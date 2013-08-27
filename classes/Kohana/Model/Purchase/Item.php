@@ -32,7 +32,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 
 	public function validate()
 	{
-		if ($this->referenece AND ! ($this->reference instanceof Sellable))
+		if ($this->reference AND ! ($this->reference instanceof Sellable))
 		{
 			$this->errors()->add('reference', 'item_not_sellable');
 		}
@@ -73,10 +73,10 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 
 	public function compute_price()
 	{
-		$current_currancy = $this->purchase_insist()->currency;
+		$current_currency = $this->purchase_insist()->currency;
 
 		return $this->monetary()
-					->convert($this->reference->price(), $this->reference->currency(), $current_currancy);
+					->convert($this->reference->price(), $this->reference->currency(), $current_currency);
 	}
 
 	public function price()
