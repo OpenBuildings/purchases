@@ -1,0 +1,198 @@
+<?php
+
+/**
+ * @group model
+ * @group model.store_purchase
+ * 
+ * @package Functest
+ * @author Ivan Kerin
+ * @copyright  (c) 2011-2013 Despark Ltd.
+ */
+class Model_Store_PurchaseTest extends Testcase_Purchases {
+
+	/**
+	 * @covers Model_Store_Purchase::find_same_item
+	 */
+	public function test_find_same_item()
+	{
+		$store_purchase = Jam::find('test_purchase', 1)->store_purchases[0];
+
+		$first_item = $store_purchase->items[0];
+		$second_item = $store_purchase->items[1];
+
+		$new_item = Jam::build('test_purchase_item', array(
+			'reference' => Jam::find('test_product', 1),
+			'quantity' => 3,
+			'type' => 'product',
+		));
+
+		$found_item = $store_purchase->find_same_item($new_item);
+		
+		$this->assertSame($first_item, $found_item);
+
+		$new_item->type = 'shipping';
+		$found_item = $store_purchase->find_same_item($new_item);
+		$this->assertNull($found_item);
+
+		$new_item->type = 'product';
+		$new_item->reference = Jam::find('test_variation', 1);
+
+		$found_item = $store_purchase->find_same_item($new_item);
+		$this->assertSame($second_item, $found_item);
+	}
+
+	/**
+	 * @covers Model_Store_Purchase::add_or_update_item
+	 */
+	public function test_add_or_update_item()
+	{
+		$store_purchase = Jam::find('test_purchase', 1)->store_purchases[0];
+
+		$existing_item_product = Jam::build('test_purchase_item', array(
+			'reference' => Jam::find('test_product', 1),
+			'quantity' => 3,
+			'type' => 'product',
+		));
+
+		$existing_item_variation = Jam::build('test_purchase_item', array(
+			'reference' => Jam::find('test_variation', 1),
+			'quantity' => 2,
+			'type' => 'product',
+		));
+
+		$new_item_product = Jam::build('test_purchase_item', array(
+			'reference' => Jam::find('test_product', 3),
+			'quantity' => 5,
+			'type' => 'product',
+		));
+
+		$store_purchase->add_or_update_item($existing_item_product);
+
+		$this->assertCount(2, $store_purchase->items);
+		$this->assertEquals(4, $store_purchase->items[0]->quantity);
+
+		$store_purchase->add_or_update_item($existing_item_variation);
+
+		$this->assertCount(2, $store_purchase->items);
+		$this->assertEquals(3, $store_purchase->items[1]->quantity);
+
+		$store_purchase->add_or_update_item($new_item_product);
+
+		$this->assertCount(3, $store_purchase->items);
+		$this->assertEquals(5, $store_purchase->items[2]->quantity);
+
+		$store_purchase->save();
+
+		$this->assertCount(3, $store_purchase->items);
+		$this->assertEquals(5, $store_purchase->items[2]->quantity);
+	}
+
+	/**
+	 * @expectedException Kohana_Exception
+	 * @covers Monedel_Purchase_Item::purchase_insist
+	 */
+	public function test_purchase_insist()
+	{
+		$store_purchase = Jam::find('test_store_purchase', 1);
+		$this->assertInstanceOf('Model_Purchase', $store_purchase->purchase_insist());
+
+		$store_purchase->purchase = NULL;
+		$store_purchase->purchase_insist();
+	}
+
+	/**
+	 * @covers Model_Store_Purchase::items
+	 * @covers Model_Store_Purchase::items_count
+	 */
+	public function test_items()
+	{
+		$store_purchase = Jam::find('test_store_purchase', 1);
+		$store_purchase->items->build(array(
+			'quantity' => 1,
+			'price' => 10,
+			'type' => 'shipping',
+		));
+
+		$store_purchase->items->build(array(
+			'quantity' => 1,
+			'price' => -10,
+			'type' => 'promotion',
+		));
+
+		$this->assertCount(4, $store_purchase->items());
+
+		$product_items = $store_purchase->items('product');
+		$this->assertCount(2, $product_items);
+		$this->assertEquals(2, $store_purchase->items_count('product'));
+		$this->assertSame($store_purchase->items[0], $product_items[0]);
+		$this->assertSame($store_purchase->items[1], $product_items[1]);
+
+		$shipping_items = $store_purchase->items('shipping');
+		$this->assertCount(1, $shipping_items);
+		$this->assertEquals(1, $store_purchase->items_count('shipping'));
+		$this->assertSame($store_purchase->items[2], $shipping_items[0]);
+
+		$mixed_items = $store_purchase->items(array('shipping', 'promotion'));
+		$this->assertCount(2, $mixed_items);
+		$this->assertEquals(2, $store_purchase->items_count(array('shipping', 'promotion')));
+		$this->assertSame($store_purchase->items[2], $mixed_items[0]);
+		$this->assertSame($store_purchase->items[3], $mixed_items[1]);
+	}
+
+	/**
+	 * @covers Model_Store_Purchase::freeze_item_prices
+	 */
+	public function test_freeze_item_prices()
+	{
+		$store_purchase = Jam::build('test_store_purchase');
+
+		$item1 = $this->getMock('Model_Test_Purchase_Item', array('freeze_price'), array('test_purchase_item'));
+
+		$item1->expects($this->once())
+			->method('freeze_price')
+			->will($this->returnValue(5));
+
+		$item2 = $this->getMock('Model_Test_Purchase_Item', array('freeze_price'), array('test_purchase_item'));
+
+		$item2->expects($this->once())
+			->method('freeze_price')
+			->will($this->returnValue(10));
+
+		$store_purchase->items = array(
+			$item1,
+			$item2,
+		);
+
+		$store_purchase->freeze_item_prices();
+	}
+
+	/**
+	 * @covers Model_Store_Purchase::total_price
+	 */
+	public function test_total_price()
+	{
+		$store_purchase = Jam::build('test_store_purchase');
+
+		$item1 = $this->getMock('Model_Test_Purchase_Item', array('total_price'), array('test_purchase_item'));
+		$item1->type = 'product';
+		$item1->expects($this->exactly(3))
+			->method('total_price')
+			->will($this->returnValue(5));
+
+		$item2 = $this->getMock('Model_Test_Purchase_Item', array('total_price'), array('test_purchase_item'));
+		$item2->type = 'shipping';
+		$item2->expects($this->exactly(3))
+			->method('total_price')
+			->will($this->returnValue(10));
+
+		$store_purchase->items = array(
+			$item1,
+			$item2,
+		);
+
+		$this->assertEquals(15, $store_purchase->total_price());
+		$this->assertEquals(5, $store_purchase->total_price('product'));
+		$this->assertEquals(10, $store_purchase->total_price('shipping'));
+		$this->assertEquals(15, $store_purchase->total_price(array('shipping', 'product')));
+	}
+}
