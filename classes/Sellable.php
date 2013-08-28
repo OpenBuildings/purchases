@@ -2,8 +2,8 @@
 
 interface Sellable {
 
-	public function price();
+	public function price(Model_Purchase_Item $item);
 
-	public function currency();
+	public function currency(Model_Purchase_Item $item);
 	
 }

@@ -40,20 +40,25 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 		$item = Jam::find('test_purchase_item', 1);
 		$item->reference = $this->getMock('Model_Test_Product', array('price', 'currency'), array('test_product'));
 
-		$item->reference->expects($this->exactly(2))
+		$item->reference->expects($this->exactly(3))
 			->method('price')
 			->will($this->returnValue(10));
 
-		$item->reference->expects($this->at(1))
+		$item->reference->expects($this->at(0))
 			->method('currency')
 			->will($this->returnValue('EUR'));
 
-		$item->reference->expects($this->at(3))
+		$item->reference->expects($this->at(2))
 			->method('currency')
 			->will($this->returnValue('USD'));
 
+		$item->reference->expects($this->at(4))
+			->method('currency')
+			->will($this->returnValue(NULL));
+
 		$this->assertSame(10.0, $item->compute_price(), 'Should be EUR -> EUR conversion');
 		$this->assertSame(7.4878322725571, $item->compute_price(), 'Should be EUR -> USD conversion');
+		$this->assertSame(10, $item->compute_price(), 'Should be no conversion if there is no currency');
 	}
 
 	/**

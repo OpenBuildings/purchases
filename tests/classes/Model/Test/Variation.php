@@ -21,12 +21,12 @@ class Model_Test_Variation extends Jam_Model implements Sellable {
 			->validator('price', array('numeric' => TRUE));
 	}
 
-	public function price()
+	public function price(Model_Purchase_Item $item)
 	{
 		return $this->price;
 	}
 
-	public function currency()
+	public function currency(Model_Purchase_Item $item)
 	{
 		return $this->product->currency;
 	}
