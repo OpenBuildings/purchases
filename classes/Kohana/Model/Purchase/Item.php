@@ -33,7 +33,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 
 	public function validate()
 	{
-		if ($this->referenece AND ! ($this->reference instanceof Sellable))
+		if ($this->reference AND ! ($this->reference instanceof Sellable))
 		{
 			$this->errors()->add('reference', 'item_not_sellable');
 		}
