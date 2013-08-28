@@ -24,6 +24,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 				'type' => Jam::field('string'),
 				'quantity' => Jam::field('integer'),
 				'price' => Jam::field('decimal'),
+				'is_payable' => Jam::field('boolean'),
 			))
 			->validator('type', 'quantity', array('present' => TRUE))
 			->validator('price', array('numeric' => TRUE))
@@ -41,8 +42,6 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 		{
 			$this->errors()->add('price', 'null_price');
 		}
-
-
 	}
 
 	public function is_same(Model_Purchase_Item $item)
@@ -73,10 +72,21 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 
 	public function compute_price()
 	{
-		$current_currency = $this->purchase_insist()->currency;
+		$currency = $this->reference->currency($this);
+		$price = $this->reference->price($this);
 
-		return $this->monetary()
-					->convert($this->reference->price(), $this->reference->currency(), $current_currency);
+		if ( ! $currency) 
+		{
+			return $price;
+		}
+		else
+		{
+			$purchase_currancy = $this->purchase_insist()->currency;
+
+			return $this
+				->monetary()
+					->convert($price, $currency, $purchase_currancy);
+		}
 	}
 
 	public function price()

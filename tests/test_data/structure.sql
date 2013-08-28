@@ -40,6 +40,7 @@ CREATE TABLE `test_purchase_items` (
   `price` DECIMAL(10,2) NULL,
   `quantity` INT(11) NULL,
   `type` VARCHAR(255) NULL,
+  `is_payable` INT(1) UNSIGNED NOT NULL,
   `is_deleted` INT(1) UNSIGNED NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB  DEFAULT CHARSET=utf8;

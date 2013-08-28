@@ -57,12 +57,23 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 	{
 		$items = array();
 
+		$is_payable = NULL;
+		
+		if (is_array($types) AND isset($types['is_payable'])) 
+		{
+			$is_payable = $types['is_payable'];
+			unset($types['is_payable']);
+		}
+
 		foreach ($this->items->as_array() as $item) 
 		{
-			if ($types === NULL OR in_array($item->type, (array) $types)) 
-			{
-				$items []= $item;
-			}
+			if ($types !== NULL AND ! (in_array($item->type, (array) $types)))
+				continue;
+
+			if ($is_payable !== NULL AND $item->is_payable !== $is_payable)
+				continue;
+
+			$items []= $item;
 		}
 
 		return $items;
