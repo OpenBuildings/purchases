@@ -105,6 +105,21 @@ VALUES
   (2,'Rug',30.00,'GBP',1),
   (3,'Matrass',130.99,'EUR',1);
 
+# Dump of table test_purchases
+# ------------------------------------------------------------
+
+INSERT INTO `test_purchases` (`id`, `creator_id`, `number`, `currency`, `monetary_source`, `is_deleted`)
+VALUES
+  (1,1,'CNV7IC','EUR','C:33:"OpenBuildings\\Monetary\\Source_ECB":775:{a:33:{s:3:"USD";s:6:"1.3355";s:3:"JPY";s:6:"132.35";s:3:"BGN";s:6:"1.9558";s:3:"CZK";s:6:"25.665";s:3:"DKK";s:6:"7.4588";s:3:"GBP";s:7:"0.85910";s:3:"HUF";s:6:"298.98";s:3:"LTL";s:6:"3.4528";s:3:"LVL";s:6:"0.7027";s:3:"PLN";s:6:"4.2323";s:3:"RON";s:6:"4.4423";s:3:"SEK";s:6:"8.7140";s:3:"CHF";s:6:"1.2358";s:3:"NOK";s:6:"8.0940";s:3:"HRK";s:6:"7.5520";s:3:"RUB";s:7:"44.1375";s:3:"TRY";s:6:"2.6640";s:3:"AUD";s:6:"1.4879";s:3:"BRL";s:6:"3.2059";s:3:"CAD";s:6:"1.4114";s:3:"CNY";s:6:"8.1759";s:3:"HKD";s:7:"10.3579";s:3:"IDR";s:8:"14723.80";s:3:"ILS";s:6:"4.8086";s:3:"INR";s:7:"85.5050";s:3:"KRW";s:7:"1489.41";s:3:"MXN";s:7:"17.4804";s:3:"MYR";s:6:"4.4085";s:3:"NZD";s:6:"1.7185";s:3:"PHP";s:6:"59.013";s:3:"SGD";s:6:"1.7120";s:3:"THB";s:6:"42.749";s:3:"ZAR";s:7:"13.6968";}}',0),
+  (2,1,'AAV7IC','GBP','',0);
+
+# Dump of table test_store_purchases
+# ------------------------------------------------------------
+
+INSERT INTO `test_store_purchases` (`id`, `number`, `test_store_id`, `test_purchase_id`, `is_deleted`)
+VALUES
+  (1,'3S2GJG',1,1,0),
+  (2,'AA2GJG',1,2,0);
 
 # Dump of table test_purchase_items
 # ------------------------------------------------------------
@@ -112,21 +127,8 @@ VALUES
 INSERT INTO `test_purchase_items` (`id`, `test_store_purchase_id`, `reference_id`, `reference_model`, `price`, `quantity`, `type`, `is_payable`, `is_discount`, `is_deleted`)
 VALUES
   (1,1,1,'test_product',200.00,1,'product',1,0,0),
-  (2,1,1,'test_variation',200.00,1,'product',1,0,0);
-
-# Dump of table test_purchases
-# ------------------------------------------------------------
-
-INSERT INTO `test_purchases` (`id`, `creator_id`, `number`, `currency`, `monetary_source`, `is_deleted`)
-VALUES
-  (1,1,'CNV7IC','EUR','C:33:"OpenBuildings\\Monetary\\Source_ECB":775:{a:33:{s:3:"USD";s:6:"1.3355";s:3:"JPY";s:6:"132.35";s:3:"BGN";s:6:"1.9558";s:3:"CZK";s:6:"25.665";s:3:"DKK";s:6:"7.4588";s:3:"GBP";s:7:"0.85910";s:3:"HUF";s:6:"298.98";s:3:"LTL";s:6:"3.4528";s:3:"LVL";s:6:"0.7027";s:3:"PLN";s:6:"4.2323";s:3:"RON";s:6:"4.4423";s:3:"SEK";s:6:"8.7140";s:3:"CHF";s:6:"1.2358";s:3:"NOK";s:6:"8.0940";s:3:"HRK";s:6:"7.5520";s:3:"RUB";s:7:"44.1375";s:3:"TRY";s:6:"2.6640";s:3:"AUD";s:6:"1.4879";s:3:"BRL";s:6:"3.2059";s:3:"CAD";s:6:"1.4114";s:3:"CNY";s:6:"8.1759";s:3:"HKD";s:7:"10.3579";s:3:"IDR";s:8:"14723.80";s:3:"ILS";s:6:"4.8086";s:3:"INR";s:7:"85.5050";s:3:"KRW";s:7:"1489.41";s:3:"MXN";s:7:"17.4804";s:3:"MYR";s:6:"4.4085";s:3:"NZD";s:6:"1.7185";s:3:"PHP";s:6:"59.013";s:3:"SGD";s:6:"1.7120";s:3:"THB";s:6:"42.749";s:3:"ZAR";s:7:"13.6968";}}',0);
-
-# Dump of table test_store_purchases
-# ------------------------------------------------------------
-
-INSERT INTO `test_store_purchases` (`id`, `number`, `test_store_id`, `test_purchase_id`, `is_deleted`)
-VALUES
-  (1,'3S2GJG',1,1,0);
+  (2,1,1,'test_variation',200.00,1,'product',1,0,0),
+  (3,2,1,'test_product',NULL,1,'product',1,0,0);
 
 # Dump of table test_stores
 # ------------------------------------------------------------

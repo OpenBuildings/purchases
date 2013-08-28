@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "5613e3cee110d24b47793db3fc3e3383",
+    "hash": "1afff89f02d3ce3d8460072cc4d8f9b8",
     "packages": [
         {
             "name": "composer/installers",
@@ -170,6 +170,60 @@
                 "sdk"
             ],
             "time": "2013-01-15 21:37:15"
+        },
+        {
+            "name": "openbuildings/emp",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OpenBuildings/emp.git",
+                "reference": "f9049bd3f8d49938a69d01ab410d63e61567c8aa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OpenBuildings/emp/zipball/f9049bd3f8d49938a69d01ab410d63e61567c8aa",
+                "reference": "f9049bd3f8d49938a69d01ab410d63e61567c8aa",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.0"
+            },
+            "suggest": {
+                "openbuildings/paypal": "Easy payments with PayPal: ExpressCheckout, AdaptivePayments, subscriptions"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Openbuildings\\Emp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Kerin",
+                    "email": "ivan@openbuildings.com",
+                    "homepage": "https://github.com/OpenBuildings/jam",
+                    "role": "Author"
+                },
+                {
+                    "name": "Haralan Dobrev",
+                    "email": "hdobrev@despark.com"
+                }
+            ],
+            "description": "Payments for eMerchantPay (EMP) https://www.emerchantpay.com/",
+            "homepage": "https://github.com/OpenBuildings/emp",
+            "keywords": [
+                "EMP",
+                "credit cards",
+                "eMerchantPay",
+                "money",
+                "payments"
+            ],
+            "time": "2013-08-28 12:44:22"
         },
         {
             "name": "openbuildings/flex-storage",
@@ -367,6 +421,53 @@
             "time": "2013-08-22 20:50:42"
         },
         {
+            "name": "openbuildings/paypal",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OpenBuildings/paypal.git",
+                "reference": "de0b07b94417a890a6e71754c0130ca1c2f4ecfa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OpenBuildings/paypal/zipball/de0b07b94417a890a6e71754c0130ca1c2f4ecfa",
+                "reference": "de0b07b94417a890a6e71754c0130ca1c2f4ecfa",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "OpenBuildings\\PayPal\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Haralan Dobrev",
+                    "email": "hdobrev@despark.com"
+                }
+            ],
+            "description": "PayPal SDK for ExpressCheckout and AdaptivePayments. Supports recurring payments, simple payments, parallel payments and chained payments.",
+            "keywords": [
+                "AdaptivePayments",
+                "ExpressCheckout",
+                "api",
+                "payments",
+                "paypal"
+            ],
+            "time": "2013-07-31 12:20:38"
+        },
+        {
             "name": "rackspace/php-opencloud",
             "version": "V1.5.10",
             "source": {
@@ -413,6 +514,44 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "openbuildings/environment-backup",
+            "version": "0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OpenBuildings/environment-backup.git",
+                "reference": "382d388ec2a9d9c414965a20347671328ab0b1f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OpenBuildings/environment-backup/zipball/382d388ec2a9d9c414965a20347671328ab0b1f2",
+                "reference": "382d388ec2a9d9c414965a20347671328ab0b1f2",
+                "shasum": ""
+            },
+            "require-dev": {
+                "openbuildings/kohana-test-bootsrap": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Openbuildings\\EnvironmentBackup\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Kerin",
+                    "email": "ivan@openbuildings.com",
+                    "homepage": "https://github.com/OpenBuildings/jam",
+                    "role": "Author"
+                }
+            ],
+            "description": "Backup/restore environment variables: globals, static vars, configs",
+            "time": "2013-07-24 07:26:52"
+        },
         {
             "name": "openbuildings/kohana-test-bootsrap",
             "version": "0.1.0",

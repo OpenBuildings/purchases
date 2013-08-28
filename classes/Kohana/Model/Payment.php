@@ -3,6 +3,8 @@
 class Kohana_Model_Payment extends Jam_Model {
 
 	const PAID = 'paid';
+
+	protected $_processor;
 	
 	public static function initialize(Jam_Meta $meta)
 	{
@@ -19,7 +21,7 @@ class Kohana_Model_Payment extends Jam_Model {
 				'raw_response' => Jam::field('serialized', array('method' => 'json')),
 				'status' => Jam::field('text'),
 			))
-			->validator('purchase', 'method', array('present' => TRUE));
+			->validator('purchase', 'method', array('present' => TRUE))
 			->validator('method', array('choice' => array('in' => array('emp', 'paypal'))));
 	}
 }

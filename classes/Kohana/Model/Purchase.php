@@ -106,4 +106,9 @@ class Kohana_Model_Purchase extends Jam_Model {
 		return $this;
 	}
 
+	public function pay(Processor $processor)
+	{
+		$this->payment = $processor->execute($this);
+	}
+
 }
