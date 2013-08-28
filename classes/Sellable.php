@@ -2,7 +2,7 @@
 
 interface Sellable {
 
-	public function price();
+	public function price(Model_Purchase_Item $purchase_item = NULL);
 
 	public function currency();
 	
