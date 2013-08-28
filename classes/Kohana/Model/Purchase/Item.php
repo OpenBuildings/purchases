@@ -25,9 +25,11 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 				'quantity' => Jam::field('integer'),
 				'price' => Jam::field('decimal'),
 				'is_payable' => Jam::field('boolean'),
+				'is_discount' => Jam::field('boolean'),
 			))
 			->validator('type', 'quantity', array('present' => TRUE))
-			->validator('price', array('numeric' => TRUE))
+			->validator('price', array('numeric' => array('greater_than_or_equal_to' => 0), 'unless' => 'is_discount'))
+			->validator('price', array('numeric' => array('less_than_or_equal_to' => 0), 'if' => 'is_discount'))
 			->validator('quantity', array('numeric' => array('only_integer' => TRUE, 'greater_than' => 0)));
 	}
 
@@ -38,10 +40,26 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 			$this->errors()->add('reference', 'item_not_sellable');
 		}
 
-		if ( ! $this->price())
+		if ($this->is_discount AND $this->price() >= 0)
 		{
-			$this->errors()->add('price', 'null_price');
+			$this->errors()->add('price', 'numeric_less_than_or_equal_to', array(':less_than_or_equal_to' => 0));
 		}
+
+		if ( ! $this->is_discount AND $this->price() <= 0)
+		{
+			$this->errors()->add('price', 'numeric_greater_than_or_equal_to', array(':greater_than_or_equal_to' => 0));
+		}
+	}
+
+	public function matches_flags(array $flags)
+	{
+		foreach ($flags as $name => $value) 
+		{
+			if ($this->{$name} !== $value) 
+				return FALSE;
+		}
+
+		return TRUE;
 	}
 
 	public function is_same(Model_Purchase_Item $item)

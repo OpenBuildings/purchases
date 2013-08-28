@@ -13,7 +13,7 @@ use OpenBuildings\Monetary\Monetary;
 class Model_Purchase_ItemTest extends Testcase_Purchases {
 
 	/**
-	 * @covers Monedel_Purchase_Item::is_same
+	 * @covers Model_Purchase_Item::is_same
 	 */
 	public function test_is_same()
 	{
@@ -33,7 +33,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Monedel_Purchase_Item::compute_price
+	 * @covers Model_Purchase_Item::compute_price
 	 */
 	public function test_compute_price()
 	{
@@ -63,7 +63,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 
 	/**
 	 * @expectedException Kohana_Exception
-	 * @covers Monedel_Purchase_Item::store_purchase_insist
+	 * @covers Model_Purchase_Item::store_purchase_insist
 	 */
 	public function test_store_purchase_insist()
 	{
@@ -76,7 +76,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 
 	/**
 	 * @expectedException Kohana_Exception
-	 * @covers Monedel_Purchase_Item::purchase_insist
+	 * @covers Model_Purchase_Item::purchase_insist
 	 */
 	public function test_purchase_insist()
 	{
@@ -88,7 +88,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Monedel_Purchase_Item::monetary
+	 * @covers Model_Purchase_Item::monetary
 	 */
 	public function test_monetary()
 	{
@@ -99,7 +99,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Monedel_Purchase_Item::price
+	 * @covers Model_Purchase_Item::price
 	 */
 	public function test_price()
 	{
@@ -151,4 +151,27 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 		$item->quantity = 3;
 		$this->assertEquals(15.90*3, $item->total_price());
 	}
+
+	/**
+	 * @covers Model_Purcahse_Item::matches_flags
+	 */
+	public function test_matches_flags()
+	{
+		$item = Jam::build('test_purchase_item', array(
+			'quantity' => 1,
+			'price' => 10,
+			'type' => 'shipping',
+			'is_payable' => TRUE,
+			'is_discount' => FALSE,
+		));
+
+		$this->assertTrue($item->matches_flags(array('is_payable' => TRUE)));
+		$this->assertTrue($item->matches_flags(array('is_discount' => FALSE)));
+		$this->assertTrue($item->matches_flags(array('is_discount' => FALSE, 'is_payable' => TRUE)));
+
+		$this->assertFalse($item->matches_flags(array('is_payable' => FALSE)));
+		$this->assertFalse($item->matches_flags(array('is_discount' => TRUE)));
+		$this->assertFalse($item->matches_flags(array('is_discount' => FALSE, 'is_payable' => FALSE)));
+	}
+
 }

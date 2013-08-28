@@ -111,12 +111,14 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 			'quantity' => 1,
 			'price' => 10,
 			'type' => 'shipping',
+			'is_payable' => TRUE,
 		));
 
 		$store_purchase->items->build(array(
 			'quantity' => 1,
 			'price' => -10,
 			'type' => 'promotion',
+			'is_discount' => TRUE,
 		));
 
 		$this->assertCount(4, $store_purchase->items());
@@ -137,6 +139,23 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		$this->assertEquals(2, $store_purchase->items_count(array('shipping', 'promotion')));
 		$this->assertSame($store_purchase->items[2], $mixed_items[0]);
 		$this->assertSame($store_purchase->items[3], $mixed_items[1]);
+
+		$payable_items = $store_purchase->items(array('is_payable' => TRUE));
+		$this->assertCount(3, $payable_items);
+		$this->assertEquals(3, $store_purchase->items_count(array('is_payable' => TRUE)));
+		$this->assertSame($store_purchase->items[0], $payable_items[0]);
+		$this->assertSame($store_purchase->items[1], $payable_items[1]);
+		$this->assertSame($store_purchase->items[2], $payable_items[2]);		
+
+		$not_payable_items = $store_purchase->items(array('is_payable' => FALSE));
+		$this->assertCount(1, $not_payable_items);
+		$this->assertEquals(1, $store_purchase->items_count(array('is_payable' => FALSE)));
+		$this->assertSame($store_purchase->items[3], $not_payable_items[0]);
+
+		$discount_items = $store_purchase->items(array('is_discount' => TRUE));
+		$this->assertCount(1, $discount_items);
+		$this->assertEquals(1, $store_purchase->items_count(array('is_discount' => TRUE)));
+		$this->assertSame($store_purchase->items[3], $discount_items[0]);
 	}
 
 	/**

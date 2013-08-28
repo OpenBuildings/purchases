@@ -57,20 +57,21 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 	{
 		$items = array();
 
-		$is_payable = NULL;
+		$flags = array('is_payable' => NULL, 'is_discount' => NULL);
+		$current_flags = NULL;
 		
-		if (is_array($types) AND isset($types['is_payable'])) 
+		if (is_array($types)) 
 		{
-			$is_payable = $types['is_payable'];
-			unset($types['is_payable']);
+			$current_flags = array_intersect_key($types, $flags);
+			$types = array_diff_key($types, $flags);
 		}
 
 		foreach ($this->items->as_array() as $item) 
 		{
-			if ($types !== NULL AND ! (in_array($item->type, (array) $types)))
+			if ($types AND ! (in_array($item->type, (array) $types)))
 				continue;
 
-			if ($is_payable !== NULL AND $item->is_payable !== $is_payable)
+			if ($current_flags AND ! $item->matches_flags($current_flags))
 				continue;
 
 			$items []= $item;

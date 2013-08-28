@@ -1,3 +1,3 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
-class Payment_Emp extends Kohana_Payment_Emp {}
+class Processor_Emp extends Kohana_Processor_Emp {}

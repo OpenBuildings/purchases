@@ -41,6 +41,7 @@ CREATE TABLE `test_purchase_items` (
   `quantity` INT(11) NULL,
   `type` VARCHAR(255) NULL,
   `is_payable` INT(1) UNSIGNED NOT NULL,
+  `is_discount` INT(1) UNSIGNED NOT NULL,
   `is_deleted` INT(1) UNSIGNED NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB  DEFAULT CHARSET=utf8;
@@ -108,10 +109,10 @@ VALUES
 # Dump of table test_purchase_items
 # ------------------------------------------------------------
 
-INSERT INTO `test_purchase_items` (`id`, `test_store_purchase_id`, `reference_id`, `reference_model`, `price`, `quantity`, `type`, `is_deleted`)
+INSERT INTO `test_purchase_items` (`id`, `test_store_purchase_id`, `reference_id`, `reference_model`, `price`, `quantity`, `type`, `is_payable`, `is_discount`, `is_deleted`)
 VALUES
-  (1,1,1,'test_product',200.00,1,'product',0),
-  (2,1,1,'test_variation',200.00,1,'product',0);
+  (1,1,1,'test_product',200.00,1,'product',1,0,0),
+  (2,1,1,'test_variation',200.00,1,'product',1,0,0);
 
 # Dump of table test_purchases
 # ------------------------------------------------------------

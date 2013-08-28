@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
-class Kohana_Payment_Emp {
+class Kohana_Processor {
 
 	public function tracking_html()
 	{
@@ -22,14 +22,6 @@ class Kohana_Payment_Emp {
 		if ( ! $this->redirect()) 
 		{
 			$this->complete($params);
-		}
-	}
-
-	public function perchase_params(Model_Purchase $purchase)
-	{
-		foreach ($variable as $key => $value) 
-		{
-			# code...
 		}
 	}
 }
