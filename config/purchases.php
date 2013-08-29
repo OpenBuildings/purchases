@@ -14,12 +14,17 @@ return array(
 			// ),
 		),
 		'paypal' => array(
-			// 'email' => 'dev@example.com',
-			// 'app_id' => 'APP-00000000000000000',
-			// 'username' => 'dev.example.com',
-			// 'password' => '0000000000',
-			// 'signature' => '00000000000000000000000000000000000000000000000000000000',
-			// 'environment' => 'sandbox.',
+			'oauth' => array(
+				// 'client_id' => 'APP-00000000000000000',
+				// 'secret' => 'dev.example.com',
+			),
+			'config' => array(
+				'mode' => 'sandbox',
+				'http.ConnectionTimeOut' => 30,
+				'log.LogEnabled' => TRUE,
+				'log.FileName' => APPPATH.'logs'.DIRECTORY_SEPARATOR.'paypal.log',
+				'log.LogLevel' => 'FINE',
+			),
 		),
 	)
 );

@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "1afff89f02d3ce3d8460072cc4d8f9b8",
+    "hash": "a20eceeab74737e1e5a7035e7ad9ede4",
     "packages": [
         {
             "name": "composer/installers",
@@ -173,16 +173,16 @@
         },
         {
             "name": "openbuildings/emp",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/emp.git",
-                "reference": "f9049bd3f8d49938a69d01ab410d63e61567c8aa"
+                "reference": "57ccec5c89f8a52222658a2a4e0590116bc153b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/emp/zipball/f9049bd3f8d49938a69d01ab410d63e61567c8aa",
-                "reference": "f9049bd3f8d49938a69d01ab410d63e61567c8aa",
+                "url": "https://api.github.com/repos/OpenBuildings/emp/zipball/57ccec5c89f8a52222658a2a4e0590116bc153b5",
+                "reference": "57ccec5c89f8a52222658a2a4e0590116bc153b5",
                 "shasum": ""
             },
             "require": {
@@ -223,7 +223,7 @@
                 "money",
                 "payments"
             ],
-            "time": "2013-08-28 12:44:22"
+            "time": "2013-08-29 11:26:45"
         },
         {
             "name": "openbuildings/flex-storage",
@@ -421,22 +421,24 @@
             "time": "2013-08-22 20:50:42"
         },
         {
-            "name": "openbuildings/paypal",
-            "version": "0.1.0",
+            "name": "paypal/rest-api-sdk-php",
+            "version": "dev-sample-dyna-config",
             "source": {
                 "type": "git",
-                "url": "https://github.com/OpenBuildings/paypal.git",
-                "reference": "de0b07b94417a890a6e71754c0130ca1c2f4ecfa"
+                "url": "https://github.com/paypal/rest-api-sdk-php.git",
+                "reference": "e927298a40358ea73030504df16d8b99486c09a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/paypal/zipball/de0b07b94417a890a6e71754c0130ca1c2f4ecfa",
-                "reference": "de0b07b94417a890a6e71754c0130ca1c2f4ecfa",
+                "url": "https://api.github.com/repos/paypal/rest-api-sdk-php/zipball/e927298a40358ea73030504df16d8b99486c09a5",
+                "reference": "e927298a40358ea73030504df16d8b99486c09a5",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "php": ">=5.3.5"
+                "ext-json": "*",
+                "paypal/sdk-core-php": "2.4.*",
+                "php": ">=5.3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "3.7.*"
@@ -444,28 +446,71 @@
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "OpenBuildings\\PayPal\\": "src/"
+                    "PayPal": "lib/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-3-Clause"
+                "Apache2"
             ],
             "authors": [
                 {
-                    "name": "Haralan Dobrev",
-                    "email": "hdobrev@despark.com"
+                    "name": "PayPal",
+                    "homepage": "https://github.com/paypal/rest-api-sdk-php/contributors"
                 }
             ],
-            "description": "PayPal SDK for ExpressCheckout and AdaptivePayments. Supports recurring payments, simple payments, parallel payments and chained payments.",
+            "description": "PayPal's PHP SDK for REST APIs",
+            "homepage": "https://github.com/paypal/rest-api-sdk-php",
             "keywords": [
-                "AdaptivePayments",
-                "ExpressCheckout",
-                "api",
                 "payments",
-                "paypal"
+                "paypal",
+                "rest",
+                "sdk"
             ],
-            "time": "2013-07-31 12:20:38"
+            "time": "2013-08-26 08:51:28"
+        },
+        {
+            "name": "paypal/sdk-core-php",
+            "version": "v2.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paypal/sdk-core-php.git",
+                "reference": "4354c7fb5e74b4b4f6861e29641bb4be39bbdca8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paypal/sdk-core-php/zipball/4354c7fb5e74b4b4f6861e29641bb4be39bbdca8",
+                "reference": "4354c7fb5e74b4b4f6861e29641bb4be39bbdca8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PayPal": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache2"
+            ],
+            "authors": [
+                {
+                    "name": "PayPal",
+                    "homepage": "https://github.com/paypal/sdk-core-php/contributors"
+                }
+            ],
+            "description": "PayPal Core SDK for PHP",
+            "homepage": "https://github.com/paypal/sdk-core-php",
+            "keywords": [
+                "paypal",
+                "php",
+                "sdk"
+            ],
+            "time": "2013-08-22 16:32:05"
         },
         {
             "name": "rackspace/php-opencloud",
@@ -586,15 +631,151 @@
             ],
             "description": "Kohana core classes repackaged with composer, used to test modules",
             "time": "2013-08-12 09:28:25"
+        },
+        {
+            "name": "openbuildings/phpunit-spiderling",
+            "version": "0.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OpenBuildings/phpunit-spiderling.git",
+                "reference": "26b91de8dd65be606dbc29d10eef75fae6cd72a1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OpenBuildings/phpunit-spiderling/zipball/26b91de8dd65be606dbc29d10eef75fae6cd72a1",
+                "reference": "26b91de8dd65be606dbc29d10eef75fae6cd72a1",
+                "shasum": ""
+            },
+            "require": {
+                "openbuildings/spiderling": "0.2.*"
+            },
+            "require-dev": {
+                "claylo/selenium-server-standalone": "2.*",
+                "openbuildings/kohana-test-bootsrap": "0.1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Openbuildings\\PHPUnitSpiderling\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Kerin",
+                    "email": "ivan@openbuildings.com",
+                    "homepage": "https://github.com/OpenBuildings/jam",
+                    "role": "Author"
+                }
+            ],
+            "description": "Use openbuildings/spiderling in phpunit tests",
+            "time": "2013-08-14 09:52:57"
+        },
+        {
+            "name": "openbuildings/spiderling",
+            "version": "0.2.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OpenBuildings/spiderling.git",
+                "reference": "70c9c2578025397a4afc1df35d22d28697983d04"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OpenBuildings/spiderling/zipball/70c9c2578025397a4afc1df35d22d28697983d04",
+                "reference": "70c9c2578025397a4afc1df35d22d28697983d04",
+                "shasum": ""
+            },
+            "require": {
+                "openbuildings/environment-backup": "0.1.*",
+                "symfony/css-selector": "2.3.*"
+            },
+            "require-dev": {
+                "claylo/selenium-server-standalone": "2.*",
+                "openbuildings/kohana-test-bootsrap": "0.1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Openbuildings\\Spiderling\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Kerin",
+                    "email": "ivan@openbuildings.com",
+                    "homepage": "https://github.com/OpenBuildings/jam",
+                    "role": "Author"
+                }
+            ],
+            "description": "Crawl the web with kohana, phantomjs or selenium",
+            "time": "2013-08-14 09:45:07"
+        },
+        {
+            "name": "symfony/css-selector",
+            "version": "v2.3.4",
+            "target-dir": "Symfony/Component/CssSelector",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/CssSelector.git",
+                "reference": "885544201cb24e79754da1dbd61bd779c2e4353e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/885544201cb24e79754da1dbd61bd779c2e4353e",
+                "reference": "885544201cb24e79754da1dbd61bd779c2e4353e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\CssSelector\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Jean-François Simon",
+                    "email": "jeanfrancois.simon@sensiolabs.com"
+                }
+            ],
+            "description": "Symfony CssSelector Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-07-21 12:12:18"
         }
     ],
     "aliases": [
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "paypal/rest-api-sdk-php": 20
+    },
     "platform": {
         "php": ">=5.3.0"
     },

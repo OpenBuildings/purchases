@@ -194,6 +194,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 
 		$this->assertNotNull($purchase->payment);
 		$this->assertEquals('emp', $purchase->payment->method);
+		$this->assertGreaterThan(0, $purchase->payment->payment_id);
 		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
 	}
 }

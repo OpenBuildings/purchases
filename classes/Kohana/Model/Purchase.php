@@ -22,9 +22,12 @@ class Kohana_Model_Purchase extends Jam_Model {
 				'payment' => Jam::association('hasone', array('inverse_of' => 'purchase')),
 			))
 			->fields(array(
-				'id' => Jam::field('primary'),
-				'currency' => Jam::field('string'),
+				'id'              => Jam::field('primary'),
+				'currency'        => Jam::field('string'),
 				'monetary_source' => Jam::field('serialized'),
+				'is_frozen'       => Jam::field('boolean'),
+				'created_at'      => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
+				'updated_at'      => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			));
 	}
 
@@ -65,6 +68,11 @@ class Kohana_Model_Purchase extends Jam_Model {
 		return Monetary::instance();
 	}
 
+	public function price_in($currency, $price)
+	{
+		return $this->monetary()->convert($price, $this->currency, $currency);
+	}
+
 	public function items($types = NULL)
 	{
 		$items = array();
@@ -89,6 +97,11 @@ class Kohana_Model_Purchase extends Jam_Model {
 		return array_sum($prices);
 	}
 
+	public function total_price_in($currency, $types = NULL)
+	{
+		return $this->price_in($currency, $this->total_price($types));
+	}
+
 	public function freeze_item_prices()
 	{
 		foreach ($this->store_purchases->as_array() as $store_purchase) 
@@ -108,14 +121,21 @@ class Kohana_Model_Purchase extends Jam_Model {
 
 	public function freeze()
 	{
-		return $this
+		$this
 			->freeze_monetary()
-			->freeze_item_prices();
+			->freeze_item_prices()
+			->set('is_frozen', TRUE);
+
+		return $this;
 	}
 
 	public function pay(Processor $processor)
 	{
-		$this->payment = $processor->execute($this);
+		$payment_attributes = $processor->execute($this);
+
+		$this->build('payment')->set($payment_attributes);
+
+		return $this;
 	}
 
 }

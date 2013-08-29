@@ -113,6 +113,11 @@ class Kohana_Processor_Emp implements Processor {
 
 		$status = ($response['transaction_response'] == 'A') ? Model_Payment::PAID : NULL;
 
-		return Jam::build('payment', array('method' => 'emp', 'raw_response' => $response['raw'], 'status' => $status));
+		return array('method' => 'emp', 'payment_id' => $response['transaction_id'], 'raw_response' => $response['raw'], 'status' => $status);
+	}
+
+	public static function complete(Model_Payment $payment, array $params)
+	{
+		// do nothing;
 	}
 }

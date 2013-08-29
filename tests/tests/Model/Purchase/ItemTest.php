@@ -153,6 +153,20 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Purcahse_Item::total_price_in
+	 */
+	public function test_total_price_in()
+	{
+		$item = Jam::find('test_purchase_item', 1);
+
+		$total_price_in_usd = $item
+			->total_price_in('USD');
+
+		$this->assertEquals(200, $item->total_price());
+		$this->assertEquals(267.1, $total_price_in_usd);
+	}
+
+	/**
 	 * @covers Model_Purcahse_Item::matches_flags
 	 */
 	public function test_matches_flags()

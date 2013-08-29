@@ -26,6 +26,8 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 				'price' => Jam::field('decimal'),
 				'is_payable' => Jam::field('boolean'),
 				'is_discount' => Jam::field('boolean'),
+				'created_at' => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
+				'updated_at' => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			))
 			->validator('type', 'quantity', array('present' => TRUE))
 			->validator('price', array('numeric' => array('greater_than_or_equal_to' => 0), 'unless' => 'is_discount'))
@@ -120,5 +122,10 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 	public function total_price()
 	{
 		return $this->price() * $this->quantity;
+	}
+
+	public function total_price_in($currency, $types = NULL)
+	{
+		return $this->purchase_insist()->price_in($currency, $this->total_price($types));
 	}
 }

@@ -159,7 +159,11 @@ class Model_PurchaseTest extends Testcase_Purchases {
 			->method('freeze_monetary')
 			->will($this->returnValue($purchase));
 
+		$this->assertFalse($purchase->is_frozen);
+		
 		$purchase->freeze();
+
+		$this->assertTrue($purchase->is_frozen);
 	}
 
 	/**
@@ -181,6 +185,43 @@ class Model_PurchaseTest extends Testcase_Purchases {
 
  		$this->assertCount(2, $purchase->store_purchases[0]->items);
  		$this->assertEquals(4, $purchase->store_purchases[0]->items[0]->quantity);
+	}
+
+	/**
+	 * @covers Model_Purchase::price_in
+	 */
+	public function test_price_in()
+	{
+		$purchase = $this->getMock('Model_Test_Purchase', array('monetary'), array('test_purchase'));
+		$purchase->currency = 'EUR';
+		$monetary = $this->getMock('Openbuildings\Monetary\Monetary');
+
+		$purchase
+			->expects($this->once())
+			->method('monetary')
+			->will($this->returnValue($monetary));
+
+		$monetary
+			->expects($this->once())
+			->method('convert')
+			->with($this->equalTo(50), $this->equalTo('EUR'), $this->equalTo('USD'))
+			->will($this->returnValue(100));
+
+		$purchase->price_in('USD', 50);
+	}
+
+	/**
+	 * @covers Model_Purchase::total_price_in
+	 */
+	public function test_total_price_in()
+	{
+		$purchase = Jam::find('test_purchase', 1);
+
+		$total_price_in_usd = $purchase
+			->total_price_in('USD', array('product'));
+
+		$this->assertEquals(400, $purchase->total_price(array('product')));
+		$this->assertEquals(534.2, $total_price_in_usd);
 	}
 
 

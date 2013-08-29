@@ -214,4 +214,18 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		$this->assertEquals(10, $store_purchase->total_price('shipping'));
 		$this->assertEquals(15, $store_purchase->total_price(array('shipping', 'product')));
 	}
+
+	/**
+	 * @covers Model_Store_Purchase::total_price_in
+	 */
+	public function test_total_price_in()
+	{
+		$store_purchase = Jam::find('test_store_purchase', 1);
+
+		$total_price_in_usd = $store_purchase
+			->total_price_in('USD', array('product'));
+
+		$this->assertEquals(400, $store_purchase->total_price(array('product')));
+		$this->assertEquals(534.2, $total_price_in_usd);
+	}
 }

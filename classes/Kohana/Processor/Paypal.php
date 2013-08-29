@@ -1,68 +1,135 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
-use Openbuildings\Emp\Api;
-use Openbuildings\Emp\Threatmatrix;
+use PayPal\Rest\ApiContext;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Api\Payer;
+use PayPal\Api\Payment;
+use PayPal\Api\Amount;
+use PayPal\Api\Transaction;
+use PayPal\Api\RedirectUrls;
+use PayPal\Api\PaymentExecution;
+use PayPal\Api\Item;
+use PayPal\Api\ItemList;
+use PayPal\Api\ShippingAddress;
 
 class Kohana_Processor_Paypal implements Processor {
 
-	public static function params_for(Model_Purchase $purchase)
-	{
-		$params = array(
-			'payment_method'         => 'creditcard',
-			'order_reference'        => $purchase->number,
-			'order_currency'         => $purchase->currency,
-			'customer_email'         => $purchase->creator->email,
-			'ip_address'             => Request::$client_ip,
-			'credit_card_trans_type' => 'sale',
-			'test_transaction'       => Kohana::$environment === Kohana::PRODUCTION ? '0' : '1',
-		);
-
-		foreach ($purchase->items(array('is_payable' => TRUE)) as $i => $item) 
-		{
-			$index = $i+1;
-
-			$params = array_merge($params, array(
-				"item_{$index}_predefined"                      => '0',
-				"item_{$index}_digital"                         => '0',
-				"item_{$index}_code"                            => $item->reference ? (string) $item->reference : $item->type,
-				"item_{$index}_qty"                             => $item->quantity,
-				"item_{$index}_discount"                        => $item->is_discount ? '1' : '0',
-				"item_{$index}_name"                            => $item->reference ? URL::title($item->reference->name(), ' ', TRUE) : $item->type,
-				"item_{$index}_unit_price_".$purchase->currency => number_format($item->price(), 2, '.', ''),
-			));
-		}
-
-		return $params;
-	}
-
-	protected $_params = array();
-	protected $_next_url;
-
-	function __construct(array $params, $next_url = NULL) 
-	{
-		$this->_params = $params;
-		$this->_next_url = $next_url;
-	}
-	
-	public function params()
-	{
-		return $this->_params;
-	}
+	protected static $_api;
 
 	public function next_url()
 	{
 		return $this->_next_url;
 	}
 
+	function __construct($success_url, $cancel_url) 
+	{
+		$this->_success_url = $success_url;
+		$this->_cancel_url = $cancel_url;
+	}
+
+	public function cancel_url()
+	{
+		return $this->_cancel_url;
+	}
+
+	public function success_url()
+	{
+		return $this->_success_url;
+	}
+
+	public static function api()
+	{
+		if ( ! Processor_Paypal::$_api) 
+		{
+			$oauth = Kohana::$config->load('purchases.processor.paypal.oauth');
+			Processor_Paypal::$_api = new ApiContext(new OAuthTokenCredential($oauth['client_id'], $oauth['secret']));
+
+			$config = Kohana::$config->load('purchases.processor.paypal.config');
+			Processor_Paypal::$_api->setConfig($config);
+		}
+		return Processor_Paypal::$_api;
+	}
+
+	public static function complete(Model_Payment $payment, array $params)
+	{
+		$paypal_payement = Payment::get($payment->payment_id, Processor_Paypal::api());
+		
+		$execution = new PaymentExecution();
+		$execution
+			->setPayerId($params['payer_id']);
+
+		$response = $paypal_payement->execute($execution, Processor_Paypal::api());
+
+		$transactions = $response->getTransactions();
+		$resources = $transactions[0]->getRelatedResources();
+		$payment->raw_response = $resources[0]->getSale()->toArray();
+		$payment->payment_id = $resources[0]->getSale()->getId();
+		$payment->status = Model_Payment::PAID;
+	}
+
 	public function execute(Model_Purchase $purchase)
 	{
-		$response = $this->api()
-			->request(Api::ORDER_SUBMIT, array_merge($this->params(), Processor_Emp::params_for($purchase)));
+		$payer = new Payer();
+		$payer
+			->setPaymentMethod('paypal');
 
-		Processor_Emp::clear_threatmatrix();
+		$amount = new Amount();
+		$amount
+			->setCurrency($purchase->currency)
+			->setTotal(number_format($purchase->total_price(array('is_payable' => TRUE)), 2, '.', ''));
 
-		$status = ($response['transaction_response'] == 'A') ? Model_Payment::PAID : NULL;
+		$item_list = new ItemList();
+		$items = array();
+		foreach ($purchase->store_purchases as $store_purchase) 
+		{
+			$item = new Item();
+			$item
+				->setQuantity(1)
+				->setName('Products From '.URL::title($store_purchase->store->name()))
+				->setPrice(number_format($store_purchase->total_price(array('is_payable' => TRUE)), 2, '.', ''))
+				->setCurrency($purchase->currency);
 
-		return Jam::build('payment', array('method' => 'emp', 'raw_response' => $response['raw'], 'status' => $status));
+			$items[] = $item;
+		}
+
+		$item_list->setItems($items);
+
+		$transaction = new Transaction();
+		$transaction
+			->setAmount($amount)
+			->setItemList($item_list)
+			->setDescription('Products from clippings');
+
+		$redirectUrls = new RedirectUrls();
+		$redirectUrls
+			->setReturnUrl($this->success_url())
+			->setCancelUrl($this->cancel_url());
+
+		$payment = new Payment();
+		$payment
+			->setIntent('sale')
+			->setPayer($payer)
+			->setRedirectUrls($redirectUrls)
+			->setTransactions(array($transaction));
+
+		try 
+		{
+			$payment->create(Processor_Paypal::api());
+		} catch (Exception $e) 
+		{
+			print_r($e->getData());
+			die();
+		}
+
+		foreach ($payment->getLinks() as $link)
+		{
+			if ($link->getRel() == 'approval_url') 
+			{
+				$this->_next_url = $link->getHref();
+				break;
+			}
+		}
+
+		return array('method' => 'paypal', 'payment_id' => $payment->getId(), 'raw_response' => $payment->toArray(), 'status' => 'pending');
 	}
 }
