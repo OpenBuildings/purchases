@@ -106,6 +106,13 @@ class Kohana_Model_Purchase extends Jam_Model {
 		return $this;
 	}
 
+	public function freeze()
+	{
+		return $this
+			->freeze_monetary()
+			->freeze_item_prices();
+	}
+
 	public function pay(Processor $processor)
 	{
 		$this->payment = $processor->execute($this);

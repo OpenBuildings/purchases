@@ -144,6 +144,23 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$this->assertSame($monetary->source(), Monetary::instance()->source());
 	}
 
+	/**
+	 * @covers Model_Purchase::freeze
+	 */
+	public function test_freeze()
+	{
+		$purchase = $this->getMock('Model_Test_Purchase', array('freeze_item_prices', 'freeze_monetary'), array('test_purchase'));
+
+		$purchase->expects($this->once())
+			->method('freeze_item_prices')
+			->will($this->returnValue($purchase));
+
+		$purchase->expects($this->once())
+			->method('freeze_monetary')
+			->will($this->returnValue($purchase));
+
+		$purchase->freeze();
+	}
 
 	/**
 	 * @covers Model_Purchase::add_item

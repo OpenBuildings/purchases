@@ -172,8 +172,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 		$purchase = Jam::find('test_purchase', 2);
 
 		$purchase
-			->freeze_item_prices()
-			->freeze_monetary()
+			->freeze()
 			->save();
 
 		$params = array(
