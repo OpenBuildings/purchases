@@ -49,6 +49,17 @@ $purchase
 
 ```
 
+## Adding / Updating single items
+
+You can add an item to the purchase with the ``add_item()`` method. It would search all the purchase items in all the store_items, If the same item is found elsewhere it would update its quantity, otherwise it would add it to the appropriate store_item (or create that if none exist):
+
+```
+
+$purchse
+	->add_item($store, $new_purchase_item);
+
+```
+
 ## EMP Processors
 
 To Use the emp processor you'll need a form on your page (you can use the included Model_Emp_Form). To supply the processor with the cc data.
