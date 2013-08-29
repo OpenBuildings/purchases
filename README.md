@@ -12,8 +12,8 @@ __Purchase_Item flags__
 
 Purchase item has important "flags" 
 
-- is_payable - that means that this is an item that should be "payed for" by the buyer, and will be added to his total bill. This is needed as some items need to be visible (and calculated) only for the seller for example, but should not appear on the buyer's bill. 
-- is_discount - this means that the purchase item's price should be negative value. This enforses a validation - discounted items can only have negative prices, whereas normal ones must always have positive prices.
+- __is_payable__ - that means that this is an item that should be "payed for" by the buyer, and will be added to his total bill. This is needed as some items need to be visible (and calculated) only for the seller for example, but should not appear on the buyer's bill. 
+- __is_discount__ - this means that the purchase item's price should be negative value. This enforses a validation - discounted items can only have negative prices, whereas normal ones must always have positive prices.
 
 __Item Querying__
 You can query items of the Store Purchase with the ``items()`` method:
@@ -22,13 +22,20 @@ You can query items of the Store Purchase with the ``items()`` method:
 
 $store_purchase->items(); // return all the purchase items as an array
 $store_purchase->items('product'); // return all the purchase items with type "product" as an array
-$store_purchase->items(array('product', 'shipping'); // return all the purchase items with type "product" or 'shipping' as an array
-$store_purchase->items(array('is_payable' = TRUE); // return all the purchase items with flag "is_payable" set to TRUE as an array
-$store_purchase->items(array('is_payable' = TRUE, 'product'); // return all the purchase items with flag "is_payable" set to TRUE and are of type 'product' as an array
+$store_purchase->items(array('product', 'shipping')); // return all the purchase items with type "product" or 'shipping' as an array
+$store_purchase->items(array('is_payable' = TRUE)); // return all the purchase items with flag "is_payable" set to TRUE as an array
+$store_purchase->items(array('is_payable' = TRUE, 'product')); // return all the purchase items with flag "is_payable" set to TRUE and are of type 'product' as an array
 
 ```
 
 All of these types of queries can be uesed by ``items_count()`` and ``total_price()``
+
+```php
+
+$store_purchase->items_count(array('product', 'shipping'));
+$store_purchase->total_price(array('is_payable' = TRUE));
+
+```
 
 ## Price Freezing
 
