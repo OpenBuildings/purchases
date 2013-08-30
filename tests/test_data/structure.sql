@@ -23,6 +23,28 @@ CREATE TABLE `test_store_purchases` (
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `test_store_refunds`;
+CREATE TABLE `test_store_refunds` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `test_store_purchase_id` INT(10) UNSIGNED NULL,
+  `created_at` DATETIME,
+  `raw_response` TEXT,
+  `reason` TEXT,
+  `is_deleted` INT(1) UNSIGNED NOT NULL,
+  `status` VARCHAR(20) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `test_store_refund_items`;
+CREATE TABLE `test_store_refund_items` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `test_store_refund_id` INT(10) UNSIGNED NULL,
+  `test_purchase_item_id` INT(10) UNSIGNED NULL,
+  `amount` DECIMAL(10,2) NULL,
+  `is_deleted` INT(1) UNSIGNED NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `test_payments`;
 CREATE TABLE `test_payments` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -102,7 +124,7 @@ CREATE TABLE `test_variations` (
 
 INSERT INTO `test_payments` (`id`, `test_purchase_id`, `payment_id`, `method`, `status`, `raw_response`, `is_deleted`)
 VALUES
-  (1,1,'11111','emp','paid','[\"asd\"]',0);
+  (1,1,'11111','emp','paid','{"order_id":"5580812","order_total":"400.00","order_datetime":"2013-08-13 15:04:37","order_status":"Paid","cart":{"item":[{"id":"5657022","code":"1","name":"Chair","description":{},"qty":"1","digital":"0","discount":"0","predefined":"0","unit_price":"200.00"},{"id":"5657032","code":2,"name":"Rug","description":{},"qty":"1","digital":"0","discount":"0","predefined":"0","unit_price":"200.00"}]},"transaction":{"type":"sale","response":"A","response_code":"0","response_text":"approved","trans_id":"1078663342","account_id":"635172"}}',0);
 
 # Dump of table test_products
 # ------------------------------------------------------------

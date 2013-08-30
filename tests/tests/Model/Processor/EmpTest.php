@@ -12,6 +12,17 @@
  */
 class Processor_EmpTest extends Testcase_Purchases {
 
+	public $payment_params = array(
+		'card_holder_name' => 'TEST HOLDER',
+		'card_number'      => '4111111111111111',
+		'exp_month'        => '10',
+		'exp_year'         => '19',
+		'cvv'              => '123',
+		'order_reference'  => '521c7556ccdd8',
+		'order_currency'   => 'GBP',
+		'payment_method'   => 'creditcard',
+	);
+
 	/**
 	 * @covers Processor_Emp::is_threatmatrix_enabled
 	 */
@@ -83,7 +94,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 
 		$purchase = Jam::find('test_purchase', 1);
 
-		$purchase->store_purchases[0]->items->build(array(
+		$promo = $purchase->store_purchases[0]->items->create(array(
 			'quantity' => 1,
 			'price' => -10,
 			'type' => 'promotion',
@@ -104,7 +115,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 
 			'item_1_predefined' => '0',
 			'item_1_digital' => '0',
-			'item_1_code' => 'Model_Test_Product(1)',
+			'item_1_code' => '1',
 			'item_1_qty' => '1',
 			'item_1_discount' => '0',
 			'item_1_name' => 'chair',
@@ -112,7 +123,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 
 			'item_2_predefined' => '0',
 			'item_2_digital' => '0',
-			'item_2_code' => 'Model_Test_Variation(1)',
+			'item_2_code' => '2',
 			'item_2_qty' => '1',
 			'item_2_discount' => '0',
 			'item_2_name' => 'red',
@@ -120,11 +131,48 @@ class Processor_EmpTest extends Testcase_Purchases {
 
 			'item_3_predefined' => '0',
 			'item_3_digital' => '0',
-			'item_3_code' => 'promotion',
+			'item_3_code' => $promo->id(),
 			'item_3_qty' => '1',
 			'item_3_discount' => '1',
 			'item_3_name' => 'promotion',
 			'item_3_unit_price_EUR' => '-10.00',
+		);
+
+		$this->assertEquals($expected, $params);
+	}
+
+	/**
+	 * @covers Processor_Emp::find_item_id
+	 */
+	public function test_find_item_id()
+	{
+		$response = Jam::find('test_payment', 1)->raw_response;
+		$this->assertEquals('5657022', Processor_Emp::find_item_id($response['cart'], 1));
+		$this->assertEquals('5657032', Processor_Emp::find_item_id($response['cart'], 2));
+	}
+
+	/**
+	 * @covers Processor_Emp::params_for_refund
+	 */
+	public function test_params_for_refund()
+	{
+		$purchase = Jam::find('test_purchase', 1);
+		$store_purchase = $purchase->store_purchases[0];
+
+		$refund = $store_purchase->refunds->create(array(
+			'reason' => 'Faulty Product',
+			'items' => array(
+				array('purchase_item' => $store_purchase->items[0])
+			)
+		));
+
+		$params = Processor_Emp::params_for_refund($refund);
+
+		$expected = array(
+			'order_id' => '5580812',
+			'trans_id' => '11111',
+			'reason' => 'Faulty Product',
+			'item_1_id' => '5657022',
 		);
 
 		$this->assertEquals($expected, $params);
@@ -151,6 +199,9 @@ class Processor_EmpTest extends Testcase_Purchases {
 		$this->assertEquals($next_url, $processor->next_url());
 	}
 
+	/**
+	 * @covers Processor_Emp::execute
+	 */
 	public function test_execute()
 	{
 		$this->env->backup_and_set(array(
@@ -166,7 +217,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 				'client_id' => getenv('PHP_EMP_CLIENT_ID')
 			)
 		));
-
+		
 		Request::factory(Processor_Emp::threatmatrix()->tracking_url())->execute();
 
 		$purchase = Jam::find('test_purchase', 2);
@@ -175,26 +226,18 @@ class Processor_EmpTest extends Testcase_Purchases {
 			->freeze()
 			->save();
 
-		$params = array(
-			'card_holder_name' => 'TEST HOLDER',
-			'card_number'      => '4111111111111111',
-			'exp_month'        => '10',
-			'exp_year'         => '19',
-			'cvv'              => '123',
-			'order_reference'  => '521c7556ccdd8',
-			'order_currency'   => 'GBP',
-			'payment_method'   => 'creditcard',
-		);
-
 		$next_url = 'http://example.com/complete';
 
-		$processor = new Processor_Emp($params, $next_url);	
+		$processor = new Processor_Emp($this->payment_params, $next_url);	
 
-		$purchase->pay($processor);
+		$purchase
+			->pay($processor)
+			->save();
 
 		$this->assertNotNull($purchase->payment);
 		$this->assertEquals('emp', $purchase->payment->method);
 		$this->assertGreaterThan(0, $purchase->payment->payment_id);
 		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
 	}
+
 }

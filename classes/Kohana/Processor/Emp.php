@@ -74,7 +74,7 @@ class Kohana_Processor_Emp implements Processor {
 			$params = array_merge($params, array(
 				"item_{$index}_predefined"                      => '0',
 				"item_{$index}_digital"                         => '0',
-				"item_{$index}_code"                            => $item->reference ? (string) $item->reference : $item->type,
+				"item_{$index}_code"                            => $item->id(),
 				"item_{$index}_qty"                             => $item->quantity,
 				"item_{$index}_discount"                        => $item->is_discount ? '1' : '0',
 				"item_{$index}_name"                            => $item->reference ? URL::title($item->reference->name(), ' ', TRUE) : $item->type,
@@ -83,6 +83,64 @@ class Kohana_Processor_Emp implements Processor {
 		}
 
 		return $params;
+	}
+
+	public static function find_item_id(array $cart, $id)
+	{
+		$items = isset($cart['item'][0]) ? $cart['item'] : array($cart['item']);
+		foreach ($items as $item) 
+		{
+			if ($item['code'] == $id) 
+				return $item['id'];
+		}
+	}
+
+	public static function params_for_refund(Model_Store_Refund $refund)
+	{
+		$payment = $refund->payment_insist();
+
+		$params = array(
+			'order_id' => $payment->raw_response['order_id'],
+			'trans_id' => $payment->payment_id,
+			'reason'   => $refund->reason,
+		);
+
+		if (count($refund->items)) 
+		{
+			foreach ($refund->items as $i => $item) 
+			{
+				$index = $i+1;
+				$item_params = array(
+					"item_{$index}_id" => Processor_Emp::find_item_id($payment->raw_response['cart'], $item->purchase_item->id()),
+				);
+
+				if ($item->amount)
+				{
+					$item_params["item_{$index}_amount"] = $item->amount;
+				}
+
+				$params = array_merge($params, $item_params);
+			}
+		}
+		else
+		{
+			$params['amount'] = $item->total_amount();
+		}
+
+		return $params;
+	}
+
+	public static function refund(Model_Store_Refund $refund)
+	{
+		$params = Processor_Emp::params_for_refund($refund);
+
+		$response = Processor_Emp::api()
+			->request(Api::ORDER_CREDIT, $params);
+
+		$refund->raw_response = $response;
+		$refund->status = Model_Store_Refund::REFUNDED;
+
+		return $this;
 	}
 
 	protected $_params = array();
@@ -106,18 +164,24 @@ class Kohana_Processor_Emp implements Processor {
 
 	public function execute(Model_Purchase $purchase)
 	{
-		$response = $this->api()
+		$response = Processor_Emp::api()
 			->request(Api::ORDER_SUBMIT, array_merge($this->params(), Processor_Emp::params_for($purchase)));
 
 		Processor_Emp::clear_threatmatrix();
 
 		$status = ($response['transaction_response'] == 'A') ? Model_Payment::PAID : NULL;
 
-		return array('method' => 'emp', 'payment_id' => $response['transaction_id'], 'raw_response' => $response['raw'], 'status' => $status);
+		return array(
+			'method' => 'emp', 
+			'payment_id' => $response['transaction_id'], 
+			'raw_response' => $response['raw'], 
+			'status' => $status
+		);
 	}
 
 	public static function complete(Model_Payment $payment, array $params)
 	{
 		// do nothing;
 	}
+
 }

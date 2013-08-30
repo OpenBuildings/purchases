@@ -3,6 +3,7 @@
 class Kohana_Model_Payment extends Jam_Model {
 
 	const PAID = 'paid';
+	const PENDING = 'pending';
 
 	protected $_processor;
 	
@@ -42,5 +43,13 @@ class Kohana_Model_Payment extends Jam_Model {
 		}
 
 		return $this;
+	}
+
+	public function refund($amount = NULL)
+	{
+		if ($this->status !== Model_Payment::PAID) 
+		{
+			
+		}
 	}
 }

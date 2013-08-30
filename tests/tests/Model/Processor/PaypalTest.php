@@ -91,5 +91,19 @@ class Processor_PaypalTest extends Testcase_Purchases_Spiderling {
 				->save();
 
 		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
+
+		$store_purchase = $purchase->store_purchases[0];
+
+		$refund = $store_purchase->refunds->create(array(
+			'items' => array(
+				array('purchase_item' => $store_purchase->items[0], 'amount' => 100)
+			)
+		));
+
+		$refund
+			->execute()
+			->save();
+
+		$this->assertEquals(Model_Store_Refund::REFUNDED, $refund->status);
 	}
 }

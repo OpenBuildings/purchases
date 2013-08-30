@@ -11,6 +11,8 @@ use PayPal\Api\PaymentExecution;
 use PayPal\Api\Item;
 use PayPal\Api\ItemList;
 use PayPal\Api\ShippingAddress;
+use PayPal\Api\Refund;
+use PayPal\Api\Sale;
 
 class Kohana_Processor_Paypal implements Processor {
 
@@ -62,9 +64,38 @@ class Kohana_Processor_Paypal implements Processor {
 
 		$transactions = $response->getTransactions();
 		$resources = $transactions[0]->getRelatedResources();
-		$payment->raw_response = $resources[0]->getSale()->toArray();
-		$payment->payment_id = $resources[0]->getSale()->getId();
-		$payment->status = Model_Payment::PAID;
+		$sale = $resources[0]->getSale();
+		$payment->raw_response = $sale->toArray();
+		$payment->payment_id = $sale->getId();
+		$payment->status = ($sale->getState() == 'completed') ? Model_Payment::PAID : $sale->getState();
+	}
+
+	public static function refund(Model_Store_Refund $refund)
+	{
+		$amount = new Amount();
+		$amount
+			->setCurrency($refund->purchase_insist()->currency)
+			->setTotal(number_format($refund->total_amount(), 2, '.', ''));
+
+		$paypal_refund = new Refund();
+		$paypal_refund
+			->setAmount($amount);
+
+		$payment = $refund->payment_insist();
+		
+		$sale = Sale::get($payment->payment_id, Processor_Paypal::api());
+		$paypal_payement = Payment::get($sale->getParentPayment(), Processor_Paypal::api());
+
+		// Create a new apiContext object so we send a new
+		// PayPal-Request-Id (idempotency) header for this resource
+		$api = new ApiContext(Processor_Paypal::api()->getCredential());
+		$config = Kohana::$config->load('purchases.processor.paypal.config');
+		$api->setConfig($config);
+
+		$response = $sale->refund($paypal_refund, $api);
+
+		$refund->raw_response = $response->toArray();
+		$refund->status = ($response->getState() == 'completed') ? Model_Store_Refund::REFUNDED : $response->getState();
 	}
 
 	public function execute(Model_Purchase $purchase)
@@ -112,14 +143,7 @@ class Kohana_Processor_Paypal implements Processor {
 			->setRedirectUrls($redirectUrls)
 			->setTransactions(array($transaction));
 
-		try 
-		{
-			$payment->create(Processor_Paypal::api());
-		} catch (Exception $e) 
-		{
-			print_r($e->getData());
-			die();
-		}
+		$payment->create(Processor_Paypal::api());
 
 		foreach ($payment->getLinks() as $link)
 		{
@@ -130,6 +154,11 @@ class Kohana_Processor_Paypal implements Processor {
 			}
 		}
 
-		return array('method' => 'paypal', 'payment_id' => $payment->getId(), 'raw_response' => $payment->toArray(), 'status' => 'pending');
+		return array(
+			'method' => 'paypal', 
+			'payment_id' => $payment->getId(), 
+			'raw_response' => $payment->toArray(), 
+			'status' => Model_Payment::PENDING
+		);
 	}
 }

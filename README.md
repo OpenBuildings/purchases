@@ -77,15 +77,12 @@ class Controller_Payment extends Controller_Template {
 		$form = Jam::build('emp_form', array($this->post()));
 		if ($this->request->method() === Request::POST AND $form->check())
 		{
-			$processor = new Processor_Emp($form->as_array());
+			$processor = new Processor_Emp($form->as_array(), '/payment/complete');
 			$purchase
 				->pay($processor)
 				->save();
 
-			if ($purchase->payment->status == Model_Payment::PAID)
-			{
-				$this->redirect('/checkout/complete');
-			}
+			$this->redirect($processor->next_url());
 		}
 
 		$this->template->content = View::factory('payment/index', array('form' => Jam::form($form)))
@@ -107,7 +104,70 @@ The form is a simple Jam_Form inside your view:
 
 ## Paypal Processor
 
+A paypal transaction requires 3 steps - creating the transaction, authorizing it by the user through paypal's interface, and executing the transaction onces its been authorized.
 
+``$processor->next_url()`` is used to go to the paypal authorization page.
+
+```php
+
+class Controller_Payment extends Controller_Template {
+
+	public function action_index()
+	{
+		$purchase = // Load purchase from somewhere
+
+		$form = Jam::build('emp_form', array($this->post()));
+		if ($this->request->method() === Request::POST AND $form->check())
+		{
+			$processor = new Processor_Emp('/payment/complete', '/payment/canceled');
+			$purchase
+				->pay($processor)
+				->save();
+
+			$this->redirect($processor->next_url());
+		}
+
+		$this->template->content = View::factory('payment/index', array('form' => Jam::form($form)));
+	}
+
+	public function action_complete()
+	{
+		$purchase = // Load purchase from somewhere
+
+		$purchase
+			->payment
+				->complete(array('payer_id' => Request::initial()->query('PayerID'))
+				->save();
+
+		$this->template->content = View::factory('payment/complete', array('purchase' => $purchase));
+	}
+}
+```
+
+## Refunds
+
+Refunds are performed with special Model_Store_Refund objects - each refund is specific to a store purchase - if you do not set any custom items, then all of them will be refunded (the whole transaction) otherwise, you can add Model_Store_Refund_Item objects for refunding specific items (partial refund).
+
+```php
+
+$store_purchase = // Load store purchase
+
+$refund = $store_purchase->refunds->create(array(
+	'items' => array(
+		// The whole price of a specific item
+		array('purchase_item' => $store_purchase->items[0])
+
+		// Parital amount of an item
+		array('purchase_item' => $store_purchase->items[1], 'amount' => 100)
+	)
+));
+
+$refund
+	->execute()
+	->save();
+```
+
+Later you can retrieve the refunds from the store purchase or issue multiple refunds
 
 ## License
 

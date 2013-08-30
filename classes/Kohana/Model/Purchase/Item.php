@@ -72,17 +72,9 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 			AND $this->type == $item->type);
 	}
 
-	public function store_purchase_insist()
-	{
-		if ( ! $this->store_purchase) 
-			throw new Kohana_Exception('This Purchase Item does not have a Store Purchase');
-
-		return $this->store_purchase;
-	}
-
 	public function purchase_insist()
 	{
-		return $this->store_purchase_insist()->purchase_insist();
+		return $this->get_insist('store_purchase')->get_insist('purchase');
 	}
 
 	public function monetary()

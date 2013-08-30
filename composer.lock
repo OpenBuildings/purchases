@@ -7,16 +7,16 @@
     "packages": [
         {
             "name": "composer/installers",
-            "version": "v1.0.5",
+            "version": "v1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "v1.0.5"
+                "reference": "b3bd071ea114a57212c75aa6a2eef5cfe0cc798f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/v1.0.5",
-                "reference": "v1.0.5",
+                "url": "https://api.github.com/repos/composer/installers/zipball/b3bd071ea114a57212c75aa6a2eef5cfe0cc798f",
+                "reference": "b3bd071ea114a57212c75aa6a2eef5cfe0cc798f",
                 "shasum": ""
             },
             "replace": {
@@ -53,6 +53,7 @@
             "description": "A multi-framework Composer library installer",
             "homepage": "http://composer.github.com/installers/",
             "keywords": [
+                "TYPO3 CMS",
                 "TYPO3 Flow",
                 "TYPO3 Neos",
                 "agl",
@@ -75,7 +76,7 @@
                 "wordpress",
                 "zend"
             ],
-            "time": "2013-08-07 17:25:08"
+            "time": "2013-08-20 04:37:09"
         },
         {
             "name": "desarrolla2/cache",
@@ -265,16 +266,16 @@
         },
         {
             "name": "openbuildings/jam",
-            "version": "0.4.4",
+            "version": "0.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam.git",
-                "reference": "0.4.4"
+                "reference": "a2907522b5f565767aca52f680232d0e90693215"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/0.4.4",
-                "reference": "0.4.4",
+                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/a2907522b5f565767aca52f680232d0e90693215",
+                "reference": "a2907522b5f565767aca52f680232d0e90693215",
                 "shasum": ""
             },
             "require": {
@@ -308,7 +309,7 @@
                 "upload",
                 "validation"
             ],
-            "time": "2013-08-20 10:40:17"
+            "time": "2013-08-30 08:25:16"
         },
         {
             "name": "openbuildings/jam-auth",

@@ -63,19 +63,6 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 
 	/**
 	 * @expectedException Kohana_Exception
-	 * @covers Model_Purchase_Item::store_purchase_insist
-	 */
-	public function test_store_purchase_insist()
-	{
-		$item = Jam::find('test_purchase_item', 1);
-		$this->assertInstanceOf('Model_Store_Purchase', $item->store_purchase_insist());
-
-		$item->store_purchase = NULL;
-		$item->store_purchase_insist();
-	}
-
-	/**
-	 * @expectedException Kohana_Exception
 	 * @covers Model_Purchase_Item::purchase_insist
 	 */
 	public function test_purchase_insist()

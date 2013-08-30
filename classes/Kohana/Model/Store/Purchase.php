@@ -12,6 +12,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 			->associations(array(
 				'purchase' => Jam::association('belongsto', array('inverse_of' => 'store_purchases')),
 				'items' => Jam::association('hasmany', array('inverse_of' => 'store_purchase', 'foreign_model' => 'purchase_item')),
+				'refunds' => Jam::association('hasmany', array('inverse_of' => 'store_purchase', 'foreign_model' => 'store_refund')),
 				'store' => Jam::association('belongsto'),
 			))
 			->fields(array(
@@ -19,15 +20,6 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 			))
 			->validator('purchase', 'store', array('present' => TRUE));
 	}
-
-	public function purchase_insist()
-	{
-		if ( ! $this->purchase) 
-			throw new Kohana_Exception('This Store Purchase does not have a Purchase');
-
-		return $this->purchase;
-	}
-
 
 	public function find_same_item(Model_Purchase_Item $new_item)
 	{
@@ -104,6 +96,6 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 
 	public function total_price_in($currency, $types = NULL)
 	{
-		return $this->purchase_insist()->price_in($currency, $this->total_price($types));
+		return $this->get_insist('purchase')->price_in($currency, $this->total_price($types));
 	}
 }
