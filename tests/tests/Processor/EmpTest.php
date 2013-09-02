@@ -226,6 +226,8 @@ class Processor_EmpTest extends Testcase_Purchases {
 	 * @covers Processor_Emp::complete
 	 * @covers Processor_Emp::refund
 	 * @covers Model_Store_Refund::execute
+	 * @covers Model_Payment::initialize
+	 * @covers Model_Payment::complete
 	 */
 	public function test_execute()
 	{
@@ -264,7 +266,24 @@ class Processor_EmpTest extends Testcase_Purchases {
 		$this->assertGreaterThan(0, $purchase->payment->payment_id);
 		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
 
-		Processor_Emp::complete($purchase->payment, array()); // This should do nothing
+		$purchase
+			->payment
+				->complete()
+				->save();
+
+		$store_purchase = $purchase->store_purchases[0];
+
+		// $refund = $store_purchase->refunds->create(array(
+		// 	'items' => array(
+		// 		array('purchase_item' => $store_purchase->items[0], 'amount' => 100)
+		// 	)
+		// ));
+
+		// $refund
+		// 	->execute()
+		// 	->save();
+
+		// $this->assertEquals(Model_Store_Refund::REFUNDED, $refund->status);
 	}
 
 }

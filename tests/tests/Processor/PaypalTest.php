@@ -51,6 +51,8 @@ class Processor_PaypalTest extends Testcase_Purchases_Spiderling {
 	 * @covers Processor_Paypal::refund
 	 * @covers Processor_Paypal::next_url
 	 * @covers Model_Store_Refund::execute
+	 * @covers Model_Payment::initialize
+	 * @covers Model_Payment::complete
 	 * @driver phantomjs
 	 */
 	public function test_execute()

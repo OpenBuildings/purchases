@@ -44,12 +44,4 @@ class Kohana_Model_Payment extends Jam_Model {
 
 		return $this;
 	}
-
-	public function refund($amount = NULL)
-	{
-		if ($this->status !== Model_Payment::PAID) 
-		{
-			
-		}
-	}
 }
