@@ -13,32 +13,28 @@ use OpenBuildings\Monetary\Monetary;
  */
 class Model_PurchaseTest extends Testcase_Purchases {
 
-	// Jam::build('test_purchase', array(
-	// 	'payment' => array(
-	// 		'method' => 'emp',
-	// 		'status' => 'paid',
-	// 		'raw_response' => array('asd'),
-	// 	),
-	// 	'store_purchases' => array(
-	// 		array(
-	// 			'store' => 1,
-	// 			'items' => array(
-	// 				array(
-	// 					'price' => 200,
-	// 					'type' => 'product',
-	// 					'quantity' => 1,
-	// 					'reference' => array('test_product' => 1),
-	// 				),
-	// 				array(
-	// 					'price' => 200,
-	// 					'type' => 'product',
-	// 					'quantity' => 1,
-	// 					'reference' => array('test_variation' => 1),
-	// 				),
-	// 			),
-	// 		)
-	// 	)
-	// ));
+	/**
+	 * @covers Model_Purchase::find_or_build_store_purchase
+	 */
+	public function test_find_or_build_store_purchase()
+	{
+		$purchase = Jam::find('test_purchase', 1);
+
+		$store_purchase = $purchase->find_or_build_store_purchase(1);
+		$this->assertSame($purchase->store_purchases[0], $store_purchase);
+		$this->assertTrue($store_purchase->loaded());
+
+		$expected_store = $purchase->store_purchases[0]->store;
+
+		$store_purchase = $purchase->find_or_build_store_purchase($expected_store);
+		$this->assertSame($purchase->store_purchases[0], $store_purchase);
+		$this->assertSame($purchase->store_purchases[0]->store, $store_purchase->store);
+
+		$store_purchase = $purchase->find_or_build_store_purchase(2);
+		$this->assertSame($purchase->store_purchases[1], $store_purchase);
+		$this->assertFalse($store_purchase->loaded());
+		$this->assertEquals(2, $store_purchase->store->id());
+	}
 
 	/**
 	 * @covers Model_Purchase::monetary
@@ -172,19 +168,19 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	public function test_add_item()
 	{
 		$purchase = Jam::find('test_purchase', 1);
- 		$this->assertCount(2, $purchase->store_purchases[0]->items);
+		$this->assertCount(2, $purchase->store_purchases[0]->items);
 
- 		$existing_item = Jam::build('test_purchase_item', array(
- 			'reference_id' => 1,
- 			'reference_model' => 'test_product',
- 			'quantity' => 3,
- 			'type' => 'product',
- 		));
+		$existing_item = Jam::build('test_purchase_item', array(
+			'reference_id' => 1,
+			'reference_model' => 'test_product',
+			'quantity' => 3,
+			'type' => 'product',
+		));
 
- 		$purchase->add_item(1, $existing_item);
+		$purchase->add_item(1, $existing_item);
 
- 		$this->assertCount(2, $purchase->store_purchases[0]->items);
- 		$this->assertEquals(4, $purchase->store_purchases[0]->items[0]->quantity);
+		$this->assertCount(2, $purchase->store_purchases[0]->items);
+		$this->assertEquals(4, $purchase->store_purchases[0]->items[0]->quantity);
 	}
 
 	/**
@@ -208,6 +204,38 @@ class Model_PurchaseTest extends Testcase_Purchases {
 			->will($this->returnValue(100));
 
 		$purchase->price_in('USD', 50);
+	}
+
+	/**
+	 * @covers Model_Purchase::total_price
+	 */
+	public function test_total_price()
+	{
+		$purchase = Jam::build('test_purchase', array('store_purchases' => array(
+			Jam::build('test_store_purchase')
+		)));
+
+		$item1 = $this->getMock('Model_Test_Purchase_Item', array('total_price'), array('test_purchase_item'));
+		$item1->type = 'product';
+		$item1->expects($this->exactly(3))
+			->method('total_price')
+			->will($this->returnValue(5));
+
+		$item2 = $this->getMock('Model_Test_Purchase_Item', array('total_price'), array('test_purchase_item'));
+		$item2->type = 'shipping';
+		$item2->expects($this->exactly(3))
+			->method('total_price')
+			->will($this->returnValue(10));
+
+		$purchase->store_purchases[0]->items = array(
+			$item1,
+			$item2,
+		);
+
+		$this->assertEquals(15, $purchase->total_price());
+		$this->assertEquals(5, $purchase->total_price('product'));
+		$this->assertEquals(10, $purchase->total_price('shipping'));
+		$this->assertEquals(15, $purchase->total_price(array('shipping', 'product')));
 	}
 
 	/**

@@ -228,6 +228,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 	 * @covers Model_Store_Refund::execute
 	 * @covers Model_Payment::initialize
 	 * @covers Model_Payment::complete
+	 * @covers Model_Purchase::pay
 	 */
 	public function test_execute()
 	{
