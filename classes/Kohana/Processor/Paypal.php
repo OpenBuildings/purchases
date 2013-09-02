@@ -14,6 +14,12 @@ use PayPal\Api\ShippingAddress;
 use PayPal\Api\Refund;
 use PayPal\Api\Sale;
 
+/**
+ * @package    Openbuildings\Purchases
+ * @author     Ivan Kerin <ikerin@gmail.com>
+ * @copyright  (c) 2013 OpenBuildings Ltd.
+ * @license    http://spdx.org/licenses/BSD-3-Clause
+ */
 class Kohana_Processor_Paypal implements Processor {
 
 	protected static $_api;

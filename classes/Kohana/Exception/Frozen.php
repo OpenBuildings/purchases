@@ -1,13 +1,10 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.'); 
 
 /**
- * Resource_Jam_Exception_Sluggable class
- * Jam Sluggable Exception
- *
- * @package    Despark/jam
- * @author     Yasen Yanev
- * @copyright  (c) 2012 Despark Ltd.
- * @license    http://creativecommons.org/licenses/by-sa/3.0/legalcode
+ * @package    Openbuildings\Purchases
+ * @author     Ivan Kerin <ikerin@gmail.com>
+ * @copyright  (c) 2013 OpenBuildings Ltd.
+ * @license    http://spdx.org/licenses/BSD-3-Clause
  */
 class Kohana_Exception_Frozen extends Kohana_Exception {
 	

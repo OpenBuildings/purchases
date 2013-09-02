@@ -3,6 +3,12 @@
 use Openbuildings\Emp\Api;
 use Openbuildings\Emp\Threatmatrix;
 
+/**
+ * @package    Openbuildings\Purchases
+ * @author     Ivan Kerin <ikerin@gmail.com>
+ * @copyright  (c) 2013 OpenBuildings Ltd.
+ * @license    http://spdx.org/licenses/BSD-3-Clause
+ */
 class Kohana_Processor_Emp implements Processor {
 
 	const THREATMATRIX_SESSION_KEY = '_threatmatrix';

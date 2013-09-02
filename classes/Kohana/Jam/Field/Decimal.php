@@ -6,8 +6,10 @@
  *  - validate it like a float
  *  - insert it (into the database) like a decimal
  *
- * @author Haralan Dobrev <hdobrev@despark>
- * @copyright (c) 2013 Despark Ltd.
+ * @package    Openbuildings\Purchases
+ * @author     Haralan Dobrev <hdobrev@despark>
+ * @copyright  (c) 2013 OpenBuildings Ltd.
+ * @license    http://spdx.org/licenses/BSD-3-Clause
  */
 class Kohana_Jam_Field_Decimal extends Jam_Field_String {
 
