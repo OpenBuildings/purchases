@@ -17,7 +17,7 @@
 		"composer/installers": "*",
 		"openbuildings/jam": "0.4.*",
 		"openbuildings/emp": "0.1.*",
-		"paypal/rest-api-sdk-php": "v0.7.*",
+		"paypal/rest-api-sdk-php": "0.7.*",
 		"openbuildings/jam-auth": "0.1.*",
 		"openbuildings/monetary": "0.2.*"
 	},
@@ -25,8 +25,5 @@
 		"openbuildings/kohana-test-bootsrap": "0.1.*",
 		"openbuildings/environment-backup": "0.1.*",
 		"openbuildings/phpunit-spiderling": "0.1.*"
-	},
-	"autoload": {
-		"psr-0": {"Openbuildings\\Purchases\\": "src/"}
 	}
 }
