@@ -2,6 +2,9 @@
 
 class Kohana_Model_Emp_Form extends Jam_Validated {
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta

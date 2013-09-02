@@ -14,7 +14,6 @@ class Model_Store_Refund_ItemTest extends Testcase_Purchases {
 
 	/**
 	 * @covers Model_Store_Refund_Item::validate
-	 * @covers Model_Store_Refund_Item::initialize
 	 */
 	public function test_validate()
 	{

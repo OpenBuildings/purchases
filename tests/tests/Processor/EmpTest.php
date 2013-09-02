@@ -174,6 +174,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 			'order_id' => '5580812',
 			'trans_id' => '11111',
 			'reason' => 'Faulty Product',
+			'test_transaction' => '1',
 			'item_1_id' => '5657022',
 			'item_2_id' => '5657032',
 			'item_2_amount' => '20.00',
@@ -193,6 +194,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 			'trans_id' => '11111',
 			'reason' => 'Full Rrefund',
 			'amount' => '400.00',
+			'test_transaction' => '1',
 		);
 
 		$this->assertEquals($expected, $params);
@@ -226,7 +228,6 @@ class Processor_EmpTest extends Testcase_Purchases {
 	 * @covers Processor_Emp::complete
 	 * @covers Processor_Emp::refund
 	 * @covers Model_Store_Refund::execute
-	 * @covers Model_Payment::initialize
 	 * @covers Model_Payment::complete
 	 * @covers Model_Purchase::pay
 	 */
@@ -274,17 +275,17 @@ class Processor_EmpTest extends Testcase_Purchases {
 
 		$store_purchase = $purchase->store_purchases[0];
 
-		// $refund = $store_purchase->refunds->create(array(
-		// 	'items' => array(
-		// 		array('purchase_item' => $store_purchase->items[0], 'amount' => 100)
-		// 	)
-		// ));
+		$refund = $store_purchase->refunds->create(array(
+			'items' => array(
+				array('purchase_item' => $store_purchase->items[0], 'amount' => 100)
+			)
+		));
 
-		// $refund
-		// 	->execute()
-		// 	->save();
+		$refund
+			->execute()
+			->save();
 
-		// $this->assertEquals(Model_Store_Refund::REFUNDED, $refund->status);
+		$this->assertEquals(Model_Store_Refund::REFUNDED, $refund->status);
 	}
 
 }

@@ -6,6 +6,9 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 
 	const PRODUCT = 'product';
 	
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta

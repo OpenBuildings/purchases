@@ -14,7 +14,6 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 
 	/**
 	 * @covers Model_Purchase_Item::validate
-	 * @covers Model_Purchase_Item::initialize
 	 */
 	public function test_validate()
 	{

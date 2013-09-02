@@ -2,6 +2,9 @@
 
 class Kohana_Model_Store_Refund_Item extends Jam_Model {
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta

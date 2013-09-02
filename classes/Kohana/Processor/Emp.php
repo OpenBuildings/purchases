@@ -100,9 +100,10 @@ class Kohana_Processor_Emp implements Processor {
 		$payment = $refund->payment_insist();
 
 		$params = array(
-			'order_id' => $payment->raw_response['order_id'],
-			'trans_id' => $payment->payment_id,
-			'reason'   => $refund->reason,
+			'order_id'         => $payment->raw_response['order_id'],
+			'trans_id'         => $payment->payment_id,
+			'reason'           => $refund->reason,
+			'test_transaction' => Kohana::$environment === Kohana::PRODUCTION ? '0' : '1',
 		);
 
 		if (count($refund->items)) 
@@ -139,8 +140,6 @@ class Kohana_Processor_Emp implements Processor {
 
 		$refund->raw_response = $response;
 		$refund->status = Model_Store_Refund::REFUNDED;
-
-		return $this;
 	}
 
 	protected $_params = array();

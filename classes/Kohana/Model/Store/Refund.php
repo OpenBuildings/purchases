@@ -4,6 +4,9 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 
 	const REFUNDED = 'refunded';
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta

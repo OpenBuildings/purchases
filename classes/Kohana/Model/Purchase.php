@@ -6,6 +6,9 @@ class Kohana_Model_Purchase extends Jam_Model {
 
 	protected $_monetary;
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta
