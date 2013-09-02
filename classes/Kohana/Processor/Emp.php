@@ -116,7 +116,7 @@ class Kohana_Processor_Emp implements Processor {
 
 				if ($item->amount)
 				{
-					$item_params["item_{$index}_amount"] = $item->amount;
+					$item_params["item_{$index}_amount"] = number_format($item->amount, 2, '.', '');
 				}
 
 				$params = array_merge($params, $item_params);
@@ -124,7 +124,7 @@ class Kohana_Processor_Emp implements Processor {
 		}
 		else
 		{
-			$params['amount'] = $item->total_amount();
+			$params['amount'] = number_format($refund->total_amount(), 2, '.', '');
 		}
 
 		return $params;

@@ -21,7 +21,7 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 				'reason' => Jam::field('string'),
 				'created_at' => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			))
-			->validator('store_purchase', 'items', array('present' => TRUE));
+			->validator('store_purchase', array('present' => TRUE));
 	}
 
 	public function validate()

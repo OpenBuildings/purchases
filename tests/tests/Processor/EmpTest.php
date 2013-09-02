@@ -39,7 +39,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 
 	/**
 	 * @covers Processor_Emp::threatmatrix
-	 * @covers Processor_Emp::clrear_threatmatrix
+	 * @covers Processor_Emp::clear_threatmatrix
 	 */
 	public function test_threatmatrix()
 	{
@@ -149,6 +149,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 		$response = Jam::find('test_payment', 1)->raw_response;
 		$this->assertEquals('5657022', Processor_Emp::find_item_id($response['cart'], 1));
 		$this->assertEquals('5657032', Processor_Emp::find_item_id($response['cart'], 2));
+		$this->assertEquals(NULL, Processor_Emp::find_item_id($response['cart'], 4));
 	}
 
 	/**
@@ -162,7 +163,8 @@ class Processor_EmpTest extends Testcase_Purchases {
 		$refund = $store_purchase->refunds->create(array(
 			'reason' => 'Faulty Product',
 			'items' => array(
-				array('purchase_item' => $store_purchase->items[0])
+				array('purchase_item' => $store_purchase->items[0]),
+				array('purchase_item' => $store_purchase->items[1], 'amount' => 20),
 			)
 		));
 
@@ -173,13 +175,33 @@ class Processor_EmpTest extends Testcase_Purchases {
 			'trans_id' => '11111',
 			'reason' => 'Faulty Product',
 			'item_1_id' => '5657022',
+			'item_2_id' => '5657032',
+			'item_2_amount' => '20.00',
+		);
+
+		$this->assertEquals($expected, $params);
+
+
+		$refund = $store_purchase->refunds->create(array(
+			'reason' => 'Full Rrefund',
+		));
+
+		$params = Processor_Emp::params_for_refund($refund);
+
+		$expected = array(
+			'order_id' => '5580812',
+			'trans_id' => '11111',
+			'reason' => 'Full Rrefund',
+			'amount' => '400.00',
 		);
 
 		$this->assertEquals($expected, $params);
 	}
 
 	/**
-	 * @covers Processor_Emp::construct
+	 * @covers Processor_Emp::__construct
+	 * @covers Processor_Emp::params
+	 * @covers Processor_Emp::next_url
 	 */
 	public function test_construct()
 	{
@@ -201,6 +223,9 @@ class Processor_EmpTest extends Testcase_Purchases {
 
 	/**
 	 * @covers Processor_Emp::execute
+	 * @covers Processor_Emp::complete
+	 * @covers Processor_Emp::refund
+	 * @covers Model_Store_Refund::execute
 	 */
 	public function test_execute()
 	{
@@ -238,6 +263,8 @@ class Processor_EmpTest extends Testcase_Purchases {
 		$this->assertEquals('emp', $purchase->payment->method);
 		$this->assertGreaterThan(0, $purchase->payment->payment_id);
 		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
+
+		Processor_Emp::complete($purchase->payment, array()); // This should do nothing
 	}
 
 }

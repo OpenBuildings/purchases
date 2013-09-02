@@ -13,6 +13,40 @@ use OpenBuildings\Monetary\Monetary;
 class Model_Purchase_ItemTest extends Testcase_Purchases {
 
 	/**
+	 * @covers Model_Purchase_Item::validate
+	 * @covers Model_Purchase_Item::initialize
+	 */
+	public function test_validate()
+	{
+		$item = Jam::find('test_purchase_item', 1);
+		$item->reference = Jam::find('test_user', 1);
+
+		$this->assertFalse($item->check());
+		$this->assertArrayHasKey('reference', $item->errors()->messages());
+
+		$item = Jam::build('test_purchase_item', array(
+			'price' => 10, 
+			'type' => 'product', 
+			'quantity' => 1,
+			'is_payable' => TRUE
+		));
+
+		$item->price = -100;
+		$this->assertFalse($item->check());
+		$this->assertArrayHasKey('price', $item->errors()->messages());
+
+		$item->price = 10;
+		$this->assertTrue($item->check());
+
+		$item->is_discount = TRUE;
+		$this->assertFalse($item->check());
+		$this->assertArrayHasKey('price', $item->errors()->messages());
+
+		$item->price = -100;
+		$this->assertTrue($item->check());
+	}
+
+	/**
 	 * @covers Model_Purchase_Item::is_same
 	 */
 	public function test_is_same()
@@ -104,7 +138,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Model_Purcahse_Item::freeze_price
+	 * @covers Model_Purchase_Item::freeze_price
 	 */
 	public function test_freeze_price()
 	{
@@ -122,7 +156,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Model_Purcahse_Item::total_price
+	 * @covers Model_Purchase_Item::total_price
 	 */
 	public function test_total_price()
 	{
@@ -140,7 +174,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Model_Purcahse_Item::total_price_in
+	 * @covers Model_Purchase_Item::total_price_in
 	 */
 	public function test_total_price_in()
 	{
@@ -154,7 +188,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Model_Purcahse_Item::matches_flags
+	 * @covers Model_Purchase_Item::matches_flags
 	 */
 	public function test_matches_flags()
 	{

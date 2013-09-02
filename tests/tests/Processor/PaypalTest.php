@@ -11,7 +11,23 @@
  * @copyright  (c) 2011-2013 Despark Ltd.
  */
 class Processor_PaypalTest extends Testcase_Purchases_Spiderling {
-	
+
+	/**
+	 * @covers Processor_Paypal::__construct
+	 * @covers Processor_Paypal::cancel_url
+	 * @covers Processor_Paypal::success_url
+	 */
+	public function test_construct()
+	{
+		$success_url = 'http://example.com/complete';
+		$cancel_url = 'http://example.com/cancel';
+
+		$processor = new Processor_Paypal($success_url, $cancel_url);
+
+		$this->assertEquals($success_url, $processor->success_url());
+		$this->assertEquals($cancel_url, $processor->cancel_url());
+	}
+
 	/**
 	 * @covers Processor_Paypal::api
 	 */
@@ -31,6 +47,10 @@ class Processor_PaypalTest extends Testcase_Purchases_Spiderling {
 
 	/**
 	 * @covers Processor_Paypal::execute
+	 * @covers Processor_Paypal::complete
+	 * @covers Processor_Paypal::refund
+	 * @covers Processor_Paypal::next_url
+	 * @covers Model_Store_Refund::execute
 	 * @driver phantomjs
 	 */
 	public function test_execute()
@@ -82,7 +102,7 @@ class Processor_PaypalTest extends Testcase_Purchases_Spiderling {
 
 		$query = parse_url($this->current_url(), PHP_URL_QUERY);	
 		parse_str($query, $query);
-
+		
 		$this->assertEquals('success', $query['result']);
 
 		$purchase
