@@ -119,7 +119,7 @@ class Controller_Payment extends Controller_Template {
 		$form = Jam::build('emp_form', array($this->post()));
 		if ($this->request->method() === Request::POST AND $form->check())
 		{
-			$processor = new Processor_Emp('/payment/complete', '/payment/canceled');
+			$processor = new Processor_Paypal('/payment/complete', '/payment/canceled');
 			$purchase
 				->pay($processor)
 				->save();
