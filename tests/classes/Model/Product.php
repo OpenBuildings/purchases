@@ -1,13 +1,12 @@
 <?php
 
-class Model_Test_Product extends Jam_Model implements Sellable {
+class Model_Product extends Jam_Model implements Sellable {
 
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta
-			->db(Kohana::TESTING)
 			->associations(array(
-				'variations' => Jam::association('hasmany', array('foreign_model' => 'test_variation')),
+				'variations' => Jam::association('hasmany'),
 			))
 			->fields(array(
 				'id' => Jam::field('primary'),

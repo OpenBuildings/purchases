@@ -65,7 +65,7 @@ class Processor_PaypalTest extends Testcase_Purchases_Spiderling {
 			),
 		));
 
-		$purchase = Jam::find('test_purchase', 2);
+		$purchase = Jam::find('purchase', 2);
 		$purchase
 			->store_purchases[0]
 				->items

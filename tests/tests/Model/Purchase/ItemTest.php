@@ -17,13 +17,13 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_validate()
 	{
-		$item = Jam::find('test_purchase_item', 1);
-		$item->reference = Jam::find('test_user', 1);
+		$item = Jam::find('purchase_item', 1);
+		$item->reference = Jam::find('user', 1);
 
 		$this->assertFalse($item->check());
 		$this->assertArrayHasKey('reference', $item->errors()->messages());
 
-		$item = Jam::build('test_purchase_item', array(
+		$item = Jam::build('purchase_item', array(
 			'price' => 10, 
 			'type' => 'product', 
 			'quantity' => 1,
@@ -50,10 +50,10 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_is_same()
 	{
-		$item = Jam::find('test_purchase_item', 1);
+		$item = Jam::find('purchase_item', 1);
 
-		$new_item = Jam::build('test_purchase_item', array(
-			'reference' => Jam::find('test_product', 1),
+		$new_item = Jam::build('purchase_item', array(
+			'reference' => Jam::find('product', 1),
 			'quantity' => 3,
 			'type' => 'product',
 		));
@@ -70,8 +70,8 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_compute_price()
 	{
-		$item = Jam::find('test_purchase_item', 1);
-		$item->reference = $this->getMock('Model_Test_Product', array('price', 'currency'), array('test_product'));
+		$item = Jam::find('purchase_item', 1);
+		$item->reference = $this->getMock('Model_Product', array('price', 'currency'), array('product'));
 
 		$item->reference->expects($this->exactly(3))
 			->method('price')
@@ -100,7 +100,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_purchase_insist()
 	{
-		$item = Jam::find('test_purchase_item', 1);
+		$item = Jam::find('purchase_item', 1);
 		$this->assertInstanceOf('Model_Purchase', $item->purchase_insist());
 
 		$item->store_purchase->purchase = NULL;
@@ -112,7 +112,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_monetary()
 	{
-		$item = Jam::find('test_purchase_item', 1);
+		$item = Jam::find('purchase_item', 1);
 
 		$this->assertInstanceOf('Openbuildings\Monetary\Monetary', $item->monetary());
 		$this->assertSame($item->store_purchase->purchase->monetary(), $item->monetary());
@@ -123,7 +123,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_price()
 	{
-		$item = $this->getMock('Model_Test_Purchase_Item', array('compute_price'), array('test_purchase_item'));
+		$item = $this->getMock('Model_Purchase_Item', array('compute_price'), array('purchase_item'));
 
 		$item->expects($this->once())
 			->method('compute_price')
@@ -141,7 +141,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_freeze_price()
 	{
-		$item = $this->getMock('Model_Test_Purchase_Item', array('compute_price'), array('test_purchase_item'));
+		$item = $this->getMock('Model_Purchase_Item', array('compute_price'), array('purchase_item'));
 
 		$item->expects($this->once())
 			->method('compute_price')
@@ -159,7 +159,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_total_price()
 	{
-		$item = $this->getMock('Model_Test_Purchase_Item', array('price'), array('test_purchase_item'));
+		$item = $this->getMock('Model_Purchase_Item', array('price'), array('purchase_item'));
 
 		$item->expects($this->exactly(2))
 			->method('price')
@@ -177,7 +177,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_total_price_in()
 	{
-		$item = Jam::find('test_purchase_item', 1);
+		$item = Jam::find('purchase_item', 1);
 
 		$total_price_in_usd = $item
 			->total_price_in('USD');
@@ -191,7 +191,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_matches_flags()
 	{
-		$item = Jam::build('test_purchase_item', array(
+		$item = Jam::build('purchase_item', array(
 			'quantity' => 1,
 			'price' => 10,
 			'type' => 'shipping',

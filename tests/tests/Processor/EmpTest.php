@@ -92,7 +92,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 		));
 
 
-		$purchase = Jam::find('test_purchase', 1);
+		$purchase = Jam::find('purchase', 1);
 
 		$promo = $purchase->store_purchases[0]->items->create(array(
 			'quantity' => 1,
@@ -146,7 +146,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 	 */
 	public function test_find_item_id()
 	{
-		$response = Jam::find('test_payment', 1)->raw_response;
+		$response = Jam::find('payment', 1)->raw_response;
 		$this->assertEquals('5657022', Processor_Emp::find_item_id($response['cart'], 1));
 		$this->assertEquals('5657032', Processor_Emp::find_item_id($response['cart'], 2));
 		$this->assertEquals(NULL, Processor_Emp::find_item_id($response['cart'], 4));
@@ -157,7 +157,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 	 */
 	public function test_params_for_refund()
 	{
-		$purchase = Jam::find('test_purchase', 1);
+		$purchase = Jam::find('purchase', 1);
 		$store_purchase = $purchase->store_purchases[0];
 
 		$refund = $store_purchase->refunds->create(array(
@@ -249,7 +249,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 		
 		Request::factory(Processor_Emp::threatmatrix()->tracking_url())->execute();
 
-		$purchase = Jam::find('test_purchase', 2);
+		$purchase = Jam::find('purchase', 2);
 
 		$purchase
 			->freeze()

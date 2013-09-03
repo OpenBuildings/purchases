@@ -18,7 +18,7 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_find_or_build_store_purchase()
 	{
-		$purchase = Jam::find('test_purchase', 1);
+		$purchase = Jam::find('purchase', 1);
 
 		$store_purchase = $purchase->find_or_build_store_purchase(1);
 		$this->assertSame($purchase->store_purchases[0], $store_purchase);
@@ -41,11 +41,11 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_monetary()
 	{
-		$purchase = Jam::build('test_purchase');
+		$purchase = Jam::build('purchase');
 
 		$this->assertSame(Monetary::instance(), $purchase->monetary());
 		
-		$purchase = Jam::find('test_purchase', 1);
+		$purchase = Jam::find('purchase', 1);
 
 		$monetary = $purchase->monetary();
 
@@ -61,7 +61,7 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_items()
 	{
-		$purchase = Jam::find('test_purchase', 1);
+		$purchase = Jam::find('purchase', 1);
 		$purchase->store_purchases[0]->items->build(array(
 			'quantity' => 1,
 			'price' => 10,
@@ -99,15 +99,15 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_freeze_item_prices()
 	{
-		$purchase = Jam::build('test_purchase');
+		$purchase = Jam::build('purchase');
 
-		$item1 = $this->getMock('Model_Test_Store_Purchase', array('freeze_item_prices'), array('test_store_purchase'));
+		$item1 = $this->getMock('Model_Store_Purchase', array('freeze_item_prices'), array('store_purchase'));
 
 		$item1->expects($this->once())
 			->method('freeze_item_prices')
 			->will($this->returnValue(5));
 
-		$item2 = $this->getMock('Model_Test_Store_Purchase', array('freeze_item_prices'), array('test_store_purchase'));
+		$item2 = $this->getMock('Model_Store_Purchase', array('freeze_item_prices'), array('store_purchase'));
 
 		$item2->expects($this->once())
 			->method('freeze_item_prices')
@@ -126,7 +126,7 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_freeze_monetary()
 	{
-		$purchase = Jam::build('test_purchase');
+		$purchase = Jam::build('purchase');
 
 		$this->assertSame(Monetary::instance(), $purchase->monetary());
 		
@@ -145,7 +145,7 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_freeze()
 	{
-		$purchase = $this->getMock('Model_Test_Purchase', array('freeze_item_prices', 'freeze_monetary'), array('test_purchase'));
+		$purchase = $this->getMock('Model_Purchase', array('freeze_item_prices', 'freeze_monetary'), array('purchase'));
 
 		$purchase->expects($this->once())
 			->method('freeze_item_prices')
@@ -167,12 +167,12 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_add_item()
 	{
-		$purchase = Jam::find('test_purchase', 1);
+		$purchase = Jam::find('purchase', 1);
 		$this->assertCount(2, $purchase->store_purchases[0]->items);
 
-		$existing_item = Jam::build('test_purchase_item', array(
+		$existing_item = Jam::build('purchase_item', array(
 			'reference_id' => 1,
-			'reference_model' => 'test_product',
+			'reference_model' => 'product',
 			'quantity' => 3,
 			'type' => 'product',
 		));
@@ -188,7 +188,7 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_price_in()
 	{
-		$purchase = $this->getMock('Model_Test_Purchase', array('monetary'), array('test_purchase'));
+		$purchase = $this->getMock('Model_Purchase', array('monetary'), array('purchase'));
 		$purchase->currency = 'EUR';
 		$monetary = $this->getMock('Openbuildings\Monetary\Monetary');
 
@@ -211,17 +211,17 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_total_price()
 	{
-		$purchase = Jam::build('test_purchase', array('store_purchases' => array(
-			Jam::build('test_store_purchase')
+		$purchase = Jam::build('purchase', array('store_purchases' => array(
+			Jam::build('store_purchase')
 		)));
 
-		$item1 = $this->getMock('Model_Test_Purchase_Item', array('total_price'), array('test_purchase_item'));
+		$item1 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
 		$item1->type = 'product';
 		$item1->expects($this->exactly(3))
 			->method('total_price')
 			->will($this->returnValue(5));
 
-		$item2 = $this->getMock('Model_Test_Purchase_Item', array('total_price'), array('test_purchase_item'));
+		$item2 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
 		$item2->type = 'shipping';
 		$item2->expects($this->exactly(3))
 			->method('total_price')
@@ -243,7 +243,7 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_total_price_in()
 	{
-		$purchase = Jam::find('test_purchase', 1);
+		$purchase = Jam::find('purchase', 1);
 
 		$total_price_in_usd = $purchase
 			->total_price_in('USD', array('product'));

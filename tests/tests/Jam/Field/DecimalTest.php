@@ -27,7 +27,7 @@ class Jam_Field_TimestampTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function test_set($options, $value, $expected)
 	{
-		$object = Jam::build('test_purchase_item');
+		$object = Jam::build('purchase_item');
 		$field = new Jam_Field_Decimal($options);
 		$result = $field->set($object, $value, TRUE);
 		$this->assertSame($expected, $result);
@@ -48,7 +48,7 @@ class Jam_Field_TimestampTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function test_convert($options, $value, $expected)
 	{
-		$object = Jam::build('test_purchase_item');
+		$object = Jam::build('purchase_item');
 		$field = new Jam_Field_Decimal($options);
 		$result = $field->convert($object, $value, TRUE);
 		$this->assertSame($expected, $result);

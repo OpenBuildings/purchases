@@ -17,7 +17,7 @@ abstract class Testcase_Purchases_Spiderling extends Testcase_Spiderling {
 	public function setUp()
 	{
 		parent::setUp();
-		Database::instance(Kohana::TESTING)->begin();
+		Database::instance()->begin();
 		Jam_Association_Creator::current(1);
 
 		$this->env = new EB\Environment(array(
@@ -28,7 +28,7 @@ abstract class Testcase_Purchases_Spiderling extends Testcase_Spiderling {
 
 	public function tearDown()
 	{
-		Database::instance(Kohana::TESTING)->rollback();	
+		Database::instance()->rollback();	
 		$this->env->restore();
 
 		parent::tearDown();

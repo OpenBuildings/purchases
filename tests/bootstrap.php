@@ -24,7 +24,7 @@ spl_autoload_register('test_autoload');
 
 Kohana::$config
 	->load('database')
-		->set(Kohana::TESTING, array(
+		->set('default', array(
 			'type'       => 'MySQL',
 			'connection' => array(
 				'hostname'   => 'localhost',

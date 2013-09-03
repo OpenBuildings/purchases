@@ -17,7 +17,7 @@ class Model_Store_Refund_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_validate()
 	{
-		$store_purchase = Jam::find('test_purchase', 1)->store_purchases[0];
+		$store_purchase = Jam::find('purchase', 1)->store_purchases[0];
 		$refund = $store_purchase->refunds->create(array(
 			'items' => array(
 				array('purchase_item' => $store_purchase->items[0])
@@ -38,7 +38,7 @@ class Model_Store_Refund_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_amount()
 	{
-		$store_purchase = Jam::find('test_purchase', 1)->store_purchases[0];
+		$store_purchase = Jam::find('purchase', 1)->store_purchases[0];
 		$refund = $store_purchase->refunds->create(array(
 			'items' => array(
 				array('purchase_item' => $store_purchase->items[0])

@@ -15,13 +15,13 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_find_same_item()
 	{
-		$store_purchase = Jam::find('test_purchase', 1)->store_purchases[0];
+		$store_purchase = Jam::find('purchase', 1)->store_purchases[0];
 
 		$first_item = $store_purchase->items[0];
 		$second_item = $store_purchase->items[1];
 
-		$new_item = Jam::build('test_purchase_item', array(
-			'reference' => Jam::find('test_product', 1),
+		$new_item = Jam::build('purchase_item', array(
+			'reference' => Jam::find('product', 1),
 			'quantity' => 3,
 			'type' => 'product',
 		));
@@ -35,7 +35,7 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		$this->assertNull($found_item);
 
 		$new_item->type = 'product';
-		$new_item->reference = Jam::find('test_variation', 1);
+		$new_item->reference = Jam::find('variation', 1);
 
 		$found_item = $store_purchase->find_same_item($new_item);
 		$this->assertSame($second_item, $found_item);
@@ -46,22 +46,22 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_add_or_update_item()
 	{
-		$store_purchase = Jam::find('test_purchase', 1)->store_purchases[0];
+		$store_purchase = Jam::find('purchase', 1)->store_purchases[0];
 
-		$existing_item_product = Jam::build('test_purchase_item', array(
-			'reference' => Jam::find('test_product', 1),
+		$existing_item_product = Jam::build('purchase_item', array(
+			'reference' => Jam::find('product', 1),
 			'quantity' => 3,
 			'type' => 'product',
 		));
 
-		$existing_item_variation = Jam::build('test_purchase_item', array(
-			'reference' => Jam::find('test_variation', 1),
+		$existing_item_variation = Jam::build('purchase_item', array(
+			'reference' => Jam::find('variation', 1),
 			'quantity' => 2,
 			'type' => 'product',
 		));
 
-		$new_item_product = Jam::build('test_purchase_item', array(
-			'reference' => Jam::find('test_product', 3),
+		$new_item_product = Jam::build('purchase_item', array(
+			'reference' => Jam::find('product', 3),
 			'quantity' => 5,
 			'type' => 'product',
 		));
@@ -93,7 +93,7 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_items()
 	{
-		$store_purchase = Jam::find('test_store_purchase', 1);
+		$store_purchase = Jam::find('store_purchase', 1);
 		$store_purchase->items->build(array(
 			'quantity' => 1,
 			'price' => 10,
@@ -150,15 +150,15 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_freeze_item_prices()
 	{
-		$store_purchase = Jam::build('test_store_purchase');
+		$store_purchase = Jam::build('store_purchase');
 
-		$item1 = $this->getMock('Model_Test_Purchase_Item', array('freeze_price'), array('test_purchase_item'));
+		$item1 = $this->getMock('Model_Purchase_Item', array('freeze_price'), array('purchase_item'));
 
 		$item1->expects($this->once())
 			->method('freeze_price')
 			->will($this->returnValue(5));
 
-		$item2 = $this->getMock('Model_Test_Purchase_Item', array('freeze_price'), array('test_purchase_item'));
+		$item2 = $this->getMock('Model_Purchase_Item', array('freeze_price'), array('purchase_item'));
 
 		$item2->expects($this->once())
 			->method('freeze_price')
@@ -177,15 +177,15 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_total_price()
 	{
-		$store_purchase = Jam::build('test_store_purchase');
+		$store_purchase = Jam::build('store_purchase');
 
-		$item1 = $this->getMock('Model_Test_Purchase_Item', array('total_price'), array('test_purchase_item'));
+		$item1 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
 		$item1->type = 'product';
 		$item1->expects($this->exactly(3))
 			->method('total_price')
 			->will($this->returnValue(5));
 
-		$item2 = $this->getMock('Model_Test_Purchase_Item', array('total_price'), array('test_purchase_item'));
+		$item2 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
 		$item2->type = 'shipping';
 		$item2->expects($this->exactly(3))
 			->method('total_price')
@@ -207,7 +207,7 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_total_price_in()
 	{
-		$store_purchase = Jam::find('test_store_purchase', 1);
+		$store_purchase = Jam::find('store_purchase', 1);
 
 		$total_price_in_usd = $store_purchase
 			->total_price_in('USD', array('product'));

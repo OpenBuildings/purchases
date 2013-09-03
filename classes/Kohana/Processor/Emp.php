@@ -137,9 +137,11 @@ class Kohana_Processor_Emp implements Processor {
 		return $params;
 	}
 
-	public static function refund(Model_Store_Refund $refund)
+	public static function refund(Model_Store_Refund $refund, array $custom_params = array())
 	{
 		$params = Processor_Emp::params_for_refund($refund);
+
+		$params = array_merge($params, $custom_params);
 
 		$response = Processor_Emp::api()
 			->request(Api::ORDER_CREDIT, $params);
@@ -167,10 +169,12 @@ class Kohana_Processor_Emp implements Processor {
 		return $this->_next_url;
 	}
 
-	public function execute(Model_Purchase $purchase)
+	public function execute(Model_Purchase $purchase, array $custom_params = array())
 	{
+		$params = array_merge($this->params(), Processor_Emp::params_for($purchase), $custom_params);
+
 		$response = Processor_Emp::api()
-			->request(Api::ORDER_SUBMIT, array_merge($this->params(), Processor_Emp::params_for($purchase)));
+			->request(Api::ORDER_SUBMIT, $params);
 
 		Processor_Emp::clear_threatmatrix();
 
@@ -184,7 +188,7 @@ class Kohana_Processor_Emp implements Processor {
 		);
 	}
 
-	public static function complete(Model_Payment $payment, array $params)
+	public static function complete(Model_Payment $payment, array $custom_params = array())
 	{
 		// do nothing;
 	}

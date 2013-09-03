@@ -58,13 +58,13 @@ class Kohana_Processor_Paypal implements Processor {
 		return Processor_Paypal::$_api;
 	}
 
-	public static function complete(Model_Payment $payment, array $params)
+	public static function complete(Model_Payment $payment, array $custom_params = array())
 	{
 		$paypal_payement = Payment::get($payment->payment_id, Processor_Paypal::api());
 		
 		$execution = new PaymentExecution();
 		$execution
-			->setPayerId($params['payer_id']);
+			->setPayerId($custom_params['payer_id']);
 
 		$response = $paypal_payement->execute($execution, Processor_Paypal::api());
 
@@ -76,7 +76,7 @@ class Kohana_Processor_Paypal implements Processor {
 		$payment->status = ($sale->getState() == 'completed') ? Model_Payment::PAID : $sale->getState();
 	}
 
-	public static function refund(Model_Store_Refund $refund)
+	public static function refund(Model_Store_Refund $refund, array $custom_params = array())
 	{
 		$amount = new Amount();
 		$amount
@@ -104,7 +104,7 @@ class Kohana_Processor_Paypal implements Processor {
 		$refund->status = ($response->getState() == 'completed') ? Model_Store_Refund::REFUNDED : $response->getState();
 	}
 
-	public function execute(Model_Purchase $purchase)
+	public function execute(Model_Purchase $purchase, array $custom_params = array())
 	{
 		$payer = new Payer();
 		$payer

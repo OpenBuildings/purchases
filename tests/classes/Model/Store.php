@@ -1,13 +1,12 @@
 <?php
 
-class Model_Test_Store extends Jam_Model {
+class Model_Store extends Jam_Model {
 
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta
-			->db(Kohana::TESTING)
 			->associations(array(
-				'products' => Jam::association('hasmany', array('foreign_model' => 'test_products')),
+				'products' => Jam::association('hasmany'),
 			))
 			->fields(array(
 				'id' => Jam::field('primary'),
