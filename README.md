@@ -77,12 +77,12 @@ class Controller_Payment extends Controller_Template {
 		$form = Jam::build('emp_form', array($this->post()));
 		if ($this->request->method() === Request::POST AND $form->check())
 		{
-			$processor = new Processor_Emp($form->as_array(), '/payment/complete');
 			$purchase
-				->pay($processor)
+				->build('payment', array('model' => 'payment_emp'))
+				->execute($form->as_array())
 				->save();
 
-			$this->redirect($processor->next_url());
+			$this->redirect('payment/complete');
 		}
 
 		$this->template->content = View::factory('payment/index', array('form' => Jam::form($form)))
@@ -119,12 +119,12 @@ class Controller_Payment extends Controller_Template {
 		$form = Jam::build('emp_form', array($this->post()));
 		if ($this->request->method() === Request::POST AND $form->check())
 		{
-			$processor = new Processor_Paypal('/payment/complete', '/payment/canceled');
 			$purchase
-				->pay($processor)
-				->save();
+				->build('payment', array('model' => 'payment_paypal'))
+					->authorize(array('success_url' => '/payment/complete', 'cancel_url' => '/payment/canceled'))
+					->save();
 
-			$this->redirect($processor->next_url());
+			$this->redirect($purchase->payment->authorize_url());
 		}
 
 		$this->template->content = View::factory('payment/index', array('form' => Jam::form($form)));
@@ -136,7 +136,7 @@ class Controller_Payment extends Controller_Template {
 
 		$purchase
 			->payment
-				->complete(array('payer_id' => Request::initial()->query('PayerID'))
+				->execute(array('payer_id' => Request::initial()->query('PayerID'))
 				->save();
 
 		$this->template->content = View::factory('payment/complete', array('purchase' => $purchase));

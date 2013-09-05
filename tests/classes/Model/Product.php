@@ -14,7 +14,7 @@ class Model_Product extends Jam_Model implements Sellable {
 				'currency' => Jam::field('string'),
 				'price' => Jam::field('float'),
 			))
-			->validator('type', 'price', 'quantity', array(
+			->validator('name', 'price', 'currency', array(
 				'present' => TRUE
 			))
 			->validator('price', array('numeric' => TRUE));

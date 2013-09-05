@@ -3,14 +3,14 @@
 /**
  * Functest_TestsTest 
  *
- * @group processor
- * @group processor.emp
+ * @group model
+ * @group model.payment_emp
  * 
  * @package Functest
  * @author Ivan Kerin
  * @copyright  (c) 2011-2013 Despark Ltd.
  */
-class Processor_EmpTest extends Testcase_Purchases {
+class Model_Payment_EmpTest extends Testcase_Purchases {
 
 	public $payment_params = array(
 		'card_holder_name' => 'TEST HOLDER',
@@ -24,73 +24,13 @@ class Processor_EmpTest extends Testcase_Purchases {
 	);
 
 	/**
-	 * @covers Processor_Emp::is_threatmatrix_enabled
+	 * @covers Model_Payment_Emp::convert_purchase
 	 */
-	public function test_is_threatmatrix_enabled()
-	{
-		$this->assertFalse(Processor_Emp::is_threatmatrix_enabled());
-
-		$this->env->backup_and_set(array(
-			'purchases.processor.emp.threatmatrix' => array('org_id' => '1')
-		));
-
-		$this->assertTrue(Processor_Emp::is_threatmatrix_enabled());		
-	}
-
-	/**
-	 * @covers Processor_Emp::threatmatrix
-	 * @covers Processor_Emp::clear_threatmatrix
-	 */
-	public function test_threatmatrix()
-	{
-		$this->assertNull(Processor_Emp::threatmatrix());
-
-		$this->env->backup_and_set(array(
-			'purchases.processor.emp.threatmatrix' => array('org_id' => 'TESTORG', 'client_id' => 'TESTCLIENT')
-		));
-
-		$threatmatrix = Processor_Emp::threatmatrix();
-
-		$this->assertInstanceOf('Openbuildings\Emp\Threatmatrix', $threatmatrix);
-		$this->assertEquals('TESTORG', $threatmatrix->org_id());
-
-		$this->assertSame($threatmatrix, Processor_Emp::threatmatrix());
-
-		Processor_Emp::clear_threatmatrix();
-
-		$this->assertInstanceOf('Openbuildings\Emp\Threatmatrix', Processor_Emp::threatmatrix());
-		$this->assertNotSame($threatmatrix, Processor_Emp::threatmatrix());		
-	}
-
-	/**
-	 * @covers Processor_Emp::api
-	 */
-	public function test_api()
-	{
-		$this->env->backup_and_set(array(
-			'Processor_Emp::$_api' => NULL,
-			'purchases.processor.emp.threatmatrix' => array('org_id' => 'TESTORG', 'client_id' => 'TESTCLIENT'),
-			'purchases.processor.emp.api' => array('gateway_url' => 'http://example.com', 'api_key' => 'TESTAPI', 'client_id' => 'TESTCLIENT')
-		));
-
-		$api = Processor_Emp::api();
-
-		$this->assertInstanceOf('Openbuildings\Emp\Api', $api);
-		$this->assertEquals('TESTAPI', $api->api_key());
-		$this->assertEquals('http://example.com', $api->gateway_url());
-		$this->assertEquals('TESTCLIENT', $api->client_id());
-		$this->assertEquals(Processor_Emp::threatmatrix(), $api->threatmatrix());
-	}
-
-	/**
-	 * @covers Processor_Emp::params_for
-	 */
-	public function test_params_for()
+	public function test_convert_purchase()
 	{
 		$this->env->backup_and_set(array(
 			'Request::$client_ip' => '1.1.1.1',
 		));
-
 
 		$purchase = Jam::find('purchase', 1);
 
@@ -102,7 +42,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 			'is_payable' => TRUE,
 		));
 
-		$params = Processor_Emp::params_for($purchase);
+		$params = Model_Payment_Emp::convert_purchase($purchase);
 
 		$expected = array(
 			'payment_method' => 'creditcard',
@@ -142,20 +82,20 @@ class Processor_EmpTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Processor_Emp::find_item_id
+	 * @covers Model_Payment_Emp::find_item_id
 	 */
 	public function test_find_item_id()
 	{
-		$response = Jam::find('payment', 1)->raw_response;
-		$this->assertEquals('5657022', Processor_Emp::find_item_id($response['cart'], 1));
-		$this->assertEquals('5657032', Processor_Emp::find_item_id($response['cart'], 2));
-		$this->assertEquals(NULL, Processor_Emp::find_item_id($response['cart'], 4));
+		$response = Jam::find('payment_emp', 1)->raw_response;
+		$this->assertEquals('5657022', Model_Payment_Emp::find_item_id($response['cart'], 1));
+		$this->assertEquals('5657032', Model_Payment_Emp::find_item_id($response['cart'], 2));
+		$this->assertEquals(NULL, Model_Payment_Emp::find_item_id($response['cart'], 4));
 	}
 
 	/**
-	 * @covers Processor_Emp::params_for_refund
+	 * @covers Model_Payment_Emp::convert_refund
 	 */
-	public function test_params_for_refund()
+	public function test_convert_refund()
 	{
 		$purchase = Jam::find('purchase', 1);
 		$store_purchase = $purchase->store_purchases[0];
@@ -168,7 +108,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 			)
 		));
 
-		$params = Processor_Emp::params_for_refund($refund);
+		$params = Model_Payment_Emp::convert_refund($refund);
 
 		$expected = array(
 			'order_id' => '5580812',
@@ -187,7 +127,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 			'reason' => 'Full Rrefund',
 		));
 
-		$params = Processor_Emp::params_for_refund($refund);
+		$params = Model_Payment_Emp::convert_refund($refund);
 
 		$expected = array(
 			'order_id' => '5580812',
@@ -201,40 +141,16 @@ class Processor_EmpTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Processor_Emp::__construct
-	 * @covers Processor_Emp::params
-	 * @covers Processor_Emp::next_url
-	 */
-	public function test_construct()
-	{
-		$params = array(
-			'card_holder_name' => 'TEST HOLDER',
-			'card_number'      => '4111111111111111',
-			'exp_month'        => '10',
-			'exp_year'         => '19',
-			'cvv'              => '123',
-		);
-
-		$next_url = 'http://example.com/complete';
-
-		$processor = new Processor_Emp($params, $next_url);
-
-		$this->assertEquals($params, $processor->params());
-		$this->assertEquals($next_url, $processor->next_url());
-	}
-
-	/**
-	 * @covers Processor_Emp::execute
-	 * @covers Processor_Emp::complete
-	 * @covers Processor_Emp::refund
 	 * @covers Model_Store_Refund::execute
-	 * @covers Model_Payment::complete
+	 * @covers Model_Payment_Emp::authorize
+	 * @covers Model_Payment_Emp::refund
+	 * @covers Model_Payment_Emp::execute
 	 * @covers Model_Purchase::pay
 	 */
 	public function test_execute()
 	{
 		$this->env->backup_and_set(array(
-			'Processor_Emp::$_api' => NULL,
+			'Emp::$_api' => NULL,
 			'Request::$client_ip' => '95.87.212.88',
 			'purchases.processor.emp.threatmatrix' => array(
 				'org_id' => getenv('PHP_THREATMATRIX_ORG_ID'), 
@@ -247,7 +163,7 @@ class Processor_EmpTest extends Testcase_Purchases {
 			)
 		));
 		
-		Request::factory(Processor_Emp::threatmatrix()->tracking_url())->execute();
+		Request::factory(Emp::threatmatrix()->tracking_url())->execute();
 
 		$purchase = Jam::find('purchase', 2);
 
@@ -255,23 +171,14 @@ class Processor_EmpTest extends Testcase_Purchases {
 			->freeze()
 			->save();
 
-		$next_url = 'http://example.com/complete';
-
-		$processor = new Processor_Emp($this->payment_params, $next_url);	
-
 		$purchase
-			->pay($processor)
-			->save();
-
-		$this->assertNotNull($purchase->payment);
-		$this->assertEquals('emp', $purchase->payment->method);
+			->build('payment', array('model' => 'payment_emp'))
+				->authorize()
+				->execute($this->payment_params)
+				->save();
+		
 		$this->assertGreaterThan(0, $purchase->payment->payment_id);
 		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
-
-		$purchase
-			->payment
-				->complete()
-				->save();
 
 		$store_purchase = $purchase->store_purchases[0];
 

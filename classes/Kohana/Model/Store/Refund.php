@@ -1,4 +1,4 @@
-<?php
+<?php defined('SYSPATH') OR die('No direct script access.');
 
 /**
  * @package    Openbuildings\Purchases
@@ -64,16 +64,7 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 		if ($payment->status !== Model_Payment::PAID)
 			throw new Kohana_Exception('Payment must be payed in order to perform a refund');
 
-		switch ($payment->method) 
-		{
-			case 'emp':
-				Processor_Emp::refund($this);
-			break;
-			
-			case 'paypal':
-				Processor_Paypal::refund($this);
-			break;
-		}
+		$payment->refund($this);
 
 		return $this;
 	}

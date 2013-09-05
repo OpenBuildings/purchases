@@ -1,4 +1,4 @@
-<?php
+<?php defined('SYSPATH') OR die('No direct script access.');
 
 use OpenBuildings\Monetary\Monetary;
 
@@ -31,7 +31,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 			->fields(array(
 				'id' => Jam::field('primary'),
 				'type' => Jam::field('string'),
-				'quantity' => Jam::field('integer'),
+				'quantity' => Jam::field('integer', array('default' => 1)),
 				'price' => Jam::field('decimal'),
 				'is_payable' => Jam::field('boolean'),
 				'is_discount' => Jam::field('boolean'),

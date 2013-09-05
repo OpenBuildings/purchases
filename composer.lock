@@ -266,16 +266,16 @@
         },
         {
             "name": "openbuildings/jam",
-            "version": "0.4.5",
+            "version": "0.4.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam.git",
-                "reference": "a2907522b5f565767aca52f680232d0e90693215"
+                "reference": "99175a3373bf6bba597bac31e95b2712ddbb6ed0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/a2907522b5f565767aca52f680232d0e90693215",
-                "reference": "a2907522b5f565767aca52f680232d0e90693215",
+                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/99175a3373bf6bba597bac31e95b2712ddbb6ed0",
+                "reference": "99175a3373bf6bba597bac31e95b2712ddbb6ed0",
                 "shasum": ""
             },
             "require": {
@@ -309,7 +309,7 @@
                 "upload",
                 "validation"
             ],
-            "time": "2013-08-30 08:25:16"
+            "time": "2013-09-05 08:39:03"
         },
         {
             "name": "openbuildings/jam-auth",

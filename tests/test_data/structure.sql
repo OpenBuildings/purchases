@@ -50,7 +50,7 @@ CREATE TABLE `payments` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `purchase_id` INT(10) UNSIGNED NULL,
   `payment_id` VARCHAR(255) NOT NULL,
-  `method` VARCHAR(20) NOT NULL,
+  `model` VARCHAR(20) NOT NULL,
   `status` VARCHAR(20) NOT NULL,
   `raw_response` TEXT,
   `is_deleted` INT(1) UNSIGNED NOT NULL,
@@ -122,9 +122,9 @@ CREATE TABLE `variations` (
 # Dump of table payments
 # ------------------------------------------------------------
 
-INSERT INTO `payments` (`id`, `purchase_id`, `payment_id`, `method`, `status`, `raw_response`, `is_deleted`)
+INSERT INTO `payments` (`id`, `purchase_id`, `payment_id`, `model`, `status`, `raw_response`, `is_deleted`)
 VALUES
-  (1,1,'11111','emp','paid','{"order_id":"5580812","order_total":"400.00","order_datetime":"2013-08-13 15:04:37","order_status":"Paid","cart":{"item":[{"id":"5657022","code":"1","name":"Chair","description":{},"qty":"1","digital":"0","discount":"0","predefined":"0","unit_price":"200.00"},{"id":"5657032","code":2,"name":"Rug","description":{},"qty":"1","digital":"0","discount":"0","predefined":"0","unit_price":"200.00"}]},"transaction":{"type":"sale","response":"A","response_code":"0","response_text":"approved","trans_id":"1078663342","account_id":"635172"}}',0);
+  (1,1,'11111','payment_emp','paid','{"order_id":"5580812","order_total":"400.00","order_datetime":"2013-08-13 15:04:37","order_status":"Paid","cart":{"item":[{"id":"5657022","code":"1","name":"Chair","description":{},"qty":"1","digital":"0","discount":"0","predefined":"0","unit_price":"200.00"},{"id":"5657032","code":2,"name":"Rug","description":{},"qty":"1","digital":"0","discount":"0","predefined":"0","unit_price":"200.00"}]},"transaction":{"type":"sale","response":"A","response_code":"0","response_text":"approved","trans_id":"1078663342","account_id":"635172"}}',0);
 
 # Dump of table products
 # ------------------------------------------------------------
