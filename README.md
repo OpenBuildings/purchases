@@ -8,6 +8,10 @@ It has support for eMerchantPay and Paypal at the moment
 
 The basic structure of the purchase is one purchase, representing the user's view of what is happening, that has several Store_Purchase objects, one for each store, and each one of these has a "Purchase_Items" assigned to it.
 
+## Prices
+
+This module heavily utalizes jam-monetary - all of its price related methods and fields are Jam_Price objects allowing you to safly conduct price calculations, so that currency conversions happen transparently. For more informations see: [https://github.com/OpenBuildings/jam-monetary](openbuildings/jam-monetary)
+
 __Purchase_Item flags__
 
 Purchase item has important "flags" 
@@ -79,8 +83,8 @@ class Controller_Payment extends Controller_Template {
 		{
 			$purchase
 				->build('payment', array('model' => 'payment_emp'))
-				->execute($form->as_array())
-				->save();
+					->execute($form->as_array())
+					->save();
 
 			$this->redirect('payment/complete');
 		}
