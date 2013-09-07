@@ -155,14 +155,12 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		$item1 = $this->getMock('Model_Purchase_Item', array('freeze_price'), array('purchase_item'));
 
 		$item1->expects($this->once())
-			->method('freeze_price')
-			->will($this->returnValue(5));
+			->method('freeze_price');
 
 		$item2 = $this->getMock('Model_Purchase_Item', array('freeze_price'), array('purchase_item'));
 
 		$item2->expects($this->once())
-			->method('freeze_price')
-			->will($this->returnValue(10));
+			->method('freeze_price');
 
 		$store_purchase->items = array(
 			$item1,
@@ -177,42 +175,31 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_total_price()
 	{
-		$store_purchase = Jam::build('store_purchase');
+		$store_purchase = Jam::build('store_purchase', array('purchase' => array('currency' => 'EUR')));
+
+		$price1 = new Jam_Price(5, 'EUR');
+		$price2 = new Jam_Price(10, 'EUR');
 
 		$item1 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
 		$item1->type = 'product';
 		$item1->expects($this->exactly(3))
 			->method('total_price')
-			->will($this->returnValue(5));
+			->will($this->returnValue($price1));
 
 		$item2 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
 		$item2->type = 'shipping';
 		$item2->expects($this->exactly(3))
 			->method('total_price')
-			->will($this->returnValue(10));
+			->will($this->returnValue($price2));
 
 		$store_purchase->items = array(
 			$item1,
 			$item2,
 		);
 
-		$this->assertEquals(15, $store_purchase->total_price());
-		$this->assertEquals(5, $store_purchase->total_price('product'));
-		$this->assertEquals(10, $store_purchase->total_price('shipping'));
-		$this->assertEquals(15, $store_purchase->total_price(array('shipping', 'product')));
-	}
-
-	/**
-	 * @covers Model_Store_Purchase::total_price_in
-	 */
-	public function test_total_price_in()
-	{
-		$store_purchase = Jam::find('store_purchase', 1);
-
-		$total_price_in_usd = $store_purchase
-			->total_price_in('USD', array('product'));
-
-		$this->assertEquals(400, $store_purchase->total_price(array('product')));
-		$this->assertEquals(534.2, $total_price_in_usd);
+		$this->assertEquals(new Jam_Price(15, 'EUR'), $store_purchase->total_price());
+		$this->assertEquals(new Jam_Price(5, 'EUR'), $store_purchase->total_price('product'));
+		$this->assertEquals(new Jam_Price(10, 'EUR'), $store_purchase->total_price('shipping'));
+		$this->assertEquals(new Jam_Price(15, 'EUR'), $store_purchase->total_price(array('shipping', 'product')));
 	}
 }

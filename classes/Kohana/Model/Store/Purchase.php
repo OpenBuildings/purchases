@@ -99,12 +99,8 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 	public function total_price($types = NULL)
 	{
 		$prices = array_map(function($item) { return $item->total_price(); }, $this->items($types));
-
-		return array_sum($prices);
-	}
-
-	public function total_price_in($currency, $types = NULL)
-	{
-		return $this->get_insist('purchase')->price_in($currency, $this->total_price($types));
+		$currency = $this->get_insist('purchase')->currency;
+		
+		return Jam_Price::sum($currency, $prices);
 	}
 }

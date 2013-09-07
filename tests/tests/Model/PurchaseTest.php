@@ -104,14 +104,12 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$item1 = $this->getMock('Model_Store_Purchase', array('freeze_item_prices'), array('store_purchase'));
 
 		$item1->expects($this->once())
-			->method('freeze_item_prices')
-			->will($this->returnValue(5));
+			->method('freeze_item_prices');
 
 		$item2 = $this->getMock('Model_Store_Purchase', array('freeze_item_prices'), array('store_purchase'));
 
 		$item2->expects($this->once())
-			->method('freeze_item_prices')
-			->will($this->returnValue(10));
+			->method('freeze_item_prices');
 
 		$purchase->store_purchases = array(
 			$item1,
@@ -184,29 +182,6 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Model_Purchase::price_in
-	 */
-	public function test_price_in()
-	{
-		$purchase = $this->getMock('Model_Purchase', array('monetary'), array('purchase'));
-		$purchase->currency = 'EUR';
-		$monetary = $this->getMock('Openbuildings\Monetary\Monetary');
-
-		$purchase
-			->expects($this->once())
-			->method('monetary')
-			->will($this->returnValue($monetary));
-
-		$monetary
-			->expects($this->once())
-			->method('convert')
-			->with($this->equalTo(50), $this->equalTo('EUR'), $this->equalTo('USD'))
-			->will($this->returnValue(100));
-
-		$purchase->price_in('USD', 50);
-	}
-
-	/**
 	 * @covers Model_Purchase::total_price
 	 */
 	public function test_total_price()
@@ -215,42 +190,29 @@ class Model_PurchaseTest extends Testcase_Purchases {
 			Jam::build('store_purchase')
 		)));
 
+		$price1 = new Jam_Price(5, 'EUR');
+		$price2 = new Jam_Price(10, 'EUR');
+
 		$item1 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
 		$item1->type = 'product';
 		$item1->expects($this->exactly(3))
 			->method('total_price')
-			->will($this->returnValue(5));
+			->will($this->returnValue($price1));
 
 		$item2 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
 		$item2->type = 'shipping';
 		$item2->expects($this->exactly(3))
 			->method('total_price')
-			->will($this->returnValue(10));
+			->will($this->returnValue($price2));
 
 		$purchase->store_purchases[0]->items = array(
 			$item1,
 			$item2,
 		);
 
-		$this->assertEquals(15, $purchase->total_price());
-		$this->assertEquals(5, $purchase->total_price('product'));
-		$this->assertEquals(10, $purchase->total_price('shipping'));
-		$this->assertEquals(15, $purchase->total_price(array('shipping', 'product')));
+		$this->assertEquals(15, $purchase->total_price()->amount());
+		$this->assertEquals(5, $purchase->total_price('product')->amount());
+		$this->assertEquals(10, $purchase->total_price('shipping')->amount());
+		$this->assertEquals(15, $purchase->total_price(array('shipping', 'product'))->amount());
 	}
-
-	/**
-	 * @covers Model_Purchase::total_price_in
-	 */
-	public function test_total_price_in()
-	{
-		$purchase = Jam::find('purchase', 1);
-
-		$total_price_in_usd = $purchase
-			->total_price_in('USD', array('product'));
-
-		$this->assertEquals(400, $purchase->total_price(array('product')));
-		$this->assertEquals(534.2, $total_price_in_usd);
-	}
-
-
 }

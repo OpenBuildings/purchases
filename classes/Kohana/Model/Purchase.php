@@ -78,11 +78,6 @@ class Kohana_Model_Purchase extends Jam_Model {
 		return Monetary::instance();
 	}
 
-	public function price_in($currency, $price)
-	{
-		return $this->monetary()->convert($price, $this->currency, $currency);
-	}
-
 	public function items($types = NULL)
 	{
 		$items = array();
@@ -103,13 +98,8 @@ class Kohana_Model_Purchase extends Jam_Model {
 	public function total_price($types = NULL)
 	{
 		$prices = array_map(function($item) { return $item->total_price(); }, $this->items($types));
-
-		return array_sum($prices);
-	}
-
-	public function total_price_in($currency, $types = NULL)
-	{
-		return $this->price_in($currency, $this->total_price($types));
+		
+		return Jam_Price::sum($this->currency, $prices);
 	}
 
 	public function freeze_item_prices()

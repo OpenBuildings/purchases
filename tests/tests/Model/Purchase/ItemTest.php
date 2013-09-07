@@ -25,6 +25,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 
 		$item = Jam::build('purchase_item', array(
 			'price' => 10, 
+			'store_purchase' => 1,
 			'type' => 'product', 
 			'quantity' => 1,
 			'is_payable' => TRUE
@@ -71,27 +72,23 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	public function test_compute_price()
 	{
 		$item = Jam::find('purchase_item', 1);
-		$item->reference = $this->getMock('Model_Product', array('price', 'currency'), array('product'));
+		$item->reference = $this->getMock('Model_Product', array('price'), array('product'));
 
-		$item->reference->expects($this->exactly(3))
-			->method('price')
-			->will($this->returnValue(10));
+		$price1 = new Jam_Price(10, 'EUR');
+		$price2 = new Jam_Price(10, 'USD');
 
 		$item->reference->expects($this->at(0))
-			->method('currency')
-			->will($this->returnValue('EUR'));
+			->method('price')
+			->with($this->identicalTo($item))
+			->will($this->returnValue($price1));
 
-		$item->reference->expects($this->at(2))
-			->method('currency')
-			->will($this->returnValue('USD'));
+		$item->reference->expects($this->at(1))
+			->method('price')
+			->with($this->identicalTo($item))
+			->will($this->returnValue($price2));
 
-		$item->reference->expects($this->at(4))
-			->method('currency')
-			->will($this->returnValue(NULL));
-
-		$this->assertSame(10.0, $item->compute_price(), 'Should be EUR -> EUR conversion');
-		$this->assertSame(7.4878322725571, $item->compute_price(), 'Should be EUR -> USD conversion');
-		$this->assertSame(10, $item->compute_price(), 'Should be no conversion if there is no currency');
+		$this->assertEquals(new Jam_Price(10, 'EUR', $item->monetary()), $item->compute_price(), 'Should be EUR -> EUR conversion');
+		$this->assertEquals(new Jam_Price(7.4878322725571, 'EUR', $item->monetary()), $item->compute_price(), 'Should be EUR -> USD conversion');
 	}
 
 	/**
@@ -124,16 +121,18 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	public function test_price()
 	{
 		$item = $this->getMock('Model_Purchase_Item', array('compute_price'), array('purchase_item'));
+		$item->store_purchase = Jam::find('store_purchase', 1);
+		$price = new Jam_Price(10, 'USD');
 
 		$item->expects($this->once())
 			->method('compute_price')
-			->will($this->returnValue(15.90));
+			->will($this->returnValue($price));
 
-		$this->assertEquals(15.90, $item->price());
+		$this->assertSame($price, $item->price());
 		
-		$item->price = 100.20;
+		$item->price = new Jam_Price(100, 'EUR');
 
-		$this->assertEquals(100.20, $item->price());
+		$this->assertSame($item->price, $item->price());
 	}
 
 	/**
@@ -143,15 +142,17 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	{
 		$item = $this->getMock('Model_Purchase_Item', array('compute_price'), array('purchase_item'));
 
+		$price = new Jam_Price(10, 'USD');
+
 		$item->expects($this->once())
 			->method('compute_price')
-			->will($this->returnValue(15.90));
+			->will($this->returnValue($price));
 
 		$this->assertNull($item->price);
 
 		$item->freeze_price();
 
-		$this->assertEquals(15.90, $item->price);
+		$this->assertEquals($price, $item->price);
 	}
 
 	/**
@@ -161,29 +162,17 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	{
 		$item = $this->getMock('Model_Purchase_Item', array('price'), array('purchase_item'));
 
+		$price = new Jam_Price(10, 'USD');
+
 		$item->expects($this->exactly(2))
 			->method('price')
-			->will($this->returnValue(15.90));
+			->will($this->returnValue($price));
 
 		$item->quantity = 2;
-		$this->assertEquals(15.90*2, $item->total_price());
+		$this->assertEquals(20, $item->total_price()->amount());
 
 		$item->quantity = 3;
-		$this->assertEquals(15.90*3, $item->total_price());
-	}
-
-	/**
-	 * @covers Model_Purchase_Item::total_price_in
-	 */
-	public function test_total_price_in()
-	{
-		$item = Jam::find('purchase_item', 1);
-
-		$total_price_in_usd = $item
-			->total_price_in('USD');
-
-		$this->assertEquals(200, $item->total_price());
-		$this->assertEquals(267.1, $total_price_in_usd);
+		$this->assertEquals(30, $item->total_price()->amount());
 	}
 
 	/**

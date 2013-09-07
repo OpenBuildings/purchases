@@ -32,15 +32,15 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 				'id' => Jam::field('primary'),
 				'type' => Jam::field('string'),
 				'quantity' => Jam::field('integer', array('default' => 1)),
-				'price' => Jam::field('decimal'),
+				'price' => Jam::field('price'),
 				'is_payable' => Jam::field('boolean'),
 				'is_discount' => Jam::field('boolean'),
 				'created_at' => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
 				'updated_at' => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			))
 			->validator('type', 'quantity', array('present' => TRUE))
-			->validator('price', array('numeric' => array('greater_than_or_equal_to' => 0), 'unless' => 'is_discount'))
-			->validator('price', array('numeric' => array('less_than_or_equal_to' => 0), 'if' => 'is_discount'))
+			->validator('price', array('price' => array('greater_than_or_equal_to' => 0), 'unless' => 'is_discount'))
+			->validator('price', array('price' => array('less_than_or_equal_to' => 0), 'if' => 'is_discount'))
 			->validator('quantity', array('numeric' => array('only_integer' => TRUE, 'greater_than' => 0)));
 	}
 
@@ -51,12 +51,12 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 			$this->errors()->add('reference', 'item_not_sellable');
 		}
 
-		if ($this->is_discount AND $this->price() >= 0)
+		if ($this->is_discount AND $this->price()->is(Jam_Price::GREATER_THAN_OR_EQUAL_TO, 0))
 		{
 			$this->errors()->add('price', 'numeric_less_than_or_equal_to', array(':less_than_or_equal_to' => 0));
 		}
 
-		if ( ! $this->is_discount AND $this->price() <= 0)
+		if ( ! $this->is_discount AND $this->price()->is(Jam_Price::LESS_THAN_OR_EQUAL_TO, 0))
 		{
 			$this->errors()->add('price', 'numeric_greater_than_or_equal_to', array(':greater_than_or_equal_to' => 0));
 		}
@@ -91,23 +91,18 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 		return $this->purchase_insist()->monetary();
 	}
 
+	public function currency()
+	{
+		return $this->purchase_insist()->currency;
+	}
+
 	public function compute_price()
 	{
-		$currency = $this->reference->currency($this);
 		$price = $this->reference->price($this);
 
-		if ( ! $currency) 
-		{
-			return $price;
-		}
-		else
-		{
-			$purchase_currancy = $this->purchase_insist()->currency;
-
-			return $this
-				->monetary()
-					->convert($price, $currency, $purchase_currancy);
-		}
+		return $price
+			->monetary($this->monetary())
+			->convert_to($this->currency());
 	}
 
 	public function price()
@@ -117,16 +112,12 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 
 	public function freeze_price()
 	{
-		$this->price = (float) $this->price();
+		$this->price = $this->compute_price();
 	}
 
 	public function total_price()
 	{
-		return $this->price() * $this->quantity;
-	}
-
-	public function total_price_in($currency, $types = NULL)
-	{
-		return $this->purchase_insist()->price_in($currency, $this->total_price($types));
+		$price = $this->price();
+		return new Jam_Price($price->amount() * $this->quantity, $price->currency());
 	}
 }

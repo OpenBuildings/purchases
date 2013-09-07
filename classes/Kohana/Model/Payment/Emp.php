@@ -42,7 +42,7 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 				"item_{$index}_qty"                             => $item->quantity,
 				"item_{$index}_discount"                        => $item->is_discount ? '1' : '0',
 				"item_{$index}_name"                            => $item->reference ? URL::title($item->reference->name(), ' ', TRUE) : $item->type,
-				"item_{$index}_unit_price_".$purchase->currency => number_format($item->price(), 2, '.', ''),
+				"item_{$index}_unit_price_".$purchase->currency => $item->price()->as_string(),
 			));
 		}
 
@@ -81,7 +81,7 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 
 				if ($item->amount)
 				{
-					$item_params["item_{$index}_amount"] = number_format($item->amount, 2, '.', '');
+					$item_params["item_{$index}_amount"] = $item->amount()->as_string();
 				}
 
 				$params = array_merge($params, $item_params);
@@ -89,7 +89,7 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 		}
 		else
 		{
-			$params['amount'] = number_format($refund->total_amount(), 2, '.', '');
+			$params['amount'] = $refund->total_amount()->as_string();
 		}
 
 		return $params;

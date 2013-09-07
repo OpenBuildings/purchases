@@ -3,5 +3,4 @@
 interface Sellable {
 
 	public function price(Model_Purchase_Item $item);
-	public function currency(Model_Purchase_Item $item);
 }

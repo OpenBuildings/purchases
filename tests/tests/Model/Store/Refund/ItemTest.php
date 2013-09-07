@@ -50,7 +50,7 @@ class Model_Store_Refund_ItemTest extends Testcase_Purchases {
 		$this->assertEquals($store_purchase->items[0]->price(), $item->amount());
 
 		$item->amount = 5;
-		$this->assertEquals(5, $item->amount());
+		$this->assertEquals(new Jam_Price(5, 'EUR', $item->monetary()), $item->amount());
 
 	}
 

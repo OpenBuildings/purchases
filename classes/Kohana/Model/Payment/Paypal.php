@@ -28,7 +28,7 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		$amount = new PayPal\Api\Amount();
 		$amount
 			->setCurrency($purchase->currency)
-			->setTotal(number_format($purchase->total_price(array('is_payable' => TRUE)), 2, '.', ''));
+			->setTotal($purchase->total_price(array('is_payable' => TRUE))->as_string());
 
 		$item_list = new PayPal\Api\ItemList();
 		$items = array();
@@ -38,7 +38,7 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 			$item
 				->setQuantity(1)
 				->setName('Products From '.URL::title($store_purchase->store->name()))
-				->setPrice(number_format($store_purchase->total_price(array('is_payable' => TRUE)), 2, '.', ''))
+				->setPrice($store_purchase->total_price(array('is_payable' => TRUE))->as_string())
 				->setCurrency($purchase->currency);
 
 			$items[] = $item;
@@ -72,7 +72,7 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		$amount = new PayPal\Api\Amount();
 		$amount
 			->setCurrency($refund->purchase_insist()->currency)
-			->setTotal(number_format($refund->total_amount(), 2, '.', ''));
+			->setTotal($refund->total_amount()->as_string());
 
 		$paypal_refund = new PayPal\Api\Refund();
 		$paypal_refund

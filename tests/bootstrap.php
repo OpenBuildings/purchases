@@ -3,24 +3,23 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 Kohana::modules(array(
-	'database'  => MODPATH.'database',
-	'auth'      => MODPATH.'auth',
-	'jam'       => __DIR__.'/../modules/jam',
-	'jam-auth'  => __DIR__.'/../modules/jam-auth',
-	'purchases' => __DIR__.'/..',
+	'database'     => MODPATH.'database',
+	'auth'         => MODPATH.'auth',
+	'jam'          => __DIR__.'/../modules/jam',
+	'jam-auth'     => __DIR__.'/../modules/jam-auth',
+	'jam-monetary' => __DIR__.'/../modules/jam-monetary',
+	'purchases'    => __DIR__.'/..',
 ));
 
-function test_autoload($class)
+spl_autoload_register(function($class)
 {
-	$file = str_replace('_', '/', $class);
+	$file = __DIR__.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR.str_replace('_', '/', $class).'.php';
 
-	if ($file = Kohana::find_file('tests/classes', $file))
+	if (is_file($file))
 	{
 		require_once $file;
 	}
-}
-
-spl_autoload_register('test_autoload');
+});
 
 Kohana::$config
 	->load('database')
@@ -40,7 +39,6 @@ Kohana::$config
 
 Kohana::$config
 	->load('auth')
-		->set('session_type', 'Auth_Test')
 		->set('session_key', 'auth_user')
 		->set('hash_key', '11111');
 

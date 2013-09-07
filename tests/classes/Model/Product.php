@@ -12,12 +12,12 @@ class Model_Product extends Jam_Model implements Sellable {
 				'id' => Jam::field('primary'),
 				'name' => Jam::field('string'),
 				'currency' => Jam::field('string'),
-				'price' => Jam::field('float'),
+				'price' => Jam::field('price'),
 			))
 			->validator('name', 'price', 'currency', array(
 				'present' => TRUE
 			))
-			->validator('price', array('numeric' => TRUE));
+			->validator('price', array('price' => TRUE));
 	}
 
 	public function price(Model_Purchase_Item $item)
@@ -25,7 +25,7 @@ class Model_Product extends Jam_Model implements Sellable {
 		return $this->price;
 	}
 
-	public function currency(Model_Purchase_Item $item)
+	public function currency()
 	{
 		return $this->currency;
 	}

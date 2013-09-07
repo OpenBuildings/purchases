@@ -33,7 +33,6 @@ class Model_Store_RefundTest extends Testcase_Purchases {
 
 	/**
 	 * @covers Model_Store_Refund::total_amount
-	 * @covers Model_Store_Refund::total_amount_in
 	 */
 	public function test_total_amount()
 	{
@@ -44,17 +43,17 @@ class Model_Store_RefundTest extends Testcase_Purchases {
 			)
 		));
 
-		$this->assertEquals(200, $refund->total_amount());
+		$this->assertEquals(200, $refund->total_amount()->amount());
 
 		$refund->items[0]->amount = 10;
 
-		$this->assertEquals(10, $refund->total_amount());
-		$this->assertEquals(13.355, $refund->total_amount_in('USD'));
+		$this->assertEquals(10, $refund->total_amount()->amount());
+		$this->assertEquals('EUR', $refund->total_amount()->currency());
 
 		$refund = $store_purchase->refunds->create(array());
 
-		$this->assertEquals(400.0, $refund->total_amount());
-		$this->assertEquals(534.2, $refund->total_amount_in('USD'));
+		$this->assertEquals(400.0, $refund->total_amount()->amount());
+		$this->assertEquals('EUR', $refund->total_amount()->currency());
 		
 	}
 
