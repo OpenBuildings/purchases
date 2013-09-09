@@ -30,7 +30,7 @@ class Kohana_Model_Payment extends Jam_Model {
 				'model' => Jam::field('polymorphic'),
 				'payment_id' => Jam::field('string'),
 				'raw_response' => Jam::field('serialized', array('method' => 'json')),
-				'status' => Jam::field('text'),
+				'status' => Jam::field('string'),
 				'created_at' => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
 				'updated_at' => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			))

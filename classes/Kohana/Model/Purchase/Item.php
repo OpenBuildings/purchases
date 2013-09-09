@@ -117,7 +117,8 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 
 	public function total_price()
 	{
-		$price = $this->price();
-		return new Jam_Price($price->amount() * $this->quantity, $price->currency());
+		return $this
+			->price()
+				->multiply_by($this->quantity);
 	}
 }

@@ -99,7 +99,7 @@ class Kohana_Model_Purchase extends Jam_Model {
 	{
 		$prices = array_map(function($item) { return $item->total_price(); }, $this->items($types));
 		
-		return Jam_Price::sum($this->currency, $prices);
+		return Jam_Price::sum($prices, $this->currency, $this->monetary());
 	}
 
 	public function freeze_item_prices()

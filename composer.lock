@@ -84,12 +84,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/desarrolla2/Cache.git",
-                "reference": "v1.6.0"
+                "reference": "8b6719695ac68380f11e89920ce456665079391e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/desarrolla2/Cache/zipball/v1.6.0",
-                "reference": "v1.6.0",
+                "url": "https://api.github.com/repos/desarrolla2/Cache/zipball/8b6719695ac68380f11e89920ce456665079391e",
+                "reference": "8b6719695ac68380f11e89920ce456665079391e",
                 "shasum": ""
             },
             "require": {
