@@ -54,7 +54,6 @@ class Model_Store_RefundTest extends Testcase_Purchases {
 
 		$this->assertEquals(400.0, $refund->total_amount()->amount());
 		$this->assertEquals('EUR', $refund->total_amount()->currency());
-		
 	}
 
 	/**

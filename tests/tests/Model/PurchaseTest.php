@@ -215,4 +215,15 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$this->assertEquals(10, $purchase->total_price('shipping')->amount());
 		$this->assertEquals(15, $purchase->total_price(array('shipping', 'product'))->amount());
 	}
+
+	/**
+	 * @covers Model_Purchase::update_items
+	 */
+	public function test_triger_update_items()
+	{
+		$purchase = Jam::find('purchase', 2)
+			->update_items();
+
+		$this->assertTrue($purchase->items_updated);
+	}
 }

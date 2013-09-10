@@ -361,16 +361,16 @@
         },
         {
             "name": "openbuildings/jam-monetary",
-            "version": "0.1.5",
+            "version": "0.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam-monetary.git",
-                "reference": "71dd2309da49e00191ea0df44b50476e99dcfaa4"
+                "reference": "818d5b46f2ebe97580c1ad9923b747f26ae9e63c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam-monetary/zipball/71dd2309da49e00191ea0df44b50476e99dcfaa4",
-                "reference": "71dd2309da49e00191ea0df44b50476e99dcfaa4",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-monetary/zipball/818d5b46f2ebe97580c1ad9923b747f26ae9e63c",
+                "reference": "818d5b46f2ebe97580c1ad9923b747f26ae9e63c",
                 "shasum": ""
             },
             "require": {
@@ -395,7 +395,7 @@
                     "role": "Author"
                 }
             ],
-            "description": "Closuretable behavior",
+            "description": "A Jam Field to transparently use 'monetary' as a jam field, and have currency exchange arithmetic out of the box",
             "homepage": "https://github.com/OpenBuildings/jam-monetary",
             "keywords": [
                 "exchange",
@@ -405,7 +405,7 @@
                 "money",
                 "price"
             ],
-            "time": "2013-09-07 08:32:57"
+            "time": "2013-09-09 14:08:04"
         },
         {
             "name": "openbuildings/monetary",
