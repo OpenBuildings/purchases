@@ -202,4 +202,14 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		$this->assertEquals(new Jam_Price(10, 'EUR'), $store_purchase->total_price('shipping'));
 		$this->assertEquals(new Jam_Price(15, 'EUR'), $store_purchase->total_price(array('shipping', 'product')));
 	}
+
+	/**
+	 * @covers Model_Store_Purchase::update_items
+	 */
+	public function test_triger_update_items()
+	{
+		$store_purchase = Jam::find('store_purchase', 2)->update_items();
+
+		$this->assertTrue($store_purchase->items_updated);
+	}
 }

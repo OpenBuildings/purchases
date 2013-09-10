@@ -221,9 +221,23 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_triger_update_items()
 	{
-		$purchase = Jam::find('purchase', 2)
-			->update_items();
+		$purchase = Jam::build('purchase');
 
-		$this->assertTrue($purchase->items_updated);
+		$item1 = $this->getMock('Model_Store_Purchase', array('update_items'), array('store_purchase'));
+
+		$item1->expects($this->once())
+			->method('update_items');
+
+		$item2 = $this->getMock('Model_Store_Purchase', array('update_items'), array('store_purchase'));
+
+		$item2->expects($this->once())
+			->method('update_items');
+
+		$purchase->store_purchases = array(
+			$item1,
+			$item2,
+		);
+
+		$purchase->update_items();
 	}
 }

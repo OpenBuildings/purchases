@@ -97,7 +97,10 @@ class Kohana_Model_Purchase extends Jam_Model {
 
 	public function update_items()
 	{
-		$this->meta()->events()->trigger('model.update_items', $this);
+		foreach ($this->store_purchases->as_array() as $store_purchase) 
+		{
+			$store_purchase->update_items();
+		}
 
 		return $this;
 	}

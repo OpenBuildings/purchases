@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
-class Jam_Behavior_Purchase extends Jam_Behavior {
+class Jam_Behavior_Store_Purchase extends Jam_Behavior {
 
 	public function initialize(Jam_Meta $meta, $name)
 	{
@@ -10,8 +10,8 @@ class Jam_Behavior_Purchase extends Jam_Behavior {
 			->bind('model.update_items', array($this, 'update_items'));
 	}
 
-	public function update_items(Model_Purchase $purchase, Jam_Event_Data $data)
+	public function update_items(Model_Store_Purchase $store_purchase, Jam_Event_Data $data)
 	{
-		$purchase->items_updated = TRUE;
+		$store_purchase->items_updated = TRUE;
 	}
 }
