@@ -10,6 +10,25 @@
  */
 class Model_Store_PurchaseTest extends Testcase_Purchases {
 
+	public function data_extract_assoc()
+	{
+		return array(
+			array(array('test', 'test2', 'test1' => 'test'), array('test1' => 'test')),
+			array(array('test3' => 'test12'), array('test3' => 'test12')),
+			array(array('test', 'test12'), array()),
+		);
+	}
+
+	/**
+	 * @covers Model_Store_Purchase::extract_assoc
+	 * @dataProvider data_extract_assoc
+	 */
+	public function test_extract_assoc($array, $expected)
+	{
+		$assoc = Model_Store_Purchase::extract_assoc($array, $expected);
+		$this->assertEquals($expected, $assoc);
+	}
+
 	/**
 	 * @covers Model_Store_Purchase::find_same_item
 	 */

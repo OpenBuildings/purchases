@@ -176,9 +176,9 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Model_Purchase_Item::matches_flags
+	 * @covers Model_Purchase_Item::matches_filters
 	 */
-	public function test_matches_flags()
+	public function test_matches_filters()
 	{
 		$item = Jam::build('purchase_item', array(
 			'quantity' => 1,
@@ -188,13 +188,13 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 			'is_discount' => FALSE,
 		));
 
-		$this->assertTrue($item->matches_flags(array('is_payable' => TRUE)));
-		$this->assertTrue($item->matches_flags(array('is_discount' => FALSE)));
-		$this->assertTrue($item->matches_flags(array('is_discount' => FALSE, 'is_payable' => TRUE)));
+		$this->assertTrue($item->matches_filters(array('is_payable' => TRUE)));
+		$this->assertTrue($item->matches_filters(array('is_discount' => FALSE)));
+		$this->assertTrue($item->matches_filters(array('is_discount' => FALSE, 'is_payable' => TRUE)));
 
-		$this->assertFalse($item->matches_flags(array('is_payable' => FALSE)));
-		$this->assertFalse($item->matches_flags(array('is_discount' => TRUE)));
-		$this->assertFalse($item->matches_flags(array('is_discount' => FALSE, 'is_payable' => FALSE)));
+		$this->assertFalse($item->matches_filters(array('is_payable' => FALSE)));
+		$this->assertFalse($item->matches_filters(array('is_discount' => TRUE)));
+		$this->assertFalse($item->matches_filters(array('is_discount' => FALSE, 'is_payable' => FALSE)));
 	}
 
 }

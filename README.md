@@ -173,6 +173,11 @@ $refund
 
 Later you can retrieve the refunds from the store purchase or issue multiple refunds
 
+
+## Updating items
+
+Both ``store_purchase`` and ``purchase`` have an update_items method, wich trigger the store_purchase's event 'model.update_items'. This is used mainly by external modules that can hook into purchases and add / update purchase_items when that event is triggered. For example openbuildings/shipping module uses that to add / update shipping items.
+
 ## License
 
 Copyright (c) 2012-2013, OpenBuildings Ltd. Developed by Ivan Kerin as part of [clippings.com](http://clippings.com)
