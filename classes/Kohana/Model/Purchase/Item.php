@@ -64,32 +64,6 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 		}
 	}
 
-	public function matches_filters(array $flags)
-	{
-		foreach ($flags as $name => $value) 
-		{
-			$method_name = Model_Purchase_Item::FILTER_PREFIX.$name;
-
-			if ( ! method_exists($this, $method_name))
-				throw new Kohana_Exception('Flag :flag does not exist, you need to implement the method :method', array(':flag' => $name, ':method' => $method_name));
-				
-			if ( ! $this->{$method_name}($value))
-				return FALSE;
-		}
-
-		return TRUE;
-	}
-
-	public function matches_filter_is_payable($value)
-	{
-		return $this->is_payable === $value;
-	}
-
-	public function matches_filter_is_discount($value)
-	{
-		return $this->is_discount === $value;
-	}
-
 	public function is_same(Model_Purchase_Item $item)
 	{
 		return ($item->reference_id 

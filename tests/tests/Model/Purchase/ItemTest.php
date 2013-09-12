@@ -174,27 +174,4 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 		$item->quantity = 3;
 		$this->assertEquals(30, $item->total_price()->amount());
 	}
-
-	/**
-	 * @covers Model_Purchase_Item::matches_filters
-	 */
-	public function test_matches_filters()
-	{
-		$item = Jam::build('purchase_item', array(
-			'quantity' => 1,
-			'price' => 10,
-			'type' => 'shipping',
-			'is_payable' => TRUE,
-			'is_discount' => FALSE,
-		));
-
-		$this->assertTrue($item->matches_filters(array('is_payable' => TRUE)));
-		$this->assertTrue($item->matches_filters(array('is_discount' => FALSE)));
-		$this->assertTrue($item->matches_filters(array('is_discount' => FALSE, 'is_payable' => TRUE)));
-
-		$this->assertFalse($item->matches_filters(array('is_payable' => FALSE)));
-		$this->assertFalse($item->matches_filters(array('is_discount' => TRUE)));
-		$this->assertFalse($item->matches_filters(array('is_discount' => FALSE, 'is_payable' => FALSE)));
-	}
-
 }

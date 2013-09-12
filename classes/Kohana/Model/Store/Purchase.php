@@ -30,21 +30,6 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 			->validator('purchase', 'store', array('present' => TRUE));
 	}
 
-	public static function extract_assoc(array $array)
-	{
-		$assoc = array();
-
-		foreach ($array as $key => $value) 
-		{
-			if ( ! is_numeric($key))
-			{
-				$assoc[$key] = $value;
-			}
-		}
-
-		return $assoc;
-	}
-
 	public function find_same_item(Model_Purchase_Item $new_item)
 	{
 		foreach ($this->items as $item) 
@@ -71,25 +56,11 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 
 	public function items($types = NULL)
 	{
-		$items = array();
+		$items = $this->items->as_array();
 
-		$current_flags = NULL;
-		
-		if (is_array($types)) 
+		if ($types) 
 		{
-			$current_flags = Model_Store_Purchase::extract_assoc($types);
-			$types = array_diff_key($types, $current_flags);
-		}
-
-		foreach ($this->items->as_array() as $item) 
-		{
-			if ($types AND ! (in_array($item->type, (array) $types)))
-				continue;
-
-			if ($current_flags AND ! $item->matches_filters($current_flags))
-				continue;
-
-			$items []= $item;
+			$items = $this->meta()->events()->trigger('model.filter_items', $this, array($items, (array) $types));
 		}
 
 		return $items;
