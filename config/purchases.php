@@ -7,6 +7,7 @@ return array(
 			// 	'gateway_url' => 'https://my.emerchantpay.com/',
 			// 	'client_id' => '00000',
 			// 	'api_key' => 'aaaaaa',
+			// 	'proxy' => 'aaaaaa',
 			// ),
 			// 'threatmatrix' => array(
 			// 	'org_id' => 'lygdph9h',

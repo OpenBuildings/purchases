@@ -22,6 +22,11 @@ class Kohana_Emp {
 			$config = Kohana::$config->load('purchases.processor.emp.api');
 			Emp::$_api = new Api($config['gateway_url'], $config['client_id'], $config['api_key']);
 
+			if (isset($config['proxy'])) 
+			{
+				Emp::$_api->proxy($config['proxy']);
+			}
+
 			if (Emp::is_threatmatrix_enabled()) 
 			{
 				Emp::$_api->threatmatrix(Emp::threatmatrix());

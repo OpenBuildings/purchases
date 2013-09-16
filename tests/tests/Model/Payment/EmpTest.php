@@ -153,18 +153,19 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			'Emp::$_api' => NULL,
 			'Request::$client_ip' => '95.87.212.88',
 			'purchases.processor.emp.threatmatrix' => array(
-				'org_id' => getenv('PHP_THREATMATRIX_ORG_ID'), 
-				'client_id' => getenv('PHP_EMP_CLIENT_ID')
+				'org_id' => getenv('EMP_TMX'), 
+				'client_id' => getenv('EMP_CID')
 			),
 			'purchases.processor.emp.api' => array(
 				'gateway_url' => 'https://my.emerchantpay.com', 
-				'api_key' => getenv('PHP_EMP_API_KEY'), 
-				'client_id' => getenv('PHP_EMP_CLIENT_ID')
+				'api_key' => getenv('EMP_KEY'), 
+				'client_id' => getenv('EMP_CID'),
+				'proxy' => getenv('EMP_PROXY')
 			)
 		));
-		
-		Request::factory(Emp::threatmatrix()->tracking_url())->execute();
 
+		Openbuildings\Emp\Remote::get(Emp::threatmatrix()->tracking_url(), array(CURLOPT_PROXY => getenv('EMP_PROXY')));
+		
 		$purchase = Jam::find('purchase', 2);
 
 		$purchase

@@ -1,5 +1,10 @@
 # Purchases Module
 
+[![Build Status](https://travis-ci.org/OpenBuildings/purchases.png?branch=master)](https://travis-ci.org/OpenBuildings/purchases)
+[![Coverage Status](https://coveralls.io/repos/OpenBuildings/purchases/badge.png?branch=master)](https://coveralls.io/r/OpenBuildings/purchases?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/openbuildings/purchases/v/stable.png)](https://packagist.org/packages/openbuildings/purchases)
+
+
 This is a kohana module that gives you out of the box functionality for multistore purchases (each purchase may have Items from different sellers, each handling their portion of products independantly)
 
 It has support for eMerchantPay and Paypal at the moment
@@ -177,6 +182,14 @@ Later you can retrieve the refunds from the store purchase or issue multiple ref
 ## Updating items
 
 Both ``store_purchase`` and ``purchase`` have an update_items method, wich trigger the store_purchase's event 'model.update_items'. This is used mainly by external modules that can hook into purchases and add / update purchase_items when that event is triggered. For example openbuildings/shipping module uses that to add / update shipping items.
+
+## Extending updates
+
+... 
+
+## Extending filters
+
+... 
 
 ## License
 

@@ -45,7 +45,7 @@ class EmpTest extends Testcase_Purchases {
 		Emp::clear_threatmatrix();
 
 		$this->assertInstanceOf('Openbuildings\Emp\Threatmatrix', Emp::threatmatrix());
-		$this->assertNotSame($threatmatrix, Emp::threatmatrix());		
+		$this->assertNotSame($threatmatrix, Emp::threatmatrix());
 	}
 
 	/**
@@ -56,7 +56,7 @@ class EmpTest extends Testcase_Purchases {
 		$this->env->backup_and_set(array(
 			'Emp::$_api' => NULL,
 			'purchases.processor.emp.threatmatrix' => array('org_id' => 'TESTORG', 'client_id' => 'TESTCLIENT'),
-			'purchases.processor.emp.api' => array('gateway_url' => 'http://example.com', 'api_key' => 'TESTAPI', 'client_id' => 'TESTCLIENT')
+			'purchases.processor.emp.api' => array('gateway_url' => 'http://example.com', 'api_key' => 'TESTAPI', 'client_id' => 'TESTCLIENT', 'proxy' => 'PROXY')
 		));
 
 		$api = Emp::api();
@@ -65,6 +65,7 @@ class EmpTest extends Testcase_Purchases {
 		$this->assertEquals('TESTAPI', $api->api_key());
 		$this->assertEquals('http://example.com', $api->gateway_url());
 		$this->assertEquals('TESTCLIENT', $api->client_id());
+		$this->assertEquals('PROXY', $api->proxy());
 		$this->assertEquals(Emp::threatmatrix(), $api->threatmatrix());
 	}
 }

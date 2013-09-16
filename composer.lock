@@ -174,24 +174,21 @@
         },
         {
             "name": "openbuildings/emp",
-            "version": "0.1.2",
+            "version": "0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/emp.git",
-                "reference": "22b174e5b301ae7de63383426277bf857aa83169"
+                "reference": "f54df4f41ce7264813225f93112ff9043d4b00ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/emp/zipball/22b174e5b301ae7de63383426277bf857aa83169",
-                "reference": "22b174e5b301ae7de63383426277bf857aa83169",
+                "url": "https://api.github.com/repos/OpenBuildings/emp/zipball/f54df4f41ce7264813225f93112ff9043d4b00ae",
+                "reference": "f54df4f41ce7264813225f93112ff9043d4b00ae",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "php": ">=5.3.0"
-            },
-            "suggest": {
-                "openbuildings/paypal": "Easy payments with PayPal: ExpressCheckout, AdaptivePayments, subscriptions"
             },
             "type": "library",
             "autoload": {
@@ -224,7 +221,7 @@
                 "money",
                 "payments"
             ],
-            "time": "2013-09-02 11:27:01"
+            "time": "2013-09-16 14:45:22"
         },
         {
             "name": "openbuildings/flex-storage",
@@ -266,16 +263,16 @@
         },
         {
             "name": "openbuildings/jam",
-            "version": "0.4.10",
+            "version": "0.4.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam.git",
-                "reference": "99175a3373bf6bba597bac31e95b2712ddbb6ed0"
+                "reference": "f0c45f675b07d33bcb0d5ca9f17ee7b9f750ad31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/99175a3373bf6bba597bac31e95b2712ddbb6ed0",
-                "reference": "99175a3373bf6bba597bac31e95b2712ddbb6ed0",
+                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/f0c45f675b07d33bcb0d5ca9f17ee7b9f750ad31",
+                "reference": "f0c45f675b07d33bcb0d5ca9f17ee7b9f750ad31",
                 "shasum": ""
             },
             "require": {
@@ -309,7 +306,7 @@
                 "upload",
                 "validation"
             ],
-            "time": "2013-09-05 08:39:03"
+            "time": "2013-09-13 15:28:48"
         },
         {
             "name": "openbuildings/jam-auth",
@@ -521,16 +518,16 @@
         },
         {
             "name": "paypal/sdk-core-php",
-            "version": "v2.4.2",
+            "version": "v2.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paypal/sdk-core-php.git",
-                "reference": "4354c7fb5e74b4b4f6861e29641bb4be39bbdca8"
+                "reference": "226d3492f80847f09c99debb4d3220d5e744ddc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paypal/sdk-core-php/zipball/4354c7fb5e74b4b4f6861e29641bb4be39bbdca8",
-                "reference": "4354c7fb5e74b4b4f6861e29641bb4be39bbdca8",
+                "url": "https://api.github.com/repos/paypal/sdk-core-php/zipball/226d3492f80847f09c99debb4d3220d5e744ddc8",
+                "reference": "226d3492f80847f09c99debb4d3220d5e744ddc8",
                 "shasum": ""
             },
             "require": {
@@ -560,7 +557,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2013-08-22 16:32:05"
+            "time": "2013-09-11 14:27:58"
         },
         {
             "name": "rackspace/php-opencloud",
