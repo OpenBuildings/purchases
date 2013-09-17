@@ -54,9 +54,16 @@ class Kohana_Jam_Behavior_Freezable extends Jam_Behavior {
 	{
 		foreach ($this->_associations as $name) 
 		{
-			foreach ($model->{$name}->as_array() as $item) 
+			if ($model->meta()->association($name) instanceof Jam_Association_Collection ) 
 			{
-				$item->{$method}();
+				foreach ($model->{$name}->as_array() as $item) 
+				{
+					$item->{$method}();
+				}
+			}
+			else
+			{
+				$model->{$name}->{$method}();
 			}
 		}
 	}
