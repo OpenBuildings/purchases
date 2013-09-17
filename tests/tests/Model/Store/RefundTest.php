@@ -93,4 +93,39 @@ class Model_Store_RefundTest extends Testcase_Purchases {
 		$refund->store_purchase->purchase->payment = NULL;
 		$refund->payment_insist();
 	}
+
+	/**
+	 * @covers Model_Store_Refund::currency
+	 */
+	public function test_currency()
+	{
+		$store_purchase = $this->getMock('Model_Store_Purchase', array('currency'), array('store_purchase'));
+		$store_purchase
+			->expects($this->exactly(2))
+				->method('currency')
+				->will($this->onConsecutiveCalls('GBP', 'EUR'));
+
+		$store_refund = Jam::build('store_refund', array('store_purchase' => $store_purchase));
+
+		$this->assertEquals('GBP', $store_refund->currency());
+		$this->assertEquals('EUR', $store_refund->currency());
+	}
+
+	/**
+	 * @covers Model_Store_Refund::monetary
+	 */
+	public function test_monetary()
+	{
+		$monetary = new OpenBuildings\Monetary\Monetary;
+
+		$store_purchase = $this->getMock('Model_Store_Purchase', array('monetary'), array('store_purchase'));
+		$store_purchase
+			->expects($this->once())
+				->method('monetary')
+				->will($this->returnValue($monetary));
+
+		$store_refund = Jam::build('store_refund', array('store_purchase' => $store_purchase));
+
+		$this->assertSame($monetary, $store_refund->monetary());
+	}
 }

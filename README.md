@@ -58,6 +58,14 @@ $purchase
 
 ```
 
+If you want to modify the purchase after that, you'll have to ``unfreeze()`` it. Also if you want to know the state of the purchase, there is ``is_frozen`` flag.
+```php
+$purchase->unfreeze();
+$purchase->is_frozen();
+```
+
+Once the purchase has been frozen, any change to the frozen fields / associations will be treated as validation errors.
+
 ## Adding / Updating single items
 
 You can add an item to the purchase with the ``add_item()`` method. It would search all the purchase items in all the store_items, If the same item is found elsewhere it would update its quantity, otherwise it would add it to the appropriate store_item (or create that if none exist):
@@ -179,17 +187,74 @@ $refund
 Later you can retrieve the refunds from the store purchase or issue multiple refunds
 
 
-## Updating items
+## Updating Items and Extending Updates
 
 Both ``store_purchase`` and ``purchase`` have an update_items method, wich trigger the store_purchase's event 'model.update_items'. This is used mainly by external modules that can hook into purchases and add / update purchase_items when that event is triggered. For example openbuildings/shipping module uses that to add / update shipping items.
 
-## Extending updates
+For example we might have a behavior like this:
 
-... 
+```php
+class Jam_Behavior_MyBehavios extends Jam_Behavior {
+
+	public function initialize(Jam_Meta $meta, $name)
+	{
+		parent::initialize($meta, $name);
+
+		$meta
+			->events()
+				->bind('model.update_items', array($this, 'update_items'));
+	}
+
+	public function update_items(Model_Store_Purchase $store_purchase, Jam_Event_Data $data)
+	{
+		if ( ! $store_purchase->items('shipping'))
+		{
+			$store_purchase->items->build(array(
+				'type' => 'shipping', 
+				'reference' => $store_purchase->shipping // some shipping object
+			));
+		}
+	}
+}
+```
 
 ## Extending filters
 
-... 
+``items()``, ``items_count()`` and ``total_price()`` use filters array as an argument. It has a special event model.filter_items wich you can use in your behaviors to add additional filters or extend existing ones.
+
+Here's an example of how you can do that:
+
+```php
+class Jam_Behavior_MyBehavios extends Jam_Behavior {
+
+	public function initialize(Jam_Meta $meta, $name)
+	{
+		parent::initialize($meta, $name);
+
+		$meta
+			->events()
+				->bind('model.filter_items', array($this, 'filter_items'));
+	}
+
+	public function filter_shipping_items(Model_Store_Purchase $store_purchase, Jam_Event_Data $data, array $items, array $filter)
+		{
+			$items = is_array($data->return) ? $data->return : $items;
+			$filtered = array();
+
+			foreach ($items as $item)
+			{
+				if (array_key_exists('shippable', $filter) AND ($item->reference instanceof Shippable) !== $filter['shippable'])
+				{
+					continue;
+				}
+
+				$filtered [] = $item;
+			}
+
+			$data->return = $filtered;
+		}
+}
+```
 
 ## License
 

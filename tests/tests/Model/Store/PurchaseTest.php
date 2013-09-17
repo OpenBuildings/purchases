@@ -46,7 +46,8 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_add_or_update_item()
 	{
-		$store_purchase = Jam::find('purchase', 1)->store_purchases[0];
+		$purchase = Jam::find('purchase', 1)->unfreeze();
+		$store_purchase = $purchase->store_purchases[0];
 
 		$existing_item_product = Jam::build('purchase_item', array(
 			'reference' => Jam::find('product', 1),
@@ -89,6 +90,7 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 
 	/**
 	 * @covers Model_Store_Purchase::items
+	 * @covers Jam_Behavior_Store_Purchase::filter_items
 	 * @covers Model_Store_Purchase::items_count
 	 */
 	public function test_items()
@@ -146,31 +148,6 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Model_Store_Purchase::freeze_item_prices
-	 */
-	public function test_freeze_item_prices()
-	{
-		$store_purchase = Jam::build('store_purchase');
-
-		$item1 = $this->getMock('Model_Purchase_Item', array('freeze_price'), array('purchase_item'));
-
-		$item1->expects($this->once())
-			->method('freeze_price');
-
-		$item2 = $this->getMock('Model_Purchase_Item', array('freeze_price'), array('purchase_item'));
-
-		$item2->expects($this->once())
-			->method('freeze_price');
-
-		$store_purchase->items = array(
-			$item1,
-			$item2,
-		);
-
-		$store_purchase->freeze_item_prices();
-	}
-
-	/**
 	 * @covers Model_Store_Purchase::total_price
 	 */
 	public function test_total_price()
@@ -211,5 +188,40 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		$store_purchase = Jam::find('store_purchase', 2)->update_items();
 
 		$this->assertTrue($store_purchase->items_updated);
+	}
+
+	/**
+	 * @covers Model_Store_Purchase::currency
+	 */
+	public function test_currency()
+	{
+		$purchase = $this->getMock('Model_Purchase', array('currency'), array('purchase'));
+		$purchase
+			->expects($this->exactly(2))
+				->method('currency')
+				->will($this->onConsecutiveCalls('GBP', 'EUR'));
+
+		$store_purchase = Jam::build('store_purchase', array('purchase' => $purchase));
+
+		$this->assertEquals('GBP', $store_purchase->currency());
+		$this->assertEquals('EUR', $store_purchase->currency());
+	}
+
+	/**
+	 * @covers Model_Store_Purchase::monetary
+	 */
+	public function test_monetary()
+	{
+		$monetary = new OpenBuildings\Monetary\Monetary;
+
+		$purchase = $this->getMock('Model_Purchase', array('monetary'), array('purchase'));
+		$purchase
+			->expects($this->once())
+				->method('monetary')
+				->will($this->returnValue($monetary));
+
+		$store_purchase = Jam::build('store_purchase', array('purchase' => $purchase));
+
+		$this->assertSame($monetary, $store_purchase->monetary());
 	}
 }

@@ -88,20 +88,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 			->will($this->returnValue($price2));
 
 		$this->assertEquals(new Jam_Price(10, 'EUR', $item->monetary()), $item->compute_price(), 'Should be EUR -> EUR conversion');
-		$this->assertEquals(new Jam_Price(7.4878322725571, 'EUR', $item->monetary()), $item->compute_price(), 'Should be EUR -> USD conversion');
-	}
-
-	/**
-	 * @expectedException Kohana_Exception
-	 * @covers Model_Purchase_Item::purchase_insist
-	 */
-	public function test_purchase_insist()
-	{
-		$item = Jam::find('purchase_item', 1);
-		$this->assertInstanceOf('Model_Purchase', $item->purchase_insist());
-
-		$item->store_purchase->purchase = NULL;
-		$item->purchase_insist();
+		$this->assertEquals(new Jam_Price(7.4867110878191, 'EUR', $item->monetary()), $item->compute_price(), 'Should be EUR -> USD conversion');
 	}
 
 	/**
@@ -115,6 +102,15 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 		$this->assertSame($item->store_purchase->purchase->monetary(), $item->monetary());
 	}
 
+	/**
+	 * @covers Model_Purchase_Item::currency
+	 */
+	public function test_currency()
+	{
+		$item = Jam::find('purchase_item', 1);
+
+		$this->assertSame($item->store_purchase->purchase->currency(), $item->currency());
+	}
 	/**
 	 * @covers Model_Purchase_Item::price
 	 */
@@ -133,26 +129,6 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 		$item->price = new Jam_Price(100, 'EUR');
 
 		$this->assertSame($item->price, $item->price());
-	}
-
-	/**
-	 * @covers Model_Purchase_Item::freeze_price
-	 */
-	public function test_freeze_price()
-	{
-		$item = $this->getMock('Model_Purchase_Item', array('compute_price'), array('purchase_item'));
-
-		$price = new Jam_Price(10, 'USD');
-
-		$item->expects($this->once())
-			->method('compute_price')
-			->will($this->returnValue($price));
-
-		$this->assertNull($item->price);
-
-		$item->freeze_price();
-
-		$this->assertEquals($price, $item->price);
 	}
 
 	/**

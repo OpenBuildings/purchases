@@ -52,7 +52,22 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$this->assertInstanceOf('Openbuildings\Monetary\Monetary', $monetary);
 		$this->assertNotSame(Monetary::instance(), $monetary);
 		$this->assertSame($monetary, $purchase->monetary());
-		$this->assertEquals(7.4878322725571, $monetary->convert(10, 'USD', 'EUR'));
+		$this->assertEquals(7.4867110878191, $monetary->convert(10, 'USD', 'EUR'));
+	}
+
+	/**
+	 * @covers Model_Purchase::currency
+	 */
+	public function test_currency()
+	{
+		$purchase = Jam::build('purchase', array('currency' => 'EUR'));
+
+		$this->assertEquals('EUR', $purchase->currency());
+
+		$purchase->currency = 'GBP';
+
+		$this->assertEquals('GBP', $purchase->currency());
+
 	}
 
 	/**
@@ -92,72 +107,6 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$this->assertEquals(2, $purchase->items_count(array('shipping', 'promotion')));
 		$this->assertSame($purchase->store_purchases[0]->items[2], $mixed_items[0]);
 		$this->assertSame($purchase->store_purchases[0]->items[3], $mixed_items[1]);
-	}
-
-	/**
-	 * @covers Model_Purchase::freeze_item_prices
-	 */
-	public function test_freeze_item_prices()
-	{
-		$purchase = Jam::build('purchase');
-
-		$item1 = $this->getMock('Model_Store_Purchase', array('freeze_item_prices'), array('store_purchase'));
-
-		$item1->expects($this->once())
-			->method('freeze_item_prices');
-
-		$item2 = $this->getMock('Model_Store_Purchase', array('freeze_item_prices'), array('store_purchase'));
-
-		$item2->expects($this->once())
-			->method('freeze_item_prices');
-
-		$purchase->store_purchases = array(
-			$item1,
-			$item2,
-		);
-
-		$purchase->freeze_item_prices();
-	}	
-
-	/**
-	 * @covers Model_Purchase::freeze_monetary
-	 */
-	public function test_freeze_monetary()
-	{
-		$purchase = Jam::build('purchase');
-
-		$this->assertSame(Monetary::instance(), $purchase->monetary());
-		
-		$purchase->freeze_monetary();
-
-		$monetary = $purchase->monetary();
-
-		$this->assertInstanceOf('Openbuildings\Monetary\Monetary', $monetary);
-		$this->assertNotSame(Monetary::instance(), $monetary);
-		$this->assertSame($monetary, $purchase->monetary());
-		$this->assertSame($monetary->source(), Monetary::instance()->source());
-	}
-
-	/**
-	 * @covers Model_Purchase::freeze
-	 */
-	public function test_freeze()
-	{
-		$purchase = $this->getMock('Model_Purchase', array('freeze_item_prices', 'freeze_monetary'), array('purchase'));
-
-		$purchase->expects($this->once())
-			->method('freeze_item_prices')
-			->will($this->returnValue($purchase));
-
-		$purchase->expects($this->once())
-			->method('freeze_monetary')
-			->will($this->returnValue($purchase));
-
-		$this->assertFalse($purchase->is_frozen);
-		
-		$purchase->freeze();
-
-		$this->assertTrue($purchase->is_frozen);
 	}
 
 	/**

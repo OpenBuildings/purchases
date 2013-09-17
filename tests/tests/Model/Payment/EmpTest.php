@@ -145,7 +145,6 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 	 * @covers Model_Payment_Emp::authorize
 	 * @covers Model_Payment_Emp::refund
 	 * @covers Model_Payment_Emp::execute
-	 * @covers Model_Purchase::pay
 	 */
 	public function test_execute()
 	{

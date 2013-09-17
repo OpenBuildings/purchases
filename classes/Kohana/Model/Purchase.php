@@ -20,6 +20,7 @@ class Kohana_Model_Purchase extends Jam_Model {
 		$meta
 			->behaviors(array(
 				'tokenable' => Jam::behavior('tokenable', array('uppercase' => TRUE, 'field' => 'number')),
+				'freezable' => Jam::behavior('freezable', array('fields' => 'monetary', 'associations' => 'store_purchases')),
 				'paranoid' => Jam::behavior('paranoid'),
 			))
 			->associations(array(
@@ -34,8 +35,7 @@ class Kohana_Model_Purchase extends Jam_Model {
 			->fields(array(
 				'id'              => Jam::field('primary'),
 				'currency'        => Jam::field('string'),
-				'monetary_source' => Jam::field('serialized'),
-				'is_frozen'       => Jam::field('boolean'),
+				'monetary'        => Jam::field('serialized'),
 				'created_at'      => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
 				'updated_at'      => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			));
@@ -66,16 +66,12 @@ class Kohana_Model_Purchase extends Jam_Model {
 
 	public function monetary()
 	{
-		if ($this->monetary_source) 
-		{
-			if ( ! $this->_monetary) 
-			{
-				$this->_monetary = new Monetary($this->currency, $this->monetary_source);
-			}
-			return $this->_monetary;
-		}
+		return $this->monetary ? $this->monetary : Monetary::instance();
+	}
 
-		return Monetary::instance();
+	public function currency()
+	{
+		return $this->currency;
 	}
 
 	public function items($types = NULL)
@@ -109,43 +105,6 @@ class Kohana_Model_Purchase extends Jam_Model {
 	{
 		$prices = array_map(function($item) { return $item->total_price(); }, $this->items($types));
 		
-		return Jam_Price::sum($prices, $this->currency, $this->monetary());
+		return Jam_Price::sum($prices, $this->currency(), $this->monetary());
 	}
-
-	public function freeze_item_prices()
-	{
-		foreach ($this->store_purchases->as_array() as $store_purchase) 
-		{
-			$store_purchase->freeze_item_prices();
-		}
-
-		return $this;
-	}
-
-	public function freeze_monetary()
-	{
-		$this->monetary_source = Monetary::instance()->source();
-		
-		return $this;
-	}
-
-	public function freeze()
-	{
-		$this
-			->freeze_monetary()
-			->freeze_item_prices()
-			->set('is_frozen', TRUE);
-
-		return $this;
-	}
-
-	public function pay(Processor $processor)
-	{
-		$payment_attributes = $processor->execute($this);
-
-		$this->build('payment')->set($payment_attributes);
-
-		return $this;
-	}
-
 }

@@ -11,7 +11,7 @@ class Model_Variation extends Jam_Model implements Sellable {
 			->fields(array(
 				'id' => Jam::field('primary'),
 				'name' => Jam::field('string'),
-				'price' => Jam::field('float'),
+				'price' => Jam::field('price'),
 			))
 			->validator('name', 'price', 'product', array(
 				'present' => TRUE
@@ -24,7 +24,7 @@ class Model_Variation extends Jam_Model implements Sellable {
 		return $this->price;
 	}
 
-	public function currency(Model_Purchase_Item $item)
+	public function currency()
 	{
 		return $this->product->currency;
 	}

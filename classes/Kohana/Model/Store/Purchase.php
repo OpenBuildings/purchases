@@ -17,6 +17,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 			->behaviors(array(
 				'tokenable' => Jam::behavior('tokenable', array('uppercase' => TRUE, 'field' => 'number')),
 				'paranoid' => Jam::behavior('paranoid'),
+				'freezable' => Jam::behavior('freezable', array('associations' => 'items', 'parent' => 'purchase')),
 			))
 			->associations(array(
 				'purchase' => Jam::association('belongsto', array('inverse_of' => 'store_purchases')),
@@ -78,16 +79,6 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 		return $this;
 	}
 
-	public function freeze_item_prices()
-	{
-		foreach ($this->items->as_array() as $item) 
-		{
-			$item->freeze_price();
-		}
-
-		return $this;
-	}
-
 	public function total_price($types = NULL)
 	{
 		$prices = array_map(function($item) { return $item->total_price(); }, $this->items($types));
@@ -97,7 +88,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 
 	public function currency()
 	{
-		return $this->get_insist('purchase')->currency;
+		return $this->get_insist('purchase')->currency();
 	}
 
 	public function monetary()

@@ -2,6 +2,9 @@
 
 class Kohana_Jam_Behavior_Store_Purchase extends Jam_Behavior {
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public function initialize(Jam_Meta $meta, $name)
 	{
 		parent::initialize($meta, $name);

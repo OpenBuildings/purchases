@@ -47,7 +47,7 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 				array(
 					'amount' => array(
 						'currency' => 'EUR',
-						'total' => 506.40,
+						'total' => 509.26,
 					),
 					'item_list' => array(
 						'items' => array(
@@ -60,7 +60,7 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 							array(
 								'quantity' => 1,
 								'name' => 'Products From empty-store',
-								'price' => '116.40',
+								'price' => '119.26',
 								'currency' => 'EUR',
 							),
 						)

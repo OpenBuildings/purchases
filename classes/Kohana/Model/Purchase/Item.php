@@ -22,6 +22,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 		$meta
 			->behaviors(array(
 				'paranoid' => Jam::behavior('paranoid'),
+				'freezable' => Jam::behavior('freezable', array('fields' => 'price', 'parent' => 'store_purchase')),
 			))
 			->associations(array(
 				'store_purchase' => Jam::association('belongsto', array('inverse_of' => 'items')),
@@ -72,24 +73,22 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 			AND $this->type == $item->type);
 	}
 
-	public function purchase_insist()
-	{
-		return $this->get_insist('store_purchase')->get_insist('purchase');
-	}
-
 	public function monetary()
 	{
-		return $this->purchase_insist()->monetary();
+		return $this->get_insist('store_purchase')->monetary();
 	}
 
 	public function currency()
 	{
-		return $this->purchase_insist()->currency;
+		return $this->get_insist('store_purchase')->currency();
 	}
 
 	public function compute_price()
 	{
-		$price = $this->reference->price($this);
+		$price = $this->get_insist('reference')->price($this);
+
+		if ( ! ($price instanceof Jam_Price))
+			throw new Kohana_Exception('Compute price expects the reference :reference to return a Jam_Price', array(':reference' => (string) $this->reference));
 
 		return $price
 			->monetary($this->monetary())
@@ -99,11 +98,6 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 	public function price()
 	{
 		return ($this->price === NULL) ? $this->compute_price() : $this->price;
-	}
-
-	public function freeze_price()
-	{
-		$this->price = $this->compute_price();
 	}
 
 	public function total_price()

@@ -33,4 +33,9 @@ abstract class Testcase_Purchases extends PHPUnit_Framework_TestCase {
 
 		parent::tearDown();
 	}
+	
+	public function ids(array $items)
+	{
+		return array_values(array_map(function($item){ return $item->id(); }, $items));
+	}
 }
