@@ -189,4 +189,18 @@ class Model_PurchaseTest extends Testcase_Purchases {
 
 		$purchase->update_items();
 	}
+
+	/**
+	 * @covers Model_Purchase::recheck
+	 */
+	public function test_recheck()
+	{
+		$purchase = Jam::find('purchase', 1);
+
+		$this->assertTrue($purchase->check());
+
+		$purchase->store_purchases[0]->items[0]->price = -10;
+
+		$this->assertFalse($purchase->recheck());
+	}
 }

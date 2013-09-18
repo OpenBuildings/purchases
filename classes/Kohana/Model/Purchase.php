@@ -107,4 +107,13 @@ class Kohana_Model_Purchase extends Jam_Model {
 		
 		return Jam_Price::sum($prices, $this->currency(), $this->monetary());
 	}
+
+	public function recheck()
+	{
+		$this->store_purchases = array_map(function($item){
+			return $item->set('items', $item->items);
+		}, $this->store_purchases->as_array());
+
+		return $this->check();
+	}
 }
