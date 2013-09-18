@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "4862f4f37298e6c33a1479e2489a4e5a",
+    "hash": "ad2aef93c25c750510ea8cf4e613744f",
     "packages": [
         {
             "name": "composer/installers",
@@ -263,16 +263,16 @@
         },
         {
             "name": "openbuildings/jam",
-            "version": "0.4.12",
+            "version": "0.4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam.git",
-                "reference": "f0c45f675b07d33bcb0d5ca9f17ee7b9f750ad31"
+                "reference": "d5310172ed9feabcbc7e332683e9718f3f19d991"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/f0c45f675b07d33bcb0d5ca9f17ee7b9f750ad31",
-                "reference": "f0c45f675b07d33bcb0d5ca9f17ee7b9f750ad31",
+                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/d5310172ed9feabcbc7e332683e9718f3f19d991",
+                "reference": "d5310172ed9feabcbc7e332683e9718f3f19d991",
                 "shasum": ""
             },
             "require": {
@@ -306,20 +306,20 @@
                 "upload",
                 "validation"
             ],
-            "time": "2013-09-13 15:28:48"
+            "time": "2013-09-18 09:35:48"
         },
         {
             "name": "openbuildings/jam-auth",
-            "version": "0.1.3",
+            "version": "0.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam-auth.git",
-                "reference": "0.1.3"
+                "reference": "88097b132467b64e2985bc67ca218e162a33d7c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam-auth/zipball/0.1.3",
-                "reference": "0.1.3",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-auth/zipball/88097b132467b64e2985bc67ca218e162a33d7c1",
+                "reference": "88097b132467b64e2985bc67ca218e162a33d7c1",
                 "shasum": ""
             },
             "require": {
@@ -354,7 +354,7 @@
                 "kohana",
                 "login"
             ],
-            "time": "2013-08-19 13:59:19"
+            "time": "2013-09-18 07:28:00"
         },
         {
             "name": "openbuildings/jam-monetary",

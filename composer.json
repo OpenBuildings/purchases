@@ -18,7 +18,7 @@
 		"openbuildings/jam": "0.4.*",
 		"openbuildings/emp": "0.1.*",
 		"paypal/rest-api-sdk-php": "0.7.*",
-		"openbuildings/jam-auth": "0.1.*",
+		"openbuildings/jam-auth": "0.2.*",
 		"openbuildings/jam-monetary": "0.1.*"
 	},
 	"require-dev": {
