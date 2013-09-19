@@ -85,7 +85,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 
 	public function compute_price()
 	{
-		$price = $this->get_insist('reference')->price($this);
+		$price = $this->get_insist('reference')->price_for_purchase_item($this);
 
 		if ( ! ($price instanceof Jam_Price))
 			throw new Kohana_Exception('Compute price expects the reference :reference to return a Jam_Price', array(':reference' => (string) $this->reference));

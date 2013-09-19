@@ -2,5 +2,5 @@
 
 interface Kohana_Sellable {
 
-	public function price(Model_Purchase_Item $item);
+	public function price_for_purchase_item(Model_Purchase_Item $item);
 }

@@ -72,20 +72,15 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	public function test_compute_price()
 	{
 		$item = Jam::find('purchase_item', 1);
-		$item->reference = $this->getMock('Model_Product', array('price'), array('product'));
+		$item->reference = $this->getMock('Model_Product', array('price_for_purchase_item'), array('product'));
 
 		$price1 = new Jam_Price(10, 'EUR');
 		$price2 = new Jam_Price(10, 'USD');
 
-		$item->reference->expects($this->at(0))
-			->method('price')
+		$item->reference->expects($this->exactly(2))
+			->method('price_for_purchase_item')
 			->with($this->identicalTo($item))
-			->will($this->returnValue($price1));
-
-		$item->reference->expects($this->at(1))
-			->method('price')
-			->with($this->identicalTo($item))
-			->will($this->returnValue($price2));
+			->will($this->onConsecutiveCalls($price1, $price2));
 
 		$this->assertEquals(new Jam_Price(10, 'EUR', $item->monetary()), $item->compute_price(), 'Should be EUR -> EUR conversion');
 		$this->assertEquals(new Jam_Price(7.4867110878191, 'EUR', $item->monetary()), $item->compute_price(), 'Should be EUR -> USD conversion');

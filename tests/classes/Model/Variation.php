@@ -19,7 +19,7 @@ class Model_Variation extends Jam_Model implements Sellable {
 			->validator('price', array('numeric' => TRUE));
 	}
 
-	public function price(Model_Purchase_Item $item)
+	public function price_for_purchase_item(Model_Purchase_Item $item)
 	{
 		return $this->price;
 	}
