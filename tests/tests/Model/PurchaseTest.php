@@ -67,8 +67,43 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$purchase->currency = 'GBP';
 
 		$this->assertEquals('GBP', $purchase->currency());
-
 	}
+
+	/**
+	 * @covers Model_Purchase::is_payed
+	 */
+	public function test_is_payed()
+	{
+		$purchase = Jam::build('purchase');
+
+		$this->assertFalse($purchase->is_payed());
+
+		$purchase->payment = Jam::build('payment');
+
+		$this->assertFalse($purchase->is_payed());
+
+		$purchase->payment->status = Model_Payment::PAID;
+
+		$this->assertTrue($purchase->is_payed());
+	}
+
+	/**
+	 * @covers Model_Purchase::payed_at
+	 */
+	public function test_payed_at()
+	{
+		$purchase = $this->getMock('Model_Purchase', array('is_payed'), array('purchase'));
+		$purchase->payment = Jam::build('payment', array('created_at' => '2013-02-02 10:00:00'));
+
+		$purchase
+			->expects($this->exactly(2))
+			->method('is_payed')
+			->will($this->onConsecutiveCalls(FALSE, TRUE));
+
+		$this->assertNull($purchase->payed_at());
+		$this->assertEquals('2013-02-02 10:00:00', $purchase->payed_at());
+	}
+
 
 	/**
 	 * @covers Model_Purchase::items
