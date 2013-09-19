@@ -1,13 +1,13 @@
 <?php
 
-class Model_Store extends Jam_Model {
+class Kohana_Model_Store extends Jam_Model {
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta
-			->associations(array(
-				'products' => Jam::association('hasmany'),
-			))
 			->fields(array(
 				'id' => Jam::field('primary'),
 				'name' => Jam::field('string'),

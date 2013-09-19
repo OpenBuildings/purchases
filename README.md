@@ -48,7 +48,7 @@ $store_purchase->total_price(array('is_payable' = TRUE));
 
 ## Price Freezing
 
-Normally all prices for purchase items are derieved dynamically, by calling ->price() and ->currency() methods on the reference object (be that a product, a promotion etc.), calculated with the current monetary exchange rates. Once you call the ``freeze()`` method on the purchase (and save it) both the exchange rates and the prices are set to the purchase disallowing any further modification of the purchase, even if the reference's price changes, the purchase item's prices will stay the same as in the moment of freezing.
+Normally all prices for purchase items are derieved dynamically, by calling ->price_for_purchase_item() method on the reference object (be that a product, a promotion etc.), calculated with the current monetary exchange rates. Once you call the ``freeze()`` method on the purchase (and save it) both the exchange rates and the prices are set to the purchase disallowing any further modification of the purchase, even if the reference's price changes, the purchase item's prices will stay the same as in the moment of freezing.
 
 ```php
 
