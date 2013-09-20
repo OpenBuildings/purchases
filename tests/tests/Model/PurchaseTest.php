@@ -229,6 +229,35 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Purchase::items_quantity
+	 */
+	public function test_items_quantity()
+	{
+		$purchase = Jam::build('purchase', array(
+			'store_purchases' => array(
+				array(
+					'store' => 1,
+					'items' => array(
+						array('type' => 'product', 'quantity' => 2),
+						array('type' => 'shipping', 'quantity' => 1),
+					)
+				),
+				array(
+					'store' => 1,
+					'items' => array(
+						array('type' => 'product', 'quantity' => 3),
+					)
+				),
+			)
+		));
+
+		$this->assertEquals(6, $purchase->items_quantity());
+		$this->assertEquals(5, $purchase->items_quantity('product'));
+		$this->assertEquals(1, $purchase->items_quantity('shipping'));
+		$this->assertEquals(6, $purchase->items_quantity(array('product', 'shipping')));
+	}
+
+	/**
 	 * @covers Model_Purchase::recheck
 	 */
 	public function test_recheck()

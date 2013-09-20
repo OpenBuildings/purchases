@@ -72,6 +72,15 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 		return count($this->items($types));
 	}
 
+	public function items_quantity($types = NULL)
+	{
+		$quantities = array_map(function($item) {
+			return $item->quantity;
+		}, $this->items($types));
+
+		return $quantities ? array_sum($quantities) : 0;
+	}
+
 	public function update_items()
 	{
 		$this->meta()->events()->trigger('model.update_items', $this);
