@@ -35,7 +35,7 @@ class Model_StoreTest extends Testcase_Purchases {
 			->with($this->equalTo($types))
 			->will($this->returnValue($price2));
 
-		$store = Jam::build('store', array('purchases' => array($purchase1,	$purchase2)));
+		$store = Jam::build('store', array('currency' => 'GBP', 'purchases' => array($purchase1,	$purchase2)));
 
 		$this->assertEquals(new Jam_Price(42, 'GBP'), $store->purchases_total_price($types));
 	}

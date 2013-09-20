@@ -19,8 +19,10 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	public function test_find_or_build_store_purchase()
 	{
 		$purchase = Jam::find('purchase', 1);
+		$store1 = Jam::find('store', 1);
+		$store2 = Jam::find('store', 2);
 
-		$store_purchase = $purchase->find_or_build_store_purchase(1);
+		$store_purchase = $purchase->find_or_build_store_purchase($store1);
 		$this->assertSame($purchase->store_purchases[0], $store_purchase);
 		$this->assertTrue($store_purchase->loaded());
 
@@ -30,10 +32,10 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$this->assertSame($purchase->store_purchases[0], $store_purchase);
 		$this->assertSame($purchase->store_purchases[0]->store, $store_purchase->store);
 
-		$store_purchase = $purchase->find_or_build_store_purchase(2);
+		$store_purchase = $purchase->find_or_build_store_purchase($store2);
 		$this->assertSame($purchase->store_purchases[1], $store_purchase);
 		$this->assertFalse($store_purchase->loaded());
-		$this->assertEquals(2, $store_purchase->store->id());
+		$this->assertEquals($store2->id(), $store_purchase->store->id());
 	}
 
 	/**
@@ -150,6 +152,7 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	public function test_add_item()
 	{
 		$purchase = Jam::find('purchase', 1);
+		$store = Jam::find('store', 1);
 		$this->assertCount(2, $purchase->store_purchases[0]->items);
 
 		$existing_item = Jam::build('purchase_item', array(
@@ -159,7 +162,7 @@ class Model_PurchaseTest extends Testcase_Purchases {
 			'type' => 'product',
 		));
 
-		$purchase->add_item(1, $existing_item);
+		$purchase->add_item($store, $existing_item);
 
 		$this->assertCount(2, $purchase->store_purchases[0]->items);
 		$this->assertEquals(4, $purchase->store_purchases[0]->items[0]->quantity);

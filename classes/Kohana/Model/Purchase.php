@@ -41,15 +41,17 @@ class Kohana_Model_Purchase extends Jam_Model {
 			));
 	}
 
-	public function find_or_build_store_purchase($store)
+	public function find_or_build_store_purchase(Model_Store $store)
 	{
-		if (($store_offset = $this->store_purchases->search($store)) === NULL)
+		$store_purchases = $this->store_purchases->as_array('store_id');
+
+		if (isset($store_purchases[$store->id()]))
 		{
-			$store_purchase = $this->store_purchases->build(array('store' => $store));
+			$store_purchase = $store_purchases[$store->id()];
 		}
 		else
 		{
-			$store_purchase = $this->store_purchases[$store_offset];
+			$store_purchase = $this->store_purchases->build(array('store' => $store));
 		}
 
 		return $store_purchase;
