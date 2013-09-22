@@ -108,7 +108,7 @@ class Kohana_Jam_Behavior_Freezable extends Jam_Behavior {
 	{
 		if ($this->_parent) 
 		{
-			$data->return = $model->{$this->_parent}->is_frozen();
+			$data->return = $model->get_insist($this->_parent)->is_frozen();
 		}
 		else
 		{
@@ -120,7 +120,7 @@ class Kohana_Jam_Behavior_Freezable extends Jam_Behavior {
 	{
 		if ($this->_parent) 
 		{
-			$data->return = $model->{$this->_parent}->is_just_frozen();
+			$data->return = $model->get_insist($this->_parent)->is_just_frozen();
 		}
 		else
 		{

@@ -38,7 +38,8 @@ class Kohana_Model_Purchase extends Jam_Model {
 				'monetary'        => Jam::field('serialized'),
 				'created_at'      => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
 				'updated_at'      => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
-			));
+			))
+			->validator('currency', array('currency' => TRUE));
 	}
 
 	public function find_or_build_store_purchase(Model_Store $store)

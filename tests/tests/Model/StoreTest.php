@@ -3,7 +3,7 @@
 /**
  * Functest_TestsTest 
  *
- * @group model.purchase
+ * @group model.store
  * 
  * @package Functest
  * @author Ivan Kerin

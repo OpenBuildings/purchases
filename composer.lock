@@ -358,16 +358,16 @@
         },
         {
             "name": "openbuildings/jam-monetary",
-            "version": "0.1.8",
+            "version": "0.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam-monetary.git",
-                "reference": "b186349bd42f202dec908f50cf41e20d7526e87f"
+                "reference": "b98bc740e78249e13893f4c4b8e90445386c2592"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam-monetary/zipball/b186349bd42f202dec908f50cf41e20d7526e87f",
-                "reference": "b186349bd42f202dec908f50cf41e20d7526e87f",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-monetary/zipball/b98bc740e78249e13893f4c4b8e90445386c2592",
+                "reference": "b98bc740e78249e13893f4c4b8e90445386c2592",
                 "shasum": ""
             },
             "require": {
@@ -402,7 +402,7 @@
                 "money",
                 "price"
             ],
-            "time": "2013-09-10 10:16:11"
+            "time": "2013-09-20 18:41:23"
         },
         {
             "name": "openbuildings/monetary",
@@ -646,16 +646,16 @@
         },
         {
             "name": "openbuildings/kohana-test-bootsrap",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/kohana-test-bootstrap.git",
-                "reference": "0.1.0"
+                "reference": "a3f9e8756d0a3262063fd904ef31ead324639a0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/kohana-test-bootstrap/zipball/0.1.0",
-                "reference": "0.1.0",
+                "url": "https://api.github.com/repos/OpenBuildings/kohana-test-bootstrap/zipball/a3f9e8756d0a3262063fd904ef31ead324639a0e",
+                "reference": "a3f9e8756d0a3262063fd904ef31ead324639a0e",
                 "shasum": ""
             },
             "type": "library",
@@ -677,7 +677,7 @@
                 }
             ],
             "description": "Kohana core classes repackaged with composer, used to test modules",
-            "time": "2013-08-12 09:28:25"
+            "time": "2013-09-20 19:43:58"
         },
         {
             "name": "openbuildings/phpunit-spiderling",
