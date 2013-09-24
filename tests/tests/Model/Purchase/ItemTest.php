@@ -67,6 +67,29 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Purchase_Item::group_by_store_purchase
+	 */
+	public function test_group_by_store_purchase()
+	{
+		$items = array(
+			Jam::build('purchase_item', array('id' => 10, 'store_purchase_id' => 1)),
+			Jam::build('purchase_item', array('id' => 20, 'store_purchase_id' => 1)),
+			Jam::build('purchase_item', array('id' => 30, 'store_purchase_id' => 12)),
+			array('id' => 40, 'store_purchase_id' => 13),
+			array('id' => 50, 'store_purchase_id' => 13),
+			1,
+		);
+
+		$groups = Model_Purchase_Item::group_by_store_purchase($items);
+
+		$this->assertEquals(array('1', '12', '13'), array_keys($groups));
+
+		$this->assertEquals(array(10, 20, 1), $this->ids($groups['1']));
+		$this->assertEquals(array(30), $this->ids($groups['12']));
+		$this->assertEquals(array(40, 50), $this->ids($groups['13']));
+	}
+
+	/**
 	 * @covers Model_Purchase_Item::compute_price
 	 */
 	public function test_compute_price()

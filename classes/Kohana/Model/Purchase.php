@@ -113,6 +113,23 @@ class Kohana_Model_Purchase extends Jam_Model {
 		return $this;
 	}
 
+	public function replace_items($items, $types = NULL)
+	{
+		$grouped = Model_Purchase_Item::group_by_store_purchase($items);
+
+		foreach ($grouped as $store_purchase_id => $items) 
+		{
+			$offset = $this->store_purchases->search($store_purchase_id);
+
+			if ($offset !== NULL) 
+			{
+				$this->store_purchases[$offset]->replace_items($items, $types);
+			}
+		}
+
+		return $this;
+	}
+
 	public function total_price($types = NULL)
 	{
 		$prices = array_map(function($item) { return $item->total_price(); }, $this->items($types));

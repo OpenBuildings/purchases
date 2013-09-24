@@ -210,6 +210,47 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Store_Purchase::replace_items
+	 */
+	public function test_replace_items()
+	{
+		$store_purchase = Jam::find('store_purchase', 2);
+		
+		$store_purchase->items->build(array(
+			'id' => 23,
+			'quantity' => 1,
+			'price' => 20,
+			'type' => 'shipping',
+			'is_payable' => TRUE,
+		));
+
+		$new_item = array(
+			'id' => 100,
+			'quantity' => 1,
+			'price' => 10,
+			'type' => 'shipping',
+			'is_payable' => TRUE,
+		);
+
+		$products = $store_purchase->items('product');
+		$shipping = $store_purchase->items('shipping');
+
+		$store_purchase->replace_items(array($new_item), 'shipping');
+
+		$this->assertEquals($products, $store_purchase->items('product'));
+
+		$new_shipping = $store_purchase->items('shipping');
+		$this->assertNotEquals($shipping, $new_shipping);
+		$this->assertEquals(array($new_item['id']), $this->ids($new_shipping));
+		$this->assertEquals($new_item['price'], $new_shipping[0]->price->amount());
+
+		$store_purchase->replace_items(array(), 'shipping');
+		$cleared_shipping = $store_purchase->items('shipping');
+
+		$this->assertEquals(array(), $this->ids($cleared_shipping));
+	}
+
+	/**
 	 * @covers Model_Store_Purchase::payed_at
 	 */
 	public function test_payed_at()

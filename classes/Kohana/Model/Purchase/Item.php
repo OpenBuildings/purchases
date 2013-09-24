@@ -47,6 +47,17 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 			->validator('quantity', array('numeric' => array('only_integer' => TRUE, 'greater_than' => 0)));
 	}
 
+	public static function group_by_store_purchase(array $items)
+	{
+		$items = Jam_Array_Model::factory()
+			->model('purchase_item')
+			->load_fields($items);
+
+		return Array_Util::group_by($items, function($item) {
+			return $item->store_purchase_id;
+		});
+	}
+
 	public function validate()
 	{
 		if ($this->reference AND ! ($this->reference instanceof Sellable))

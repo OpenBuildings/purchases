@@ -88,6 +88,24 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 		return $this;
 	}
 
+	public function replace_items($items, $types = NULL)
+	{
+		$original = $this->items($types);
+
+		$array = Jam_Array_Model::factory()
+			->model('purchase_item')
+			->load_fields($original)
+			->set($items);
+
+		$removed_ids = array_values(array_diff($array->original_ids(), $array->ids()));
+
+		$this->items
+			->remove($removed_ids)
+			->add($items);
+
+		return $this;
+	}
+
 	public function total_price($types = NULL)
 	{
 		$prices = array_map(function($item) { return $item->total_price(); }, $this->items($types));
