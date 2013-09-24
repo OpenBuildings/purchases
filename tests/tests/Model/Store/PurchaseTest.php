@@ -232,6 +232,11 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 			'is_payable' => TRUE,
 		);
 
+		$update_item = array(
+			'id' => 3,
+			'quantity' => 3,
+		);
+
 		$products = $store_purchase->items('product');
 		$shipping = $store_purchase->items('shipping');
 
@@ -248,6 +253,14 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		$cleared_shipping = $store_purchase->items('shipping');
 
 		$this->assertEquals(array(), $this->ids($cleared_shipping));
+
+		$existing_item = $store_purchase->items[0]->as_array();
+
+		$products = $store_purchase->replace_items(array($update_item), 'product');
+
+		$expected = array_merge($existing_item, $update_item);
+
+		$this->assertEquals($expected, $store_purchase->items[0]->as_array());
 	}
 
 	/**
