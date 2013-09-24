@@ -240,6 +240,7 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$store_purchase1->id = 10;
 		$store_purchase2 = $this->getMock('Model_Store_Purchase', array('replace_items'), array('store_purchase'));
 		$store_purchase2->id = 20;
+		$store_purchase3 = Jam::build('store_purchase', array('id' => 30));
 
 		$item1 = Jam::build('purchase_item', array('id' => 10, 'store_purchase' => $store_purchase1));
 		$item2 = Jam::build('purchase_item', array('id' => 20, 'store_purchase' => $store_purchase1));
@@ -250,7 +251,6 @@ class Model_PurchaseTest extends Testcase_Purchases {
 			->method('replace_items')
 			->with($this->equalTo(array($item1, $item2)), $this->equalTo('product'));
 
-
 		$store_purchase2
 			->expects($this->once())
 			->method('replace_items')
@@ -259,9 +259,12 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$purchase->store_purchases = array(
 			$store_purchase1,
 			$store_purchase2,
+			$store_purchase3,
 		);
 
 		$purchase->replace_items(array($item1, $item2, $item3), 'product');
+
+		$this->assertFalse($purchase->store_purchases->has($store_purchase3));
 	}
 
 	/**

@@ -116,16 +116,17 @@ class Kohana_Model_Purchase extends Jam_Model {
 	public function replace_items($items, $types = NULL)
 	{
 		$grouped = Model_Purchase_Item::group_by_store_purchase($items);
+		$current = $this->store_purchases->as_array('id');
 
-		foreach ($grouped as $store_purchase_id => $items) 
+		$replaced = array_intersect_key($grouped, $current);
+		$removed = array_diff_key($current, $grouped);
+
+		foreach ($replaced as $index => $items) 
 		{
-			$offset = $this->store_purchases->search($store_purchase_id);
-
-			if ($offset !== NULL) 
-			{
-				$this->store_purchases[$offset]->replace_items($items, $types);
-			}
+			$current[$index]->replace_items($items, $types);
 		}
+
+		$this->store_purchases->remove(array_values($removed));
 
 		return $this;
 	}
