@@ -51,7 +51,8 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 	{
 		$items = Jam_Array_Model::factory()
 			->model('purchase_item')
-			->load_fields($items);
+			->load_fields($items)
+			->set($items);
 
 		return Array_Util::group_by($items, function($item) {
 			return $item->store_purchase_id;

@@ -78,13 +78,14 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 			array('id' => 40, 'store_purchase_id' => 13),
 			array('id' => 50, 'store_purchase_id' => 13),
 			1,
+			array('id' => 2),
 		);
 
 		$groups = Model_Purchase_Item::group_by_store_purchase($items);
 
 		$this->assertEquals(array('1', '12', '13'), array_keys($groups));
 
-		$this->assertEquals(array(10, 20, 1), $this->ids($groups['1']));
+		$this->assertEquals(array(10, 20, 1, 2), $this->ids($groups['1']));
 		$this->assertEquals(array(30), $this->ids($groups['12']));
 		$this->assertEquals(array(40, 50), $this->ids($groups['13']));
 	}
