@@ -165,7 +165,6 @@ class Controller_Payment extends Controller_Template {
 You could pass additional info to the payment processor as billing address / name, by using the billing association.
 
 ```php
-
 $purchase = Jam::find('purchase', 1);
 
 $purchase->billing = Jam::build('address', array(
