@@ -10,6 +10,9 @@ class Kohana_Model_Address extends Jam_Model {
 
 	public $required = FALSE;
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta

@@ -411,25 +411,25 @@
         },
         {
             "name": "openbuildings/jam-locations",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam-locations.git",
-                "reference": "1bcd399cd9cb92200d4b3ef52a5a46db94ef4971"
+                "reference": "1b3183467f376f99451cfdc7445c07b11a83d0cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam-locations/zipball/1bcd399cd9cb92200d4b3ef52a5a46db94ef4971",
-                "reference": "1bcd399cd9cb92200d4b3ef52a5a46db94ef4971",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-locations/zipball/1b3183467f376f99451cfdc7445c07b11a83d0cf",
+                "reference": "1b3183467f376f99451cfdc7445c07b11a83d0cf",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "*",
-                "ext-geoip": "*",
                 "openbuildings/jam-closuretable": "0.1.*",
                 "php": ">=5.4.0"
             },
             "require-dev": {
+                "ext-geoip": "*",
                 "openbuildings/environment-backup": "0.1.*",
                 "openbuildings/kohana-test-bootsrap": "0.1.*"
             },
@@ -455,7 +455,7 @@
                 "kohana",
                 "location"
             ],
-            "time": "2013-09-25 16:46:39"
+            "time": "2013-09-26 07:02:11"
         },
         {
             "name": "openbuildings/jam-monetary",
