@@ -126,7 +126,6 @@ A paypal transaction requires 3 steps - creating the transaction, authorizing it
 ``$processor->next_url()`` is used to go to the paypal authorization page.
 
 ```php
-
 class Controller_Payment extends Controller_Template {
 
 	public function action_index()
@@ -159,6 +158,26 @@ class Controller_Payment extends Controller_Template {
 		$this->template->content = View::factory('payment/complete', array('purchase' => $purchase));
 	}
 }
+```
+
+## Additional billing info
+
+You could pass additional info to the payment processor as billing address / name, by using the billing association.
+
+```php
+
+$purchase = Jam::find('purchase', 1);
+
+$purchase->billing = Jam::build('address', array(
+	'email' => 'john.smith@example.com',
+	'first_name' => 'John',
+	'last_name' => 'Smith',
+	'line1' => 'Street 1',
+	'city' => Jam::find('location', 'London'),
+	'country' => Jam::find('location', 'United Kingdom'),
+	'zip' => 'QSZND',
+	'phone' => '1234567',
+));
 ```
 
 ## Refunds

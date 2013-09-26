@@ -46,6 +46,21 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 			));
 		}
 
+		if (($billing = $purchase->billing))
+		{
+			$params = array_merge($params, array_filter(array(
+				'customer_first_name' => $billing->first_name,
+				'customer_last_name'  => $billing->last_name,
+				'customer_address'    => $billing->line1,
+				'customer_address2'   => $billing->line2,
+				'customer_city'       => $billing->city ? $billing->city->name() : NULL,
+				'customer_country'    => $billing->country ? $billing->country->short_name : NULL,
+				'customer_postcode'   => $billing->zip,
+				'customer_email'      => $billing->email,
+				'customer_phone'      => $billing->phone,
+			)));
+		}
+
 		return $params;
 	}	
 

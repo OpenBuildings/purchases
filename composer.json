@@ -19,7 +19,8 @@
 		"openbuildings/emp": "0.1.*",
 		"paypal/rest-api-sdk-php": "0.7.*",
 		"openbuildings/jam-auth": "0.2.*",
-		"openbuildings/jam-monetary": "0.1.*"
+		"openbuildings/jam-monetary": "0.1.*",
+		"openbuildings/jam-locations": "0.1.*"
 	},
 	"require-dev": {
 		"openbuildings/kohana-test-bootsrap": "0.1.*",

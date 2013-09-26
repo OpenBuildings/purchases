@@ -48,7 +48,17 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			'payment_method' => 'creditcard',
 			'order_reference' => 'CNV7IC',
 			'order_currency' => 'EUR',
-			'customer_email' => 'admin@example.com',
+			'customer_email' => 'user@example.com',
+
+			'customer_first_name' => 'name1',
+			'customer_last_name' => 'name2',
+			'customer_address' => 'Street 1',
+			'customer_address2' => 'House 1',
+			'customer_city' => 'London',
+			'customer_country' => 'UK',
+			'customer_postcode' => 'ZIP',
+			'customer_phone' => 'phone123',
+
 			'test_transaction' => '1',
 			'ip_address' => '1.1.1.1',
 			'credit_card_trans_type' => 'sale',
