@@ -55,7 +55,7 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			'customer_address' => 'Street 1',
 			'customer_address2' => 'House 1',
 			'customer_city' => 'London',
-			'customer_country' => 'UK',
+			'customer_country' => 'GB',
 			'customer_postcode' => 'ZIP',
 			'customer_phone' => 'phone123',
 

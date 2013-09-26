@@ -25,18 +25,6 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		$payer
 			->setPaymentMethod('paypal');
 
-		if (($billing = $purchase->billing))
-		{
-			$payer_info = new PayPal\Api\PayerInfo();
-			$payer_info
-				->setEmail($billing->email)
-				->setFirstName($billing->first_name)
-				->setLastName($billing->last_name)
-				->setPhone($billing->phone);
-
-			$payer->setPayerInfo($payer_info);
-		}
-
 		$amount = new PayPal\Api\Amount();
 		$amount
 			->setCurrency($purchase->currency)

@@ -46,7 +46,7 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 			));
 		}
 
-		if (($billing = $purchase->billing))
+		if (($billing = $purchase->billing_address))
 		{
 			$params = array_merge($params, array_filter(array(
 				'customer_first_name' => $billing->first_name,

@@ -167,7 +167,7 @@ You could pass additional info to the payment processor as billing address / nam
 ```php
 $purchase = Jam::find('purchase', 1);
 
-$purchase->billing = Jam::build('address', array(
+$purchase->billing_address = Jam::build('address', array(
 	'email' => 'john.smith@example.com',
 	'first_name' => 'John',
 	'last_name' => 'Smith',

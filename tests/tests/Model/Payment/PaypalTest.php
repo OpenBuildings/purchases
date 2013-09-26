@@ -38,12 +38,6 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 			'intent' => 'sale',
 			'payer' => array(
 				'payment_method' => 'paypal',
-				'payer_info' => array(
-					'email' => 'user@example.com',
-					'first_name' => 'name1',
-					'last_name' => 'name2',
-					'phone' => 'phone123',
-				),
 			),
 			'redirect_urls' => array(
 				'return_url' => 'http://example.com/success',
