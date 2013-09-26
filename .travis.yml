@@ -17,6 +17,7 @@ script:
 
 before_script:
   - mkdir -p build/logs
+  - composer selfupdate  
   - composer require --dev satooshi/php-coveralls:dev-master
   - composer install
   - mysql -e 'create database `test-purchases`;'

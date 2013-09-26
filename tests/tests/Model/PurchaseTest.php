@@ -164,6 +164,8 @@ class Model_PurchaseTest extends Testcase_Purchases {
 
 		$purchase->add_item($store, $existing_item);
 
+		$this->assertSame($existing_item, $purchase->item_added);
+
 		$this->assertCount(2, $purchase->store_purchases[0]->items);
 		$this->assertEquals(4, $purchase->store_purchases[0]->items[0]->quantity);
 	}

@@ -65,6 +65,8 @@ class Kohana_Model_Purchase extends Jam_Model {
 			->find_or_build_store_purchase($store)
 				->add_or_update_item($new_item);
 
+		$this->meta()->events()->trigger('model.add_item', $this, array($new_item));
+
 		return $this;
 	}
 
