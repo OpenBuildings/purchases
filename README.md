@@ -152,7 +152,7 @@ class Controller_Payment extends Controller_Template {
 
 		$purchase
 			->payment
-				->execute(array('payer_id' => Request::initial()->query('PayerID'))
+				->execute(array('payer_id' => Request::initial()->query('PayerID')))
 				->save();
 
 		$this->template->content = View::factory('payment/complete', array('purchase' => $purchase));

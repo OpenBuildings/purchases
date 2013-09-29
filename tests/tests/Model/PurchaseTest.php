@@ -144,6 +144,19 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$this->assertEquals(2, $purchase->items_count(array('shipping', 'promotion')));
 		$this->assertSame($purchase->store_purchases[0]->items[2], $mixed_items[0]);
 		$this->assertSame($purchase->store_purchases[0]->items[3], $mixed_items[1]);
+
+		$excluded_items = $purchase->items(array('not' => 'promotion'));
+		$this->assertCount(3, $excluded_items);
+		$this->assertEquals(3, $purchase->items_count(array('not' => 'promotion')));
+		$this->assertSame($purchase->store_purchases[0]->items[0], $excluded_items[0]);
+		$this->assertSame($purchase->store_purchases[0]->items[1], $excluded_items[1]);
+		$this->assertSame($purchase->store_purchases[0]->items[2], $excluded_items[2]);
+
+		$excluded_items = $purchase->items(array('not' => array('promotion', 'shipping')));
+		$this->assertCount(2, $excluded_items);
+		$this->assertEquals(2, $purchase->items_count(array('not' => array('promotion', 'shipping'))));
+		$this->assertSame($purchase->store_purchases[0]->items[0], $excluded_items[0]);
+		$this->assertSame($purchase->store_purchases[0]->items[1], $excluded_items[1]);
 	}
 
 	/**

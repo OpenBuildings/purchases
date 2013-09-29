@@ -38,6 +38,7 @@ class Kohana_Jam_Behavior_Store_Purchase extends Jam_Behavior {
 		foreach ($items as $item)
 		{
 			if (($types AND ! in_array($item->type, $types))
+				OR (array_key_exists('not', $filter) AND in_array($item->type, (array) $filter['not']))
 				OR (array_key_exists('is_payable', $filter) AND $item->is_payable !== $filter['is_payable'])
 				OR (array_key_exists('is_discount', $filter) AND $item->is_discount !== $filter['is_discount']))
 			{
