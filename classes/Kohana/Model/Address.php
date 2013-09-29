@@ -38,6 +38,7 @@ class Kohana_Model_Address extends Jam_Model {
 				'line2'      => Jam::field('string'),
 				'state'      => Jam::field('string'),
 				'fax'        => Jam::field('string'),
+				'fields_required'   => Jam::field('boolean', array('in_db' => FALSE)),
 			))
 			->validator(
 				'first_name',
@@ -48,7 +49,7 @@ class Kohana_Model_Address extends Jam_Model {
 				'line1',
 				'zip',
 				'phone',
-				array('if' => 'required', 'present' => TRUE)
+				array('if' => 'fields_required', 'present' => TRUE)
 			)
 			->validator('email', array('format' => array('email' => TRUE)));
 	}
