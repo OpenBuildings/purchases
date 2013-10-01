@@ -28,13 +28,12 @@ __Item Querying__
 You can query items of the Store Purchase with the ``items()`` method:
 
 ```php
-
 $store_purchase->items(); // return all the purchase items as an array
 $store_purchase->items('product'); // return all the purchase items with type "product" as an array
 $store_purchase->items(array('product', 'shipping')); // return all the purchase items with type "product" or 'shipping' as an array
 $store_purchase->items(array('is_payable' => TRUE)); // return all the purchase items with flag "is_payable" set to TRUE as an array
 $store_purchase->items(array('is_payable' => TRUE, 'product')); // return all the purchase items with flag "is_payable" set to TRUE and are of type 'product' as an array
-
+$store_purchase->items(array('not' => 'shipping')); // return all the purchase items that are not of type shipping
 ```
 
 All of these types of queries can be uesed by ``items_count()`` and ``total_price()``

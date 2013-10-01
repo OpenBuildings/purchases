@@ -83,6 +83,8 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 
 	public function authorize(array $params = array())
 	{
+		$this->meta()->events()->trigger('model.before_authorize', $this, array($params));
+
 		$payment = Model_Payment_Paypal::convert_purchase($this->purchase, $params);
 
 		$payment->create(Paypal::api());
@@ -96,6 +98,8 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 			}
 		}
 
+		$this->meta()->events()->trigger('model.after_authorize', $this, array($params));
+
 		$this->set(array(
 			'method' => 'paypal', 
 			'payment_id' => $payment->getId(), 
@@ -108,6 +112,8 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 
 	public function execute(array $params = array())
 	{
+		$this->meta()->events()->trigger('model.before_execute', $this, array($params));
+
 		$paypal_payement = PayPal\Api\Payment::get($this->payment_id, Paypal::api());
 		
 		$execution = new PayPal\Api\PaymentExecution();
@@ -126,11 +132,15 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 			'status' => ($sale->getState() == 'completed') ? Model_Payment::PAID : $sale->getState(),
 		));
 
+		$this->meta()->events()->trigger('model.after_execute', $this, array($params));
+
 		return $this;
 	}
 
 	public function refund(Model_Store_Refund $refund, array $custom_params = array())
 	{
+		$this->meta()->events()->trigger('model.before_refund', $this, array($refund, $custom_params));
+
 		$paypal_refund = Model_Payment_Paypal::convert_refund($refund);
 
 		$sale = PayPal\Api\Sale::get($this->payment_id, Paypal::api());
@@ -140,6 +150,8 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 
 		$refund->raw_response = $response->toArray();
 		$refund->status = ($response->getState() == 'completed') ? Model_Store_Refund::REFUNDED : $response->getState();
+
+		$this->meta()->events()->trigger('model.after_refund', $this, array($refund, $custom_params));
 
 		return $this;
 	}
