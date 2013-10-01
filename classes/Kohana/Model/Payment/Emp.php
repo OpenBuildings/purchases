@@ -110,6 +110,13 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 		return $params;
 	}
 
+	public function transaction_fee(Jam_Price $price)
+	{
+		return $price
+				->multiply_by(0.0335)
+				->add(new Jam_Price(0.22, 'EUR'));
+	}
+
 	public function execute(array $params = array())
 	{
 		$this->meta()->events()->trigger('model.before_execute', $this, array($params));

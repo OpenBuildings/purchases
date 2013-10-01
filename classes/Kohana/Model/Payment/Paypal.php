@@ -81,6 +81,43 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		return $paypal_refund;
 	}
 
+	public static function transaction_fee_percent(Jam_Price $total)
+	{
+		$amount = $total->in('EUR');
+
+		if ($amount <= 2500.00)
+		{
+			$fee = 0.034;
+		}	
+		elseif ($amount <= 10000.00)
+		{
+			$fee = 0.029;
+		}
+		elseif ($amount <= 50000.00)
+		{
+			$fee = 0.027;
+		}
+		elseif ($amount <= 100000.00)
+		{
+			$fee = 0.024;
+		}
+		else
+		{
+			$fee = 0.019;
+		}
+
+		return $fee;
+	}
+
+	public function transaction_fee(Jam_Price $price)
+	{
+		$percent = Model_Payment_Paypal::transaction_fee_percent($price);
+
+		return $price
+			->multiply_by($percent)
+			->add(new Jam_Price(0.35, 'EUR'));
+	}
+
 	public function authorize(array $params = array())
 	{
 		$this->meta()->events()->trigger('model.before_authorize', $this, array($params));

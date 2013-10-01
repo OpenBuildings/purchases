@@ -48,6 +48,11 @@ class Kohana_Model_Payment extends Jam_Model {
 		return $this->_authorize_url;
 	}
 
+	public function transaction_fee(Jam_Price $price)
+	{
+		return NULL;
+	}
+
 	public function execute(array $params = array())
 	{
 		return $this;
