@@ -141,14 +141,14 @@ class Kohana_Model_Purchase extends Jam_Model {
 		return Jam_Price::sum($prices, $this->currency(), $this->monetary());
 	}
 
-	public function is_payed()
+	public function is_paid()
 	{
 		return ($this->payment AND $this->payment->status === Model_Payment::PAID);
 	}
 
-	public function payed_at()
+	public function paid_at()
 	{
-		return $this->is_payed() ? $this->payment->created_at : NULL;
+		return $this->is_paid() ? $this->payment->created_at : NULL;
 	}
 
 	public function recheck()

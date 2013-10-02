@@ -72,38 +72,38 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Model_Purchase::is_payed
+	 * @covers Model_Purchase::is_paid
 	 */
-	public function test_is_payed()
+	public function test_is_paid()
 	{
 		$purchase = Jam::build('purchase');
 
-		$this->assertFalse($purchase->is_payed());
+		$this->assertFalse($purchase->is_paid());
 
 		$purchase->payment = Jam::build('payment');
 
-		$this->assertFalse($purchase->is_payed());
+		$this->assertFalse($purchase->is_paid());
 
 		$purchase->payment->status = Model_Payment::PAID;
 
-		$this->assertTrue($purchase->is_payed());
+		$this->assertTrue($purchase->is_paid());
 	}
 
 	/**
-	 * @covers Model_Purchase::payed_at
+	 * @covers Model_Purchase::paid_at
 	 */
-	public function test_payed_at()
+	public function test_paid_at()
 	{
-		$purchase = $this->getMock('Model_Purchase', array('is_payed'), array('purchase'));
+		$purchase = $this->getMock('Model_Purchase', array('is_paid'), array('purchase'));
 		$purchase->payment = Jam::build('payment', array('created_at' => '2013-02-02 10:00:00'));
 
 		$purchase
 			->expects($this->exactly(2))
-			->method('is_payed')
+			->method('is_paid')
 			->will($this->onConsecutiveCalls(FALSE, TRUE));
 
-		$this->assertNull($purchase->payed_at());
-		$this->assertEquals('2013-02-02 10:00:00', $purchase->payed_at());
+		$this->assertNull($purchase->paid_at());
+		$this->assertEquals('2013-02-02 10:00:00', $purchase->paid_at());
 	}
 
 

@@ -264,20 +264,20 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Model_Store_Purchase::payed_at
+	 * @covers Model_Store_Purchase::paid_at
 	 */
-	public function test_payed_at()
+	public function test_paid_at()
 	{
-		$purchase = $this->getMock('Model_Purchase', array('payed_at'), array('purchase'));
+		$purchase = $this->getMock('Model_Purchase', array('paid_at'), array('purchase'));
 		$purchase
 			->expects($this->exactly(2))
-				->method('payed_at')
+				->method('paid_at')
 				->will($this->onConsecutiveCalls('2013-05-02 10:00:00', '2013-02-02 10:00:00'));
 
 		$store_purchase = Jam::build('store_purchase', array('purchase' => $purchase));
 
-		$this->assertEquals('2013-05-02 10:00:00', $store_purchase->payed_at());
-		$this->assertEquals('2013-02-02 10:00:00', $store_purchase->payed_at());
+		$this->assertEquals('2013-05-02 10:00:00', $store_purchase->paid_at());
+		$this->assertEquals('2013-02-02 10:00:00', $store_purchase->paid_at());
 	}
 
 	/**

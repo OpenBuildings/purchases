@@ -118,9 +118,9 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 		return $this->get_insist('purchase')->currency();
 	}
 
-	public function payed_at()
+	public function paid_at()
 	{
-		return $this->get_insist('purchase')->payed_at();	
+		return $this->get_insist('purchase')->paid_at();	
 	}
 
 	public function monetary()
