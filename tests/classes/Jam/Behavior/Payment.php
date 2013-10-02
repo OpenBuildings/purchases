@@ -1,0 +1,51 @@
+<?php defined('SYSPATH') OR die('No direct script access.');
+
+class Jam_Behavior_Payment extends Jam_Behavior {
+
+	public function initialize(Jam_Meta $meta, $name)
+	{
+		parent::initialize($meta, $name);
+
+		$meta->events()
+
+			->bind('model.before_authorize', array($this, 'before_authorize'))
+			->bind('model.after_authorize', array($this, 'after_authorize'))
+
+			->bind('model.before_execute', array($this, 'before_execute'))
+			->bind('model.after_execute', array($this, 'after_execute'))
+
+			->bind('model.before_refund', array($this, 'before_refund'))
+			->bind('model.after_refund', array($this, 'after_refund'));
+
+	}
+
+	public function before_authorize(Model_Payment $payment, Jam_Event_Data $data)
+	{
+		$payment->before_authorize_called = TRUE;
+	}
+
+	public function after_authorize(Model_Payment $payment, Jam_Event_Data $data)
+	{
+		$payment->after_authorize_called = TRUE;
+	}
+
+	public function before_execute(Model_Payment $payment, Jam_Event_Data $data)
+	{
+		$payment->before_execute_called = TRUE;
+	}
+
+	public function after_execute(Model_Payment $payment, Jam_Event_Data $data)
+	{
+		$payment->after_execute_called = TRUE;
+	}
+
+	public function before_refund(Model_Payment $payment, Jam_Event_Data $data)
+	{
+		$payment->before_refund_called = TRUE;
+	}
+
+	public function after_refund(Model_Payment $payment, Jam_Event_Data $data)
+	{
+		$payment->after_refund_called = TRUE;
+	}
+}

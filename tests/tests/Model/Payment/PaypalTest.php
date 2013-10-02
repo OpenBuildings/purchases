@@ -147,8 +147,7 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 
 		$purchase
 			->build('payment', array('model' => 'payment_paypal'))
-				->authorize(array('success_url' => 'http://example.com?result=success', 'cancel_url' => 'http://example.com?result=cancel'))
-				->save();
+				->authorize(array('success_url' => 'http://example.com?result=success', 'cancel_url' => 'http://example.com?result=cancel'));
 
 		$this->assertInstanceOf('Model_Payment_Paypal', $purchase->payment);
 		$this->assertEquals('paypal', $purchase->payment->method);
@@ -177,8 +176,7 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 
 		$purchase
 			->payment
-				->execute(array('payer_id' => $query['PayerID']))
-				->save();
+				->execute(array('payer_id' => $query['PayerID']));
 
 		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
 
@@ -191,8 +189,7 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 		));
 
 		$refund
-			->execute()
-			->save();
+			->execute();
 
 		$this->assertEquals(Model_Store_Refund::REFUNDED, $refund->status);
 	}

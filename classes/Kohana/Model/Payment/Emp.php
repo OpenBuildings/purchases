@@ -117,10 +117,8 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 				->add(new Jam_Price(0.22, 'EUR'));
 	}
 
-	public function execute(array $params = array())
+	public function execute_processor(array $params = array())
 	{
-		$this->meta()->events()->trigger('model.before_execute', $this, array($params));
-
 		$params = array_merge(Model_Payment_Emp::convert_purchase($this->purchase), $params);
 
 		$response = Emp::api()
@@ -136,15 +134,11 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 			'status' => $status
 		));
 
-		$this->meta()->events()->trigger('model.after_execute', $this, array($params));
-
 		return $this;
 	}
 
-	public function refund(Model_Store_Refund $refund, array $custom_params = array())
+	public function refund_processor(Model_Store_Refund $refund, array $custom_params = array())
 	{
-		$this->meta()->events()->trigger('model.before_refund', $this, array($refund, $custom_params));
-
 		$params = Model_Payment_Emp::convert_refund($refund);
 
 		$params = array_merge($params, $custom_params);
@@ -154,8 +148,6 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 
 		$refund->raw_response = $response;
 		$refund->status = Model_Store_Refund::REFUNDED;
-
-		$this->meta()->events()->trigger('model.after_refund', $this, array($refund, $custom_params));
 
 		return $this;
 	}

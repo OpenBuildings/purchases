@@ -1,14 +1,8 @@
 <?php
 
 /**
- * Functest_TestsTest 
- *
  * @group model
  * @group model.payment_emp
- * 
- * @package Functest
- * @author Ivan Kerin
- * @copyright  (c) 2011-2013 Despark Ltd.
  */
 class Model_Payment_EmpTest extends Testcase_Purchases {
 
@@ -183,9 +177,7 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 
 		$purchase
 			->build('payment', array('model' => 'payment_emp'))
-				->authorize()
-				->execute($this->payment_params)
-				->save();
+				->execute($this->payment_params);
 		
 		$this->assertGreaterThan(0, $purchase->payment->payment_id);
 		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
@@ -199,8 +191,7 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 		));
 
 		$refund
-			->execute()
-			->save();
+			->execute();
 
 		$this->assertEquals(Model_Store_Refund::REFUNDED, $refund->status);
 	}

@@ -38,9 +38,9 @@ class Kohana_Model_Payment extends Jam_Model {
 			->validator('method', array('choice' => array('in' => array('emp', 'paypal'))));
 	}
 
-	public function authorize(array $params = array())
+	public function transaction_fee(Jam_Price $price)
 	{
-		return $this;
+		return NULL;
 	}
 
 	public function authorize_url()
@@ -48,17 +48,53 @@ class Kohana_Model_Payment extends Jam_Model {
 		return $this->_authorize_url;
 	}
 
-	public function transaction_fee(Jam_Price $price)
+	public function authorize(array $params = array())
 	{
-		return NULL;
+		$this->meta()->events()->trigger('model.before_authorize', $this, array($params));
+
+		$this->authorize_processor($params);
+		$this->save();
+
+		$this->meta()->events()->trigger('model.after_authorize', $this, array($params));
+
+		return $this;
 	}
 
 	public function execute(array $params = array())
 	{
+		$this->meta()->events()->trigger('model.before_execute', $this, array($params));
+
+		$this->execute_processor($params);
+		$this->save();
+
+		$this->meta()->events()->trigger('model.after_execute', $this, array($params));
+
 		return $this;
 	}
 
-	public function refund(Model_Store_Refund $refund, array $params = array())
+	public function refund(Model_Store_Refund $refund, array $custom_params = array())
+	{
+		$this->meta()->events()->trigger('model.before_refund', $this, array($refund, $custom_params));
+
+		$this->refund_processor($refund, $custom_params);
+		$refund->save();
+
+		$this->meta()->events()->trigger('model.after_refund', $this, array($refund, $custom_params));
+
+		return $this;
+	}
+
+	public function authorize_processor(array $params = array())
+	{
+		throw new Kohana_Exception('This payment does not support authorize');
+	}
+
+	public function execute_processor(array $params = array())
+	{
+		throw new Kohana_Exception('This payment does not support execute');
+	}
+
+	public function refund_processor(Model_Store_Refund $refund, array $params = array())
 	{
 		throw new Kohana_Exception('This payment does not support refunds');
 	}
