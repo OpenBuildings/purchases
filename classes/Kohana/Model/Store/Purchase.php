@@ -20,10 +20,24 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 				'freezable' => Jam::behavior('freezable', array('associations' => 'items', 'parent' => 'purchase')),
 			))
 			->associations(array(
-				'purchase' => Jam::association('belongsto', array('inverse_of' => 'store_purchases')),
-				'items' => Jam::association('hasmany', array('inverse_of' => 'store_purchase', 'foreign_model' => 'purchase_item')),
-				'refunds' => Jam::association('hasmany', array('inverse_of' => 'store_purchase', 'foreign_model' => 'store_refund')),
-				'store' => Jam::association('belongsto'),
+				'purchase' => Jam::association('belongsto', array(
+					'inverse_of' => 'store_purchases'
+				)),
+				'items' => Jam::association('hasmany', array(
+					'inverse_of' => 'store_purchase', 
+					'foreign_model' => 'purchase_item', 
+					'delete_on_remove' => Jam_Association::DELETE,
+					'dependent' => Jam_Association::DELETE,
+				)),
+				'refunds' => Jam::association('hasmany', array(
+					'inverse_of' => 'store_purchase', 
+					'foreign_model' => 'store_refund', 
+					'delete_on_remove' => Jam_Association::DELETE,
+					'dependent' => Jam_Association::DELETE,
+				)),
+				'store' => Jam::association('belongsto', array(
+					'inverse_of' => 'store_purchases',
+				)),
 			))
 			->fields(array(
 				'id' => Jam::field('primary'),

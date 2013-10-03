@@ -10,7 +10,8 @@ class Kohana_Model_Store extends Jam_Model {
 		$meta
 			->associations(array(
 				'store_purchases' => Jam::association('hasmany', array(
-					'inverse_of' => 'store'
+					'inverse_of' => 'store',
+					'foreign_model' => 'store_purchase',
 				)),
 				'purchases' => Jam::association('manytomany', array(
 					'foreign_model' => 'purchase',

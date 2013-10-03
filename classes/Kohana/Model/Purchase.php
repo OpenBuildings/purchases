@@ -28,13 +28,17 @@ class Kohana_Model_Purchase extends Jam_Model {
 					'inverse_of' => 'purchase', 
 					'foreign_model' => 'store_purchase',
 					'delete_on_remove' => Jam_Association::DELETE,
+					'dependent' => Jam_Association::DELETE,
 				)),
 				'stores' => Jam::association('manytomany', array(
 					'join_table' => 'store_purchases', 
 					'readonly' => TRUE,
 				)),
 				'creator' => Jam::association('creator'),
-				'billing_address' => Jam::association('belongsto', array('foreign_model' => 'address')),
+				'billing_address' => Jam::association('belongsto', array(
+					'foreign_model' => 'address',
+					'dependent' => Jam_Association::DELETE,
+				)),
 				'payment' => Jam::association('hasone', array('inverse_of' => 'purchase')),
 			))
 			->fields(array(
