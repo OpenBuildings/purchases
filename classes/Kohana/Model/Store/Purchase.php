@@ -41,6 +41,8 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 			))
 			->fields(array(
 				'id' => Jam::field('primary'),
+				'created_at'      => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
+				'updated_at'      => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			))
 			->validator('purchase', 'store', array('present' => TRUE));
 	}

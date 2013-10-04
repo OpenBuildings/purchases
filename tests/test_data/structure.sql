@@ -21,6 +21,8 @@ CREATE TABLE `store_purchases` (
   `store_id` INT(10) UNSIGNED NULL,
   `purchase_id` INT(10) UNSIGNED NULL,
   `is_deleted` INT(1) UNSIGNED NOT NULL,
+  `created_at` DATETIME,
+  `updated_at` DATETIME,
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
