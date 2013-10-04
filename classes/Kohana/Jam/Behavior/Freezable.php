@@ -34,7 +34,7 @@ class Kohana_Jam_Behavior_Freezable extends Jam_Behavior {
 		{
 			foreach ($this->_associations as $name) 
 			{
-				if (count($model->{$name}) !== count($model->{$name}->original()))
+				if ($model->meta()->association($name) instanceof Jam_Association_Collection AND count($model->{$name}) !== count($model->{$name}->original()))
 				{
 					$model->errors()->add($name, 'frozen');
 				}
