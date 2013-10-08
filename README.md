@@ -15,7 +15,7 @@ The basic structure of the purchase is one purchase, representing the user's vie
 
 ## Prices
 
-This module heavily utalizes jam-monetary - all of its price related methods and fields are Jam_Price objects allowing you to safly conduct price calculations, so that currency conversions happen transparently. For more informations see: [https://github.com/OpenBuildings/jam-monetary](openbuildings/jam-monetary)
+This module heavily utilizes jam-monetary - all of its price related methods and fields are Jam_Price objects allowing you to safly conduct price calculations, so that currency conversions happen transparently. For more informations see: [https://github.com/OpenBuildings/jam-monetary](openbuildings/jam-monetary)
 
 __Purchase_Item flags__
 
