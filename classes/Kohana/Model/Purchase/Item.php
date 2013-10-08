@@ -66,12 +66,12 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 			$this->errors()->add('reference', 'item_not_sellable');
 		}
 
-		if ($this->is_discount AND $this->price()->is(Jam_Price::GREATER_THAN_OR_EQUAL_TO, 0))
+		if ($this->is_discount AND ! $this->price()->is(Jam_Price::LESS_THAN_OR_EQUAL_TO, 0))
 		{
 			$this->errors()->add('price', 'numeric_less_than_or_equal_to', array(':less_than_or_equal_to' => 0));
 		}
 
-		if ( ! $this->is_discount AND $this->price()->is(Jam_Price::LESS_THAN_OR_EQUAL_TO, 0))
+		if ( ! $this->is_discount AND ! $this->price()->is(Jam_Price::GREATER_THAN_OR_EQUAL_TO, 0))
 		{
 			$this->errors()->add('price', 'numeric_greater_than_or_equal_to', array(':greater_than_or_equal_to' => 0));
 		}
