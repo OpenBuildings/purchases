@@ -26,5 +26,8 @@
 		"openbuildings/kohana-test-bootsrap": "0.1.*",
 		"openbuildings/environment-backup": "0.1.*",
 		"openbuildings/phpunit-spiderling": "0.1.*"
+	},
+	"suggest": {
+		"openbuildings/shipping": "Extends purchases functionality with shipping and delivery"
 	}
 }
