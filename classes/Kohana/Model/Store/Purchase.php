@@ -47,22 +47,22 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 			->validator('purchase', 'store', array('present' => TRUE));
 	}
 
-	public function find_same_item(Model_Purchase_Item $new_item)
+	public function search_same_item(Model_Purchase_Item $new_item)
 	{
-		foreach ($this->items as $item) 
+		foreach ($this->items as $index => $item) 
 		{
 			if ($item->is_same($new_item))
 			{
-				return $item;
+				return $index;
 			}
 		}
 	}
 
 	public function add_or_update_item(Model_Purchase_Item $new_item)
 	{
-		if ($item = $this->find_same_item($new_item)) 
+		if (($index = $this->search_same_item($new_item)) !== NULL) 
 		{
-			$item->quantity += $new_item->quantity;
+			$this->items[$index]->quantity += $new_item->quantity;
 		}
 		else
 		{

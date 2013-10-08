@@ -155,7 +155,9 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 		
 		$this
 			->visit($purchase->payment->authorize_url())
-			->fill_in('Email', 'buyer@openbuildings.com')
+			->next_wait_time(5000)
+			->click_button('Pay with')
+			->fill_in('login_email', 'buyer@openbuildings.com')
 			->fill_in('PayPal password', '12345678')
 			->click_button('Log In');
 

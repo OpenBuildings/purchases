@@ -11,9 +11,9 @@
 class Model_Store_PurchaseTest extends Testcase_Purchases {
 
 	/**
-	 * @covers Model_Store_Purchase::find_same_item
+	 * @covers Model_Store_Purchase::search_same_item
 	 */
-	public function test_find_same_item()
+	public function test_search_same_item()
 	{
 		$store_purchase = Jam::find('purchase', 1)->store_purchases[0];
 
@@ -26,19 +26,19 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 			'type' => 'product',
 		));
 
-		$found_item = $store_purchase->find_same_item($new_item);
+		$found_index = $store_purchase->search_same_item($new_item);
 		
-		$this->assertSame($first_item, $found_item);
+		$this->assertSame($first_item, $store_purchase->items[$found_index]);
 
 		$new_item->type = 'shipping';
-		$found_item = $store_purchase->find_same_item($new_item);
-		$this->assertNull($found_item);
+		$found_index = $store_purchase->search_same_item($new_item);
+		$this->assertNull($found_index);
 
 		$new_item->type = 'product';
 		$new_item->reference = Jam::find('variation', 1);
 
-		$found_item = $store_purchase->find_same_item($new_item);
-		$this->assertSame($second_item, $found_item);
+		$found_index = $store_purchase->search_same_item($new_item);
+		$this->assertSame($second_item, $store_purchase->items[$found_index]);
 	}
 
 	/**
