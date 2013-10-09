@@ -28,6 +28,7 @@
 		"openbuildings/phpunit-spiderling": "0.1.*"
 	},
 	"suggest": {
-		"openbuildings/shipping": "Extends purchases functionality with shipping and delivery"
+		"openbuildings/shipping": "Extends purchases functionality with shipping and delivery",
+		"openbuildings/promotions": "Extends purchases functionality with promotions and gift cards"
 	}
 }
