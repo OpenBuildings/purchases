@@ -146,9 +146,8 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 
 	/**
 	 * @covers Model_Store_Refund::execute
-	 * @covers Model_Payment_Emp::authorize
-	 * @covers Model_Payment_Emp::refund
-	 * @covers Model_Payment_Emp::execute
+	 * @covers Model_Payment_Emp::refund_processor
+	 * @covers Model_Payment_Emp::execute_processor
 	 */
 	public function test_execute()
 	{
@@ -194,6 +193,27 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			->execute();
 
 		$this->assertEquals(Model_Store_Refund::REFUNDED, $refund->status);
+	}
+
+	public function data_transaction_fee()
+	{
+		$monetary = new OpenBuildings\Monetary\Monetary('GBP', new OpenBuildings\Monetary\Source_Static());
+
+		return array(
+			array(new Jam_Price(10, 'EUR', $monetary), new Jam_Price(0.555, 'EUR', $monetary)),
+			array(new Jam_Price(20, 'GBP', $monetary), new Jam_Price(0.854723, 'GBP', $monetary)),
+		);
+	}
+
+	/**
+	 * @dataProvider data_transaction_fee
+	 * @covers Model_Payment_Emp::transaction_fee
+	 */
+	public function test_transaction_fee($payment_price, $expected)
+	{
+		$payment = Jam::build('payment_emp');
+		$result = $payment->transaction_fee($payment_price);
+		$this->assertEquals($expected, $result);
 	}
 
 }

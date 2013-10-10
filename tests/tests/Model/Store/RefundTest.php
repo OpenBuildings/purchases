@@ -112,6 +112,23 @@ class Model_Store_RefundTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Store_Refund::display_currency
+	 */
+	public function test_display_currency()
+	{
+		$store_purchase = $this->getMock('Model_Store_Purchase', array('display_currency'), array('store_purchase'));
+		$store_purchase
+			->expects($this->exactly(2))
+				->method('display_currency')
+				->will($this->onConsecutiveCalls('GBP', 'EUR'));
+
+		$store_refund = Jam::build('store_refund', array('store_purchase' => $store_purchase));
+
+		$this->assertEquals('GBP', $store_refund->display_currency());
+		$this->assertEquals('EUR', $store_refund->display_currency());
+	}
+
+	/**
 	 * @covers Model_Store_Refund::monetary
 	 */
 	public function test_monetary()

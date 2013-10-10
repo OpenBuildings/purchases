@@ -115,10 +115,17 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_monetary()
 	{
-		$item = Jam::find('purchase_item', 1);
+		$monetary = new OpenBuildings\Monetary\Monetary;
 
-		$this->assertInstanceOf('Openbuildings\Monetary\Monetary', $item->monetary());
-		$this->assertSame($item->store_purchase->purchase->monetary(), $item->monetary());
+		$store_purchase = $this->getMock('Model_Store_Purchase', array('monetary'), array('store_purchase'));
+		$store_purchase
+			->expects($this->once())
+				->method('monetary')
+				->will($this->returnValue($monetary));
+
+		$purchase_item = Jam::build('purchase_item', array('store_purchase' => $store_purchase));
+
+		$this->assertSame($monetary, $purchase_item->monetary());
 	}
 
 	/**
@@ -126,10 +133,35 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_currency()
 	{
-		$item = Jam::find('purchase_item', 1);
+		$store_purchase = $this->getMock('Model_Store_Purchase', array('currency'), array('store_purchase'));
+		$store_purchase
+			->expects($this->exactly(2))
+				->method('currency')
+				->will($this->onConsecutiveCalls('GBP', 'EUR'));
 
-		$this->assertSame($item->store_purchase->purchase->currency(), $item->currency());
+		$purchase_item = Jam::build('purchase_item', array('store_purchase' => $store_purchase));
+
+		$this->assertEquals('GBP', $purchase_item->currency());
+		$this->assertEquals('EUR', $purchase_item->currency());
 	}
+
+	/**
+	 * @covers Model_Purchase_Item::display_currency
+	 */
+	public function test_display_currency()
+	{
+		$store_purchase = $this->getMock('Model_Store_Purchase', array('display_currency'), array('store_purchase'));
+		$store_purchase
+			->expects($this->exactly(2))
+				->method('display_currency')
+				->will($this->onConsecutiveCalls('GBP', 'EUR'));
+
+		$purchase_item = Jam::build('purchase_item', array('store_purchase' => $store_purchase));
+
+		$this->assertEquals('GBP', $purchase_item->display_currency());
+		$this->assertEquals('EUR', $purchase_item->display_currency());
+	}
+
 	/**
 	 * @covers Model_Purchase_Item::price
 	 */

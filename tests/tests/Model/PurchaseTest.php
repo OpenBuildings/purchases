@@ -72,6 +72,20 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Purchase::display_currency
+	 */
+	public function test_display_currency()
+	{
+		$purchase = Jam::build('purchase', array('currency' => 'EUR'));
+
+		$this->assertEquals('EUR', $purchase->display_currency());
+
+		$purchase->currency = 'GBP';
+
+		$this->assertEquals('GBP', $purchase->display_currency());
+	}
+
+	/**
 	 * @covers Model_Purchase::is_paid
 	 */
 	public function test_is_paid()

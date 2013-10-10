@@ -5,6 +5,9 @@
  */
 class Model_PaymentTest extends Testcase_Purchases {
 
+	/**
+	 * @covers Model_Payment::authorize
+	 */
 	public function test_authorize()
 	{
 		$params = array('test', 'test2');
@@ -25,6 +28,9 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$this->assertTrue($payment->after_authorize_called);
 	}
 
+	/**
+	 * @covers Model_Payment::execute
+	 */
 	public function test_execute()
 	{
 		$params = array('test', 'test2');
@@ -45,6 +51,9 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$this->assertTrue($payment->after_execute_called);
 	}
 
+	/**
+	 * @covers Model_Payment::refund
+	 */
 	public function test_refund()
 	{
 		$params = array('test', 'test2');
@@ -64,5 +73,49 @@ class Model_PaymentTest extends Testcase_Purchases {
 
 		$this->assertTrue($payment->before_refund_called);
 		$this->assertTrue($payment->after_refund_called);
+	}
+
+	/**
+	 * @covers Model_Payment::transaction_fee
+	 */
+	public function test_transaction_fee()
+	{
+		$payment = Jam::build('payment');
+		$result = $payment->transaction_fee(new Jam_Price(10, 'GBP'));
+		$this->assertNull($result);
+	}
+
+	/**
+	 * @covers Model_Payment::execute_processor
+	 * @expectedException Kohana_Exception
+	 * @expectedExceptionMessage This payment does not support execute
+	 */
+	public function test_execute_processor()
+	{
+		$payment = Jam::build('payment');
+		$payment->execute_processor();
+	}
+
+	/**
+	 * @covers Model_Payment::authorize_processor
+	 * @expectedException Kohana_Exception
+	 * @expectedExceptionMessage This payment does not support authorize
+	 */
+	public function test_authorize_processor()
+	{
+		$payment = Jam::build('payment');
+		$payment->authorize_processor();
+	}
+
+	/**
+	 * @covers Model_Payment::refund_processor
+	 * @expectedException Kohana_Exception
+	 * @expectedExceptionMessage This payment does not support refund
+	 */
+	public function test_refund_processor()
+	{
+		$payment = Jam::build('payment');
+		$refund = Jam::build('store_refund');
+		$payment->refund_processor($refund);
 	}
 }

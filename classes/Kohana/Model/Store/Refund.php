@@ -60,6 +60,11 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 		return $this->get_insist('store_purchase')->currency();	
 	}
 
+	public function display_currency()
+	{
+		return $this->get_insist('store_purchase')->display_currency();	
+	}
+
 	public function monetary()
 	{
 		return $this->get_insist('store_purchase')->monetary();

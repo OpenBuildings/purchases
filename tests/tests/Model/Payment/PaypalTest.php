@@ -117,10 +117,10 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 	}
 
 	/**
-	 * @covers Model_Payment_Paypal::execute
-	 * @covers Model_Payment_Paypal::authorize
+	 * @covers Model_Payment_Paypal::execute_processor
+	 * @covers Model_Payment_Paypal::authorize_processor
 	 * @covers Model_Payment_Paypal::authorize_url
-	 * @covers Model_Payment_Paypal::refund
+	 * @covers Model_Payment_Paypal::refund_processor
 	 * @driver phantomjs
 	 */
 	public function test_execute()
@@ -194,5 +194,51 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 			->execute();
 
 		$this->assertEquals(Model_Store_Refund::REFUNDED, $refund->status);
+	}
+
+	public function data_transaction_fee()
+	{
+		$monetary = new OpenBuildings\Monetary\Monetary('GBP', new OpenBuildings\Monetary\Source_Static());
+
+		return array(
+			array(new Jam_Price(10, 'EUR', $monetary), new Jam_Price(0.69, 'EUR', $monetary)),
+			array(new Jam_Price(20, 'GBP', $monetary), new Jam_Price(0.9738775, 'GBP', $monetary)),
+			array(new Jam_Price(4000, 'GBP', $monetary), new Jam_Price(116.2938775, 'GBP', $monetary)),
+		);
+	}
+
+	/**
+	 * @dataProvider data_transaction_fee
+	 * @covers Model_Payment_Paypal::transaction_fee
+	 */
+	public function test_transaction_fee($payment_price, $expected)
+	{
+		$payment = Jam::build('payment_paypal');
+		$result = $payment->transaction_fee($payment_price);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function data_transaction_fee_percent()
+	{
+		$monetary = new OpenBuildings\Monetary\Monetary('GBP', new OpenBuildings\Monetary\Source_Static());
+
+		return array(
+			array(new Jam_Price(100, 'EUR', $monetary), 0.034),
+			array(new Jam_Price(3000, 'EUR', $monetary), 0.029),
+			array(new Jam_Price(9000, 'GBP', $monetary), 0.027),
+			array(new Jam_Price(59000, 'EUR', $monetary), 0.024),
+			array(new Jam_Price(90000, 'GBP', $monetary), 0.019),
+			array(new Jam_Price(190000, 'GBP', $monetary), 0.019),
+		);
+	}
+
+	/**
+	 * @dataProvider data_transaction_fee_percent
+	 * @covers Model_Payment_Paypal::transaction_fee_percent
+	 */
+	public function test_transaction_fee_percent($payment_price, $expected)
+	{
+		$result = Model_Payment_Paypal::transaction_fee_percent($payment_price);
+		$this->assertEquals($expected, $result);
 	}
 }

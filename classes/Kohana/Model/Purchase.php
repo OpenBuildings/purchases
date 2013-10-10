@@ -88,6 +88,11 @@ class Kohana_Model_Purchase extends Jam_Model {
 		return $this->currency;
 	}
 
+	public function display_currency()
+	{
+		return $this->currency;
+	}
+
 	public function items($types = NULL)
 	{
 		$items = array();

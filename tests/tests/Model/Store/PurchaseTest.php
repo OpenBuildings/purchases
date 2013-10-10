@@ -298,6 +298,23 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Store_Purchase::display_currency
+	 */
+	public function test_display_currency()
+	{
+		$purchase = $this->getMock('Model_Purchase', array('display_currency'), array('purchase'));
+		$purchase
+			->expects($this->exactly(2))
+				->method('display_currency')
+				->will($this->onConsecutiveCalls('GBP', 'EUR'));
+
+		$store_purchase = Jam::build('store_purchase', array('purchase' => $purchase));
+
+		$this->assertEquals('GBP', $store_purchase->display_currency());
+		$this->assertEquals('EUR', $store_purchase->display_currency());
+	}
+	
+	/**
 	 * @covers Model_Store_Purchase::monetary
 	 */
 	public function test_monetary()

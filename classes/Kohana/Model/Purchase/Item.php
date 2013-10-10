@@ -95,6 +95,11 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 		return $this->get_insist('store_purchase')->currency();
 	}
 
+	public function display_currency()
+	{
+		return $this->get_insist('store_purchase')->display_currency();
+	}
+
 	public function compute_price()
 	{
 		$price = $this->get_insist('reference')->price_for_purchase_item($this);
