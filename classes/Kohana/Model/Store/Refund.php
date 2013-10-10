@@ -51,7 +51,7 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 		{
 			$amounts = array_map(function($item) { return $item->amount(); }, $this->items->as_array());
 			
-			return Jam_Price::sum($amounts, $this->currency(), $this->monetary());
+			return Jam_Price::sum($amounts, $this->currency(), $this->monetary(), $this->display_currency());
 		}
 	}
 

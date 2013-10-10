@@ -1,5 +1,8 @@
 <?php
 
+use OpenBuildings\Monetary\Monetary;
+use OpenBuildings\Monetary\Source_Static;
+
 /**
  * @group model
  * @group model.store_purchase
@@ -152,20 +155,39 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_total_price()
 	{
-		$store_purchase = Jam::build('store_purchase', array('purchase' => array('currency' => 'EUR')));
+		$monetary = new Monetary('GBP', new Source_Static);
+
+		$store_purchase = $this->getMock('Model_Store_Purchase', array('currency', 'monetary', 'display_currency'), array('store_purchase'));
+
+		$store_purchase
+			->expects($this->exactly(4))
+			->method('currency')
+			->will($this->returnValue('EUR'));
+
+		$store_purchase
+			->expects($this->exactly(4))
+			->method('monetary')
+			->will($this->returnValue($monetary));
+
+		$store_purchase
+			->expects($this->exactly(4))
+			->method('display_currency')
+			->will($this->returnValue('GBP'));
 
 		$price1 = new Jam_Price(5, 'EUR');
 		$price2 = new Jam_Price(10, 'EUR');
 
 		$item1 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
 		$item1->type = 'product';
-		$item1->expects($this->exactly(3))
+		$item1
+			->expects($this->exactly(3))
 			->method('total_price')
 			->will($this->returnValue($price1));
 
 		$item2 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
 		$item2->type = 'shipping';
-		$item2->expects($this->exactly(3))
+		$item2
+			->expects($this->exactly(3))
 			->method('total_price')
 			->will($this->returnValue($price2));
 
@@ -174,10 +196,10 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 			$item2,
 		);
 
-		$this->assertEquals(new Jam_Price(15, 'EUR'), $store_purchase->total_price());
-		$this->assertEquals(new Jam_Price(5, 'EUR'), $store_purchase->total_price('product'));
-		$this->assertEquals(new Jam_Price(10, 'EUR'), $store_purchase->total_price('shipping'));
-		$this->assertEquals(new Jam_Price(15, 'EUR'), $store_purchase->total_price(array('shipping', 'product')));
+		$this->assertEquals(new Jam_Price(15, 'EUR', $monetary, 'GBP'), $store_purchase->total_price());
+		$this->assertEquals(new Jam_Price(5, 'EUR', $monetary, 'GBP'), $store_purchase->total_price('product'));
+		$this->assertEquals(new Jam_Price(10, 'EUR', $monetary, 'GBP'), $store_purchase->total_price('shipping'));
+		$this->assertEquals(new Jam_Price(15, 'EUR', $monetary, 'GBP'), $store_purchase->total_price(array('shipping', 'product')));
 	}
 
 	/**

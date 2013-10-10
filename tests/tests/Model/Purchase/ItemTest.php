@@ -1,6 +1,7 @@
 <?php
 
 use OpenBuildings\Monetary\Monetary;
+use OpenBuildings\Monetary\Source_Static;
 
 /**
  * @group model
@@ -90,24 +91,48 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 		$this->assertEquals(array(40, 50), $this->ids($groups['13']));
 	}
 
+	public function data_compute_price()
+	{
+		$monetary = new Monetary('GBP', new Source_Static);
+
+		return array(
+			array(new Jam_Price(10, 'EUR'), 'GBP', $monetary, 'EUR', new Jam_Price(8.3965, 'GBP', $monetary, 'EUR')),
+			array(new Jam_Price(10, 'GBP'), 'GBP', $monetary, 'GBP', new Jam_Price(10, 'GBP', $monetary, 'GBP')),
+			array(new Jam_Price(5, 'USD'), 'EUR', $monetary, 'EUR', new Jam_Price(3.7545993842457, 'EUR', $monetary, 'EUR')),
+		);
+	}
+
 	/**
+	 * @dataProvider data_compute_price
 	 * @covers Model_Purchase_Item::compute_price
 	 */
-	public function test_compute_price()
+	public function test_compute_price($price, $currency, $monetary, $display_currency, $expected)
 	{
-		$item = Jam::find('purchase_item', 1);
+		$item = $this->getMock('Model_Purchase_Item', array('currency', 'monetary', 'display_currency'), array('purchase_item'));
+
+		$item
+			->expects($this->once())
+			->method('currency')
+			->will($this->returnValue($currency));
+
+		$item
+			->expects($this->once())
+			->method('monetary')
+			->will($this->returnValue($monetary));
+
+		$item
+			->expects($this->once())
+			->method('display_currency')
+			->will($this->returnValue($display_currency));
+
 		$item->reference = $this->getMock('Model_Product', array('price_for_purchase_item'), array('product'));
 
-		$price1 = new Jam_Price(10, 'EUR');
-		$price2 = new Jam_Price(10, 'USD');
-
-		$item->reference->expects($this->exactly(2))
+		$item->reference->expects($this->once())
 			->method('price_for_purchase_item')
 			->with($this->identicalTo($item))
-			->will($this->onConsecutiveCalls($price1, $price2));
+			->will($this->returnValue($price));
 
-		$this->assertEquals(new Jam_Price(10, 'EUR', $item->monetary()), $item->compute_price(), 'Should be EUR -> EUR conversion');
-		$this->assertEquals(new Jam_Price(7.4867110878191, 'EUR', $item->monetary()), $item->compute_price(), 'Should be EUR -> USD conversion');
+		$this->assertEquals($expected, $item->compute_price());
 	}
 
 	/**
@@ -115,7 +140,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_monetary()
 	{
-		$monetary = new OpenBuildings\Monetary\Monetary;
+		$monetary = new Monetary;
 
 		$store_purchase = $this->getMock('Model_Store_Purchase', array('monetary'), array('store_purchase'));
 		$store_purchase
