@@ -107,9 +107,13 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 		if ( ! ($price instanceof Jam_Price))
 			throw new Kohana_Exception('Compute price expects the reference :reference to return a Jam_Price', array(':reference' => (string) $this->reference));
 
-		return $price
+		$price = $price
 			->monetary($this->monetary())
 			->convert_to($this->currency());
+
+		$price->display_currency($this->display_currency());
+
+		return $price;
 	}
 
 	public function price()
