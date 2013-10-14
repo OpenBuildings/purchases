@@ -1,5 +1,11 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
+/**
+ * @package    Openbuildings\Purchases
+ * @author     Ivan Kerin <ikerin@gmail.com>
+ * @copyright  (c) 2013 OpenBuildings Ltd.
+ * @license    http://spdx.org/licenses/BSD-3-Clause
+ */
 class Kohana_Jam_Behavior_Store_Purchase extends Jam_Behavior {
 
 	/**
@@ -13,6 +19,11 @@ class Kohana_Jam_Behavior_Store_Purchase extends Jam_Behavior {
 			->bind('model.filter_items', array($this, 'filter_items'));
 	}
 
+	/**
+	 * Extract values with numeric keys so that array('product', 'shipping, 'is_payable' => TRUE) will return array('product', 'shipping')
+	 * @param  array  $array 
+	 * @return array        
+	 */
 	public static function extract_types(array $array)
 	{
 		$types = array();
@@ -28,6 +39,19 @@ class Kohana_Jam_Behavior_Store_Purchase extends Jam_Behavior {
 		return $types;
 	}
 
+	/**
+	 * filter out items from $items that do not match the given filters.
+	 *
+	 * - is_payable => TRUE|FALSE 
+	 * - is_discount => TRUE|FALSE
+	 * - not => array() - do not match items with this types
+	 * - array() - all other non-associative keys are considered type filters, allowing items only with these types
+	 * 
+	 * @param  Model_Store_Purchase $store_purchase 
+	 * @param  Jam_Event_Data       $data           
+	 * @param  array                $items          
+	 * @param  array                $filter         
+	 */
 	public function filter_items(Model_Store_Purchase $store_purchase, Jam_Event_Data $data, array $items, array $filter)
 	{
 		$types = Jam_Behavior_Store_Purchase::extract_types($filter);

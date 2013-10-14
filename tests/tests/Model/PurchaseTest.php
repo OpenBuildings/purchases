@@ -3,13 +3,7 @@
 use OpenBuildings\Monetary\Monetary;
 
 /**
- * Functest_TestsTest 
- *
  * @group model.purchase
- * 
- * @package Functest
- * @author Ivan Kerin
- * @copyright  (c) 2011-2013 Despark Ltd.
  */
 class Model_PurchaseTest extends Testcase_Purchases {
 

@@ -1,16 +1,9 @@
 <?php
 
 /**
- * Functest_TestsTest 
- *
  * @group paypal
- * 
- * @package Functest
- * @author Ivan Kerin
- * @copyright  (c) 2011-2013 Despark Ltd.
  */
 class PaypalTest extends Testcase_Purchases_Spiderling {
-
 
 	/**
 	 * @covers Paypal::api

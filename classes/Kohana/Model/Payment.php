@@ -38,16 +38,30 @@ class Kohana_Model_Payment extends Jam_Model {
 			->validator('method', array('choice' => array('in' => array('emp', 'paypal'))));
 	}
 
+	/**
+	 * Calculate a transaction fee, based on the price provided. By default returns NULL
+	 * @param  Jam_Price $price 
+	 * @return Jam_Price           
+	 */
 	public function transaction_fee(Jam_Price $price)
 	{
 		return NULL;
 	}
 
+	/**
+	 * This would return the url needed to authorize the purchase by the user, if the payment method requires it
+	 * @return string 
+	 */
 	public function authorize_url()
 	{
 		return $this->_authorize_url;
 	}
 
+	/**
+	 * Execute authorize_processor and model.before_authorize and model.after_authorize. Save the model after authorize_processor()
+	 * @param  array  $params pass this to authorize_processor()
+	 * @return Model_Payment  self
+	 */
 	public function authorize(array $params = array())
 	{
 		$this->meta()->events()->trigger('model.before_authorize', $this, array($params));
@@ -60,6 +74,11 @@ class Kohana_Model_Payment extends Jam_Model {
 		return $this;
 	}
 
+	/**
+	 * Execute execute_processor and model.before_execute and model.after_execute. Save the model after execute_processor()
+	 * @param  array  $params pass this to execute_processor()
+	 * @return Model_Payment  self
+	 */
 	public function execute(array $params = array())
 	{
 		$this->meta()->events()->trigger('model.before_execute', $this, array($params));
@@ -72,6 +91,12 @@ class Kohana_Model_Payment extends Jam_Model {
 		return $this;
 	}
 
+	/**
+	 * Execute refund_processor and model.before_refund and model.after_refund. Save the refund model after refund_processor()
+	 * @param  Model_Store_Refund  $refund pass this to refund_processor()
+	 * @param  array  $custom_params pass this to refund_processor()
+	 * @return Model_Payment  self
+	 */
 	public function refund(Model_Store_Refund $refund, array $custom_params = array())
 	{
 		$this->meta()->events()->trigger('model.before_refund', $this, array($refund, $custom_params));
@@ -84,16 +109,31 @@ class Kohana_Model_Payment extends Jam_Model {
 		return $this;
 	}
 
+	/**
+	 * Extend this in the child models.
+	 * @param  array  $params 
+	 * @throws Kohana_Exception If method not implemented
+	 */
 	public function authorize_processor(array $params = array())
 	{
 		throw new Kohana_Exception('This payment does not support authorize');
 	}
 
+	/**
+	 * Extend this in the child models.
+	 * @param  array  $params 
+	 * @throws Kohana_Exception If method not implemented
+	 */
 	public function execute_processor(array $params = array())
 	{
 		throw new Kohana_Exception('This payment does not support execute');
 	}
 
+	/**
+	 * Extend this in the child models.
+	 * @param  array  $params 
+	 * @throws Kohana_Exception If method not implemented
+	 */
 	public function refund_processor(Model_Store_Refund $refund, array $params = array())
 	{
 		throw new Kohana_Exception('This payment does not support refunds');

@@ -33,6 +33,9 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 			->validator('store_purchase', array('present' => TRUE));
 	}
 
+	/**
+	 * Do not allow refunding more than the given price
+	 */
 	public function validate()
 	{
 		if ($this->total_amount() > $this->store_purchase->total_price(array('is_payable' => TRUE))) 
@@ -41,6 +44,10 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 		}
 	}
 
+	/**
+	 * Total amount to be refunded
+	 * @return Jam_Price
+	 */
 	public function total_amount()
 	{
 		if ( ! count($this->items))
@@ -70,6 +77,11 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 		return $this->get_insist('store_purchase')->monetary();
 	}
 
+	/**
+	 * Call payment->refund
+	 * @throws Kohana_Exception If payment is not "paid"
+	 * @return Model_Store_refund self
+	 */
 	public function execute()
 	{
 		$this->check_insist();

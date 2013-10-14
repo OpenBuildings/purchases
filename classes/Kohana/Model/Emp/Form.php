@@ -1,6 +1,8 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
 /**
+ * This form is used to ease creating html form for credit cards, that use emp paymnet processor
+ * 
  * @package    Openbuildings\Purchases
  * @author     Ivan Kerin <ikerin@gmail.com>
  * @copyright  (c) 2013 OpenBuildings Ltd.

@@ -202,6 +202,7 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 		return array(
 			array(new Jam_Price(10, 'EUR', $monetary), new Jam_Price(0.555, 'EUR', $monetary)),
 			array(new Jam_Price(20, 'GBP', $monetary), new Jam_Price(0.854723, 'GBP', $monetary)),
+			array(new Jam_Price(244, 'GBP', $monetary), new Jam_Price(8.358723, 'GBP', $monetary)),
 		);
 	}
 

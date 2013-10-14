@@ -1,5 +1,11 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
+/**
+ * @package    Openbuildings\Purchases
+ * @author     Ivan Kerin <ikerin@gmail.com>
+ * @copyright  (c) 2013 OpenBuildings Ltd.
+ * @license    http://spdx.org/licenses/BSD-3-Clause
+ */
 class Kohana_Jam_Behavior_Freezable extends Jam_Behavior {
 
 	public $_associations;
@@ -23,11 +29,25 @@ class Kohana_Jam_Behavior_Freezable extends Jam_Behavior {
 		}
 	}
 
+	/**
+	 * After saving the model it is not considered "just_frozen"
+	 * @param  Jam_Model      $model 
+	 * @param  Jam_Event_Data $data  
+	 */
 	public function model_after_save(Jam_Model $model, Jam_Event_Data $data)
 	{
 		$model->is_just_frozen = FALSE;
 	}
 
+	/**
+	 * Add validation so that if you change any fields that are considered frozen, 
+	 * it would add an error. 
+	 * In case of associations, if the count of the items has been changed,
+	 * also add an error.
+	 * 
+	 * @param  Jam_Model      $model 
+	 * @param  Jam_Event_Data $data  
+	 */
 	public function model_after_check(Jam_Model $model, Jam_Event_Data $data)
 	{
 		if ($model->loaded() AND $model->is_frozen() AND ! $model->is_just_frozen()) 
@@ -50,7 +70,12 @@ class Kohana_Jam_Behavior_Freezable extends Jam_Behavior {
 		}
 	}
 
-	public function call_associations_method(Jam_Model $model, $method)
+	/**
+	 * Call the given method an all the child associations
+	 * @param  Jam_Model $model  
+	 * @param  string    $method_name
+	 */
+	public function call_associations_method(Jam_Model $model, $method_name)
 	{
 		foreach ($this->_associations as $name) 
 		{
@@ -58,16 +83,22 @@ class Kohana_Jam_Behavior_Freezable extends Jam_Behavior {
 			{
 				foreach ($model->{$name}->as_array() as $item) 
 				{
-					$item->{$method}();
+					$item->{$method_name}();
 				}
 			}
 			else
 			{
-				$model->{$name}->{$method}();
+				$model->{$name}->{$method_name}();
 			}
 		}
 	}
 
+	/**
+	 * Freeze all the fields in this method, also call "freeze" on all children
+	 * @param  Jam_Model      $model 
+	 * @param  Jam_Event_Data $data  
+	 * @return Jam_Model                self
+	 */
 	public function model_call_freeze(Jam_Model $model, Jam_Event_Data $data)
 	{
 		$this->call_associations_method($model, 'freeze');
@@ -86,6 +117,12 @@ class Kohana_Jam_Behavior_Freezable extends Jam_Behavior {
 		$data->return = $model;
 	}
 
+	/**
+	 * Unfreeze all the fields in this method, also call "unfreeze" on all children
+	 * @param  Jam_Model      $model 
+	 * @param  Jam_Event_Data $data  
+	 * @return Jam_Model                self
+	 */
 	public function model_call_unfreeze(Jam_Model $model, Jam_Event_Data $data)
 	{
 		$this->call_associations_method($model, 'unfreeze');
@@ -104,6 +141,12 @@ class Kohana_Jam_Behavior_Freezable extends Jam_Behavior {
 		$data->return = $model;
 	}
 
+	/**
+	 * Check if the model is frozen. Go up the chain of parents until a parent with a is_frozen flag is reached. That way all the children use only the flag of the parent
+	 * @param  Jam_Model      $model 
+	 * @param  Jam_Event_Data $data  
+	 * @return boolean                
+	 */
 	public function model_call_is_frozen(Jam_Model $model, Jam_Event_Data $data)
 	{
 		if ($this->_parent) 
@@ -116,6 +159,12 @@ class Kohana_Jam_Behavior_Freezable extends Jam_Behavior {
 		}
 	}
 
+	/**
+	 * Check if the object has been frozen, but is not yet saved. Go up the chain of parents until it reaches the root, whose is_just_frozen flag is returned.
+	 * @param  Jam_Model      $model 
+	 * @param  Jam_Event_Data $data  
+	 * @return boolean                
+	 */
 	public function model_call_is_just_frozen(Jam_Model $model, Jam_Event_Data $data)
 	{
 		if ($this->_parent) 

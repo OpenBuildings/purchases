@@ -47,6 +47,11 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 			->validator('purchase', 'store', array('present' => TRUE));
 	}
 
+	/**
+	 * Search for the same item in items, (using "is_same()" method, and return its index, or NULL if not found)
+	 * @param  Model_Purchase_Item $new_item 
+	 * @return integer                        
+	 */
 	public function search_same_item(Model_Purchase_Item $new_item)
 	{
 		foreach ($this->items as $index => $item) 
@@ -58,6 +63,11 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 		}
 	}
 
+	/**
+	 * Add the item to items or update an existing one (checked using "search_same_item()")
+	 * @param Model_Purchase_Item $new_item 
+	 * @return Model_Store_Purchase self
+	 */
 	public function add_or_update_item(Model_Purchase_Item $new_item)
 	{
 		if (($index = $this->search_same_item($new_item)) !== NULL) 
@@ -71,6 +81,12 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 		return $this;
 	}
 
+	/**
+	 * Return items, filtered, trigger model.filter_items to allow adding custom filters
+	 * @trigger model.filter_items
+	 * @param  array $types 
+	 * @return array        
+	 */
 	public function items($types = NULL)
 	{
 		$items = $this->items->as_array();
@@ -83,11 +99,21 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 		return $items;
 	}
 
+	/**
+	 * Return the count of items, filtered
+	 * @param  array $types
+	 * @return integer
+	 */
 	public function items_count($types = NULL)
 	{
 		return count($this->items($types));
 	}
 
+	/**
+	 * Return the sum of the quantities of all the items, filtered.
+	 * @param  array $types 
+	 * @return integer        
+	 */
 	public function items_quantity($types = NULL)
 	{
 		$quantities = array_map(function($item) {
@@ -97,6 +123,11 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 		return $quantities ? array_sum($quantities) : 0;
 	}
 
+	/**
+	 * Trigger model.update_items
+	 * @trigger model.update_items
+	 * @return Model_Store_Purchase self
+	 */
 	public function update_items()
 	{
 		$this->meta()->events()->trigger('model.update_items', $this);
@@ -104,6 +135,12 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 		return $this;
 	}
 
+	/**
+	 * Replace purchase items, filtered. Removes old items
+	 * @param  array $items arrat of Model_Purchase_Item
+	 * @param  array $types 
+	 * @return Model_Store_Purchase        self
+	 */
 	public function replace_items($items, $types = NULL)
 	{
 		$original = $this->items($types);
@@ -122,6 +159,11 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 		return $this;
 	}
 
+	/**
+	 * Sum the total price of the items. filtered.
+	 * @param  array $types 
+	 * @return Jam_Price        
+	 */
 	public function total_price($types = NULL)
 	{
 		$prices = array_map(function($item) { return $item->total_price(); }, $this->items($types));

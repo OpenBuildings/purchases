@@ -19,6 +19,14 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 			->table('payments');
 	}
 
+	/**
+	 * Convert a Model_Purcahse object to an array of parameteres, suited for Emp Payment processor
+	 * Uses discount items, payable items, billing address as well as customer email and ip_address
+	 * If environment != Kohana::PRODUCTION, adds a "test_transaction" => 1
+	 * 
+	 * @param  Model_Purchase $purchase 
+	 * @return array                   
+	 */
 	public static function convert_purchase(Model_Purchase $purchase)
 	{
 		$params = array(
@@ -64,6 +72,12 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 		return $params;
 	}	
 
+	/**
+	 * Find the item_id from a cart array, returned from emp
+	 * @param  array  $cart 
+	 * @param  string $id   
+	 * @return string       
+	 */
 	public static function find_item_id(array $cart, $id)
 	{
 		$items = isset($cart['item'][0]) ? $cart['item'] : array($cart['item']);
@@ -74,6 +88,11 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 		}
 	}
 
+	/**
+	 * Convert a Model_Store_Refund object to an array of parameteres, suited for Emp Payment processor. Uses purchase's payment object and its raw_response to extract the needed ids.
+	 * @param  Model_Store_Refund $refund 
+	 * @return array                     
+	 */
 	public static function convert_refund(Model_Store_Refund $refund)
 	{
 		$payment = $refund->payment_insist();
@@ -110,13 +129,23 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 		return $params;
 	}
 
-	public function transaction_fee(Jam_Price $price)
+	/**
+	 * Calculate the transaction_fee of Emp Payment processor based on the given amount
+	 * @param  Jam_Price $amount 
+	 * @return Jam_Price           
+	 */
+	public function transaction_fee(Jam_Price $amount)
 	{
-		return $price
+		return $amount
 				->multiply_by(0.0335)
 				->add(new Jam_Price(0.22, 'EUR'));
 	}
 
+	/**
+	 * Perform a payment of the current purchase, set the reponse in payment_id, raw_response and status.
+	 * @param  array  $params 
+	 * @return Model_Payment_Emp         self
+	 */
 	public function execute_processor(array $params = array())
 	{
 		$params = array_merge(Model_Payment_Emp::convert_purchase($this->purchase), $params);
@@ -137,6 +166,12 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 		return $this;
 	}
 
+	/**
+	 * Perform a refund based on a given refund object. Set the refund's raw_response and status accordingly
+	 * @param  Model_Store_Refund $refund        
+	 * @param  array              $custom_params 
+	 * @return Model_Payment_Emp                            self
+	 */
 	public function refund_processor(Model_Store_Refund $refund, array $custom_params = array())
 	{
 		$params = Model_Payment_Emp::convert_refund($refund);

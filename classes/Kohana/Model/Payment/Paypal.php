@@ -19,6 +19,14 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 			->table('payments');
 	}
 
+	/**
+	 * Convert a Model_Purchase to a PayPal\Api\Payment object.
+	 * Discount prices are not supported, so that each store_purchase is combined and added as a separate item.
+	 * 
+	 * @param  Model_Purchase $purchase 
+	 * @param  array          $params   
+	 * @return PayPal\Api\Payment                   
+	 */
 	public static function convert_purchase(Model_Purchase $purchase, array $params = array())
 	{
 		$payer = new PayPal\Api\Payer();
@@ -67,6 +75,13 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		return $payment;
 	}
 
+	/**
+	 * Convert Model_Store_Refund to a PayPal\Api\Refund
+	 * Do not convert individual refund items as the refund does not support that.
+	 * 
+	 * @param  Model_Store_Refund $refund 
+	 * @return PayPal\Api\Refund                     
+	 */
 	public static function convert_refund(Model_Store_Refund $refund)
 	{
 		$amount = new PayPal\Api\Amount();
@@ -81,43 +96,58 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		return $paypal_refund;
 	}
 
+	/**
+	 * Calculate transaction percent based on the price
+	 * @param  Jam_Price $total 
+	 * @return float           
+	 */
 	public static function transaction_fee_percent(Jam_Price $total)
 	{
 		$amount = $total->in('EUR');
 
 		if ($amount <= 2500.00)
 		{
-			$fee = 0.034;
+			$percent = 0.034;
 		}	
 		elseif ($amount <= 10000.00)
 		{
-			$fee = 0.029;
+			$percent = 0.029;
 		}
 		elseif ($amount <= 50000.00)
 		{
-			$fee = 0.027;
+			$percent = 0.027;
 		}
 		elseif ($amount <= 100000.00)
 		{
-			$fee = 0.024;
+			$percent = 0.024;
 		}
 		else
 		{
-			$fee = 0.019;
+			$percent = 0.019;
 		}
 
-		return $fee;
+		return $percent;
 	}
 
-	public function transaction_fee(Jam_Price $price)
+	/**
+	 * Calcualte the transaciton fee of paypal based on the amount
+	 * @param  Jam_Price $amount 
+	 * @return Jam_Price           
+	 */
+	public function transaction_fee(Jam_Price $amount)
 	{
-		$percent = Model_Payment_Paypal::transaction_fee_percent($price);
+		$percent = Model_Payment_Paypal::transaction_fee_percent($amount);
 
-		return $price
+		return $amount
 			->multiply_by($percent)
 			->add(new Jam_Price(0.35, 'EUR'));
 	}
 
+	/**
+	 * Use the current purchase to generate an "authorize url" where you can go and approve the purchase through paypal's interface.
+	 * @param  array  $params must provide success_url and cancel_url
+	 * @return Model_Payment_Paypal         self
+	 */
 	public function authorize_processor(array $params = array())
 	{
 		$payment = Model_Payment_Paypal::convert_purchase($this->purchase, $params);
@@ -143,6 +173,12 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		return $this;
 	}
 
+	/**
+	 * Finalize the purchase after the user has approved the payment request.
+	 * Provide payer_id in params to check the payment request.
+	 * @param  array  $params must provide payer_id from the approval redirect
+	 * @return Model_Payment_Paypal         self
+	 */
 	public function execute_processor(array $params = array())
 	{
 		$paypal_payement = PayPal\Api\Payment::get($this->payment_id, Paypal::api());
@@ -166,6 +202,12 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		return $this;
 	}
 
+	/**
+	 * Refund amount of the purchases, specified in the Model_Store_Refund object
+	 * @param  Model_Store_Refund $refund        
+	 * @param  array              $custom_params 
+	 * @return Model_Store_Refund                            self
+	 */
 	public function refund_processor(Model_Store_Refund $refund, array $custom_params = array())
 	{
 		$paypal_refund = Model_Payment_Paypal::convert_refund($refund);
