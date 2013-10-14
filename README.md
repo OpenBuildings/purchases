@@ -41,11 +41,9 @@ All of these types of queries can be used by ``items_count()`` and ``total_price
 There is also "items_quantity" which sums the quantities of all the items, matched by the filters.
 
 ```php
-
 $store_purchase->items_count(array('product', 'shipping'));
 $store_purchase->total_price(array('is_payable' = TRUE));
 $store_purchase->items_quantity(array('is_payable' = TRUE));
-
 ```
 
 All of these methods can also be executed on Model_Purchase objects, giving you an aggregate of all the store_purchases. For example:
@@ -60,7 +58,6 @@ $purchase->items_quantity(array('is_payable' => TRUE));
 Normally all prices for purchase items are derived dynamically, by calling ->price_for_purchase_item() method on the reference object (be that a product, a promotion etc.), calculated with the current monetary exchange rates. Once you call the ``freeze()`` method on the purchase (and save it) both the exchange rates and the prices are set to the purchase disallowing any further modification of the purchase, even if the reference's price changes, the purchase item's prices will stay the same as in the moment of freezing.
 
 ```php
-
 $purchase
 	->freeze()
 	->save();
@@ -78,7 +75,7 @@ Once the purchase has been frozen and saved, any change to the frozen fields / a
 
 In order for that to work across all the models of the purchase, the Freezable behavior is used. It has 3 parameters "associations", "parent" and "fields"
 
-```
+```php
 class Some_Model extends Jam_Model {
 
 	public static function initialize(Jam_Meta $meta)
@@ -90,7 +87,10 @@ class Some_Model extends Jam_Model {
 					'parent' => 'some_parent_model',
 					'associations' => array('some_child', 'some_children'),
 				)),
-			))
+			));
+	}
+	//...
+}
 ```
 
 That means that whenever the model is "frozen" then the field named "price" will be assigned the value of the method "price()".
@@ -220,7 +220,6 @@ $purchase->billing_address = Jam::build('address', array(
 Refunds are performed with special Model_Store_Refund objects - each refund is specific to a store purchase - if you do not set any custom items, then all of them will be refunded (the whole transaction) otherwise, you can add Model_Store_Refund_Item objects for refunding specific items (partial refund).
 
 ```php
-
 $store_purchase = // Load store purchase
 
 $refund = $store_purchase->refunds->create(array(
@@ -328,22 +327,22 @@ class Jam_Behavior_MyBehavios extends Jam_Behavior {
 	}
 
 	public function filter_shipping_items(Model_Store_Purchase $store_purchase, Jam_Event_Data $data, array $items, array $filter)
+	{
+		$items = is_array($data->return) ? $data->return : $items;
+		$filtered = array();
+
+		foreach ($items as $item)
 		{
-			$items = is_array($data->return) ? $data->return : $items;
-			$filtered = array();
-
-			foreach ($items as $item)
+			if (array_key_exists('shippable', $filter) AND ($item->reference instanceof Shippable) !== $filter['shippable'])
 			{
-				if (array_key_exists('shippable', $filter) AND ($item->reference instanceof Shippable) !== $filter['shippable'])
-				{
-					continue;
-				}
-
-				$filtered [] = $item;
+				continue;
 			}
 
-			$data->return = $filtered;
+			$filtered []= $item;
 		}
+
+		$data->return = $filtered;
+	}
 }
 ```
 
