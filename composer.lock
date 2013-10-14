@@ -460,16 +460,16 @@
         },
         {
             "name": "openbuildings/jam-monetary",
-            "version": "0.1.11",
+            "version": "0.1.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam-monetary.git",
-                "reference": "63fe83277b3663e1d3ce0a2ad6325fdf52cde12d"
+                "reference": "6eae7f86d7052872ff3b16f4ea00397509d058bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam-monetary/zipball/63fe83277b3663e1d3ce0a2ad6325fdf52cde12d",
-                "reference": "63fe83277b3663e1d3ce0a2ad6325fdf52cde12d",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-monetary/zipball/6eae7f86d7052872ff3b16f4ea00397509d058bc",
+                "reference": "6eae7f86d7052872ff3b16f4ea00397509d058bc",
                 "shasum": ""
             },
             "require": {
@@ -504,7 +504,7 @@
                 "money",
                 "price"
             ],
-            "time": "2013-10-10 07:01:23"
+            "time": "2013-10-10 08:43:04"
         },
         {
             "name": "openbuildings/monetary",
