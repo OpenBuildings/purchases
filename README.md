@@ -53,6 +53,12 @@ All of these methods can also be executed on Model_Purchase objects, giving you 
 $purchase->items_quantity(array('is_payable' => TRUE));
 ```
 
+There is a special method that is available only on the Model_Store_Purchase object. ``total_price_ratio`` - it will return what part of the whole purchase is the particular store purchase (from 0 to 1). You can pass filters to it too so only certain purchase_items will be taken into account.
+
+```php
+$store_purchase->total_price_ratio(array('is_payable' => TRUE)); // Will return e.g. 0.6
+```
+
 ## Price Freezing
 
 Normally all prices for purchase items are derived dynamically, by calling ->price_for_purchase_item() method on the reference object (be that a product, a promotion etc.), calculated with the current monetary exchange rates. Once you call the ``freeze()`` method on the purchase (and save it) both the exchange rates and the prices are set to the purchase disallowing any further modification of the purchase, even if the reference's price changes, the purchase item's prices will stay the same as in the moment of freezing.

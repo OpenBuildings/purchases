@@ -190,4 +190,20 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 	{
 		return $this->get_insist('purchase')->monetary();
 	}
+
+	/**
+	 * Return the ratio of this store_purchase as part of the whole purchase
+	 * @param  string|arrat $types filter
+	 * @return integer
+	 */
+	public function total_price_ratio($types)
+	{
+		$price = $this->total_price($types);
+		$total_price = $this->get_insist('purchase')->total_price($types);
+
+		if ( ! $price OR ! $total_price OR ! $price->amount() OR ! $total_price->amount())
+			return NULL;
+
+		return $price->amount() / $total_price->amount();
+	}
 }
