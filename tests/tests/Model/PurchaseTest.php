@@ -226,44 +226,6 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$this->assertEquals(15, $purchase->total_price(array('shipping', 'product'))->amount());
 	}
 
-	public function data_total_price_ratio()
-	{
-		return array(
-			array(new Jam_Price(5, 'EUR'), new Jam_Price(5, 'EUR'), 1.0),
-			array(new Jam_Price(10, 'EUR'), new Jam_Price(50, 'EUR'), 0.2),
-			array(new Jam_Price(40, 'EUR'), new Jam_Price(1250, 'EUR'), 0.032),
-		);
-	}
-
-	/**
-	 * @covers Model_Purchase::total_price_ratio
-	 * @dataProvider data_total_price_ratio
-	 */
-	public function test_total_price_ratio($store_purchase_price, $purchase_price, $expected_ratio)
-	{
-		$filters = array('some_filters' => TRUE);
-
-		$purchase = $this->getMock('Model_Purchase', array('total_price'), array('purchase'));
-
-		$purchase
-			->expects($this->once())
-			->method('total_price')
-			->with($this->identicalTo($filters))
-			->will($this->returnValue($purchase_price));
-
-		$store_purchase = $this->getMock('Model_Store_Purchase', array('total_price'), array('store_purchase'));
-
-		$store_purchase
-			->expects($this->once())
-			->method('total_price')
-			->with($this->identicalTo($filters))
-			->will($this->returnValue($store_purchase_price));
-
-		$store_purchase->purchase = $purchase;
-
-		$this->assertSame($expected_ratio, $store_purchase->total_price_ratio($filters));
-	}
-
 	/**
 	 * @covers Model_Purchase::update_items
 	 */
