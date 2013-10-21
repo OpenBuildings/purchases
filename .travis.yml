@@ -1,4 +1,3 @@
---- 
 env:
   global:
     - secure: WM6/jFIv5y0fucZqd2kUhHindfgyz2UkRfDor/e+BEeqN9JfJD5kVDyLHIbHSvGXWYah5Nk56I6Wwo3HjPgsdKU1tfatYBNMqRzKHa13sChd4idIrpUJBRKGqWDJeh3h6Cnf5DrudUKPh7AdDN8Nz5kC+CAo5M3LpM919Qu8mz0=
@@ -6,6 +5,8 @@ env:
     - secure: fuPJkgdJqR88vOcKi7s7UMNCNdlHbxhfAk4vxQPh82070sZ6bV95/2IypEQHAIsoyLmP2nSDlsTn5ROwPQaDL0zqii0WMueLYHwKbOx1If4yslDjMpuQ7Qv5Wbrid4mhak0O0sWvgFd20Q5hBbnaV6uCEcorqdwabrm9/oKF4zw=
     - secure: c9r0P1Ey2jKqtAY3WIHz+lQ7x+ZW70Jtn24ZIWwRQG2jqY0l4VTC7tkE1RGBnNYyfDrdRYFnIuQ5xC8iMNp3R3NdPtbqo0Hwe3cA+lEfpuZ0XyPHTl0dywYijYmwr3vWtPLq8LnYbAOV53fYuFI/jE2WaGVw0A5F2Stsa0Im52w=
     - secure: MXb0FdlZZPAinvZ60iSpL55xrJ9Gd91u5427apa3WTz5koybB5eMn5QoFkUlOU02u0vmLSWTGo5OK1/P/5MS1kewXVLIzu+L0nIAjnbTUi9JjVQiV6Kpl3MCzr12T0zQ3JNvGUi85t612VA4S4so9Yh/LOBfhUNASPtqX3Mrhkw=
+    - secure: CNqIU+dzcH6MKsiFaa+N3j9WS7kra4ajwZ0E+Z6UiLH8I62vN1eBwCj5ibRrs8cFdMtkAD+DFGntqe9OjJI7f2pc8o9ZMLls4siACju0jPECPWDlDIpOzrksqVCHdgE3epnJOIQ+Wgtw43/TKoPLYD4TwzUDS4yG/0UjgSvftWU=
+    - secure: GMeb9x2HLs701pTYpM5y7omKcFxPdpsCd1Yb8vxmD73kIgGwccv3vliOL59cHuKkJfdktNUAel0K6XUHAd77cYwxsI3GHSeSvatYXsI2o6t8b2wHLMro4XqR+GlVBXY39ocKieJFrbmTSWXvQmPBENlz2oerW69NtybXV/4eLaQ=
 
 language: php
 
@@ -17,7 +18,7 @@ script:
 
 before_script:
   - mkdir -p build/logs
-  - composer selfupdate  
+  - composer selfupdate
   - composer require --dev satooshi/php-coveralls:dev-master
   - composer install
   - mysql -e 'create database `test-purchases`;'
