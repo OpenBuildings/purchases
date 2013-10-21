@@ -89,6 +89,8 @@ class Kohana_Jam_Behavior_Freezable extends Jam_Behavior {
 			else
 			{
 				$model->{$name}->{$method_name}();
+				
+				$model->{$name} = $model->{$name};
 			}
 		}
 	}
