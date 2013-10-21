@@ -29,10 +29,12 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 	 */
 	public static function convert_purchase(Model_Purchase $purchase)
 	{
+		$currency = $purchase->display_currency() ?: $purchase->currency();
+
 		$params = array(
 			'payment_method'         => 'creditcard',
 			'order_reference'        => $purchase->number,
-			'order_currency'         => $purchase->currency,
+			'order_currency'         => $currency,
 			'customer_email'         => $purchase->creator->email,
 			'ip_address'             => Request::$client_ip,
 			'credit_card_trans_type' => 'sale',
@@ -44,13 +46,13 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 			$index = $i+1;
 
 			$params = array_merge($params, array(
-				"item_{$index}_predefined"                      => '0',
-				"item_{$index}_digital"                         => '0',
-				"item_{$index}_code"                            => $item->id(),
-				"item_{$index}_qty"                             => $item->quantity,
-				"item_{$index}_discount"                        => $item->is_discount ? '1' : '0',
-				"item_{$index}_name"                            => $item->reference ? URL::title($item->reference->name(), ' ', TRUE) : $item->type,
-				"item_{$index}_unit_price_".$purchase->currency => $item->price()->as_string(),
+				"item_{$index}_predefined"            => '0',
+				"item_{$index}_digital"               => '0',
+				"item_{$index}_code"                  => $item->id(),
+				"item_{$index}_qty"                   => $item->quantity,
+				"item_{$index}_discount"              => $item->is_discount ? '1' : '0',
+				"item_{$index}_name"                  => $item->reference ? URL::title($item->reference->name(), ' ', TRUE) : $item->type,
+				"item_{$index}_unit_price_".$currency => $item->price()->as_string($currency),
 			));
 		}
 

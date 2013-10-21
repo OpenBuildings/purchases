@@ -29,14 +29,16 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 	 */
 	public static function convert_purchase(Model_Purchase $purchase, array $params = array())
 	{
+		$currency = $purchase->display_currency() ?: $purchase->currency();
+
 		$payer = new PayPal\Api\Payer();
 		$payer
 			->setPaymentMethod('paypal');
 
 		$amount = new PayPal\Api\Amount();
 		$amount
-			->setCurrency($purchase->currency)
-			->setTotal($purchase->total_price(array('is_payable' => TRUE))->as_string());
+			->setCurrency($currency)
+			->setTotal($purchase->total_price(array('is_payable' => TRUE))->as_string($currency));
 
 		$item_list = new PayPal\Api\ItemList();
 		$items = array();
@@ -46,8 +48,8 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 			$item
 				->setQuantity(1)
 				->setName('Products From '.URL::title($store_purchase->store->name()))
-				->setPrice($store_purchase->total_price(array('is_payable' => TRUE))->as_string())
-				->setCurrency($purchase->currency);
+				->setPrice($store_purchase->total_price(array('is_payable' => TRUE))->as_string($currency))
+				->setCurrency($currency);
 
 			$items[] = $item;
 		}
