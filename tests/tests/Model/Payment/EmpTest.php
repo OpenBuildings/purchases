@@ -70,7 +70,7 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			'item_2_code' => '2',
 			'item_2_qty' => '1',
 			'item_2_discount' => '0',
-			'item_2_name' => 'red',
+			'item_2_name' => 'red..',
 			'item_2_unit_price_EUR' => '200.00',
 
 			'item_3_predefined' => '0',
