@@ -20,12 +20,12 @@ class Model_Emp_FormTest extends Testcase_Purchases {
 	{
 		$years = Model_Emp_Form::years();
 		$this->assertCount(25, $years);
-		$this->assertEquals(date('y'), reset($years));
+		$this->assertEquals(date('Y'), reset($years));
 		$this->assertEquals(date('y'), key($years));
 
 		$years = Model_Emp_Form::years(12);
 		$this->assertCount(13, $years);
-		$this->assertEquals(date('y'), reset($years));
+		$this->assertEquals(date('Y'), reset($years));
 		$this->assertEquals(date('y'), key($years));
 	}
 }

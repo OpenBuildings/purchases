@@ -67,7 +67,9 @@ class Kohana_Model_Emp_Form extends Jam_Validated {
 	public static function years($years_in_the_furutre = 24)
 	{
 		$years = range(date('y'), date('y', strtotime('+'.$years_in_the_furutre.' years')));
-		return array_combine($years, $years);
+		$labels = range(date('Y'), date('Y', strtotime('+'.$years_in_the_furutre.' years')));
+		
+		return array_combine($years, $labels);
 	}
 }
 
