@@ -29,39 +29,45 @@ class Kohana_Model_Emp_Form extends Jam_Validated {
 				)
 			)
 			->validator('card_holder_name',	array(
-					'length' => array(
-						'minimum' => 3,
-						'maximum' => 40,
-					)
+				'length' => array(
+					'minimum' => 3,
+					'maximum' => 40,
 				)
-			)
+			))
 			->validator('card_number', array(
-					'length' => array(
-						'maximum' => 20,
-					),
-					'format' => array(
-						'credit_card' => TRUE,
-					)
+				'length' => array(
+					'maximum' => 20,
+				),
+				'format' => array(
+					'credit_card' => TRUE,
 				)
-			)
+			))
 			->validator('exp_month', array(
-					'format' => array(
-						'regex' => '/\d{2}/',
-					)
+				'format' => array(
+					'regex' => '/\d{2}/',
 				)
-			)
+			))
 			->validator('exp_year',	array(
-					'format' => array(
-						'regex' => '/\d{2}/',
-					)
+				'format' => array(
+					'regex' => '/\d{2}/',
 				)
-			)
+			))
 			->validator('cvv',array(
-					'format' => array(
-						'regex' => '/\d{2,4}/',
-					)
+				'format' => array(
+					'regex' => '/\d{2,4}/',
 				)
-			);
+			));
+	}
+
+	public static function months()
+	{
+		return array('01' => '01', '02' => '02', '03' => '03', '04' => '04', '05' => '05', '06' => '06', '07' => '07', '08' => '08', '09' => '09', '10' => '10', '11' => '11', '12' => '12');
+	}
+
+	public static function years($years_in_the_furutre = 24)
+	{
+		$years = range(date('y'), date('y', strtotime('+'.$years_in_the_furutre.' years')));
+		return array_combine($years, $years);
 	}
 }
 
