@@ -133,7 +133,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 	 */
 	public function compute_price()
 	{
-		$price = $this->get_insist('reference')->price_for_purchase_item($this);
+		$price = $this->get_reference_paranoid()->price_for_purchase_item($this);
 
 		if ( ! ($price instanceof Jam_Price))
 			throw new Kohana_Exception('Compute price expects the reference :reference to return a Jam_Price', array(':reference' => (string) $this->reference));
@@ -145,6 +145,19 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 		$price->display_currency($this->display_currency());
 
 		return $price;
+	}
+
+	/**
+	 * Get the reference even if it was deleted
+	 * @return Jam_Model
+	 */
+	public function get_reference_paranoid()
+	{
+		Jam_Behavior_Paranoid::filter(Jam_Behavior_Paranoid::ALL);
+		$reference = $this->get_insist('reference');
+		Jam_Behavior_Paranoid::filter(Jam_Behavior_Paranoid::NORMAL);
+
+		return $reference;
 	}
 
 	/**

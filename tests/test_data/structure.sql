@@ -110,6 +110,7 @@ CREATE TABLE `products` (
   `price` DECIMAL(10,2) NOT NULL,
   `currency` VARCHAR(3) NOT NULL,
   `store_id` INT(10) UNSIGNED NULL,
+  `is_deleted` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB  DEFAULT CHARSET=utf8;
 
@@ -119,6 +120,7 @@ CREATE TABLE `variations` (
   `name` VARCHAR(254) NOT NULL,
   `price` DECIMAL(10,2) NOT NULL,
   `product_id` INT(10) UNSIGNED NULL,
+  `is_deleted` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB  DEFAULT CHARSET=utf8;
 
@@ -205,11 +207,11 @@ VALUES
 # Dump of table products
 # ------------------------------------------------------------
 
-INSERT INTO `products` (`id`, `name`, `price`, `currency`, `store_id`)
+INSERT INTO `products` (`id`, `name`, `price`, `currency`, `store_id`, `is_deleted`)
 VALUES
-  (1,'Chair',290.40,'GBP',1),
-  (2,'Rug',30.00,'GBP',1),
-  (3,'Matrass',130.99,'EUR',1);
+  (1,'Chair',290.40,'GBP',1, 0),
+  (2,'Rug',30.00,'GBP',1, 0),
+  (3,'Matrass',130.99,'EUR',1, 0);
 
 # Dump of table purchases
 # ------------------------------------------------------------

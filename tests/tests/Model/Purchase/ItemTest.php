@@ -208,6 +208,27 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Purchase_Item::get_reference_paranoid
+	 */
+	public function test_get_reference_paranoid()
+	{
+		$purchase_item = Jam::find('purchase_item', 1);
+
+		$this->assertInstanceOf('Model_Product', $purchase_item->reference);
+		$this->assertInstanceOf('Model_Product', $purchase_item->get_reference_paranoid());
+
+		Jam::find('product', 1)->delete();
+
+		$purchase_item = Jam::find('purchase_item', 1);
+
+		$this->assertNull($purchase_item->reference);
+
+		$purchase_item = Jam::find('purchase_item', 1);
+
+		$this->assertInstanceOf('Model_Product', $purchase_item->get_reference_paranoid());
+	}
+
+	/**
 	 * @covers Model_Purchase_Item::total_price
 	 */
 	public function test_total_price()

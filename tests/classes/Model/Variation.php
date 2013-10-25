@@ -5,6 +5,9 @@ class Model_Variation extends Jam_Model implements Sellable {
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta
+			->behaviors(array(
+				'paranoid' => Jam::behavior('paranoid'),
+			))
 			->associations(array(
 				'product' => Jam::association('belongsto'),
 			))
