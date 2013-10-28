@@ -155,6 +155,7 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 		$currency = $this->purchase->display_currency() ?: $this->purchase->currency();
 
 		$request_params = array(
+			'refernece'        => $this->purchase->number,
 			'amount'           => $this->purchase->total_price(array('is_payable' => TRUE))->as_string($currency),
 			'currency'         => $currency,
 			'test_transaction' => Kohana::$environment === Kohana::PRODUCTION ? '0' : '1',

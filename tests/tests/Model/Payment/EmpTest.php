@@ -152,6 +152,8 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 		$this->env->backup_and_set(array(
 			'Emp::$_api' => NULL,
 			'Request::$client_ip' => '95.87.212.88',
+			'Request::$user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36',
+			'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
 			'purchases.processor.emp.threatmatrix' => array(
 				'org_id' => getenv('EMP_TMX'), 
 				'client_id' => getenv('EMP_CID'),
@@ -167,8 +169,6 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 
 		$vbv_params = Jam::build('emp_form', $this->payment_params)->vbv_params();
 
-		Openbuildings\Emp\Remote::get(Emp::threatmatrix()->tracking_url(), array(CURLOPT_PROXY => getenv('EMP_PROXY')));
-		
 		$purchase = Jam::find('purchase', 2);
 
 		$purchase
