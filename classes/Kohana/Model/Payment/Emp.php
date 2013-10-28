@@ -146,6 +146,37 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 	}
 
 	/**
+	 * Use the current purchase to generate an "authorize url" where you can go and approve the purchase through paypal's interface.
+	 * @param  array  $params must provide callback_url
+	 * @return Model_Payment_Emp         self
+	 */
+	public function authorize_processor(array $params = array())
+	{
+		$currency = $this->purchase->display_currency() ?: $this->purchase->currency();
+
+		$request_params = array(
+			'amount'           => $this->purchase->total_price(array('is_payable' => TRUE))->as_string($currency),
+			'currency'         => $currency,
+			'test_transaction' => Kohana::$environment === Kohana::PRODUCTION ? '0' : '1',
+		);
+
+		$request_params = array_merge($request_params, $params);
+
+		$response = Emp::api()
+			->request(Openbuildings\Emp\Api::VBVMC3D_AUTH, $request_params);
+
+		print_r($response);
+
+		// $this->set(array(
+		// 	'payment_id' => $payment->getId(), 
+		// 	'raw_response' => $response, 
+		// 	'status' => Model_Payment::PENDING
+		// ));
+
+		return $this;
+	}
+
+	/**
 	 * Perform a payment of the current purchase, set the reponse in payment_id, raw_response and status.
 	 * @param  array  $params 
 	 * @return Model_Payment_Emp         self
@@ -168,6 +199,11 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 		));
 
 		return $this;
+	}
+
+	public function use_3dsecure()
+	{
+		return Kohana::$config->load('purchases.processor.emp.3d_secure');
 	}
 
 	/**

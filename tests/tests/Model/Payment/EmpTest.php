@@ -145,6 +145,38 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Payment_Emp::authorize_processor
+	 */
+	public function test_authorize()
+	{
+		$this->env->backup_and_set(array(
+			'Emp::$_api' => NULL,
+			'Request::$client_ip' => '95.87.212.88',
+			'purchases.processor.emp.threatmatrix' => array(
+				'org_id' => getenv('EMP_TMX'), 
+				'client_id' => getenv('EMP_CID'),
+			),
+			'purchases.processor.emp.api' => array(
+				'gateway_url' => 'https://my.emerchantpay.com', 
+				'api_key' => getenv('EMP_KEY'), 
+				'client_id' => getenv('EMP_CID'),
+				'proxy' => getenv('EMP_PROXY'),
+			),
+			'purchases.processor.emp.3d_secure' => TRUE,
+		));
+
+		$vbv_params = Jam::build('emp_form', $this->payment_params)->vbv_params();
+
+		Openbuildings\Emp\Remote::get(Emp::threatmatrix()->tracking_url(), array(CURLOPT_PROXY => getenv('EMP_PROXY')));
+		
+		$purchase = Jam::find('purchase', 2);
+
+		$purchase
+			->build('payment', array('model' => 'payment_emp'))
+				->authorize($vbv_params);	
+	}
+
+	/**
 	 * @covers Model_Store_Refund::execute
 	 * @covers Model_Payment_Emp::refund_processor
 	 * @covers Model_Payment_Emp::execute_processor

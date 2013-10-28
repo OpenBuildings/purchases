@@ -166,7 +166,6 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		}
 
 		$this->set(array(
-			'method' => 'paypal', 
 			'payment_id' => $payment->getId(), 
 			'raw_response' => $payment->toArray(), 
 			'status' => Model_Payment::PENDING
