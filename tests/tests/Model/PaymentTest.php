@@ -11,14 +11,16 @@ class Model_PaymentTest extends Testcase_Purchases {
 	public function test_authorize()
 	{
 		$params = array('test', 'test2');
-		$payment = $this->getMock('Model_Payment', array('authorize_processor', 'save'), array('payment'));
+		$payment = $this->getMock('Model_Payment', array('authorize_processor'), array('payment'));
+		$purchase = $this->getMock('Model_Purchase', array('save'), array('purchase'));
+		$payment->purchase = $purchase;
 
 		$payment
 			->expects($this->once())
 			->method('authorize_processor')
 			->with($this->equalTo($params));
 
-		$payment
+		$purchase
 			->expects($this->once())
 			->method('save');
 
@@ -34,14 +36,16 @@ class Model_PaymentTest extends Testcase_Purchases {
 	public function test_execute()
 	{
 		$params = array('test', 'test2');
-		$payment = $this->getMock('Model_Payment', array('execute_processor', 'save'), array('payment'));
+		$payment = $this->getMock('Model_Payment', array('execute_processor'), array('payment'));
+		$purchase = $this->getMock('Model_Purchase', array('save'), array('purchase'));
+		$payment->purchase = $purchase;
 
 		$payment
 			->expects($this->once())
 			->method('execute_processor')
 			->with($this->equalTo($params));
 
-		$payment
+		$purchase
 			->expects($this->once())
 			->method('save');
 

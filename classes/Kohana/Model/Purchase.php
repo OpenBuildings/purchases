@@ -39,7 +39,7 @@ class Kohana_Model_Purchase extends Jam_Model {
 					'foreign_model' => 'address',
 					'dependent' => Jam_Association::DELETE,
 				)),
-				'payment' => Jam::association('hasone', array('inverse_of' => 'purchase')),
+				'payment' => Jam::association('hasone', array('inverse_of' => 'purchase', 'dependent' => Jam_Association::DELETE)),
 			))
 			->fields(array(
 				'id'              => Jam::field('primary'),
