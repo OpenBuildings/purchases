@@ -460,22 +460,22 @@
         },
         {
             "name": "openbuildings/jam-monetary",
-            "version": "0.1.13",
+            "version": "0.1.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam-monetary.git",
-                "reference": "ac1946e905ff83ee35a11f85be7428b680c5324b"
+                "reference": "6601622609fe2c604364aa227e430f747bba26d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam-monetary/zipball/ac1946e905ff83ee35a11f85be7428b680c5324b",
-                "reference": "ac1946e905ff83ee35a11f85be7428b680c5324b",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-monetary/zipball/6601622609fe2c604364aa227e430f747bba26d1",
+                "reference": "6601622609fe2c604364aa227e430f747bba26d1",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "*",
                 "openbuildings/jam": "0.4.*",
-                "openbuildings/monetary": "0.3.*",
+                "openbuildings/monetary": "0.4.*",
                 "php": ">=5.3.0"
             },
             "require-dev": {
@@ -504,20 +504,20 @@
                 "money",
                 "price"
             ],
-            "time": "2013-10-14 10:35:11"
+            "time": "2013-10-29 13:57:35"
         },
         {
             "name": "openbuildings/monetary",
-            "version": "0.3.1",
+            "version": "0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/monetary.git",
-                "reference": "401f0c306a775280d31a526b0064c037cb087f7e"
+                "reference": "f05bc74cadc6d850b199705f10ee590aaf3bbd59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/monetary/zipball/401f0c306a775280d31a526b0064c037cb087f7e",
-                "reference": "401f0c306a775280d31a526b0064c037cb087f7e",
+                "url": "https://api.github.com/repos/OpenBuildings/monetary/zipball/f05bc74cadc6d850b199705f10ee590aaf3bbd59",
+                "reference": "f05bc74cadc6d850b199705f10ee590aaf3bbd59",
                 "shasum": ""
             },
             "require": {
@@ -548,11 +548,13 @@
                 },
                 {
                     "name": "Haralan Dobrev",
-                    "email": "hdobrev@despark.com"
+                    "email": "hdobrev@despark.com",
+                    "role": "Author"
                 },
                 {
                     "name": "Yasen Yanev",
-                    "email": "yasen@openbuildings.com"
+                    "email": "yasen@openbuildings.com",
+                    "role": "Author"
                 }
             ],
             "description": "Useful tool for formatting and converting currencies",
@@ -566,7 +568,7 @@
                 "money",
                 "yahoo"
             ],
-            "time": "2013-08-23 13:23:09"
+            "time": "2013-10-28 11:21:15"
         },
         {
             "name": "paypal/rest-api-sdk-php",
