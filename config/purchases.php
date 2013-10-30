@@ -9,7 +9,6 @@ return array(
 			// 	'api_key' => 'aaaaaa',
 			// 	'proxy' => 'aaaaaa',
 			// ),
-			// '3d_secure' => FALSE,
 			// 'threatmatrix' => array(
 			// 	'org_id' => 'lygdph9h',
 			// 	'client_id' => '00000',
