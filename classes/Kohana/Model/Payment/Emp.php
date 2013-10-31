@@ -38,7 +38,6 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 			'customer_email'         => $purchase->creator->email,
 			'ip_address'             => Request::$client_ip,
 			'credit_card_trans_type' => 'sale',
-			'test_transaction'       => Kohana::$environment === Kohana::PRODUCTION ? '0' : '1',
 		);
 
 		foreach ($purchase->items(array('is_payable' => TRUE)) as $i => $item) 
@@ -105,7 +104,6 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 			'order_id'         => $payment->raw_response['order_id'],
 			'trans_id'         => $payment->payment_id,
 			'reason'           => $refund->reason,
-			'test_transaction' => Kohana::$environment === Kohana::PRODUCTION ? '0' : '1',
 		);
 
 		if (count($refund->items)) 
@@ -146,45 +144,13 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 	}
 
 	/**
-	 * Use the current purchase to generate an "authorize url" where you can go and approve the purchase through paypal's interface.
-	 * @param  array  $params must provide callback_url
-	 * @return Model_Payment_Emp         self
-	 */
-	public function authorize_processor(array $params = array())
-	{
-		$currency = $this->purchase->display_currency() ?: $this->purchase->currency();
-
-		$request_params = array(
-			'refernece'        => $this->purchase->number,
-			'amount'           => $this->purchase->total_price(array('is_payable' => TRUE))->as_string($currency),
-			'currency'         => $currency,
-			'test_transaction' => Kohana::$environment === Kohana::PRODUCTION ? '0' : '1',
-		);
-
-		$request_params = array_merge($request_params, $params);
-
-		$response = Emp::api()
-			->request(Openbuildings\Emp\Api::VBVMC3D_AUTH, $request_params);
-
-		print_r($response);
-
-		// $this->set(array(
-		// 	'payment_id' => $payment->getId(), 
-		// 	'raw_response' => $response, 
-		// 	'status' => Model_Payment::PENDING
-		// ));
-
-		return $this;
-	}
-
-	/**
 	 * Perform a payment of the current purchase, set the reponse in payment_id, raw_response and status.
 	 * @param  array  $params 
 	 * @return Model_Payment_Emp         self
 	 */
 	public function execute_processor(array $params = array())
 	{
-		$params = array_merge(Model_Payment_Emp::convert_purchase($this->purchase), $params);
+		$params = array_merge($params, Model_Payment_Emp::convert_purchase($this->purchase));
 
 		$response = Emp::api()
 			->request(Openbuildings\Emp\Api::ORDER_SUBMIT, $params);
@@ -216,8 +182,6 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 	public function refund_processor(Model_Store_Refund $refund, array $custom_params = array())
 	{
 		$params = Model_Payment_Emp::convert_refund($refund);
-
-		$params = array_merge($params, $custom_params);
 
 		$response = Emp::api()
 			->request(Openbuildings\Emp\Api::ORDER_CREDIT, $params);

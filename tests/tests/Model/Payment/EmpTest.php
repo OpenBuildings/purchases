@@ -53,7 +53,6 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			'customer_postcode' => 'ZIP',
 			'customer_phone' => 'phone123',
 
-			'test_transaction' => '1',
 			'ip_address' => '1.1.1.1',
 			'credit_card_trans_type' => 'sale',
 
@@ -118,7 +117,6 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			'order_id' => '5580812',
 			'trans_id' => '11111',
 			'reason' => 'Faulty Product',
-			'test_transaction' => '1',
 			'item_1_id' => '5657022',
 			'item_2_id' => '5657032',
 			'item_2_amount' => '20.00',
@@ -138,42 +136,9 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			'trans_id' => '11111',
 			'reason' => 'Full Rrefund',
 			'amount' => '400.00',
-			'test_transaction' => '1',
 		);
 
 		$this->assertEquals($expected, $params);
-	}
-
-	/**
-	 * @covers Model_Payment_Emp::authorize_processor
-	 */
-	public function test_authorize()
-	{
-		$this->env->backup_and_set(array(
-			'Emp::$_api' => NULL,
-			'Request::$client_ip' => '95.87.212.88',
-			'Request::$user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36',
-			'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-			'purchases.processor.emp.threatmatrix' => array(
-				'org_id' => getenv('EMP_TMX'), 
-				'client_id' => getenv('EMP_CID'),
-			),
-			'purchases.processor.emp.api' => array(
-				'gateway_url' => 'https://my.emerchantpay.com', 
-				'api_key' => getenv('EMP_KEY'), 
-				'client_id' => getenv('EMP_CID'),
-				'proxy' => getenv('EMP_PROXY'),
-			),
-			'purchases.processor.emp.3d_secure' => TRUE,
-		));
-
-		$vbv_params = Jam::build('emp_form', $this->payment_params)->vbv_params();
-
-		$purchase = Jam::find('purchase', 2);
-
-		$purchase
-			->build('payment', array('model' => 'payment_emp'))
-				->authorize($vbv_params);	
 	}
 
 	/**

@@ -59,13 +59,13 @@ class Kohana_Model_Emp_Form extends Jam_Validated {
 			));
 	}
 
-	public function vbv_params()
+	public function vbv_params($callback_url)
 	{
 		return array(
 			'cardnumber' => $this->card_number,
 			'expdate' => $this->exp_month.$this->exp_year,
-			// 'browser_useragent' => Request::$user_agent,
-			// 'browser_accept' => 'application/xml,application/xhtml+xml,text/html',
+			'callback_url' => $callback_url,
+			'browser_useragent' => Request::$user_agent,
 		);
 	}
 

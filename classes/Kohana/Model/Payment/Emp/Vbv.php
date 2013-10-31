@@ -28,27 +28,27 @@ class Kohana_Model_Payment_Emp_Vbv extends Model_Payment {
 	{
 		$currency = $this->purchase->display_currency() ?: $this->purchase->currency();
 
-		$request_params = array(
+		$purchase_params = array(
 			'refernece'        => $this->purchase->number,
 			'amount'           => $this->purchase->total_price(array('is_payable' => TRUE))->as_string($currency),
 			'currency'         => $currency,
-			// 'test_transaction' => Kohana::$environment === Kohana::PRODUCTION ? '0' : '1',
 		);
 
-		$request_params = array_merge($request_params, $params);
-
-		print_r($request_params);
+		$request_params = array_merge($params, $purchase_params);
 
 		$response = Emp::api()
 			->request(Openbuildings\Emp\Api::VBVMC3D_AUTH, $request_params);
 
-		print_r($response);
+		if ($response['raw']['enrollmentstatus'] !== 'Y')
+			throw new Exception_Payment('Credit card not enrolled in VBV/3D Secure');
+		
+		$this->_authorize_url = $response['raw']['bouncerURL'];
 
-		// $this->set(array(
-		// 	'payment_id' => $payment->getId(), 
-		// 	'raw_response' => $response, 
-		// 	'status' => Model_Payment::PENDING
-		// ));
+		$this->set(array(
+			'payment_id' => $response['raw']['requestid'],
+			'raw_response' => $response['raw'],
+			'status' => Model_Payment::PENDING,
+		));
 
 		return $this;
 	}
@@ -60,7 +60,20 @@ class Kohana_Model_Payment_Emp_Vbv extends Model_Payment {
 	 */
 	public function execute_processor(array $params = array())
 	{
-		$params = array_merge(Model_Payment_Emp::convert_purchase($this->purchase), $params);
+		$auth_result_params = array(
+			'reference' => $this->purchase->number,
+			'requestid' => $this->payment_id,
+		);
+
+		$auth_result_response = Emp::api()
+			->request(Openbuildings\Emp\Api::VBVMC3D_RESULT, $auth_result_params);
+
+		if ($auth_result_response['raw']['authenticationstatus'] !== 'Y')
+			throw new Exception_Payment('Authentication not complete');
+
+		$vbv_auth_params = Arr::extract($auth_result_response['raw'], array('eci', 'xid', 'cavv'));
+
+		$params = array_merge($params, $vbv_auth_params, Model_Payment_Emp::convert_purchase($this->purchase));
 
 		$response = Emp::api()
 			->request(Openbuildings\Emp\Api::ORDER_SUBMIT, $params);
@@ -82,13 +95,11 @@ class Kohana_Model_Payment_Emp_Vbv extends Model_Payment {
 	 * Perform a refund based on a given refund object. Set the refund's raw_response and status accordingly
 	 * @param  Model_Store_Refund $refund        
 	 * @param  array              $custom_params 
-	 * @return Model_Payment_Emp                            self
+	 * @return Model_Payment_Emp_Vbv                            self
 	 */
 	public function refund_processor(Model_Store_Refund $refund, array $custom_params = array())
 	{
 		$params = Model_Payment_Emp::convert_refund($refund);
-
-		$params = array_merge($params, $custom_params);
 
 		$response = Emp::api()
 			->request(Openbuildings\Emp\Api::ORDER_CREDIT, $params);

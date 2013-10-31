@@ -16,10 +16,14 @@ class Model_Payment_Emp_VbvTest extends Testcase_Purchases {
 		'order_currency'   => 'GBP',
 		'payment_method'   => 'creditcard',
 	);
+
 	/**
-	 * @covers Model_Payment_Emp::authorize_processor
+	 * @covers Model_Payment_Paypal_Vbv::execute_processor
+	 * @covers Model_Payment_Paypal_Vbv::authorize_processor
+	 * @covers Model_Payment_Paypal_Vbv::authorize_url
+	 * @covers Model_Payment_Paypal_Vbv::refund_processor
 	 */
-	public function test_authorize()
+	public function test_execute()
 	{
 		$this->env->backup_and_set(array(
 			'Emp::$_api' => NULL,
@@ -36,16 +40,39 @@ class Model_Payment_Emp_VbvTest extends Testcase_Purchases {
 				'client_id' => getenv('EMP_CID'),
 				'proxy' => getenv('EMP_PROXY'),
 			),
-			'purchases.processor.emp.3d_secure' => TRUE,
 		));
 
-		$vbv_params = Jam::build('emp_form', $this->payment_params)->vbv_params();
-		$vbv_params['callback_url'] = 'http://bouncer.example.com';
+		$form = Jam::build('emp_form', $this->payment_params);
+		$vbv_params = $form->vbv_params('http://example.com/checkout');
 
 		$purchase = Jam::find('purchase', 2);
+		
+		// Set the price to 1 to automatically authorize
+		$purchase->store_purchases[0]->items[0]->price = 1;
 
 		$purchase
 			->build('payment', array('model' => 'payment_emp_vbv'))
-				->authorize($vbv_params);	
+				->authorize($vbv_params);
+
+		$purchase
+			->payment
+				->execute($form->as_array());
+
+		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
+
+		$this->assertNotEquals('', $purchase->payment->payment_id);
+
+		$store_purchase = $purchase->store_purchases[0];
+
+		$refund = $store_purchase->refunds->create(array(
+			'items' => array(
+				array('purchase_item' => $store_purchase->items[0], 'amount' => 1)
+			)
+		));
+
+		$refund
+			->execute();
+
+		$this->assertEquals(Model_Store_Refund::REFUNDED, $refund->status);
 	}
 }

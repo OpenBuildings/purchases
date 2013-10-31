@@ -144,7 +144,6 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 				->authorize(array('success_url' => 'http://example.com?result=success', 'cancel_url' => 'http://example.com?result=cancel'));
 
 		$this->assertInstanceOf('Model_Payment_Paypal', $purchase->payment);
-		$this->assertEquals('paypal', $purchase->payment->method);
 		$this->assertNotEquals('', $purchase->payment->payment_id);
 		
 		$this
