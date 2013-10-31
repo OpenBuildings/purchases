@@ -6,18 +6,7 @@
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Model_Payment_Emp_Vbv extends Model_Payment {
-
-	/**
-	 * @codeCoverageIgnore
-	 */
-	public static function initialize(Jam_Meta $meta)
-	{
-		parent::initialize($meta);
-
-		$meta
-			->table('payments');
-	}
+class Kohana_Model_Payment_Emp_Vbv extends Model_Payment_Emp {
 
 	/**
 	 * Use the current purchase to generate an "authorize url" where you can go and approve the purchase through paypal's interface.
@@ -87,25 +76,6 @@ class Kohana_Model_Payment_Emp_Vbv extends Model_Payment {
 			'raw_response' => $response['raw'], 
 			'status' => $status
 		));
-
-		return $this;
-	}
-
-	/**
-	 * Perform a refund based on a given refund object. Set the refund's raw_response and status accordingly
-	 * @param  Model_Store_Refund $refund        
-	 * @param  array              $custom_params 
-	 * @return Model_Payment_Emp_Vbv                            self
-	 */
-	public function refund_processor(Model_Store_Refund $refund, array $custom_params = array())
-	{
-		$params = Model_Payment_Emp::convert_refund($refund);
-
-		$response = Emp::api()
-			->request(Openbuildings\Emp\Api::ORDER_CREDIT, $params);
-
-		$refund->raw_response = $response;
-		$refund->status = Model_Store_Refund::REFUNDED;
 
 		return $this;
 	}
