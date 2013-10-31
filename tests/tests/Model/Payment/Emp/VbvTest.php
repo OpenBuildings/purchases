@@ -18,10 +18,10 @@ class Model_Payment_Emp_VbvTest extends Testcase_Purchases {
 	);
 
 	/**
-	 * @covers Model_Payment_Paypal_Vbv::execute_processor
-	 * @covers Model_Payment_Paypal_Vbv::authorize_processor
-	 * @covers Model_Payment_Paypal_Vbv::authorize_url
-	 * @covers Model_Payment_Paypal_Vbv::refund_processor
+	 * @covers Model_Payment_Emp_Vbv::execute_processor
+	 * @covers Model_Payment_Emp_Vbv::authorize_processor
+	 * @covers Model_Payment_Emp_Vbv::authorize_url
+	 * @covers Model_Payment_Emp_Vbv::refund_processor
 	 */
 	public function test_execute()
 	{
