@@ -174,16 +174,16 @@
         },
         {
             "name": "openbuildings/emp",
-            "version": "0.1.7",
+            "version": "0.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/emp.git",
-                "reference": "a705b8e50cdb4a3dcdd0bc469d5e357893e1ab7d"
+                "reference": "84ce64e863a0cb1f73e88b0f864fb32b21cbee57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/emp/zipball/a705b8e50cdb4a3dcdd0bc469d5e357893e1ab7d",
-                "reference": "a705b8e50cdb4a3dcdd0bc469d5e357893e1ab7d",
+                "url": "https://api.github.com/repos/OpenBuildings/emp/zipball/84ce64e863a0cb1f73e88b0f864fb32b21cbee57",
+                "reference": "84ce64e863a0cb1f73e88b0f864fb32b21cbee57",
                 "shasum": ""
             },
             "require": {
@@ -222,7 +222,7 @@
                 "money",
                 "payments"
             ],
-            "time": "2013-10-31 12:28:22"
+            "time": "2013-10-31 15:07:39"
         },
         {
             "name": "openbuildings/flex-storage",

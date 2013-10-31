@@ -152,8 +152,15 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 	{
 		$params = array_merge($params, Model_Payment_Emp::convert_purchase($this->purchase));
 
-		$response = Emp::api()
-			->request(Openbuildings\Emp\Api::ORDER_SUBMIT, $params);
+		try 
+		{
+			$response = Emp::api()
+				->request(Openbuildings\Emp\Api::ORDER_SUBMIT, $params);
+		} 
+		catch (Openbuildings\Emp\Exception $exception) 
+		{
+			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $exception->getMessage()), 0, $exception);
+		}
 
 		Emp::clear_threatmatrix();
 
@@ -178,9 +185,16 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 	{
 		$params = Model_Payment_Emp::convert_refund($refund);
 
-		$response = Emp::api()
-			->request(Openbuildings\Emp\Api::ORDER_CREDIT, $params);
-
+		try 
+		{
+			$response = Emp::api()
+				->request(Openbuildings\Emp\Api::ORDER_CREDIT, $params);
+		} 
+		catch (Openbuildings\Emp\Exception $exception) 
+		{
+			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $exception->getMessage()), 0, $exception);
+		}
+		
 		$refund->raw_response = $response;
 		$refund->status = Model_Store_Refund::REFUNDED;
 
