@@ -31,6 +31,11 @@ class Kohana_Emp {
 			{
 				Emp::$_api->threatmatrix(Emp::threatmatrix());
 			}
+
+			if (Kohana::$environment == Kohana::TESTING) 
+			{
+				Emp::$_api->test(TRUE);
+			}
 		}
 		return Emp::$_api;
 	}

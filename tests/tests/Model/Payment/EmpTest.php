@@ -53,7 +53,6 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			'customer_postcode' => 'ZIP',
 			'customer_phone' => 'phone123',
 
-			'test_transaction' => '1',
 			'ip_address' => '1.1.1.1',
 			'credit_card_trans_type' => 'sale',
 
@@ -118,7 +117,6 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			'order_id' => '5580812',
 			'trans_id' => '11111',
 			'reason' => 'Faulty Product',
-			'test_transaction' => '1',
 			'item_1_id' => '5657022',
 			'item_2_id' => '5657032',
 			'item_2_amount' => '20.00',
@@ -138,7 +136,6 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			'trans_id' => '11111',
 			'reason' => 'Full Rrefund',
 			'amount' => '400.00',
-			'test_transaction' => '1',
 		);
 
 		$this->assertEquals($expected, $params);

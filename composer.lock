@@ -174,16 +174,16 @@
         },
         {
             "name": "openbuildings/emp",
-            "version": "0.1.6",
+            "version": "0.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/emp.git",
-                "reference": "38e49408fa3a1a9191fe774b2cfcaca5f4515ed9"
+                "reference": "a705b8e50cdb4a3dcdd0bc469d5e357893e1ab7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/emp/zipball/38e49408fa3a1a9191fe774b2cfcaca5f4515ed9",
-                "reference": "38e49408fa3a1a9191fe774b2cfcaca5f4515ed9",
+                "url": "https://api.github.com/repos/OpenBuildings/emp/zipball/a705b8e50cdb4a3dcdd0bc469d5e357893e1ab7d",
+                "reference": "a705b8e50cdb4a3dcdd0bc469d5e357893e1ab7d",
                 "shasum": ""
             },
             "require": {
@@ -222,7 +222,7 @@
                 "money",
                 "payments"
             ],
-            "time": "2013-09-30 12:47:35"
+            "time": "2013-10-31 12:28:22"
         },
         {
             "name": "openbuildings/flex-storage",
@@ -264,16 +264,16 @@
         },
         {
             "name": "openbuildings/jam",
-            "version": "0.4.27",
+            "version": "0.4.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam.git",
-                "reference": "2ac7f94af7737ee032a8bc5874712602e80bfe20"
+                "reference": "6f921136441c1635ab2705980948431ceab92583"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/2ac7f94af7737ee032a8bc5874712602e80bfe20",
-                "reference": "2ac7f94af7737ee032a8bc5874712602e80bfe20",
+                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/6f921136441c1635ab2705980948431ceab92583",
+                "reference": "6f921136441c1635ab2705980948431ceab92583",
                 "shasum": ""
             },
             "require": {
@@ -313,7 +313,7 @@
                 "upload",
                 "validation"
             ],
-            "time": "2013-10-22 13:55:00"
+            "time": "2013-10-28 07:56:53"
         },
         {
             "name": "openbuildings/jam-auth",
@@ -460,16 +460,16 @@
         },
         {
             "name": "openbuildings/jam-monetary",
-            "version": "0.1.15",
+            "version": "0.1.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam-monetary.git",
-                "reference": "6601622609fe2c604364aa227e430f747bba26d1"
+                "reference": "190dfe42d280ed089c4cc4cb357394e1d59e0329"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam-monetary/zipball/6601622609fe2c604364aa227e430f747bba26d1",
-                "reference": "6601622609fe2c604364aa227e430f747bba26d1",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-monetary/zipball/190dfe42d280ed089c4cc4cb357394e1d59e0329",
+                "reference": "190dfe42d280ed089c4cc4cb357394e1d59e0329",
                 "shasum": ""
             },
             "require": {
@@ -504,7 +504,7 @@
                 "money",
                 "price"
             ],
-            "time": "2013-10-29 13:57:35"
+            "time": "2013-10-29 16:40:22"
         },
         {
             "name": "openbuildings/monetary",

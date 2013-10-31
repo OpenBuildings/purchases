@@ -34,8 +34,7 @@ class Kohana_Model_Payment extends Jam_Model {
 				'created_at' => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
 				'updated_at' => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			))
-			->validator('purchase', 'model', array('present' => TRUE))
-			->validator('method', array('choice' => array('in' => array('emp', 'paypal'))));
+			->validator('purchase', 'model', array('present' => TRUE));
 	}
 
 	/**

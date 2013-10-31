@@ -122,7 +122,7 @@ $purchse
 
 ```
 
-## EMP Processors
+## EMP Processor
 
 To Use the emp processor you'll need a form on your page (you can use the included Model_Emp_Form). To supply the processor with the cc data.
 
@@ -163,6 +163,66 @@ The form is a simple Jam_Form inside your view:
 </form>
 ```
 
+## EMP VBV Processor
+
+This uses EMP credit card processor but with VBV/3DSecure utalizing authorize and execute methods
+
+in the controller:
+
+```php
+
+class Controller_Payment extends Controller_Template {
+
+	public function action_index()
+	{
+		$purchase = // Load purchase from somewhere
+
+		$form = Jam::build('emp_form', array($this->post()));
+		if ($this->request->method() === Request::POST AND $form->check())
+		{
+			$purchase
+				->build('payment', array('model' => 'payment_paypal_vbv'))
+					->authorize($form->vbv_params('/payment/complete'));
+			
+			// We need to save the form somewhere as it is later used for execute method
+			$this->session->set('emp_form', $form->as_array());
+
+			$this->redirect($purchase->payment->authorize_url());
+		}
+
+		$this->template->content = View::factory('payment/index', array('form' => Jam::form($form)));
+	}
+
+	public function action_complete()
+	{
+		$purchase = // Load purchase from somewhere
+
+		if ( ! $purchase->is_paid())
+		{
+			$form = Jam::build('emp_form', array($this->session->get_once('emp_form')));
+
+			$purchase
+				->payment
+					->execute($form->as_array());
+		}
+			
+		$this->template->content = View::factory('payment/complete', array('purchase' => $purchase));
+	}
+}
+```
+The form is a simple Jam_Form inside your view:
+
+```php
+<form action='payment/index'>
+	<?php echo $form->row('input', 'card_holder_name') ?>
+	<?php echo $form->row('input', 'card_number') ?>
+	<?php echo $form->row('input', 'exp_month') ?>
+	<?php echo $form->row('input', 'exp_year') ?>
+	<?php echo $form->row('input', 'cvv') ?>
+	<button type="submit">Process payment</button>
+</form>
+```
+
 ## PayPal Processor
 
 A PayPal transaction requires 3 steps - creating the transaction, authorizing it by the user through PayPal's interface, and executing the transaction onces its been authorized.
@@ -176,7 +236,6 @@ class Controller_Payment extends Controller_Template {
 	{
 		$purchase = // Load purchase from somewhere
 
-		$form = Jam::build('emp_form', array($this->post()));
 		if ($this->request->method() === Request::POST AND $form->check())
 		{
 			$purchase
@@ -186,7 +245,7 @@ class Controller_Payment extends Controller_Template {
 			$this->redirect($purchase->payment->authorize_url());
 		}
 
-		$this->template->content = View::factory('payment/index', array('form' => Jam::form($form)));
+		$this->template->content = View::factory('payment/index');
 	}
 
 	public function action_complete()

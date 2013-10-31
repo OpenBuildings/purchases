@@ -22,6 +22,7 @@ abstract class Testcase_Purchases extends PHPUnit_Framework_TestCase {
 		$this->env = new EB\Environment(array(
 			'static' => new EB\Environment_Group_Static(),
 			'config' => new EB\Environment_Group_Config(),
+			'server' => new EB\Environment_Group_Server(),
 		));
 	}
 
