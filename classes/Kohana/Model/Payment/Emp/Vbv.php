@@ -28,14 +28,14 @@ class Kohana_Model_Payment_Emp_Vbv extends Model_Payment_Emp {
 		$response = Emp::api()
 			->request(Openbuildings\Emp\Api::VBVMC3D_AUTH, $request_params);
 
-		if ($response['raw']['enrollmentstatus'] !== 'Y')
+		if (Arr::path($response, 'raw.enrollmentstatus') !== 'Y')
 			throw new Exception_Payment('Credit card not enrolled in VBV/3D Secure');
 		
-		$this->_authorize_url = $response['raw']['bouncerURL'];
+		$this->_authorize_url = Arr::path($response, 'raw.bouncerURL');
 
 		$this->set(array(
-			'payment_id' => $response['raw']['requestid'],
-			'raw_response' => $response['raw'],
+			'payment_id' => Arr::path($response, 'raw.requestid'),
+			'raw_response' => Arr::get($response, 'raw'),
 			'status' => Model_Payment::PENDING,
 		));
 
@@ -57,7 +57,7 @@ class Kohana_Model_Payment_Emp_Vbv extends Model_Payment_Emp {
 		$auth_result_response = Emp::api()
 			->request(Openbuildings\Emp\Api::VBVMC3D_RESULT, $auth_result_params);
 
-		if ($auth_result_response['raw']['authenticationstatus'] !== 'Y')
+		if (Arr::path($auth_result_response, 'raw.authenticationstatus') !== 'Y')
 			throw new Exception_Payment('Authentication not complete');
 
 		$vbv_auth_params = Arr::extract($auth_result_response['raw'], array('eci', 'xid', 'cavv'));

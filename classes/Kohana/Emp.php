@@ -32,7 +32,7 @@ class Kohana_Emp {
 				Emp::$_api->threatmatrix(Emp::threatmatrix());
 			}
 
-			if (Kohana::$environment == Kohana::TESTING) 
+			if (Kohana::$environment !== Kohana::PRODUCTION) 
 			{
 				Emp::$_api->test(TRUE);
 			}

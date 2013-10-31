@@ -168,11 +168,6 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 		return $this;
 	}
 
-	public function use_3dsecure()
-	{
-		return Kohana::$config->load('purchases.processor.emp.3d_secure');
-	}
-
 	/**
 	 * Perform a refund based on a given refund object. Set the refund's raw_response and status accordingly
 	 * @param  Model_Store_Refund $refund        
