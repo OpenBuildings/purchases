@@ -26,6 +26,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 
 		$payment->authorize($params);
 
+		$this->assertTrue($payment->before_first_operation_called);
 		$this->assertTrue($payment->before_authorize_called);
 		$this->assertTrue($payment->after_authorize_called);
 	}
@@ -36,7 +37,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 	public function test_execute()
 	{
 		$params = array('test', 'test2');
-		$payment = $this->getMock('Model_Payment', array('execute_processor'), array('payment'));
+		$payment = $this->getMock('Model_Payment', array('execute_processor', 'loaded'), array('payment'));
 		$purchase = $this->getMock('Model_Purchase', array('save'), array('purchase'));
 		$payment->purchase = $purchase;
 
@@ -45,12 +46,49 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->method('execute_processor')
 			->with($this->equalTo($params));
 
+		$payment
+			->expects($this->once())
+			->method('loaded')
+			->will($this->returnValue(FALSE));
+
 		$purchase
 			->expects($this->once())
 			->method('save');
 
 		$payment->execute($params);
 
+		$this->assertTrue($payment->before_first_operation_called);
+		$this->assertTrue($payment->before_execute_called);
+		$this->assertTrue($payment->after_execute_called);
+	}
+
+	/**
+	 * @covers Model_Payment::execute
+	 */
+	public function test_execute_not_call_before_first_operation_called()
+	{
+		$params = array('test', 'test2');
+		$payment = $this->getMock('Model_Payment', array('execute_processor', 'loaded'), array('payment'));
+		$purchase = $this->getMock('Model_Purchase', array('save'), array('purchase'));
+		$payment->purchase = $purchase;
+
+		$payment
+			->expects($this->once())
+			->method('execute_processor')
+			->with($this->equalTo($params));
+
+		$payment
+			->expects($this->once())
+			->method('loaded')
+			->will($this->returnValue(TRUE));
+
+		$purchase
+			->expects($this->once())
+			->method('save');
+
+		$payment->execute($params);
+
+		$this->assertNull($payment->before_first_operation_called);
 		$this->assertTrue($payment->before_execute_called);
 		$this->assertTrue($payment->after_execute_called);
 	}

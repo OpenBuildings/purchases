@@ -8,6 +8,9 @@ class Jam_Behavior_Payment extends Jam_Behavior {
 
 		$meta->events()
 
+			->bind('model.before_first_operation', array($this, 'before_first_operation'))
+			->bind('model.after_first_operation', array($this, 'after_first_operation'))
+
 			->bind('model.before_authorize', array($this, 'before_authorize'))
 			->bind('model.after_authorize', array($this, 'after_authorize'))
 
@@ -17,6 +20,16 @@ class Jam_Behavior_Payment extends Jam_Behavior {
 			->bind('model.before_refund', array($this, 'before_refund'))
 			->bind('model.after_refund', array($this, 'after_refund'));
 
+	}
+
+	public function before_first_operation(Model_Payment $payment, Jam_Event_Data $data)
+	{
+		$payment->before_first_operation_called = TRUE;
+	}
+
+	public function after_first_operation(Model_Payment $payment, Jam_Event_Data $data)
+	{
+		$payment->after_first_operation_called = TRUE;
 	}
 
 	public function before_authorize(Model_Payment $payment, Jam_Event_Data $data)
