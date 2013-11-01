@@ -6,6 +6,6 @@
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Exception_Payment extends Kahana_Exception {
+class Kohana_Exception_Payment extends Kohana_Exception {	
 	
 }
