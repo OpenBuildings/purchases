@@ -120,7 +120,6 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 			->wait(3000)
 			->click_on('input', array('value' => 'Pay'))
 			->wait(3000)
-			->screenshot('paypal-paid.jpg')
 			->assertHasCss('h3', array('text' => 'You made a payment of'))
 			->assertHasCss('h3 p', array('text' => $amount_string));
 
