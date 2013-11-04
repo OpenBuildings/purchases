@@ -113,21 +113,16 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 			->assertHasCss('input', array('value' => 'Log In'))
 			->fill_in('login_email', 'buyer@openbuildings.com')
 			->fill_in('login_password', '12345678')
-			->next_wait_time(4000)
-			->click_on('input', array('value' => 'Log In'));
-
-		$this->markTestIncomplete();
-
-		$this->next_wait_time(10000)
+			->wait(3000)
+			->click_on('input', array('value' => 'Log In'))
+			->wait(3000)
 			->assertHasCss('h2', array('text' => 'Review your information'))
-			->find('input', array('value' => 'Pay'))
-				->click()
-			->end()
-			->next_wait_time(10000)
-			->assertHasCss('h2', array('text' => 'Your payment has been sent'))
-			->assertHasCss('h3', array('text' => 'You made a payment of '.$amount_string));
-
-		$this->assertEquals('success', $query['result']);
+			->wait(3000)
+			->click_on('input', array('value' => 'Pay'))
+			->wait(3000)
+			->screenshot('paypal-paid.jpg')
+			->assertHasCss('h3', array('text' => 'You made a payment of'))
+			->assertHasCss('h3 p', array('text' => $amount_string));
 
 		$purchase->payment->execute();
 

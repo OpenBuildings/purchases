@@ -173,7 +173,10 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 			));
 
 		return $this
-			->set('raw_response', $payment_details)
+			->set(array(
+				'raw_response' => $payment_details,
+				'status' => $payment_details['status'] === 'COMPLETED' ? Model_Payment::PAID : $this->status
+			))
 			->save();
 	}
 }
