@@ -24,7 +24,11 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 		$item = Jam::build('purchase_item', array('reference' => $product, 'type' => 'product', 'is_payable' => TRUE));
 		$purchase->add_item(Jam::find('store', 2), $item);
 
-		$paypal_payment = Model_Payment_Paypal::convert_purchase($purchase, array('success_url' => 'http://example.com/success', 'cancel_url' => 'http://example.com/cancel'));
+		$paypal_payment = Model_Payment_Paypal::convert_purchase($purchase, array(
+			'success_url' => 'http://example.com/success',
+			'cancel_url' => 'http://example.com/cancel',
+			'description' => 'test transaction description'
+		));
 
 		$this->assertInstanceOf('Paypal\Api\Payment', $paypal_payment);
 
@@ -59,7 +63,7 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 							),
 						)
 					),
-					'description' => 'Products from clippings',
+					'description' => 'test transaction description',
 				)
 			)
 		);

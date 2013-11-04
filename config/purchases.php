@@ -16,8 +16,16 @@ return array(
 		),
 		'paypal' => array(
 			'oauth' => array(
-				// 'client_id' => 'APP-00000000000000000',
+				// 'client_id' => 'APP-XXXXXXXXXXXXXXXXX',
 				// 'secret' => 'dev.example.com',
+			),
+			'adaptive' => array(
+				'auth' => array(
+					// 'app_id'    => 'APP-XXXXXXXXXXXXXXXXX',
+					// 'username'  => '*********************', // Also known as user ID
+					// 'password'  => '*********************',
+					// 'signature' => '*********************',
+				),
 			),
 			'config' => array(
 				'mode' => 'sandbox',

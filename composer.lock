@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "865ea6db40ecb0a4ccc2a904675c6df2",
+    "hash": "83833a1e3c9e79fe58574d1d9f4af185",
     "packages": [
         {
             "name": "composer/installers",
@@ -571,99 +571,6 @@
             "time": "2013-10-28 11:21:15"
         },
         {
-            "name": "paypal/rest-api-sdk-php",
-            "version": "v0.7.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/paypal/rest-api-sdk-php.git",
-                "reference": "4193ae100a8de6fc4e62f94f6c895e0a1f10c956"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/paypal/rest-api-sdk-php/zipball/4193ae100a8de6fc4e62f94f6c895e0a1f10c956",
-                "reference": "4193ae100a8de6fc4e62f94f6c895e0a1f10c956",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "paypal/sdk-core-php": "2.4.*",
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.7.*",
-                "satooshi/php-coveralls": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "PayPal": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache2"
-            ],
-            "authors": [
-                {
-                    "name": "PayPal",
-                    "homepage": "https://github.com/paypal/rest-api-sdk-php/contributors"
-                }
-            ],
-            "description": "PayPal's PHP SDK for REST APIs",
-            "homepage": "https://github.com/paypal/rest-api-sdk-php",
-            "keywords": [
-                "payments",
-                "paypal",
-                "rest",
-                "sdk"
-            ],
-            "time": "2013-07-31 15:21:19"
-        },
-        {
-            "name": "paypal/sdk-core-php",
-            "version": "v2.4.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/paypal/sdk-core-php.git",
-                "reference": "226d3492f80847f09c99debb4d3220d5e744ddc8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/paypal/sdk-core-php/zipball/226d3492f80847f09c99debb4d3220d5e744ddc8",
-                "reference": "226d3492f80847f09c99debb4d3220d5e744ddc8",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "PayPal": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache2"
-            ],
-            "authors": [
-                {
-                    "name": "PayPal",
-                    "homepage": "https://github.com/paypal/sdk-core-php/contributors"
-                }
-            ],
-            "description": "PayPal Core SDK for PHP",
-            "homepage": "https://github.com/paypal/sdk-core-php",
-            "keywords": [
-                "paypal",
-                "php",
-                "sdk"
-            ],
-            "time": "2013-09-11 14:27:58"
-        },
-        {
             "name": "rackspace/php-opencloud",
             "version": "V1.5.10",
             "source": {
@@ -784,6 +691,55 @@
             "time": "2013-10-01 08:57:54"
         },
         {
+            "name": "openbuildings/paypal",
+            "version": "0.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OpenBuildings/paypal.git",
+                "reference": "270e6e66f1093ac38d8d3837632786873254b142"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OpenBuildings/paypal/zipball/270e6e66f1093ac38d8d3837632786873254b142",
+                "reference": "270e6e66f1093ac38d8d3837632786873254b142",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "OpenBuildings\\PayPal\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Haralan Dobrev",
+                    "email": "hkdobrev@gmail.com",
+                    "homepage": "http://hkdobrev.blogspot.com",
+                    "role": "developer"
+                }
+            ],
+            "description": "PayPal SDK for ExpressCheckout and AdaptivePayments. Supports recurring payments, simple payments, parallel payments and chained payments.",
+            "keywords": [
+                "AdaptivePayments",
+                "ExpressCheckout",
+                "api",
+                "payments",
+                "paypal"
+            ],
+            "time": "2013-11-01 16:15:43"
+        },
+        {
             "name": "openbuildings/phpunit-spiderling",
             "version": "0.1.5",
             "source": {
@@ -867,6 +823,99 @@
             ],
             "description": "Crawl the web with kohana, phantomjs or selenium",
             "time": "2013-10-09 08:32:13"
+        },
+        {
+            "name": "paypal/rest-api-sdk-php",
+            "version": "v0.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paypal/rest-api-sdk-php.git",
+                "reference": "4193ae100a8de6fc4e62f94f6c895e0a1f10c956"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paypal/rest-api-sdk-php/zipball/4193ae100a8de6fc4e62f94f6c895e0a1f10c956",
+                "reference": "4193ae100a8de6fc4e62f94f6c895e0a1f10c956",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "paypal/sdk-core-php": "2.4.*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*",
+                "satooshi/php-coveralls": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PayPal": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache2"
+            ],
+            "authors": [
+                {
+                    "name": "PayPal",
+                    "homepage": "https://github.com/paypal/rest-api-sdk-php/contributors"
+                }
+            ],
+            "description": "PayPal's PHP SDK for REST APIs",
+            "homepage": "https://github.com/paypal/rest-api-sdk-php",
+            "keywords": [
+                "payments",
+                "paypal",
+                "rest",
+                "sdk"
+            ],
+            "time": "2013-07-31 15:21:19"
+        },
+        {
+            "name": "paypal/sdk-core-php",
+            "version": "v2.4.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paypal/sdk-core-php.git",
+                "reference": "226d3492f80847f09c99debb4d3220d5e744ddc8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paypal/sdk-core-php/zipball/226d3492f80847f09c99debb4d3220d5e744ddc8",
+                "reference": "226d3492f80847f09c99debb4d3220d5e744ddc8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PayPal": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache2"
+            ],
+            "authors": [
+                {
+                    "name": "PayPal",
+                    "homepage": "https://github.com/paypal/sdk-core-php/contributors"
+                }
+            ],
+            "description": "PayPal Core SDK for PHP",
+            "homepage": "https://github.com/paypal/sdk-core-php",
+            "keywords": [
+                "paypal",
+                "php",
+                "sdk"
+            ],
+            "time": "2013-09-11 14:27:58"
         },
         {
             "name": "symfony/css-selector",

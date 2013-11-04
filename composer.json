@@ -17,7 +17,6 @@
 		"composer/installers": "*",
 		"openbuildings/jam": "0.4.*",
 		"openbuildings/emp": "0.1.*",
-		"paypal/rest-api-sdk-php": "0.7.*",
 		"openbuildings/jam-auth": "0.2.*",
 		"openbuildings/jam-monetary": "0.1.*",
 		"openbuildings/jam-locations": "0.1.*"
@@ -25,10 +24,14 @@
 	"require-dev": {
 		"openbuildings/kohana-test-bootsrap": "0.1.*",
 		"openbuildings/environment-backup": "0.1.*",
+		"paypal/rest-api-sdk-php": "0.7.*",
+		"openbuildings/paypal": "0.3.*",
 		"openbuildings/phpunit-spiderling": "0.1.*"
 	},
 	"suggest": {
 		"openbuildings/shipping": "Extends purchases functionality with shipping and delivery",
-		"openbuildings/promotions": "Extends purchases functionality with promotions and gift cards"
+		"openbuildings/promotions": "Extends purchases functionality with promotions and gift cards",
+		"openbuildings/paypal": "Require this package if you need to use PayPal payments with ChainedPayments",
+		"paypal/rest-api-sdk-php": "Require this package if you need to use PayPal payments with REST API"
 	}
 }

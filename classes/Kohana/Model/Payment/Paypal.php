@@ -22,10 +22,10 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 	/**
 	 * Convert a Model_Purchase to a PayPal\Api\Payment object.
 	 * Discount prices are not supported, so that each store_purchase is combined and added as a separate item.
-	 * 
-	 * @param  Model_Purchase $purchase 
-	 * @param  array          $params   
-	 * @return PayPal\Api\Payment                   
+	 *
+	 * @param  Model_Purchase $purchase
+	 * @param  array          $params
+	 * @return PayPal\Api\Payment
 	 */
 	public static function convert_purchase(Model_Purchase $purchase, array $params = array())
 	{
@@ -42,7 +42,7 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 
 		$item_list = new PayPal\Api\ItemList();
 		$items = array();
-		foreach ($purchase->store_purchases as $store_purchase) 
+		foreach ($purchase->store_purchases as $store_purchase)
 		{
 			$item = new PayPal\Api\Item();
 			$item
@@ -59,8 +59,12 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		$transaction = new PayPal\Api\Transaction();
 		$transaction
 			->setAmount($amount)
-			->setItemList($item_list)
-			->setDescription('Products from clippings');
+			->setItemList($item_list);
+
+		if ( ! empty($params['description']))
+		{
+			$transaction->setDescription($params['description']);
+		}
 
 		$redirectUrls = new PayPal\Api\RedirectUrls();
 		$redirectUrls
@@ -80,9 +84,9 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 	/**
 	 * Convert Model_Store_Refund to a PayPal\Api\Refund
 	 * Do not convert individual refund items as the refund does not support that.
-	 * 
-	 * @param  Model_Store_Refund $refund 
-	 * @return PayPal\Api\Refund                     
+	 *
+	 * @param  Model_Store_Refund $refund
+	 * @return PayPal\Api\Refund
 	 */
 	public static function convert_refund(Model_Store_Refund $refund)
 	{
@@ -100,8 +104,8 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 
 	/**
 	 * Calculate transaction percent based on the price
-	 * @param  Jam_Price $total 
-	 * @return float           
+	 * @param  Jam_Price $total
+	 * @return float
 	 */
 	public static function transaction_fee_percent(Jam_Price $total)
 	{
@@ -110,7 +114,7 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		if ($amount <= 2500.00)
 		{
 			$percent = 0.034;
-		}	
+		}
 		elseif ($amount <= 10000.00)
 		{
 			$percent = 0.029;
@@ -131,18 +135,23 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		return $percent;
 	}
 
-	/**
-	 * Calcualte the transaciton fee of paypal based on the amount
-	 * @param  Jam_Price $amount 
-	 * @return Jam_Price           
-	 */
-	public function transaction_fee(Jam_Price $amount)
+	public static function transaction_fee_amount(Jam_Price $amount)
 	{
 		$percent = Model_Payment_Paypal::transaction_fee_percent($amount);
 
 		return $amount
 			->multiply_by($percent)
 			->add(new Jam_Price(0.35, 'EUR'));
+	}
+
+	/**
+	 * Calcualte the transaciton fee of paypal based on the amount
+	 * @param  Jam_Price $amount
+	 * @return Jam_Price
+	 */
+	public function transaction_fee(Jam_Price $amount)
+	{
+		return Model_Payment_Paypal::transaction_fee_amount($amount);
 	}
 
 	/**
@@ -158,7 +167,7 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 
 		foreach ($payment->getLinks() as $link)
 		{
-			if ($link->getRel() == 'approval_url') 
+			if ($link->getRel() == 'approval_url')
 			{
 				$this->_authorize_url = $link->getHref();
 				break;
@@ -182,13 +191,13 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 	 */
 	public function execute_processor(array $params = array())
 	{
-		$paypal_payement = PayPal\Api\Payment::get($this->payment_id, Paypal::api());
+		$paypal_payment = PayPal\Api\Payment::get($this->payment_id, Paypal::api());
 		
 		$execution = new PayPal\Api\PaymentExecution();
 		$execution
 			->setPayerId($params['payer_id']);
 
-		$response = $paypal_payement->execute($execution, Paypal::api());
+		$response = $paypal_payment->execute($execution, Paypal::api());
 
 		$transactions = $response->getTransactions();
 		$resources = $transactions[0]->getRelatedResources();
@@ -205,8 +214,8 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 
 	/**
 	 * Refund amount of the purchases, specified in the Model_Store_Refund object
-	 * @param  Model_Store_Refund $refund        
-	 * @param  array              $custom_params 
+	 * @param  Model_Store_Refund $refund
+	 * @param  array              $custom_params
 	 * @return Model_Store_Refund                            self
 	 */
 	public function refund_processor(Model_Store_Refund $refund, array $custom_params = array())
@@ -214,7 +223,7 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		$paypal_refund = Model_Payment_Paypal::convert_refund($refund);
 
 		$sale = PayPal\Api\Sale::get($this->payment_id, Paypal::api());
-		$paypal_payement = PayPal\Api\Payment::get($sale->getParentPayment(), Paypal::api());
+		PayPal\Api\Payment::get($sale->getParentPayment(), Paypal::api());
 
 		$response = $sale->refund($paypal_refund, Paypal::api(TRUE));
 
