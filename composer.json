@@ -10,7 +10,12 @@
 			"name": "Ivan Kerin",
 			"email": "ivan@openbuildings.com",
 			"role": "Author"
-		}
+		},
+		{
+			"name": "Haralan Dobrev",
+			"email": "hkdobrev@gmail.com",
+			"role": "Author"
+		},
 	],
 	"require": {
 		"php": ">=5.3.0",
