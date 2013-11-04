@@ -9,6 +9,52 @@ This is a Kohana module that gives you out of the box functionality for multi-st
 
 It has support for eMerchantPay and Paypal at the moment
 
+## Instalation
+
+All the purchase models work out of the box. You need to configure the models you want to sell by implement Sellable interface. E.g
+
+```php
+class Model_Product extends Jam_Model implements Sellable {
+
+	public static function initialize(Jam_Meta $meta)
+	{
+		$meta
+			->fields(array(
+				'id' => Jam::field('primary'),
+				'name' => Jam::field('string'),
+				'currency' => Jam::field('string'),
+				'price' => Jam::field('price'),
+			));
+	}
+
+	public function price_for_purchase_item(Model_Purchase_Item $item)
+	{
+		return $this->price;
+	}
+
+	public function currency()
+	{
+		return $this->currency;
+	}
+}
+```
+
+You need to add the "Buyer" behavior for you user model. It adds ``current_purchase`` and ``purchases`` associations:
+
+```php
+class Model_User extends Kohana_Model_User {
+
+	public static function initialize(Jam_Meta $meta)
+	{
+		$meta
+			->behaviors(array(
+				'buyer' => Jam::association('buyer'),
+			));
+		// ...
+	}
+}
+```
+
 ## Purchase, Store Purchase and Purchase Items
 
 The basic structure of the purchase is one purchase, representing the user's view of what is happening, that has several Store_Purchase objects, one for each store, and each one of these has a "Purchase_Items" assigned to it.
