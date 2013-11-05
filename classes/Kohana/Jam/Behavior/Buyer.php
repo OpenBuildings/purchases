@@ -18,7 +18,7 @@ class Kohana_Jam_Behavior_Buyer extends Jam_Behavior {
 		$meta
 			->associations(array(
 				'purchases' => Jam::association('hasmany', array('foreign_model' => 'purchase', 'foreign_key' => 'creator_id')),
-				'current_purchase' => Jam::assocaition('belongs', array('foreign_model' => 'purchase')),
+				'current_purchase' => Jam::association('belongs', array('foreign_model' => 'purchase')),
 			));
 	}
 }
