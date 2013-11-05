@@ -11,7 +11,7 @@ It has support for eMerchantPay and Paypal at the moment
 
 ## Instalation
 
-All the purchase models work out of the box. You need to configure the models you want to sell by implement Sellable interface. E.g
+All the purchase models work out of the box. However to use it properly you need to configure the models you want to sell by implementing Sellable interface. E.g
 
 ```php
 class Model_Product extends Jam_Model implements Sellable {
