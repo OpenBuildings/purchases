@@ -35,10 +35,14 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 			'payment_method'         => 'creditcard',
 			'order_reference'        => $purchase->number,
 			'order_currency'         => $currency,
-			'customer_email'         => $purchase->creator->email,
 			'ip_address'             => Request::$client_ip,
 			'credit_card_trans_type' => 'sale',
 		);
+
+		if ($purchase->creator) 
+		{
+			$params['customer_email'] = $purchase->creator->email;
+		}
 
 		foreach ($purchase->items(array('is_payable' => TRUE)) as $i => $item) 
 		{
