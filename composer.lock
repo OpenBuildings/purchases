@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "83833a1e3c9e79fe58574d1d9f4af185",
+    "hash": "affac7b7d00db262039c72dc365c6697",
     "packages": [
         {
             "name": "composer/installers",
@@ -726,7 +726,7 @@
                     "name": "Haralan Dobrev",
                     "email": "hkdobrev@gmail.com",
                     "homepage": "http://hkdobrev.blogspot.com",
-                    "role": "developer"
+                    "role": "Author"
                 }
             ],
             "description": "PayPal SDK for ExpressCheckout and AdaptivePayments. Supports recurring payments, simple payments, parallel payments and chained payments.",
@@ -741,16 +741,16 @@
         },
         {
             "name": "openbuildings/phpunit-spiderling",
-            "version": "0.1.5",
+            "version": "0.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/phpunit-spiderling.git",
-                "reference": "26b91de8dd65be606dbc29d10eef75fae6cd72a1"
+                "reference": "85a65e433911a9d547be2024a0e8aac2468fe49d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/phpunit-spiderling/zipball/26b91de8dd65be606dbc29d10eef75fae6cd72a1",
-                "reference": "26b91de8dd65be606dbc29d10eef75fae6cd72a1",
+                "url": "https://api.github.com/repos/OpenBuildings/phpunit-spiderling/zipball/85a65e433911a9d547be2024a0e8aac2468fe49d",
+                "reference": "85a65e433911a9d547be2024a0e8aac2468fe49d",
                 "shasum": ""
             },
             "require": {
@@ -779,7 +779,7 @@
                 }
             ],
             "description": "Use openbuildings/spiderling in phpunit tests",
-            "time": "2013-08-14 09:52:57"
+            "time": "2013-11-05 10:30:11"
         },
         {
             "name": "openbuildings/spiderling",
