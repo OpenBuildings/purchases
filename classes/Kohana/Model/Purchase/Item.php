@@ -153,9 +153,10 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 	 */
 	public function get_reference_paranoid()
 	{
+		$current_filter = Jam_Behavior_Paranoid::filter();
 		Jam_Behavior_Paranoid::filter(Jam_Behavior_Paranoid::ALL);
 		$reference = $this->get_insist('reference');
-		Jam_Behavior_Paranoid::filter(Jam_Behavior_Paranoid::NORMAL);
+		Jam_Behavior_Paranoid::filter($current_filter);
 
 		return $reference;
 	}
