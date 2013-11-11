@@ -27,6 +27,9 @@ before_script:
   - composer install
   - mysql -e 'create database `test-purchases`;'
   - mysql --default-character-set=utf8 test-purchases < tests/test_data/structure.sql
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - "nohup java -jar vendor/claylo/selenium-server-standalone/selenium-server-standalone-2.*.jar > /dev/null 2> /dev/null &"
 
 after_script:
   - php vendor/bin/coveralls -v

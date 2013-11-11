@@ -119,7 +119,7 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 	 * @covers Model_Payment_Paypal::authorize_processor
 	 * @covers Model_Payment_Paypal::authorize_url
 	 * @covers Model_Payment_Paypal::refund_processor
-	 * @driver phantomjs
+	 * @driver selenium
 	 */
 	public function test_execute()
 	{
@@ -155,7 +155,7 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 			->wait(5000)
 			->assertHasCss('h3', array('text' => 'Your order summary'))
 			->next_wait_time(5000)
-			->click_on('#loadLogin')
+			->click_on('div.panel', array('text' => 'Log in to your account to complete the purchase'))
 			->next_wait_time(5000)
 			->fill_in('login_email', 'buyer@openbuildings.com')
 			->fill_in('PayPal password', '12345678')

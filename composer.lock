@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "affac7b7d00db262039c72dc365c6697",
+    "hash": "364bf42e5706a5de803dd7d7c5c32ad9",
     "packages": [
         {
             "name": "composer/installers",
@@ -264,16 +264,16 @@
         },
         {
             "name": "openbuildings/jam",
-            "version": "0.4.29",
+            "version": "0.4.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam.git",
-                "reference": "6f921136441c1635ab2705980948431ceab92583"
+                "reference": "c0b85df332e3a1764d060a102b6a8fce254d262b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/6f921136441c1635ab2705980948431ceab92583",
-                "reference": "6f921136441c1635ab2705980948431ceab92583",
+                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/c0b85df332e3a1764d060a102b6a8fce254d262b",
+                "reference": "c0b85df332e3a1764d060a102b6a8fce254d262b",
                 "shasum": ""
             },
             "require": {
@@ -313,7 +313,7 @@
                 "upload",
                 "validation"
             ],
-            "time": "2013-10-28 07:56:53"
+            "time": "2013-11-07 11:10:37"
         },
         {
             "name": "openbuildings/jam-auth",
@@ -618,6 +618,38 @@
     ],
     "packages-dev": [
         {
+            "name": "claylo/selenium-server-standalone",
+            "version": "2.32.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/claylo/selenium-server-standalone.git",
+                "reference": "8ceae6ce2b2257e7f0cee573640e77a3591af111"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/claylo/selenium-server-standalone/zipball/8ceae6ce2b2257e7f0cee573640e77a3591af111",
+                "reference": "8ceae6ce2b2257e7f0cee573640e77a3591af111",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "OpenQA",
+                    "homepage": "http://seleniumhq.org/"
+                }
+            ],
+            "description": "Composer distribution of Selenium Server Standalone, the browser automation framework.",
+            "keywords": [
+                "selenium",
+                "testing"
+            ],
+            "time": "2013-04-17 02:08:23"
+        },
+        {
             "name": "openbuildings/environment-backup",
             "version": "0.1.1",
             "source": {
@@ -783,16 +815,16 @@
         },
         {
             "name": "openbuildings/spiderling",
-            "version": "0.2.10",
+            "version": "0.2.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/spiderling.git",
-                "reference": "b0519c84b45d7a7c0b0f860315d42aed1bd4b33d"
+                "reference": "9d8461888ba2329f9d06061fc87287110a5ec996"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/spiderling/zipball/b0519c84b45d7a7c0b0f860315d42aed1bd4b33d",
-                "reference": "b0519c84b45d7a7c0b0f860315d42aed1bd4b33d",
+                "url": "https://api.github.com/repos/OpenBuildings/spiderling/zipball/9d8461888ba2329f9d06061fc87287110a5ec996",
+                "reference": "9d8461888ba2329f9d06061fc87287110a5ec996",
                 "shasum": ""
             },
             "require": {
@@ -822,7 +854,7 @@
                 }
             ],
             "description": "Crawl the web with kohana, phantomjs or selenium",
-            "time": "2013-10-09 08:32:13"
+            "time": "2013-11-08 14:54:21"
         },
         {
             "name": "paypal/rest-api-sdk-php",

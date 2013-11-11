@@ -457,6 +457,14 @@ class Jam_Behavior_MyBehavios extends Jam_Behavior {
 }
 ```
 
+## Running tests
+
+Tests should be run with selenium running (on port 4444 local)
+
+E.g.
+
+	xvfb-run java -jar vendor/claylo/selenium-server-standalone/selenium-server-standalone-2.*.jar
+
 ## License
 
 Copyright (c) 2012-2013, OpenBuildings Ltd. Developed by Ivan Kerin as part of [clippings.com](http://clippings.com)

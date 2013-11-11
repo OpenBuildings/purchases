@@ -75,7 +75,7 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 	 * @covers Model_Payment_Paypal_Chained::authorize_url
 	 * @covers Model_Payment_Paypal_Chained::refund_processor
 	 * @covers Model_Payment_Paypal_Chained::config_auth
-	 * @driver phantomjs
+	 * @driver selenium
 	 */
 	public function test_execute()
 	{
