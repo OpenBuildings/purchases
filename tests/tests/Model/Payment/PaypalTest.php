@@ -152,18 +152,20 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 		
 		$this
 			->visit($purchase->payment->authorize_url())
+			->wait(5000)
+			->assertHasCss('h3', array('text' => 'Your order summary'))
 			->next_wait_time(5000)
-			->click_button('Pay with')
+			->click_on('#loadLogin')
 			->next_wait_time(5000)
 			->fill_in('login_email', 'buyer@openbuildings.com')
 			->fill_in('PayPal password', '12345678')
-			->wait(3000)
+			->wait(5000)
 			->click_button('Log In')
-			->wait(3000)
+			->wait(5000)
 			->assertHasCss('h2', array('text' => 'Review your information'))
 			->assertHasCss('span.grandTotal', array('text' => $purchase->total_price(array('is_payable' => TRUE))))
 			->click_button('Continue')
-			->wait(3000)
+			->wait(5000)
 			->assertHasNoCss('h2', array('text' => 'Review your information'));
 
 		$query = parse_url($this->current_url(), PHP_URL_QUERY);	
