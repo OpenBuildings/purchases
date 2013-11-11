@@ -111,6 +111,11 @@ class Kohana_Model_Payment extends Jam_Model {
 
 		$this->meta()->events()->trigger('model.after_execute', $this, array($params));
 
+		if ($this->status === Model_Payment::PAID)
+		{
+			$this->meta()->events()->trigger('model.pay', $this, array($params));
+		}
+
 		return $this;
 	}
 

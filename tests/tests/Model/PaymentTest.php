@@ -51,6 +51,8 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->method('loaded')
 			->will($this->returnValue(FALSE));
 
+		$payment->status = Model_Payment::PAID;
+
 		$purchase
 			->expects($this->once())
 			->method('save');
@@ -60,6 +62,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$this->assertTrue($payment->before_first_operation_called);
 		$this->assertTrue($payment->before_execute_called);
 		$this->assertTrue($payment->after_execute_called);
+		$this->assertTrue($payment->pay_called);
 	}
 
 	/**
@@ -91,6 +94,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$this->assertNull($payment->before_first_operation_called);
 		$this->assertTrue($payment->before_execute_called);
 		$this->assertTrue($payment->after_execute_called);
+		$this->assertNull($payment->pay_called);
 	}
 
 	/**
