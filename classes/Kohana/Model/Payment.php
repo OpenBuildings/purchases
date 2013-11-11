@@ -64,13 +64,22 @@ class Kohana_Model_Payment extends Jam_Model {
 	public function authorize(array $params = array())
 	{
 		$this->meta()->events()->trigger('model.before_authorize', $this, array($params));
-		$this->meta()->events()->trigger('model.before_first_operation', $this, array($params));
+		$first_operation = ! $this->loaded();
+
+		if ($first_operation)
+		{
+			$this->meta()->events()->trigger('model.before_first_operation', $this, array($params));
+		}
 
 		$this->authorize_processor($params);
 		$this->purchase->payment = $this;
 		$this->purchase->save();
 
-		$this->meta()->events()->trigger('model.after_first_operation', $this, array($params));
+		if ($first_operation)
+		{
+			$this->meta()->events()->trigger('model.after_first_operation', $this, array($params));
+		}
+
 		$this->meta()->events()->trigger('model.after_authorize', $this, array($params));
 
 		return $this;
@@ -99,6 +108,7 @@ class Kohana_Model_Payment extends Jam_Model {
 		{
 			$this->meta()->events()->trigger('model.after_first_operation', $this, array($params));
 		}
+
 		$this->meta()->events()->trigger('model.after_execute', $this, array($params));
 
 		return $this;
