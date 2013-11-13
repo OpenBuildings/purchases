@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "364bf42e5706a5de803dd7d7c5c32ad9",
+    "hash": "17c8e4cebde7fa93c673c75e1ae25ae1",
     "packages": [
         {
             "name": "composer/installers",
@@ -411,6 +411,49 @@
             "time": "2013-09-02 12:41:12"
         },
         {
+            "name": "openbuildings/jam-freezable",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OpenBuildings/jam-freezable.git",
+                "reference": "2ebfbbde386f30b27f6fb65d0ef96621edaf6382"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-freezable/zipball/2ebfbbde386f30b27f6fb65d0ef96621edaf6382",
+                "reference": "2ebfbbde386f30b27f6fb65d0ef96621edaf6382",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "*",
+                "openbuildings/jam": "0.4.*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "openbuildings/kohana-test-bootsrap": "0.1.*"
+            },
+            "type": "kohana-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Kerin",
+                    "email": "ivank@gmail.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "Freeze dynamically computed values in the database using Jam",
+            "homepage": "https://github.com/OpenBuildings/jam-freezable",
+            "keywords": [
+                "database",
+                "freezing",
+                "jam"
+            ],
+            "time": "2013-11-13 12:14:29"
+        },
+        {
             "name": "openbuildings/jam-locations",
             "version": "0.1.1",
             "source": {
@@ -758,7 +801,7 @@
                     "name": "Haralan Dobrev",
                     "email": "hkdobrev@gmail.com",
                     "homepage": "http://hkdobrev.blogspot.com",
-                    "role": "Author"
+                    "role": "developer"
                 }
             ],
             "description": "PayPal SDK for ExpressCheckout and AdaptivePayments. Supports recurring payments, simple payments, parallel payments and chained payments.",
