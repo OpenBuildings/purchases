@@ -15,6 +15,8 @@ class Kohana_Model_Store extends Jam_Model {
 				'store_purchases' => Jam::association('hasmany', array(
 					'inverse_of' => 'store',
 					'foreign_model' => 'store_purchase',
+					'delete_on_remove' => Jam_Association::DELETE,
+					'dependent' => Jam_Association::DELETE,
 				)),
 				'purchases' => Jam::association('manytomany', array(
 					'foreign_model' => 'purchase',
