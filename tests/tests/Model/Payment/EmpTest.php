@@ -118,6 +118,7 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			'trans_id' => '11111',
 			'reason' => 'Faulty Product',
 			'item_1_id' => '5657022',
+			'item_1_amount' => '200',
 			'item_2_id' => '5657032',
 			'item_2_amount' => '20.00',
 		);

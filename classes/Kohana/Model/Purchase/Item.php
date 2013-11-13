@@ -171,6 +171,22 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 	}
 
 	/**
+	 * Check if item has been refunded
+	 * @return boolean 
+	 */
+	public function is_refunded()
+	{
+		foreach ($this->get_insist('store_purchase')->refunds->as_array() as $refund)
+		{
+			if ($refund->has_purchase_item($this)) 
+			{
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+
+	/**
 	 * Return price() multiplied by quantity field
 	 * @return Jam_Price 
 	 */

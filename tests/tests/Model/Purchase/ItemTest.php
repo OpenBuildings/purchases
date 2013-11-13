@@ -228,6 +228,25 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 		$this->assertInstanceOf('Model_Product', $purchase_item->get_reference_paranoid());
 	}
 
+	public function test_is_refunded()
+	{
+		$refund = $this->getMock('Model_Store_Refund', array('has_purchase_item'), array('store_refund'));
+
+		$item = Jam::build('purchase_item', array(
+			'store_purchase' => array(
+				'refunds' => array($refund),
+			)
+		));
+
+		$refund->expects($this->exactly(2))
+			->method('has_purchase_item')
+			->with($this->identicalTo($item))
+			->will($this->onConsecutiveCalls(FALSE, TRUE));
+
+		$this->assertFalse($item->is_refunded());
+		$this->assertTrue($item->is_refunded());
+	}
+
 	/**
 	 * @covers Model_Purchase_Item::total_price
 	 */

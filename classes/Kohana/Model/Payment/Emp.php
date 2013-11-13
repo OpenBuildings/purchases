@@ -119,10 +119,7 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 					"item_{$index}_id" => Model_Payment_Emp::find_item_id($payment->raw_response['cart'], $item->purchase_item->id()),
 				);
 
-				if ($item->amount)
-				{
-					$item_params["item_{$index}_amount"] = $item->amount()->as_string();
-				}
+				$item_params["item_{$index}_amount"] = $item->amount()->as_string();
 
 				$params = array_merge($params, $item_params);
 			}

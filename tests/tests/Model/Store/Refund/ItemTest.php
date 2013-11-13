@@ -53,7 +53,7 @@ class Model_Store_Refund_ItemTest extends Testcase_Purchases {
 		$this->assertEquals($this->store_purchase->items[0]->price(), $item->amount());
 
 		$item->amount = 5;
-		$this->assertEquals(new Jam_Price(5, 'EUR', $item->monetary(), 'GBP'), $item->amount());
+		$this->assertEquals(new Jam_Price(5, 'EUR', $item->monetary(), 'EUR'), $item->amount());
 	}
 
 	/**
@@ -71,6 +71,65 @@ class Model_Store_Refund_ItemTest extends Testcase_Purchases {
 
 		$this->assertEquals('GBP', $item->currency());
 		$this->assertEquals('EUR', $item->currency());
+	}
+
+	/**
+	 * @covers Model_Store_Refund_Item::display_currency
+	 */
+	public function test_display_currency()
+	{
+		$store_refund = $this->getMock('Model_Store_Refund', array('display_currency'), array('store_refund'));
+		$store_refund
+			->expects($this->exactly(2))
+				->method('display_currency')
+				->will($this->onConsecutiveCalls('GBP', 'EUR'));
+
+		$item = Jam::build('store_refund_item', array('store_refund' => $store_refund));
+
+		$this->assertEquals('GBP', $item->display_currency());
+		$this->assertEquals('EUR', $item->display_currency());
+	}
+
+	/**
+	 * @covers Model_Store_Refund_Item::is_full_amount
+	 */
+	public function test_is_full_amount()
+	{
+		$monetary = new OpenBuildings\Monetary\Monetary;
+
+		$purchase_item = $this->getMock('Model_Purchase_Item', array('price'), array('purchase_item'));
+		$purchase_item
+			->expects($this->exactly(2))
+				->method('price')
+				->will($this->returnValue(new Jam_Price(10, 'GBP')));
+
+		$item = $this->getMock('Model_Store_Refund_Item', array('currency', 'display_currency', 'monetary'), array('store_refund_item'));
+		$item
+			->expects($this->any())
+				->method('currency')
+				->will($this->returnValue('GBP'));
+
+		$item
+			->expects($this->any())
+				->method('display_currency')
+				->will($this->returnValue('GBP'));
+
+		$item
+			->expects($this->any())
+				->method('monetary')
+				->will($this->returnValue($monetary));
+
+		$item->purchase_item = $purchase_item;
+
+		$this->assertTrue($item->is_full_amount());
+
+		$item->amount = 5;
+
+		$this->assertFalse($item->is_full_amount());
+
+		$item->amount = 10;
+
+		$this->assertTrue($item->is_full_amount());
 	}
 
 	/**

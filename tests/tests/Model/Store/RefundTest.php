@@ -145,4 +145,29 @@ class Model_Store_RefundTest extends Testcase_Purchases {
 
 		$this->assertSame($monetary, $store_refund->monetary());
 	}
+
+	/**
+	 * @covers Model_Store_Refund::has_purchase_item
+	 */
+	public function test_has_purchase_item()
+	{
+		$item = $this->getMock('Model_Store_Refund_Item', array('is_full_amount'), array('store_refund_item'));
+		$item
+			->expects($this->exactly(2))
+				->method('is_full_amount')
+				->will($this->onConsecutiveCalls(TRUE, FALSE));
+
+		$item->purchase_item_id = 1;
+
+		$purchase_item1 = Jam::find('purchase_item', 1);
+		$purchase_item2 = Jam::find('purchase_item', 2);
+
+		$refund = Jam::build('store_refund', array(
+			'items' => array($item)
+		));
+
+		$this->assertFalse($refund->has_purchase_item($purchase_item2));
+		$this->assertTrue($refund->has_purchase_item($purchase_item1));
+		$this->assertFalse($refund->has_purchase_item($purchase_item1));
+	}
 }
