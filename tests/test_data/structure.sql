@@ -101,6 +101,7 @@ CREATE TABLE `stores` (
   `name` VARCHAR(254) NOT NULL,
   `currency` VARCHAR(3) NOT NULL,
   `paypal_email` VARCHAR(100) NULL,
+  `is_deleted` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB  DEFAULT CHARSET=utf8;
 
@@ -247,10 +248,10 @@ VALUES
 # Dump of table stores
 # ------------------------------------------------------------
 
-INSERT INTO `stores` (`id`, `name`, `paypal_email`)
+INSERT INTO `stores` (`id`, `name`, `paypal_email`, `is_deleted`)
 VALUES
-  (1,'Example Store', 'teststore@clippings.com'),
-  (2,'Empty Store', 'test-store@clippings.com');
+  (1,'Example Store', 'teststore@clippings.com', 0),
+  (2,'Empty Store', 'test-store@clippings.com', 0);
 
 # Dump of table users
 # ------------------------------------------------------------

@@ -8,6 +8,9 @@ class Kohana_Model_Store extends Jam_Model {
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta
+			->behaviors(array(
+				'paranoid' => Jam::behavior('paranoid'),
+			))
 			->associations(array(
 				'store_purchases' => Jam::association('hasmany', array(
 					'inverse_of' => 'store',
