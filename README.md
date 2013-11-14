@@ -75,11 +75,11 @@ You can query items of the Store Purchase with the ``items()`` method:
 
 ```php
 $store_purchase->items(); // return all the purchase items as an array
-$store_purchase->items('product'); // return all the purchase items with type "product" as an array
-$store_purchase->items(array('product', 'shipping')); // return all the purchase items with type "product" or 'shipping' as an array
+$store_purchase->items('product'); // return all the purchase items with model "purchase_item_product" as an array
+$store_purchase->items(array('product', 'shipping')); // return all the purchase items with model "purchase_item_product" or "purchase_item_shipping" as an array
 $store_purchase->items(array('is_payable' => TRUE)); // return all the purchase items with flag "is_payable" set to TRUE as an array
-$store_purchase->items(array('is_payable' => TRUE, 'product')); // return all the purchase items with flag "is_payable" set to TRUE and are of type 'product' as an array
-$store_purchase->items(array('not' => 'shipping')); // return all the purchase items that are not of type shipping
+$store_purchase->items(array('is_payable' => TRUE, 'product')); // return all the purchase items with flag "is_payable" set to TRUE and are with model "purchase_item_product" as an array
+$store_purchase->items(array('not' => 'shipping')); // return all the purchase items that are not instance of model "purchase_item_shipping"
 ```
 
 All of these types of queries can be used by ``items_count()`` and ``total_price()``
@@ -410,8 +410,7 @@ class Jam_Behavior_MyBehavios extends Jam_Behavior {
 	{
 		if ( ! $store_purchase->items('shipping'))
 		{
-			$store_purchase->items->build(array(
-				'type' => 'shipping', 
+			$store_purchase->items []= Jam::build('purchase_item_shipping', array(
 				'reference' => $store_purchase->shipping // some shipping object
 			));
 		}

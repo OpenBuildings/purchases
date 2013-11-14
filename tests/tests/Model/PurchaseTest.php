@@ -125,13 +125,13 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$purchase->store_purchases[0]->items->build(array(
 			'quantity' => 1,
 			'price' => 10,
-			'type' => 'shipping',
+			'model' => 'purchase_item_shipping',
 		));
 
 		$purchase->store_purchases[0]->items->build(array(
 			'quantity' => 1,
 			'price' => -10,
-			'type' => 'promotion',
+			'model' => 'purchase_item_promotion',
 		));
 
 		$this->assertCount(4, $purchase->items());
@@ -180,7 +180,7 @@ class Model_PurchaseTest extends Testcase_Purchases {
 			'reference_id' => 1,
 			'reference_model' => 'product',
 			'quantity' => 3,
-			'type' => 'product',
+			'model' => 'purchase_item_product',
 		));
 
 		$purchase->add_item($store, $existing_item);
@@ -204,13 +204,13 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$price2 = new Jam_Price(10, 'EUR');
 
 		$item1 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
-		$item1->type = 'product';
+		$item1->model = 'purchase_item_product';
 		$item1->expects($this->exactly(3))
 			->method('total_price')
 			->will($this->returnValue($price1));
 
 		$item2 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
-		$item2->type = 'shipping';
+		$item2->model = 'purchase_item_shipping';
 		$item2->expects($this->exactly(3))
 			->method('total_price')
 			->will($this->returnValue($price2));
@@ -300,14 +300,14 @@ class Model_PurchaseTest extends Testcase_Purchases {
 				array(
 					'store' => 1,
 					'items' => array(
-						array('type' => 'product', 'quantity' => 2),
-						array('type' => 'shipping', 'quantity' => 1),
+						array('model' => 'purchase_item_product', 'quantity' => 2),
+						array('model' => 'purchase_item_shipping', 'quantity' => 1),
 					)
 				),
 				array(
 					'store' => 1,
 					'items' => array(
-						array('type' => 'product', 'quantity' => 3),
+						array('model' => 'purchase_item_product', 'quantity' => 3),
 					)
 				),
 			)

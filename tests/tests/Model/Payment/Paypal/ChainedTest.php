@@ -33,13 +33,13 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 		$promo = $purchase->store_purchases[0]->items->create(array(
 			'quantity' => 1,
 			'price' => -10,
-			'type' => 'promotion',
+			'model' => 'purchase_item_promotion',
 			'is_discount' => TRUE,
 			'is_payable' => TRUE,
 		));
 
 		$product = Jam::create('product', array('price' => 100, 'name' => 'product 1', 'currency' => 'GBP', 'store' => Jam::find('store', 2)));
-		$item = Jam::build('purchase_item', array('reference' => $product, 'type' => 'product', 'is_payable' => TRUE));
+		$item = Jam::build('purchase_item', array('reference' => $product, 'model' => 'purchase_item_product', 'is_payable' => TRUE));
 		$purchase->add_item(Jam::find('store', 2), $item);
 
 		$payment = Model_Payment_Paypal_Chained::convert_purchase($purchase, array(
@@ -86,7 +86,7 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 					->build(array(
 						'quantity' => 1, 
 						'price' => -10, 
-						'type' => 'promotion', 
+						'model' => 'purchase_item_promotion',
 						'is_discount' => TRUE,
 						'is_payable' => TRUE,
 					));

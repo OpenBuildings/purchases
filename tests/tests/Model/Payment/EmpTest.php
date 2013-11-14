@@ -28,13 +28,14 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 
 		$purchase = Jam::find('purchase', 1);
 
-		$promo = $purchase->store_purchases[0]->items->create(array(
+		$promo = Jam::build('purchase_item_promotion', array(
 			'quantity' => 1,
 			'price' => -10,
-			'type' => 'promotion',
 			'is_discount' => TRUE,
 			'is_payable' => TRUE,
 		));
+
+		$purchase->store_purchases[0]->items []= $promo;
 
 		$params = Model_Payment_Emp::convert_purchase($purchase);
 
@@ -58,16 +59,16 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 
 			'item_1_predefined' => '0',
 			'item_1_digital' => '0',
-			'item_1_code' => '1',
-			'item_1_qty' => '1',
+			'item_1_code' => 1,
+			'item_1_qty' => 1,
 			'item_1_discount' => '0',
 			'item_1_name' => 'chair',
 			'item_1_unit_price_EUR' => '200.00',
 
 			'item_2_predefined' => '0',
 			'item_2_digital' => '0',
-			'item_2_code' => '2',
-			'item_2_qty' => '1',
+			'item_2_code' => 2,
+			'item_2_qty' => 1,
 			'item_2_discount' => '0',
 			'item_2_name' => 'red..',
 			'item_2_unit_price_EUR' => '200.00',
@@ -75,7 +76,7 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			'item_3_predefined' => '0',
 			'item_3_digital' => '0',
 			'item_3_code' => $promo->id(),
-			'item_3_qty' => '1',
+			'item_3_qty' => 1,
 			'item_3_discount' => '1',
 			'item_3_name' => 'promotion',
 			'item_3_unit_price_EUR' => '-10.00',

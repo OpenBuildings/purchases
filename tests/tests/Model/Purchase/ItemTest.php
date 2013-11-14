@@ -27,7 +27,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 		$item = Jam::build('purchase_item', array(
 			'price' => 10, 
 			'store_purchase' => 1,
-			'type' => 'product', 
+			'model' => 'purchase_item_product',
 			'quantity' => 1,
 			'is_payable' => TRUE
 		));
@@ -54,15 +54,14 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	{
 		$item = Jam::find('purchase_item', 1);
 
-		$new_item = Jam::build('purchase_item', array(
+		$new_item = Jam::build('purchase_item_product', array(
 			'reference' => Jam::find('product', 1),
 			'quantity' => 3,
-			'type' => 'product',
 		));
 
 		$this->assertTrue($item->is_same($new_item));
 
-		$new_item->type = 'shipping';
+		$new_item->model = 'purchase_item_shipping';
 
 		$this->assertFalse($item->is_same($new_item));
 	}
@@ -108,7 +107,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_compute_price($price, $currency, $monetary, $display_currency, $expected)
 	{
-		$item = $this->getMock('Model_Purchase_Item', array('currency', 'monetary', 'display_currency'), array('purchase_item'));
+		$item = $this->getMock('Model_Purchase_Item_Product', array('currency', 'monetary', 'display_currency'), array('purchase_item_product'));
 
 		$item
 			->expects($this->once())
@@ -265,5 +264,62 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 
 		$item->quantity = 3;
 		$this->assertEquals(30, $item->total_price()->amount());
+	}
+
+	public function test_type()
+	{
+		$item = Jam::build('purchase_item_product');
+		$this->assertSame('product', $item->type());
+
+		$item->model = '';
+		$this->assertNull($item->type());
+
+		$item->model = FALSE;
+		$this->assertNull($item->type());
+
+		$item->model = NULL;
+		$this->assertNull($item->type());
+
+		$item->model = 'purchase_dsfs';
+		$this->assertSame('purchase_dsfs', $item->type());
+
+		$item->model = 'purchase_item_shipping';
+		$this->assertSame('shipping', $item->type());
+	}
+
+	public function test_compute_price_expects_jam_price()
+	{
+		$item = $this->getMock('Model_Purchase_Item', array(
+			'get_price'
+		), array(
+			'purchase_item'
+		));
+
+		$item
+			->expects($this->once())
+			->method('get_price')
+			->will($this->returnValue(10.00));
+
+		$product = $this->getMock('Model_Product', array(
+			'__toString',
+		), array(
+			'product'
+		));
+
+		$product
+			->expects($this->once())
+			->method('__toString')
+			->will($this->returnValue('abc'));
+
+		$item->reference = $product;
+
+		$this->setExpectedException('Kohana_Exception', 'Compute price expects the reference abc to return a Jam_Price');
+		$item->compute_price();
+	}
+
+	public function test_get_price_throws_exception()
+	{
+		$this->setExpectedException('BadMethodCallException', 'You must implement get_price()');
+		Jam::build('purchase_item')->get_price();
 	}
 }

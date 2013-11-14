@@ -23,21 +23,20 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		$first_item = $store_purchase->items[0];
 		$second_item = $store_purchase->items[1];
 
-		$new_item = Jam::build('purchase_item', array(
+		$new_item = Jam::build('purchase_item_product', array(
 			'reference' => Jam::find('product', 1),
 			'quantity' => 3,
-			'type' => 'product',
 		));
 
 		$found_index = $store_purchase->search_same_item($new_item);
 		
 		$this->assertSame($first_item, $store_purchase->items[$found_index]);
 
-		$new_item->type = 'shipping';
+		$new_item->model = 'purchase_item_shipping';
 		$found_index = $store_purchase->search_same_item($new_item);
 		$this->assertNull($found_index);
 
-		$new_item->type = 'product';
+		$new_item->model = 'purchase_item_product';
 		$new_item->reference = Jam::find('variation', 1);
 
 		$found_index = $store_purchase->search_same_item($new_item);
@@ -55,19 +54,19 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		$existing_item_product = Jam::build('purchase_item', array(
 			'reference' => Jam::find('product', 1),
 			'quantity' => 3,
-			'type' => 'product',
+			'model' => 'purchase_item_product',
 		));
 
 		$existing_item_variation = Jam::build('purchase_item', array(
 			'reference' => Jam::find('variation', 1),
 			'quantity' => 2,
-			'type' => 'product',
+			'model' => 'purchase_item_product',
 		));
 
 		$new_item_product = Jam::build('purchase_item', array(
 			'reference' => Jam::find('product', 3),
 			'quantity' => 5,
-			'type' => 'product',
+			'model' => 'purchase_item_product',
 		));
 
 		$store_purchase->add_or_update_item($existing_item_product);
@@ -102,14 +101,14 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		$store_purchase->items->build(array(
 			'quantity' => 1,
 			'price' => 10,
-			'type' => 'shipping',
+			'model' => 'purchase_item_shipping',
 			'is_payable' => TRUE,
 		));
 
 		$store_purchase->items->build(array(
 			'quantity' => 1,
 			'price' => -10,
-			'type' => 'promotion',
+			'model' => 'purchase_item_promotion',
 			'is_discount' => TRUE,
 		));
 
@@ -178,14 +177,14 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		$price2 = new Jam_Price(10, 'EUR');
 
 		$item1 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
-		$item1->type = 'product';
+		$item1->model = 'purchase_item_product';
 		$item1
 			->expects($this->exactly(3))
 			->method('total_price')
 			->will($this->returnValue($price1));
 
 		$item2 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
-		$item2->type = 'shipping';
+		$item2->model = 'purchase_item_shipping';
 		$item2
 			->expects($this->exactly(3))
 			->method('total_price')
@@ -209,9 +208,9 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	{
 		$store_purchase = Jam::build('store_purchase', array(
 			'items' => array(
-				array('type' => 'product', 'quantity' => 2),
-				array('type' => 'product', 'quantity' => 3),
-				array('type' => 'shipping', 'quantity' => 1),
+				array('model' => 'purchase_item_product', 'quantity' => 2),
+				array('model' => 'purchase_item_product', 'quantity' => 3),
+				array('model' => 'purchase_item_shipping', 'quantity' => 1),
 			)
 		));
 
@@ -242,7 +241,7 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 			'id' => 23,
 			'quantity' => 1,
 			'price' => 20,
-			'type' => 'shipping',
+			'model' => 'purchase_item_shipping',
 			'is_payable' => TRUE,
 		));
 
@@ -250,7 +249,7 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 			'id' => 100,
 			'quantity' => 1,
 			'price' => 10,
-			'type' => 'shipping',
+			'model' => 'purchase_item_shipping',
 			'is_payable' => TRUE,
 		);
 

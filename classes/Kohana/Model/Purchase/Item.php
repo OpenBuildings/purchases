@@ -10,10 +10,8 @@ use OpenBuildings\Monetary\Monetary;
  */
 class Kohana_Model_Purchase_Item extends Jam_Model {
 
-	const PRODUCT = 'product';
+	const STI_PREFIX = 'purchase_item_';
 
-	const FILTER_PREFIX = 'matches_filter_';
-	
 	/**
 	 * @codeCoverageIgnore
 	 */
@@ -33,7 +31,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 			))
 			->fields(array(
 				'id' => Jam::field('primary'),
-				'type' => Jam::field('string'),
+				'model' => Jam::field('polymorphic'),
 				'quantity' => Jam::field('integer', array('default' => 1)),
 				'price' => Jam::field('price'),
 				'is_payable' => Jam::field('boolean'),
@@ -41,7 +39,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 				'created_at' => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
 				'updated_at' => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			))
-			->validator('type', 'quantity', array('present' => TRUE))
+			->validator('model', 'quantity', array('present' => TRUE))
 			->validator('price', array('price' => array('greater_than_or_equal_to' => 0), 'unless' => 'is_discount'))
 			->validator('price', array('price' => array('less_than_or_equal_to' => 0), 'if' => 'is_discount'))
 			->validator('quantity', array('numeric' => array('only_integer' => TRUE, 'greater_than' => 0)));
@@ -88,21 +86,21 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 	/**
 	 * Check if the purchase item is the same as another purchase item,
 	 * creterias are reference id, model and purchase item type.
-	 * 
-	 * @param  Model_Purchase_Item $item 
-	 * @return boolean                   
+	 *
+	 * @param  Model_Purchase_Item $item
+	 * @return boolean
 	 */
 	public function is_same(Model_Purchase_Item $item)
 	{
-		return ($item->reference_id 
-			AND $this->reference_id == $item->reference_id 
-			AND $this->reference_model == $item->reference_model 
-			AND $this->type == $item->type);
+		return ($item->reference_id
+			AND $this->reference_id == $item->reference_id
+			AND $this->reference_model == $item->reference_model
+			AND $this->model == $item->model);
 	}
 
 	/**
 	 * Return the monetary for this purchase item, get it from parent store_purchase
-	 * @return OpenBuildings\Monetary\Montary 
+	 * @return OpenBuildings\Monetary\Montary
 	 */
 	public function monetary()
 	{
@@ -111,7 +109,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 
 	/**
 	 * Return the currency for this purchase item, get it from parent store_purchase
-	 * @return string 
+	 * @return string
 	 */
 	public function currency()
 	{
@@ -120,7 +118,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 
 	/**
 	 * Return the display_currency for this purchase item, get it from parent store_purchase
-	 * @return string 
+	 * @return string
 	 */
 	public function display_currency()
 	{
@@ -129,14 +127,16 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 
 	/**
 	 * Compute the price of the reference, converted to this purchase item currency and Monetary
-	 * @return Jam_Price 
+	 * @return Jam_Price
 	 */
 	public function compute_price()
 	{
-		$price = $this->get_reference_paranoid()->price_for_purchase_item($this);
+		$price = $this->get_price();
 
 		if ( ! ($price instanceof Jam_Price))
-			throw new Kohana_Exception('Compute price expects the reference :reference to return a Jam_Price', array(':reference' => (string) $this->reference));
+			throw new Kohana_Exception('Compute price expects the reference :reference to return a Jam_Price', array(
+				':reference' => (string) $this->reference
+			));
 
 		$price = $price
 			->monetary($this->monetary())
@@ -163,7 +163,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 
 	/**
 	 * Freezable implementation, return compute_price or price field
-	 * @return Jam_Price 
+	 * @return Jam_Price
 	 */
 	public function price()
 	{
@@ -188,12 +188,30 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 
 	/**
 	 * Return price() multiplied by quantity field
-	 * @return Jam_Price 
+	 * @return Jam_Price
 	 */
 	public function total_price()
 	{
 		return $this
 			->price()
 				->multiply_by($this->quantity);
+	}
+
+	public function type()
+	{
+		if ( ! $this->model)
+			return NULL;
+
+		return str_replace(static::STI_PREFIX, '', $this->model);
+	}
+
+	/**
+	 * Get the price of the item.
+	 *
+	 * @return Jam_Price
+	 */
+	public function get_price()
+	{
+		throw new BadMethodCallException('You must implement get_price()');
 	}
 }

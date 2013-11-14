@@ -48,7 +48,7 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 		{
 			$index = $i+1;
 
-			$name = str_pad($item->reference ? URL::title($item->reference->name(), ' ', TRUE) : $item->type, 5, '.');
+			$name = str_pad($item->reference ? URL::title($item->reference->name(), ' ', TRUE) : $item->type(), 5, '.');
 
 			$params = array_merge($params, array(
 				"item_{$index}_predefined"            => '0',
