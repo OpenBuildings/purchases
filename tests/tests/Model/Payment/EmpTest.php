@@ -214,5 +214,4 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 		$result = $payment->transaction_fee($payment_price);
 		$this->assertEquals($expected, $result);
 	}
-
 }

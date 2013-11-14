@@ -17,11 +17,11 @@ class Kohana_Model_Emp_Form extends Jam_Validated {
 	{
 		$meta
 			->fields(array(
-				'card_holder_name' => Jam::field('string'),
-				'card_number' => Jam::field('string'),
+				'card_holder_name' => Jam::field('string', array('filters' => array('trim'))),
+				'card_number' => Jam::field('string', array('filters' => array('Model_Emp_Form::process_credit_card'))),
 				'exp_month' => Jam::field('string'),
 				'exp_year' => Jam::field('string'),
-				'cvv' => Jam::field('string'),
+				'cvv' => Jam::field('string', array('filters' => array('trim'))),
 			))
 			->validator('card_holder_name', 'card_number', 'exp_month', 'exp_year', 'cvv',
 				array(
@@ -57,6 +57,11 @@ class Kohana_Model_Emp_Form extends Jam_Validated {
 					'regex' => '/\d{2,4}/',
 				)
 			));
+	}
+
+	public static function process_credit_card($card)
+	{
+		return preg_replace('/\s|\-/', '', $card);
 	}
 
 	public function vbv_params($callback_url)
