@@ -35,11 +35,6 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		$payer
 			->setPaymentMethod('paypal');
 
-		$amount = new PayPal\Api\Amount();
-		$amount
-			->setCurrency($currency)
-			->setTotal($purchase->total_price(array('is_payable' => TRUE))->as_string($currency));
-
 		$item_list = new PayPal\Api\ItemList();
 		$items = array();
 		foreach ($purchase->store_purchases as $store_purchase)
@@ -55,6 +50,11 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		}
 
 		$item_list->setItems($items);
+
+		$amount = new PayPal\Api\Amount();
+		$amount
+			->setCurrency($currency)
+			->setTotal(Jam_Price::sum(array_map(function($item) { return $item->getPrice(); }, $items), $currency)->as_string());
 
 		$transaction = new PayPal\Api\Transaction();
 		$transaction

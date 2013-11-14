@@ -59,7 +59,7 @@ class Kohana_Model_Store_Refund_Item extends Jam_Model {
 
 	public function purchase_item_price()
 	{
-		return $this->get_insist('purchase_item')->price();
+		return $this->get_insist('purchase_item')->total_price();
 	}
 
 	public function amount()
