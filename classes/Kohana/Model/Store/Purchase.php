@@ -206,4 +206,11 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 
 		return $price->amount() / $total_price->amount();
 	}
+
+	public function store()
+	{
+		return Jam_Behavior_Paranoid::with_filter(Jam_Behavior_Paranoid::ALL, function() {
+			return $this->store;
+		});
+	}
 }
