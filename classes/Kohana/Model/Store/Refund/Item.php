@@ -31,7 +31,7 @@ class Kohana_Model_Store_Refund_Item extends Jam_Model {
 
 	public function validate()
 	{
-		if ($this->amount AND $this->amount->amount() > $this->get_insist('purchase_item')->price()->amount()) 
+		if ($this->amount AND $this->amount->amount() > abs($this->purchase_item_price()->amount()))
 		{
 			$this->errors()->add('amount', 'numeric_less_than_or_equal_to', array(':less_than_or_equal_to' => $this->get_insist('purchase_item')->price()));
 		}
@@ -44,7 +44,7 @@ class Kohana_Model_Store_Refund_Item extends Jam_Model {
 
 	public function display_currency()
 	{
-		return $this->get_insist('store_refund')->display_currency();	
+		return $this->get_insist('store_refund')->display_currency();
 	}
 
 	public function monetary()
@@ -54,11 +54,16 @@ class Kohana_Model_Store_Refund_Item extends Jam_Model {
 
 	public function is_full_amount()
 	{
-		return ($this->amount === NULL OR $this->amount->is(Jam_Price::EQUAL_TO, $this->get_insist('purchase_item')->price()));
+		return ($this->amount === NULL OR $this->amount->is(Jam_Price::EQUAL_TO, $this->purchase_item_price()));
+	}
+
+	public function purchase_item_price()
+	{
+		return $this->get_insist('purchase_item')->price();
 	}
 
 	public function amount()
 	{
-		return ($this->amount !== NULL) ? $this->amount : $this->get_insist('purchase_item')->price();
+		return ($this->amount !== NULL) ? $this->amount : $this->purchase_item_price();
 	}
 }

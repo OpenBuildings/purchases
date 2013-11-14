@@ -264,16 +264,16 @@
         },
         {
             "name": "openbuildings/jam",
-            "version": "0.4.32",
+            "version": "0.4.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam.git",
-                "reference": "c0b85df332e3a1764d060a102b6a8fce254d262b"
+                "reference": "cda804e6c92afbc512b084d087401abaa1b3b990"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/c0b85df332e3a1764d060a102b6a8fce254d262b",
-                "reference": "c0b85df332e3a1764d060a102b6a8fce254d262b",
+                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/cda804e6c92afbc512b084d087401abaa1b3b990",
+                "reference": "cda804e6c92afbc512b084d087401abaa1b3b990",
                 "shasum": ""
             },
             "require": {
@@ -313,7 +313,7 @@
                 "upload",
                 "validation"
             ],
-            "time": "2013-11-07 11:10:37"
+            "time": "2013-11-13 10:06:23"
         },
         {
             "name": "openbuildings/jam-auth",
@@ -801,7 +801,7 @@
                     "name": "Haralan Dobrev",
                     "email": "hkdobrev@gmail.com",
                     "homepage": "http://hkdobrev.blogspot.com",
-                    "role": "developer"
+                    "role": "Author"
                 }
             ],
             "description": "PayPal SDK for ExpressCheckout and AdaptivePayments. Supports recurring payments, simple payments, parallel payments and chained payments.",

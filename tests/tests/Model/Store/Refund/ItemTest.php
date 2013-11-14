@@ -74,6 +74,18 @@ class Model_Store_Refund_ItemTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Store_Refund_Item::purchase_item_price
+	 */
+	public function test_purchase_item_price()
+	{
+		$purchase_item = Jam::find('purchase_item', 1);
+
+		$item = Jam::build('store_refund_item', array('purchase_item' => $purchase_item));
+
+		$this->assertEquals($purchase_item->price(), $item->purchase_item_price());
+	}
+
+	/**
 	 * @covers Model_Store_Refund_Item::display_currency
 	 */
 	public function test_display_currency()
@@ -97,13 +109,13 @@ class Model_Store_Refund_ItemTest extends Testcase_Purchases {
 	{
 		$monetary = new OpenBuildings\Monetary\Monetary;
 
-		$purchase_item = $this->getMock('Model_Purchase_Item', array('price'), array('purchase_item'));
-		$purchase_item
+		$item = $this->getMock('Model_Store_Refund_Item', array('currency', 'display_currency', 'monetary', 'purchase_item_price'), array('store_refund_item'));
+		
+		$item
 			->expects($this->exactly(2))
-				->method('price')
+				->method('purchase_item_price')
 				->will($this->returnValue(new Jam_Price(10, 'GBP')));
 
-		$item = $this->getMock('Model_Store_Refund_Item', array('currency', 'display_currency', 'monetary'), array('store_refund_item'));
 		$item
 			->expects($this->any())
 				->method('currency')
@@ -118,8 +130,6 @@ class Model_Store_Refund_ItemTest extends Testcase_Purchases {
 			->expects($this->any())
 				->method('monetary')
 				->will($this->returnValue($monetary));
-
-		$item->purchase_item = $purchase_item;
 
 		$this->assertTrue($item->is_full_amount());
 
