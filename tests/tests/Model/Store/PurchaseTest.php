@@ -116,36 +116,30 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 
 		$product_items = $store_purchase->items('product');
 		$this->assertCount(2, $product_items);
-		$this->assertEquals(2, $store_purchase->items_count('product'));
 		$this->assertSame($store_purchase->items[0], $product_items[0]);
 		$this->assertSame($store_purchase->items[1], $product_items[1]);
 
 		$shipping_items = $store_purchase->items('shipping');
 		$this->assertCount(1, $shipping_items);
-		$this->assertEquals(1, $store_purchase->items_count('shipping'));
 		$this->assertSame($store_purchase->items[2], $shipping_items[0]);
 
 		$mixed_items = $store_purchase->items(array('shipping', 'promotion'));
 		$this->assertCount(2, $mixed_items);
-		$this->assertEquals(2, $store_purchase->items_count(array('shipping', 'promotion')));
 		$this->assertSame($store_purchase->items[2], $mixed_items[0]);
 		$this->assertSame($store_purchase->items[3], $mixed_items[1]);
 
 		$payable_items = $store_purchase->items(array('is_payable' => TRUE));
 		$this->assertCount(3, $payable_items);
-		$this->assertEquals(3, $store_purchase->items_count(array('is_payable' => TRUE)));
 		$this->assertSame($store_purchase->items[0], $payable_items[0]);
 		$this->assertSame($store_purchase->items[1], $payable_items[1]);
 		$this->assertSame($store_purchase->items[2], $payable_items[2]);		
 
 		$not_payable_items = $store_purchase->items(array('is_payable' => FALSE));
 		$this->assertCount(1, $not_payable_items);
-		$this->assertEquals(1, $store_purchase->items_count(array('is_payable' => FALSE)));
 		$this->assertSame($store_purchase->items[3], $not_payable_items[0]);
 
 		$discount_items = $store_purchase->items(array('is_discount' => TRUE));
 		$this->assertCount(1, $discount_items);
-		$this->assertEquals(1, $store_purchase->items_count(array('is_discount' => TRUE)));
 		$this->assertSame($store_purchase->items[3], $discount_items[0]);
 	}
 
@@ -202,6 +196,41 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Store_Purchase::items_count
+	 */
+	public function test_items_count()
+	{
+		$store_purchase = Jam::find('store_purchase', 1);
+		$store_purchase->items->build(array(
+			'quantity' => 1,
+			'price' => 10,
+			'model' => 'purchase_item_shipping',
+			'is_payable' => TRUE,
+		));
+
+		$store_purchase->items->build(array(
+			'quantity' => 1,
+			'price' => -10,
+			'model' => 'purchase_item_promotion',
+			'is_discount' => TRUE,
+		));
+
+		$this->assertCount(4, $store_purchase->items());
+
+		$this->assertEquals(2, $store_purchase->items_count('product'));
+
+		$this->assertEquals(1, $store_purchase->items_count('shipping'));
+
+		$this->assertEquals(2, $store_purchase->items_count(array('shipping', 'promotion')));
+
+		$this->assertEquals(3, $store_purchase->items_count(array('is_payable' => TRUE)));
+
+		$this->assertEquals(1, $store_purchase->items_count(array('is_payable' => FALSE)));
+
+		$this->assertEquals(1, $store_purchase->items_count(array('is_discount' => TRUE)));
+	}
+
+	/**
 	 * @covers Model_Store_Purchase::items_quantity
 	 */
 	public function test_items_quantity()
@@ -232,6 +261,7 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 
 	/**
 	 * @covers Model_Store_Purchase::replace_items
+	 * @covers Model_Purchase::replace_items
 	 */
 	public function test_replace_items()
 	{
@@ -389,5 +419,20 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		$store_purchase->purchase = $purchase;
 
 		$this->assertSame($expected_ratio, $store_purchase->total_price_ratio($filters));
+	}
+
+	/**
+	 * @covers Model_Store_Purchase::store
+	 */
+	public function test_store()
+	{
+		$store_purchase = Jam::find('store_purchase', 3);
+		$this->assertNull($store_purchase->store);
+
+		$store_purchase = Jam::find('store_purchase', 3);
+		$this->assertInstanceOf('Model_Store', $store_purchase->store());
+
+		$store_purchase->store = NULL;
+		$this->assertNull($store_purchase->store());
 	}
 }

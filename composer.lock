@@ -801,7 +801,7 @@
                     "name": "Haralan Dobrev",
                     "email": "hkdobrev@gmail.com",
                     "homepage": "http://hkdobrev.blogspot.com",
-                    "role": "Author"
+                    "role": "developer"
                 }
             ],
             "description": "PayPal SDK for ExpressCheckout and AdaptivePayments. Supports recurring payments, simple payments, parallel payments and chained payments.",

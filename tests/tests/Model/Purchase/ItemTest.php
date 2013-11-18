@@ -227,6 +227,9 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 		$this->assertInstanceOf('Model_Product', $purchase_item->get_reference_paranoid());
 	}
 
+	/**
+	 * @covers Model_Purchase_Item::is_refunded
+	 */
 	public function test_is_refunded()
 	{
 		$refund = $this->getMock('Model_Store_Refund', array('has_purchase_item'), array('store_refund'));
@@ -266,6 +269,9 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 		$this->assertEquals(30, $item->total_price()->amount());
 	}
 
+	/**
+	 * @covers Model_Purchase_Item::type
+	 */
 	public function test_type()
 	{
 		$item = Jam::build('purchase_item_product');
@@ -287,6 +293,9 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 		$this->assertSame('shipping', $item->type());
 	}
 
+	/**
+	 * @covers Model_Purchase_Item::compute_price
+	 */
 	public function test_compute_price_expects_jam_price()
 	{
 		$item = $this->getMock('Model_Purchase_Item', array(
@@ -317,6 +326,9 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 		$item->compute_price();
 	}
 
+	/**
+	 * @covers Model_Purchase_Item::get_price
+	 */
 	public function test_get_price_throws_exception()
 	{
 		$this->setExpectedException('BadMethodCallException', 'You must implement get_price()');

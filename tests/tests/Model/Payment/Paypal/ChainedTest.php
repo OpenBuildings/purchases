@@ -3,6 +3,8 @@
 use OpenBuildings\PayPal\Payment_Adaptive;
 
 /**
+ * @group model
+ * @group model.payment
  * @group model.payment_paypal_chained
  */
 class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {

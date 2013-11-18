@@ -117,7 +117,6 @@ class Model_PurchaseTest extends Testcase_Purchases {
 
 	/**
 	 * @covers Model_Purchase::items
-	 * @covers Model_Purchase::items_count
 	 */
 	public function test_items()
 	{
@@ -138,33 +137,53 @@ class Model_PurchaseTest extends Testcase_Purchases {
 
 		$product_items = $purchase->items('product');
 		$this->assertCount(2, $product_items);
-		$this->assertEquals(2, $purchase->items_count('product'));
 		$this->assertSame($purchase->store_purchases[0]->items[0], $product_items[0]);
 		$this->assertSame($purchase->store_purchases[0]->items[1], $product_items[1]);
 
 		$shipping_items = $purchase->items('shipping');
 		$this->assertCount(1, $shipping_items);
-		$this->assertEquals(1, $purchase->items_count('shipping'));
 		$this->assertSame($purchase->store_purchases[0]->items[2], $shipping_items[0]);
 
 		$mixed_items = $purchase->items(array('shipping', 'promotion'));
 		$this->assertCount(2, $mixed_items);
-		$this->assertEquals(2, $purchase->items_count(array('shipping', 'promotion')));
 		$this->assertSame($purchase->store_purchases[0]->items[2], $mixed_items[0]);
 		$this->assertSame($purchase->store_purchases[0]->items[3], $mixed_items[1]);
 
 		$excluded_items = $purchase->items(array('not' => 'promotion'));
 		$this->assertCount(3, $excluded_items);
-		$this->assertEquals(3, $purchase->items_count(array('not' => 'promotion')));
 		$this->assertSame($purchase->store_purchases[0]->items[0], $excluded_items[0]);
 		$this->assertSame($purchase->store_purchases[0]->items[1], $excluded_items[1]);
 		$this->assertSame($purchase->store_purchases[0]->items[2], $excluded_items[2]);
 
 		$excluded_items = $purchase->items(array('not' => array('promotion', 'shipping')));
 		$this->assertCount(2, $excluded_items);
-		$this->assertEquals(2, $purchase->items_count(array('not' => array('promotion', 'shipping'))));
 		$this->assertSame($purchase->store_purchases[0]->items[0], $excluded_items[0]);
 		$this->assertSame($purchase->store_purchases[0]->items[1], $excluded_items[1]);
+	}
+
+	/**
+	 * @covers Model_Purchase::items_count
+	 */
+	public function test_items_count()
+	{
+		$purchase = Jam::find('purchase', 1);
+		$purchase->store_purchases[0]->items->build(array(
+			'quantity' => 1,
+			'price' => 10,
+			'model' => 'purchase_item_shipping',
+		));
+
+		$purchase->store_purchases[0]->items->build(array(
+			'quantity' => 1,
+			'price' => -10,
+			'model' => 'purchase_item_promotion',
+		));
+
+		$this->assertEquals(2, $purchase->items_count('product'));
+		$this->assertEquals(1, $purchase->items_count('shipping'));
+		$this->assertEquals(2, $purchase->items_count(array('shipping', 'promotion')));
+		$this->assertEquals(3, $purchase->items_count(array('not' => 'promotion')));
+		$this->assertEquals(2, $purchase->items_count(array('not' => array('promotion', 'shipping'))));
 	}
 
 	/**
@@ -259,20 +278,41 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	{
 		$purchase = Jam::build('purchase');
 
-		$store_purchase1 = $this->getMock('Model_Store_Purchase', array('replace_items'), array('store_purchase'));
+		$store_purchase1 = $this->getMock('Model_Store_Purchase', array(
+			'replace_items'
+		), array(
+			'store_purchase'
+		));
+
 		$store_purchase1->id = 10;
-		$store_purchase2 = $this->getMock('Model_Store_Purchase', array('replace_items'), array('store_purchase'));
+		$store_purchase2 = $this->getMock('Model_Store_Purchase', array(
+			'replace_items'
+		), array(
+			'store_purchase'
+		));
+
 		$store_purchase2->id = 20;
 		$store_purchase3 = Jam::build('store_purchase', array('id' => 30));
 
-		$item1 = Jam::build('purchase_item', array('id' => 10, 'store_purchase' => $store_purchase1));
-		$item2 = Jam::build('purchase_item', array('id' => 20, 'store_purchase' => $store_purchase1));
-		$item3 = Jam::build('purchase_item', array('id' => 30, 'store_purchase' => $store_purchase2));
+		$item1 = Jam::build('purchase_item', array(
+			'id' => 10,
+			'store_purchase' => $store_purchase1
+		));
+		$item2 = Jam::build('purchase_item', array(
+			'id' => 20,
+			'store_purchase' => $store_purchase1
+		));
+		$item3 = Jam::build('purchase_item', array(
+			'id' => 30,
+			'store_purchase' => $store_purchase2
+		));
 
 		$store_purchase1
 			->expects($this->once())
 			->method('replace_items')
-			->with($this->equalTo(array($item1, $item2)), $this->equalTo('product'));
+			->with($this->equalTo(array(
+				$item1, $item2
+			)), $this->equalTo('product'));
 
 		$store_purchase2
 			->expects($this->once())

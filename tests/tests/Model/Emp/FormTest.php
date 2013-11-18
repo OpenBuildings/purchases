@@ -69,4 +69,52 @@ class Model_Emp_FormTest extends Testcase_Purchases {
 
 		$this->assertEquals($expected, $form->as_array());
 	}
+
+	public function data_vbv_params()
+	{
+		return array(
+			array(
+				array(
+					'cardnumber' => 'qwerhjgf43534fgn3453',
+					'expdate' => 'QWERTYZXCVB',
+					'callback_url' => 'ABCDE',
+					'browser_useragent' => 'teeeestiing'
+				),
+				'qwerh jgf4 353 4fgn3453',
+				'QWERTY',
+				'ZXCVB',
+				'ABCDE',
+				'teeeestiing'
+			),
+			array(
+				array(
+					'cardnumber' => '',
+					'expdate' => '2013',
+					'callback_url' => 'example.com',
+					'browser_useragent' => 'test user agent'
+				),
+				'   ',
+				NULL,
+				'2013',
+				'example.com',
+				'test user agent'
+			),
+		);
+	}
+
+	/**
+	 * @dataProvider data_vbv_params
+	 * @covers Model_Emp_Form::vbv_params
+	 * @backupGlobals
+	 */
+	public function test_vbv_params($expected_params, $card_number, $exp_month, $exp_year, $callback_url, $user_agent)
+	{
+		$emp_form = Jam::build('emp_form');
+		$emp_form->card_number = $card_number;
+		$emp_form->exp_month = $exp_month;
+		$emp_form->exp_year = $exp_year;
+
+		Request::$user_agent = $user_agent;
+		$this->assertSame($expected_params, $emp_form->vbv_params($callback_url));
+	}
 }

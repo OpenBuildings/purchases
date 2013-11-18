@@ -2,6 +2,7 @@
 
 /**
  * @group model
+ * @group model.payment
  * @group model.payment_emp_vbv
  */
 class Model_Payment_Emp_VbvTest extends Testcase_Purchases {
@@ -20,8 +21,6 @@ class Model_Payment_Emp_VbvTest extends Testcase_Purchases {
 	/**
 	 * @covers Model_Payment_Emp_Vbv::execute_processor
 	 * @covers Model_Payment_Emp_Vbv::authorize_processor
-	 * @covers Model_Payment_Emp_Vbv::authorize_url
-	 * @covers Model_Payment_Emp_Vbv::refund_processor
 	 */
 	public function test_execute()
 	{

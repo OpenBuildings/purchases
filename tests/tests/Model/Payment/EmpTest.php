@@ -2,6 +2,7 @@
 
 /**
  * @group model
+ * @group model.payment
  * @group model.payment_emp
  */
 class Model_Payment_EmpTest extends Testcase_Purchases {
