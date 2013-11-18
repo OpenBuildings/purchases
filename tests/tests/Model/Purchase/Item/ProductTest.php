@@ -13,6 +13,7 @@ class Model_Purchase_Item_ProductTest extends Testcase_Purchases {
 	{
 		$meta = Jam::meta('purchase_item_product');
 		$this->assertSame('purchase_items', $meta->table());
+		$this->assertTrue($meta->field('is_payable')->default);
 	}
 
 	/**
