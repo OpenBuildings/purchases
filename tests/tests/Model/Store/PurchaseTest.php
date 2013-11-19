@@ -6,12 +6,18 @@ use OpenBuildings\Monetary\Source_Static;
 /**
  * @group model
  * @group model.store_purchase
- * 
+ *
  * @package Functest
  * @author Ivan Kerin
  * @copyright  (c) 2011-2013 Despark Ltd.
  */
 class Model_Store_PurchaseTest extends Testcase_Purchases {
+
+	public function test_initialize()
+	{
+		$meta = Jam::meta('store_purchase');
+		$this->assertSame('number', $meta->name_key());
+	}
 
 	/**
 	 * @covers Model_Store_Purchase::search_same_item
@@ -132,7 +138,7 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		$this->assertCount(3, $payable_items);
 		$this->assertSame($store_purchase->items[0], $payable_items[0]);
 		$this->assertSame($store_purchase->items[1], $payable_items[1]);
-		$this->assertSame($store_purchase->items[2], $payable_items[2]);		
+		$this->assertSame($store_purchase->items[2], $payable_items[2]);
 
 		$not_payable_items = $store_purchase->items(array('is_payable' => FALSE));
 		$this->assertCount(1, $not_payable_items);

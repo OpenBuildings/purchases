@@ -14,6 +14,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta
+			->name_key('number')
 			->behaviors(array(
 				'tokenable' => Jam::behavior('tokenable', array('uppercase' => TRUE, 'field' => 'number')),
 				'paranoid' => Jam::behavior('paranoid'),
