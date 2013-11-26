@@ -1,6 +1,6 @@
 <?php
 
-use OpenBuildings\PayPal\Payment_Adaptive;
+use OpenBuildings\PayPal\Payment_Adaptive_Simple;
 
 /**
  * @group model
@@ -53,7 +53,7 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 		$this->assertInstanceOf('OpenBuildings\PayPal\Payment_Adaptive_Chained', $payment);
 
 		$this->assertSame('EUR', $payment->config('currency'));
-		$this->assertSame(Payment_Adaptive::FEES_PAYER_EACHRECEIVER, $payment->config('fees_payer'));
+		$this->assertSame(Payment_Adaptive_Simple::FEES_PAYER_EACHRECEIVER, $payment->config('fees_payer'));
 		$this->assertSame(array(
 			'total_price' => '509.26',
 			'receivers' => array(

@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
 use OpenBuildings\PayPal\Payment;
-use OpenBuildings\PayPal\Payment_Adaptive;
+use OpenBuildings\PayPal\Payment_Adaptive_Simple;
 
 /**
  * @package    Openbuildings\Purchases
@@ -45,26 +45,16 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 	 */
 	public static function convert_purchase(Model_Purchase $purchase, array $params = array())
 	{
-		$paypal_adaptive_behavior = NULL;
-		foreach (Jam::meta('store')->behaviors() as $behavior)
-		{
-			if ($behavior instanceof Jam_Behavior_Paypal_Adaptive)
-			{
-				$paypal_adaptive_behavior = $behavior;
-				break;
-			}
-		}
-
-		if ( ! $paypal_adaptive_behavior)
+		if ( ! Jam::meta('store')->behavior('paypal_adaptive'))
 			throw new Exception('Model_Store must have Paypal_Adaptive behavior attached to perform AdaptivePayments');
 
 		$currency = $purchase->display_currency() ?: $purchase->currency();
 
-		$receivers = Model_Payment_Paypal_Chained::receivers($purchase, $paypal_adaptive_behavior, $currency);
+		$receivers = Model_Payment_Paypal_Chained::receivers($purchase, $currency);
 
 		if (empty($params['fees_payer']))
 		{
-			$params['fees_payer'] = Payment_Adaptive::FEES_PAYER_EACHRECEIVER;
+			$params['fees_payer'] = Payment_Adaptive_Simple::FEES_PAYER_EACHRECEIVER;
 		}
 
 		$auth = Kohana::$config->load('purchases.processor.paypal.adaptive.auth');
@@ -93,13 +83,13 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 			->config('app_id', $auth['app_id']);
 	}
 
-	public static function receivers(Model_Purchase $purchase, $paypal_adaptive_behavior, $currency)
+	public static function receivers(Model_Purchase $purchase, $currency)
 	{
 		$receivers = array();
 
 		foreach ($purchase->store_purchases->as_array() as $store_purchase)
 		{
-			$paypal_email = $store_purchase->store->{$paypal_adaptive_behavior->field_name()};
+			$paypal_email = $store_purchase->store->{Jam_Behavior_Paypal_Adaptive::PAYPAL_EMAIL_FIELD};
 
 			if ( ! $paypal_email)
 				continue;
@@ -146,7 +136,7 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 			'status' => Model_Payment::PENDING
 		));
 
-		$this->_authorize_url = Payment_Adaptive::approve_url(
+		$this->_authorize_url = Payment_Adaptive_Simple::approve_url(
 			$this->payment_id,
 			empty($params['mobile']) ? FALSE : TRUE
 		);
