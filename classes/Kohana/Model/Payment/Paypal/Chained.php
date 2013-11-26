@@ -105,6 +105,26 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 		return $receivers;
 	}
 
+	public static function store_refund_receivers(Model_Store_Refund $store_refund, $currency)
+	{
+		$receivers = array();
+
+		$store_purchase = $store_refund->get_insist('store_purchase');
+		$paypal_email = $store_purchase->get_insist('store')->{Jam_Behavior_Paypal_Adaptive::PAYPAL_EMAIL_FIELD};
+
+		if ( ! $paypal_email)
+			return $receivers;
+
+		$receivers []= array(
+			'email' => $paypal_email,
+			'amount' => $store_purchase->total_price(array(
+				'is_payable' => TRUE
+			))->as_string($currency)
+		);
+
+		return $receivers;
+	}
+
 	/**
 	 * Calcualte the transaciton fee of paypal based on the amount
 	 * @param  Jam_Price $amount
@@ -112,7 +132,7 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 	 */
 	public function transaction_fee(Jam_Price $amount)
 	{
-		return Model_Payment_Paypal::transaction_fee_amount($amount);
+		return Model_Payment_Paypal::transaction_fee($amount);
 	}
 
 	/**
@@ -168,5 +188,33 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 				'status' => $payment_details['status'] === 'COMPLETED' ? Model_Payment::PAID : $this->status
 			))
 			->save();
+	}
+
+	/**
+	 * Refund amount of the purchases, specified in the Model_Store_Refund object
+	 *
+	 * @param  array  $params
+	 * @throws Kohana_Exception If method not implemented
+	 */
+	public function refund_processor(Model_Store_Refund $store_refund, array $params = array())
+	{
+		$refund = Payment::instance('Adaptive_Refund');
+		$refund = Model_Payment_Paypal_Chained::config_auth($refund);
+
+		$purchase = $store_refund->purchase_insist();
+		$currency = $purchase->display_currency() ?: $purchase->currency();
+		$refund->config('currency', $currency);
+
+		$receivers = Model_Payment_Paypal_Chained::store_refund_receivers($store_refund, $currency);
+		$response = $refund->do_refund(array(
+			self::PAYMENT_ID_KEY => $this->payment_id,
+		), $receivers, count($receivers) > 1);
+
+		$store_refund->raw_response = $response;
+		$store_refund->status = ($response['refundInfoList.refundInfo(0).refundStatus'] == 'REFUNDED')
+			? Model_Store_Refund::REFUNDED
+			: $response['refundInfoList.refundInfo(0).refundStatus'];
+
+		return $this;
 	}
 }

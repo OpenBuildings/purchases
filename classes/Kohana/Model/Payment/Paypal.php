@@ -90,9 +90,11 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 	 */
 	public static function convert_refund(Model_Store_Refund $refund)
 	{
+		$purchase = $refund->purchase_insist();
+		$currency = $purchase->display_currency() ?: $purchase->currency();
 		$amount = new PayPal\Api\Amount();
 		$amount
-			->setCurrency($refund->purchase_insist()->currency)
+			->setCurrency($currency)
 			->setTotal($refund->total_amount()->as_string());
 
 		$paypal_refund = new PayPal\Api\Refund();
@@ -112,36 +114,18 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		$amount = $total->in('EUR');
 
 		if ($amount <= 2500.00)
-		{
-			$percent = 0.034;
-		}
-		elseif ($amount <= 10000.00)
-		{
-			$percent = 0.029;
-		}
-		elseif ($amount <= 50000.00)
-		{
-			$percent = 0.027;
-		}
-		elseif ($amount <= 100000.00)
-		{
-			$percent = 0.024;
-		}
-		else
-		{
-			$percent = 0.019;
-		}
+			return 0.034;
 
-		return $percent;
-	}
+		if ($amount <= 10000.00)
+			return 0.029;
 
-	public static function transaction_fee_amount(Jam_Price $amount)
-	{
-		$percent = Model_Payment_Paypal::transaction_fee_percent($amount);
+		if ($amount <= 50000.00)
+			return 0.027;
 
-		return $amount
-			->multiply_by($percent)
-			->add(new Jam_Price(0.35, 'EUR'));
+		if ($amount <= 100000.00)
+			return 0.024;
+
+		return 0.019;
 	}
 
 	/**
@@ -151,7 +135,11 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 	 */
 	public function transaction_fee(Jam_Price $amount)
 	{
-		return Model_Payment_Paypal::transaction_fee_amount($amount);
+		$percent = Model_Payment_Paypal::transaction_fee_percent($amount);
+
+		return $amount
+			->multiply_by($percent)
+			->add(new Jam_Price(0.35, 'EUR'));
 	}
 
 	/**

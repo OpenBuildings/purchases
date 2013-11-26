@@ -25,8 +25,9 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 	}
 
 	/**
-	 * @covers Model_Payment_Paypal_Chained::convert_purchase
-	 * @covers Model_Payment_Paypal_Chained::receivers
+	 * @covers Kohana_Model_Payment_Paypal_Chained::convert_purchase
+	 * @covers Kohana_Model_Payment_Paypal_Chained::receivers
+	 * @covers Kohana_Model_Payment_Paypal_Chained::store_refund_receivers
 	 */
 	public function test_convert_purchase()
 	{
@@ -59,11 +60,18 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 			'receivers' => array(
 				array(
 					'email' => 'teststore@clippings.com',
-					'amount' => '390.00'
+					'amount' => '195.00',
+					'primary' => FALSE,
 				),
 				array(
 					'email' => 'test-store@clippings.com',
-					'amount' => '119.26'
+					'amount' => '119.26',
+					'primary' => FALSE,
+				),
+				array(
+					'email' => 'adel-dev@clippings.com',
+					'amount' => '509.26',
+					'primary' => TRUE,
 				),
 			)
 		), $payment->order());
@@ -72,11 +80,12 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 	}
 
 	/**
-	 * @covers Model_Payment_Paypal_Chained::execute_processor
-	 * @covers Model_Payment_Paypal_Chained::authorize_processor
-	 * @covers Model_Payment_Paypal_Chained::authorize_url
-	 * @covers Model_Payment_Paypal_Chained::refund_processor
-	 * @covers Model_Payment_Paypal_Chained::config_auth
+	 * @covers Kohana_Model_Payment_Paypal_Chained::execute_processor
+	 * @covers Kohana_Model_Payment_Paypal_Chained::authorize_processor
+	 * @covers Kohana_Model_Payment_Paypal_Chained::authorize_url
+	 * @covers Kohana_Model_Payment_Paypal_Chained::config_auth
+	 * @covers Kohana_Model_Payment_Paypal_Chained::refund_processor
+	 * @covers Kohana_Model_Payment_Paypal_Chained::store_refund_receivers
 	 * @driver selenium
 	 */
 	public function test_execute()
@@ -130,5 +139,22 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 		$purchase->payment->execute();
 
 		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
+
+		$pay_key = $purchase->payment->payment_id;
+		$this->assertStringStartsWith('AP-', $pay_key);
+
+		$refund = $purchase->store_purchases[0]->refunds->create(array(
+			'items' => array(
+				array(
+					'purchase_item' => $purchase->store_purchases[0]->items[0],
+					'amount' => 100
+				)
+			)
+		));
+
+		$refund
+			->execute();
+
+		$this->assertEquals(Model_Store_Refund::REFUNDED, $refund->status);
 	}
 }

@@ -771,16 +771,16 @@
         },
         {
             "name": "openbuildings/paypal",
-            "version": "0.4.0",
+            "version": "0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/paypal.git",
-                "reference": "0f92bc96b0208e58b3c44ebf4adfa52e1eee791d"
+                "reference": "e5a3d71486788323f5acc9cab0e6a8fc29a3bff7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/paypal/zipball/0f92bc96b0208e58b3c44ebf4adfa52e1eee791d",
-                "reference": "0f92bc96b0208e58b3c44ebf4adfa52e1eee791d",
+                "url": "https://api.github.com/repos/OpenBuildings/paypal/zipball/e5a3d71486788323f5acc9cab0e6a8fc29a3bff7",
+                "reference": "e5a3d71486788323f5acc9cab0e6a8fc29a3bff7",
                 "shasum": ""
             },
             "require": {
@@ -816,7 +816,7 @@
                 "payments",
                 "paypal"
             ],
-            "time": "2013-11-25 15:25:15"
+            "time": "2013-11-26 17:11:15"
         },
         {
             "name": "openbuildings/phpunit-spiderling",
