@@ -90,10 +90,12 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 	 */
 	public static function convert_refund(Model_Store_Refund $refund)
 	{
+		$currency = $refund->display_currency() ?: $refund->currency();
+
 		$amount = new PayPal\Api\Amount();
 		$amount
-			->setCurrency($refund->purchase_insist()->currency)
-			->setTotal($refund->total_amount()->as_string());
+			->setCurrency($currency)
+			->setTotal($refund->total_amount()->as_string($currency));
 
 		$paypal_refund = new PayPal\Api\Refund();
 		$paypal_refund

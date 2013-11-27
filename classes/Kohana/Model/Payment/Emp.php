@@ -103,6 +103,7 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 	public static function convert_refund(Model_Store_Refund $refund)
 	{
 		$payment = $refund->payment_insist();
+		$currency = $refund->display_currency() ?: $refund->currency();
 
 		$params = array(
 			'order_id'         => $payment->raw_response['order_id'],
@@ -119,14 +120,14 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 					"item_{$index}_id" => Model_Payment_Emp::find_item_id($payment->raw_response['cart'], $item->purchase_item->id()),
 				);
 
-				$item_params["item_{$index}_amount"] = $item->amount()->as_string();
+				$item_params["item_{$index}_amount"] = $item->amount()->as_string($currency);
 
 				$params = array_merge($params, $item_params);
 			}
 		}
 		else
 		{
-			$params['amount'] = $refund->total_amount()->as_string();
+			$params['amount'] = $refund->total_amount()->as_string($currency);
 		}
 
 		return $params;
