@@ -1,5 +1,7 @@
 <?php
 
+use OpenBuildings\Monetary\Monetary;
+use OpenBuildings\Monetary\Source_Static;
 use OpenBuildings\PayPal\Payment_Adaptive_Simple;
 
 /**
@@ -65,7 +67,7 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 				),
 				array(
 					'email' => 'test-store@clippings.com',
-					'amount' => '119.26',
+					'amount' => '59.63',
 					'primary' => FALSE,
 				),
 				array(
@@ -118,8 +120,8 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 			->visit($purchase->payment->authorize_url())
 			->assertHasCss('h3', array('text' => 'Your payment summary'))
 			->assertHasCss('.items .amount', array('text' => $amount_string))
-			->wait(4000)
-			->next_wait_time(4000)
+			->wait(8000)
+			->next_wait_time(8000)
 			->click_on('#loadLogin')
 			->wait(10000)
 			->next_wait_time(4000)
@@ -156,5 +158,246 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 			->execute();
 
 		$this->assertEquals(Model_Store_Refund::REFUNDED, $refund->status);
+	}
+
+	/**
+	 * @covers Kohana_Model_Payment_Paypal_Chained::convert_receivers_amount
+	 */
+	public function test_convert_receivers_amount()
+	{
+		$receivers = array(
+			array(
+				'amount' => new Jam_Price(10, 'GBP'),
+			),
+			array(
+				'amount' => new Jam_Price(100, 'USD'),
+			),
+			array(
+				'amount' => new Jam_Price(15, 'EUR'),
+			),
+		);
+
+		$result = Kohana_Model_Payment_Paypal_Chained::convert_receivers_amount($receivers, 'EUR');
+		$this->assertSame(array(
+			array(
+				'amount' => '11.93',
+			),
+			array(
+				'amount' => '73.82',
+			),
+			array(
+				'amount' => '15.00',
+			),
+		), $result);
+	}
+
+	public function data_store_purchase_receiver()
+	{
+		return array(
+			array(
+				array(
+					'store' => array(
+						'paypal_email' => 'abc@example.com',
+					),
+				),
+				50.00,
+				1,
+				array(
+					'email' => 'abc@example.com',
+					'amount' => 50.00,
+				),
+			),
+			array(
+				array(
+					'store' => array(
+						'paypal_email' => FALSE,
+					),
+				),
+				50.00,
+				0,
+				NULL,
+			),
+			array(
+				array(
+					'store' => array(
+						'paypal_email' => 'paypal@example.com',
+					),
+				),
+				'150.00',
+				1,
+				array(
+					'email' => 'paypal@example.com',
+					'amount' => '150.00',
+				),
+			),
+			array(
+				array(
+					'store' => array(
+						'paypal_email' => NULL,
+					),
+				),
+				'150.00',
+				0,
+				NULL,
+			),
+			array(
+				array(
+					'store' => Jam::build('store'),
+				),
+				'150.00',
+				0,
+				NULL,
+			),
+		);
+	}
+
+	/**
+	 * @dataProvider data_store_purchase_receiver
+	 * @covers Kohana_Model_Payment_Paypal_Chained::store_purchase_receiver
+	 */
+	public function test_store_purchase_receiver($store_purchase_data, $total_price, $call_total_price, $expected_receiver_data)
+	{
+		$store_purchase = $this->getMock('Model_Store_Purchase', array(
+			'total_price',
+		), array(
+			'store_purchase'
+		));
+
+		if ($call_total_price)
+		{
+			$store_purchase
+				->expects($this->exactly($call_total_price))
+				->method('total_price')
+				->with(array(
+					'is_payable' => TRUE
+				))
+				->will($this->returnValue($total_price));
+		}
+
+		$store_purchase->set($store_purchase_data);
+
+		$this->assertSame(
+			$expected_receiver_data,
+			Kohana_Model_Payment_Paypal_Chained::store_purchase_receiver(
+				$store_purchase
+			)
+		);
+	}
+
+	public function data_store_refund_receivers()
+	{
+		return array(
+			array(
+				array(
+					'store' => array(
+						'paypal_email' => 'abc@example.com',
+					),
+				),
+				new Jam_Price(15.00, 'EUR'),
+				1,
+				array(
+					array(
+						'email' => 'abc@example.com',
+						'amount' => '15.00',
+					),
+				),
+			),
+			array(
+				array(
+					'store' => array(
+						'paypal_email' => FALSE,
+					),
+				),
+				new Jam_Price(15.00, 'EUR'),
+				0,
+				array(),
+			),
+			array(
+				array(
+					'store' => array(
+						'paypal_email' => 'abc@example.com',
+					),
+				),
+				new Jam_Price(10.00, 'GBP'),
+				1,
+				array(
+					array(
+						'email' => 'abc@example.com',
+						'amount' => '11.93',
+					),
+				),
+			),
+			array(
+				array(
+					'store' => Jam::build('store'),
+				),
+				new Jam_Price(15.00, 'EUR'),
+				0,
+				array(),
+			),
+		);
+	}
+
+	/**
+	 * @dataProvider data_store_refund_receivers
+	 * @covers Kohana_Model_Payment_Paypal_Chained::store_refund_receivers
+	 */
+	public function test_store_refund_receivers($store_purchase_data, $total_price, $call_total_price, $expected_store_refund_receivers)
+	{
+		$store_refund = $this->getMock('Model_Store_Refund', array(
+			'get_insist'
+		), array(
+			'store_refund'
+		));
+
+		$store_purchase = $this->getMock('Model_Store_Purchase', array(
+			'total_price',
+		), array(
+			'store_purchase'
+		));
+
+		$store_purchase->set($store_purchase_data);
+
+		if ($call_total_price)
+		{
+			$store_purchase
+				->expects($this->exactly($call_total_price))
+				->method('total_price')
+				->with(array(
+					'is_payable' => TRUE
+				))
+				->will($this->returnValue($total_price));
+		}
+
+		$store_refund
+			->expects($this->once())
+			->method('get_insist')
+			->with('store_purchase')
+			->will($this->returnValue($store_purchase));
+
+		$result = Kohana_Model_Payment_Paypal_Chained::store_refund_receivers($store_refund, 'EUR');
+		$this->assertSame($expected_store_refund_receivers, $result);
+	}
+
+	public function data_transaction_fee()
+	{
+		$monetary = new Monetary('GBP', new Source_Static());
+
+		return array(
+			array(new Jam_Price(10, 'EUR', $monetary), new Jam_Price(0.69, 'EUR', $monetary)),
+			array(new Jam_Price(20, 'GBP', $monetary), new Jam_Price(0.9738775, 'GBP', $monetary)),
+			array(new Jam_Price(4000, 'GBP', $monetary), new Jam_Price(116.2938775, 'GBP', $monetary)),
+		);
+	}
+
+	/**
+	 * @dataProvider data_transaction_fee
+	 * @covers Model_Payment_Paypal_Chained::transaction_fee
+	 */
+	public function test_transaction_fee($payment_price, $expected)
+	{
+		$payment = Jam::build('payment_paypal_chained');
+		$result = $payment->transaction_fee($payment_price);
+		$this->assertEquals($expected, $result);
 	}
 }

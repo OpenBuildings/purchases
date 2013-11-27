@@ -1,5 +1,8 @@
 <?php
 
+use OpenBuildings\Monetary\Monetary;
+use OpenBuildings\Monetary\Source_Static;
+
 /**
  * @group model
  * @group model.payment
@@ -197,7 +200,7 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 
 	public function data_transaction_fee()
 	{
-		$monetary = new OpenBuildings\Monetary\Monetary('GBP', new OpenBuildings\Monetary\Source_Static());
+		$monetary = new Monetary('GBP', new Source_Static());
 
 		return array(
 			array(new Jam_Price(10, 'EUR', $monetary), new Jam_Price(0.69, 'EUR', $monetary)),
@@ -219,7 +222,7 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 
 	public function data_transaction_fee_percent()
 	{
-		$monetary = new OpenBuildings\Monetary\Monetary('GBP', new OpenBuildings\Monetary\Source_Static());
+		$monetary = new Monetary('GBP', new Source_Static());
 
 		return array(
 			array(new Jam_Price(100, 'EUR', $monetary), 0.034),

@@ -85,42 +85,45 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 
 	public static function receivers(Model_Purchase $purchase, $currency)
 	{
-		$receivers = array();
+		$receivers = array_filter(
+			array_map(
+				'static::store_purchase_receiver',
+				$purchase->store_purchases->as_array()
+			)
+		);
 
-		foreach ($purchase->store_purchases->as_array() as $store_purchase)
-		{
-			$paypal_email = $store_purchase->store->{Jam_Behavior_Paypal_Adaptive::PAYPAL_EMAIL_FIELD};
+		return static::convert_receivers_amount($receivers, $currency);
+	}
 
-			if ( ! $paypal_email)
-				continue;
+	public static function store_purchase_receiver(Model_Store_Purchase $store_purchase)
+	{
+		$paypal_email = $store_purchase->get_insist('store')->{Jam_Behavior_Paypal_Adaptive::PAYPAL_EMAIL_FIELD};
 
-			$receivers []= array(
-				'email' => $paypal_email,
-				'amount' => $store_purchase->total_price(array(
-					'is_payable' => TRUE
-				))->as_string($currency)
-			);
-		}
+		if ( ! $paypal_email)
+			return NULL;
 
-		return $receivers;
+		return array(
+			'email' => $paypal_email,
+			'amount' => $store_purchase->total_price(array(
+				'is_payable' => TRUE
+			))
+		);
 	}
 
 	public static function store_refund_receivers(Model_Store_Refund $store_refund, $currency)
 	{
-		$receivers = array();
-
 		$store_purchase = $store_refund->get_insist('store_purchase');
-		$paypal_email = $store_purchase->get_insist('store')->{Jam_Behavior_Paypal_Adaptive::PAYPAL_EMAIL_FIELD};
 
-		if ( ! $paypal_email)
-			return $receivers;
+		$receivers = array_filter(array(static::store_purchase_receiver($store_purchase)));
 
-		$receivers []= array(
-			'email' => $paypal_email,
-			'amount' => $store_purchase->total_price(array(
-				'is_payable' => TRUE
-			))->as_string($currency)
-		);
+		return static::convert_receivers_amount($receivers, $currency);
+	}
+
+	public static function convert_receivers_amount(array $receivers, $currency)
+	{
+		array_walk($receivers, function( & $receiver) use ($currency) {
+			$receiver['amount'] = $receiver['amount']->as_string($currency);
+		});
 
 		return $receivers;
 	}
@@ -132,7 +135,7 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 	 */
 	public function transaction_fee(Jam_Price $amount)
 	{
-		return Model_Payment_Paypal::transaction_fee($amount);
+		return Jam::build('payment_paypal')->transaction_fee($amount);
 	}
 
 	/**
