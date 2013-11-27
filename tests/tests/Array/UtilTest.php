@@ -42,7 +42,6 @@ class Array_UtilTest extends Testcase_Purchases {
 		$this->assertEquals($result, Array_Util::group_by($array, $callback, $preserve_keys));
 	}
 
-
 	public function data_not_instance_of()
 	{
 		return array(
@@ -55,6 +54,7 @@ class Array_UtilTest extends Testcase_Purchases {
 	
 	/**
 	 * @dataProvider data_not_instance_of
+	 * @covers Array_Util::not_instance_of
 	 */
 	public function test_not_instance_of($array, $class, $expected)
 	{
@@ -73,10 +73,11 @@ class Array_UtilTest extends Testcase_Purchases {
 	
 	/**
 	 * @dataProvider data_validate_instance_of
+	 * @covers Array_Util::validate_instance_of
 	 */
 	public function test_validate_instance_of($array, $class, $expected_exception_message)
 	{
-		if ($expected_exception_message) 
+		if ($expected_exception_message)
 		{
 			$this->setExpectedException('Kohana_Exception', $expected_exception_message);
 		}

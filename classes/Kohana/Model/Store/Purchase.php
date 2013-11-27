@@ -14,6 +14,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta
+			->name_key('number')
 			->behaviors(array(
 				'tokenable' => Jam::behavior('tokenable', array('uppercase' => TRUE, 'field' => 'number')),
 				'paranoid' => Jam::behavior('paranoid'),
@@ -105,7 +106,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 	 * @return integer
 	 */
 	public function items_count($types = NULL)
-	{
+	{  // @codeCoverageIgnore
 		return count($this->items($types));
 	}
 
@@ -114,7 +115,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 	 * @param  array $types 
 	 * @return integer        
 	 */
-	public function items_quantity($types = NULL)
+	public function items_quantity($types = NULL) // @codeCoverageIgnore
 	{
 		$quantities = array_map(function($item) {
 			return $item->quantity;

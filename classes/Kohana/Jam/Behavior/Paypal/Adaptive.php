@@ -11,7 +11,7 @@
  */
 class Kohana_Jam_Behavior_Paypal_Adaptive extends Jam_Behavior {
 
-	public $_field_name = 'paypal_email';
+	const PAYPAL_EMAIL_FIELD = 'paypal_email';
 
 	public $_field_options = array();
 
@@ -23,16 +23,11 @@ class Kohana_Jam_Behavior_Paypal_Adaptive extends Jam_Behavior {
 		parent::initialize($meta, $name);
 
 		$meta
-			->field($this->_field_name, Jam::field('string', $this->_field_options))
-			->validator($this->_field_name, array(
+			->field(Jam_Behavior_Paypal_Adaptive::PAYPAL_EMAIL_FIELD, Jam::field('string', $this->_field_options))
+			->validator(Jam_Behavior_Paypal_Adaptive::PAYPAL_EMAIL_FIELD, array(
 				'format' => array(
 					'email' => TRUE
 				)
 			));
-	}
-
-	public function field_name()
-	{
-		return $this->_field_name;
 	}
 }

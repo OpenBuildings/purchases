@@ -170,4 +170,39 @@ class Model_Store_RefundTest extends Testcase_Purchases {
 		$this->assertTrue($refund->has_purchase_item($purchase_item1));
 		$this->assertFalse($refund->has_purchase_item($purchase_item1));
 	}
+
+	/**
+	 * @covers Model_Store_Refund::execute
+	 */
+	public function test_execute()
+	{
+		$store_refund = $this->getMock('Model_Store_Refund', array(
+			'check_insist',
+			'payment_insist',
+		), array(
+			'store_refund'
+		));
+
+		$payment_mock = $this->getMock('stdClass', array(
+			'refund'
+		));
+
+		$payment_mock->status = Model_Payment::PAID;
+
+		$payment_mock
+			->expects($this->once())
+			->method('refund')
+			->with($store_refund);
+
+		$store_refund
+			->expects($this->once())
+			->method('check_insist');
+
+		$store_refund
+			->expects($this->once())
+			->method('payment_insist')
+			->will($this->returnValue($payment_mock));
+
+		$this->assertSame($store_refund, $store_refund->execute());
+	}
 }

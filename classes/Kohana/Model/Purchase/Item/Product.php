@@ -8,11 +8,20 @@
  */
 class Kohana_Model_Purchase_Item_Product extends Model_Purchase_Item {
 
+	/**
+	 * @codeCoverageIgnore
+	 */
 	public static function initialize(Jam_Meta $meta)
 	{
 		parent::initialize($meta);
 
-		$meta->table('purchase_items');
+		$meta
+			->table('purchase_items')
+			->fields(array(
+				'is_payable' => Jam::field('boolean', array(
+					'default' => TRUE
+				))
+			));
 	}
 
 	public function get_price()

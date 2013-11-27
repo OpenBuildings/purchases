@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * @group model
+ * @group model.payment
  * @group model.payment_paypal
  */
 class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
@@ -12,7 +14,7 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 	{
 		$purchase = Jam::find('purchase', 1);
 
-		$promo = $purchase->store_purchases[0]->items->create(array(
+		$purchase->store_purchases[0]->items->create(array(
 			'quantity' => 1,
 			'price' => -10,
 			'model' => 'purchase_item_promotion',

@@ -18,6 +18,7 @@ class Kohana_Model_Purchase extends Jam_Model {
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta
+			->name_key('number')
 			->behaviors(array(
 				'tokenable' => Jam::behavior('tokenable', array('uppercase' => TRUE, 'field' => 'number')),
 				'freezable' => Jam::behavior('freezable', array('fields' => 'monetary', 'associations' => 'store_purchases')),

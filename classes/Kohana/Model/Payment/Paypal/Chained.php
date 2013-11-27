@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
 use OpenBuildings\PayPal\Payment;
-use OpenBuildings\PayPal\Payment_Adaptive;
+use OpenBuildings\PayPal\Payment_Adaptive_Simple;
 
 /**
  * @package    Openbuildings\Purchases
@@ -45,26 +45,16 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 	 */
 	public static function convert_purchase(Model_Purchase $purchase, array $params = array())
 	{
-		$paypal_adaptive_behavior = NULL;
-		foreach (Jam::meta('store')->behaviors() as $behavior)
-		{
-			if ($behavior instanceof Jam_Behavior_Paypal_Adaptive)
-			{
-				$paypal_adaptive_behavior = $behavior;
-				break;
-			}
-		}
-
-		if ( ! $paypal_adaptive_behavior)
+		if ( ! Jam::meta('store')->behavior('paypal_adaptive'))
 			throw new Exception('Model_Store must have Paypal_Adaptive behavior attached to perform AdaptivePayments');
 
 		$currency = $purchase->display_currency() ?: $purchase->currency();
 
-		$receivers = Model_Payment_Paypal_Chained::receivers($purchase, $paypal_adaptive_behavior, $currency);
+		$receivers = Model_Payment_Paypal_Chained::receivers($purchase, $currency);
 
 		if (empty($params['fees_payer']))
 		{
-			$params['fees_payer'] = Payment_Adaptive::FEES_PAYER_EACHRECEIVER;
+			$params['fees_payer'] = Payment_Adaptive_Simple::FEES_PAYER_EACHRECEIVER;
 		}
 
 		$auth = Kohana::$config->load('purchases.processor.paypal.adaptive.auth');
@@ -93,13 +83,13 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 			->config('app_id', $auth['app_id']);
 	}
 
-	public static function receivers(Model_Purchase $purchase, $paypal_adaptive_behavior, $currency)
+	public static function receivers(Model_Purchase $purchase, $currency)
 	{
 		$receivers = array();
 
 		foreach ($purchase->store_purchases->as_array() as $store_purchase)
 		{
-			$paypal_email = $store_purchase->store->{$paypal_adaptive_behavior->field_name()};
+			$paypal_email = $store_purchase->store->{Jam_Behavior_Paypal_Adaptive::PAYPAL_EMAIL_FIELD};
 
 			if ( ! $paypal_email)
 				continue;
@@ -115,6 +105,26 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 		return $receivers;
 	}
 
+	public static function store_refund_receivers(Model_Store_Refund $store_refund, $currency)
+	{
+		$receivers = array();
+
+		$store_purchase = $store_refund->get_insist('store_purchase');
+		$paypal_email = $store_purchase->get_insist('store')->{Jam_Behavior_Paypal_Adaptive::PAYPAL_EMAIL_FIELD};
+
+		if ( ! $paypal_email)
+			return $receivers;
+
+		$receivers []= array(
+			'email' => $paypal_email,
+			'amount' => $store_purchase->total_price(array(
+				'is_payable' => TRUE
+			))->as_string($currency)
+		);
+
+		return $receivers;
+	}
+
 	/**
 	 * Calcualte the transaciton fee of paypal based on the amount
 	 * @param  Jam_Price $amount
@@ -122,7 +132,7 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 	 */
 	public function transaction_fee(Jam_Price $amount)
 	{
-		return Model_Payment_Paypal::transaction_fee_amount($amount);
+		return Model_Payment_Paypal::transaction_fee($amount);
 	}
 
 	/**
@@ -146,7 +156,7 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 			'status' => Model_Payment::PENDING
 		));
 
-		$this->_authorize_url = Payment_Adaptive::approve_url(
+		$this->_authorize_url = Payment_Adaptive_Simple::approve_url(
 			$this->payment_id,
 			empty($params['mobile']) ? FALSE : TRUE
 		);
@@ -178,5 +188,33 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 				'status' => $payment_details['status'] === 'COMPLETED' ? Model_Payment::PAID : $this->status
 			))
 			->save();
+	}
+
+	/**
+	 * Refund amount of the purchases, specified in the Model_Store_Refund object
+	 *
+	 * @param  array  $params
+	 * @throws Kohana_Exception If method not implemented
+	 */
+	public function refund_processor(Model_Store_Refund $store_refund, array $params = array())
+	{
+		$refund = Payment::instance('Adaptive_Refund');
+		$refund = Model_Payment_Paypal_Chained::config_auth($refund);
+
+		$purchase = $store_refund->purchase_insist();
+		$currency = $purchase->display_currency() ?: $purchase->currency();
+		$refund->config('currency', $currency);
+
+		$receivers = Model_Payment_Paypal_Chained::store_refund_receivers($store_refund, $currency);
+		$response = $refund->do_refund(array(
+			self::PAYMENT_ID_KEY => $this->payment_id,
+		), $receivers, count($receivers) > 1);
+
+		$store_refund->raw_response = $response;
+		$store_refund->status = ($response['refundInfoList.refundInfo(0).refundStatus'] == 'REFUNDED')
+			? Model_Store_Refund::REFUNDED
+			: $response['refundInfoList.refundInfo(0).refundStatus'];
+
+		return $this;
 	}
 }
