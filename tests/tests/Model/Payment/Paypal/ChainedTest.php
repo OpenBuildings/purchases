@@ -165,25 +165,27 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 	 */
 	public function test_convert_receivers_amount()
 	{
+		$monetary = new Monetary('GBP', new Source_Static);
+
 		$receivers = array(
 			array(
-				'amount' => new Jam_Price(10, 'GBP'),
+				'amount' => new Jam_Price(10, 'GBP', $monetary),
 			),
 			array(
-				'amount' => new Jam_Price(100, 'USD'),
+				'amount' => new Jam_Price(100, 'USD', $monetary),
 			),
 			array(
-				'amount' => new Jam_Price(15, 'EUR'),
+				'amount' => new Jam_Price(15, 'EUR', $monetary),
 			),
 		);
 
 		$result = Kohana_Model_Payment_Paypal_Chained::convert_receivers_amount($receivers, 'EUR');
 		$this->assertSame(array(
 			array(
-				'amount' => '11.93',
+				'amount' => '11.91',
 			),
 			array(
-				'amount' => '73.82',
+				'amount' => '75.09',
 			),
 			array(
 				'amount' => '15.00',
@@ -286,6 +288,8 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 
 	public function data_store_refund_receivers()
 	{
+		$monetary = new Monetary('GBP', new Source_Static);
+
 		return array(
 			array(
 				array(
@@ -293,7 +297,7 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 						'paypal_email' => 'abc@example.com',
 					),
 				),
-				new Jam_Price(15.00, 'EUR'),
+				new Jam_Price(15.00, 'EUR', $monetary),
 				1,
 				array(
 					array(
@@ -308,7 +312,7 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 						'paypal_email' => FALSE,
 					),
 				),
-				new Jam_Price(15.00, 'EUR'),
+				new Jam_Price(15.00, 'EUR', $monetary),
 				0,
 				array(),
 			),
@@ -318,12 +322,12 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 						'paypal_email' => 'abc@example.com',
 					),
 				),
-				new Jam_Price(10.00, 'GBP'),
+				new Jam_Price(10.00, 'GBP', $monetary),
 				1,
 				array(
 					array(
 						'email' => 'abc@example.com',
-						'amount' => '11.93',
+						'amount' => '11.91',
 					),
 				),
 			),
@@ -331,7 +335,7 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 				array(
 					'store' => Jam::build('store'),
 				),
-				new Jam_Price(15.00, 'EUR'),
+				new Jam_Price(15.00, 'EUR', $monetary),
 				0,
 				array(),
 			),
@@ -381,7 +385,7 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 
 	public function data_transaction_fee()
 	{
-		$monetary = new Monetary('GBP', new Source_Static());
+		$monetary = new Monetary('GBP', new Source_Static);
 
 		return array(
 			array(new Jam_Price(10, 'EUR', $monetary), new Jam_Price(0.69, 'EUR', $monetary)),
