@@ -13,6 +13,15 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 
 	const PAYMENT_ID_KEY = 'payKey';
 
+	const REFUND_STATUS_REFUNDED = 'REFUNDED';
+
+	const REFUNDED_STATUS_REFUNDED_PENDING = 'REFUNDED_PENDING';
+
+	public static $successful_refund_statuses = array(
+		self::REFUND_STATUS_REFUNDED,
+		self::REFUNDED_STATUS_REFUNDED_PENDING,
+	);
+
 	/**
 	 * @codeCoverageIgnore
 	 */
@@ -214,7 +223,8 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 		), $receivers, count($receivers) > 1);
 
 		$store_refund->raw_response = $response;
-		$store_refund->status = ($response['refundInfoList.refundInfo(0).refundStatus'] == 'REFUNDED')
+		$refund_status = $response['refundInfoList.refundInfo(0).refundStatus'];
+		$store_refund->status = in_array($refund_status, array(static::$successful_refund_statuses))
 			? Model_Store_Refund::REFUNDED
 			: $response['refundInfoList.refundInfo(0).refundStatus'];
 
