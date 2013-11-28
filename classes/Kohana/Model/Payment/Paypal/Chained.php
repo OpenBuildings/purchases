@@ -224,7 +224,7 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 
 		$store_refund->raw_response = $response;
 		$refund_status = $response['refundInfoList.refundInfo(0).refundStatus'];
-		$store_refund->status = in_array($refund_status, array(static::$successful_refund_statuses))
+		$store_refund->status = in_array($refund_status, static::$successful_refund_statuses)
 			? Model_Store_Refund::REFUNDED
 			: $response['refundInfoList.refundInfo(0).refundStatus'];
 
