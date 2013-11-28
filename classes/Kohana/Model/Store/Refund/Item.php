@@ -31,9 +31,12 @@ class Kohana_Model_Store_Refund_Item extends Jam_Model {
 
 	public function validate()
 	{
-		if ($this->amount AND $this->amount->amount() > abs($this->purchase_item_price()->amount()))
+		if ($this->amount AND round($this->amount->amount(), 2) > abs(round($this->purchase_item_price()->amount(), 2)))
 		{
-			$this->errors()->add('amount', 'numeric_less_than_or_equal_to', array(':less_than_or_equal_to' => $this->get_insist('purchase_item')->price()));
+			$this->errors()
+				->add('amount', 'numeric_less_than_or_equal_to', array(
+					':less_than_or_equal_to' => $this->purchase_item_price()
+				));
 		}
 	}
 
