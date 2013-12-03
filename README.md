@@ -1,7 +1,8 @@
 # Purchases Module
 
 [![Build Status](https://travis-ci.org/OpenBuildings/purchases.png?branch=master)](https://travis-ci.org/OpenBuildings/purchases)
-[![Coverage Status](https://coveralls.io/repos/OpenBuildings/purchases/badge.png?branch=master)](https://coveralls.io/r/OpenBuildings/purchases?branch=master)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/OpenBuildings/purchases/badges/quality-score.png?s=e9d8fb56ba6287ac409e35a485445071ad52eebe)](https://scrutinizer-ci.com/g/OpenBuildings/purchases/)
+[![Code Coverage](https://scrutinizer-ci.com/g/OpenBuildings/purchases/badges/coverage.png?s=80b3817f7aa1d6b14e56a45ba054f44cb4df695b)](https://scrutinizer-ci.com/g/OpenBuildings/purchases/)
 [![Latest Stable Version](https://poser.pugx.org/openbuildings/purchases/v/stable.png)](https://packagist.org/packages/openbuildings/purchases)
 
 
