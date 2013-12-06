@@ -2,7 +2,7 @@
 
 /**
  * This form is used to ease creating html form for credit cards, that use emp paymnet processor
- * 
+ *
  * @package    Openbuildings\Purchases
  * @author     Ivan Kerin <ikerin@gmail.com>
  * @copyright  (c) 2013 OpenBuildings Ltd.
@@ -17,13 +17,22 @@ class Kohana_Model_Emp_Form extends Jam_Validated {
 	{
 		$meta
 			->fields(array(
-				'card_holder_name' => Jam::field('string', array('filters' => array('trim'))),
-				'card_number' => Jam::field('string', array('filters' => array('Model_Emp_Form::process_credit_card'))),
+				'card_holder_name' => Jam::field('string', array(
+					'filters' => array('trim')
+				)),
+				'card_number' => Jam::field('string', array(
+					'filters' => array('Model_Emp_Form::process_credit_card')
+				)),
 				'exp_month' => Jam::field('string'),
 				'exp_year' => Jam::field('string'),
 				'cvv' => Jam::field('string', array('filters' => array('trim'))),
 			))
-			->validator('card_holder_name', 'card_number', 'exp_month', 'exp_year', 'cvv',
+			->validator(
+				'card_holder_name',
+				'card_number',
+				'exp_month',
+				'exp_year',
+				'cvv',
 				array(
 					'present' => TRUE,
 				)
@@ -104,4 +113,3 @@ class Kohana_Model_Emp_Form extends Jam_Validated {
 		}
 	}
 }
-
