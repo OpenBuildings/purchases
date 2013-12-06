@@ -86,5 +86,22 @@ class Kohana_Model_Emp_Form extends Jam_Validated {
 		
 		return array_combine($years, $labels);
 	}
+
+	public function validate()
+	{
+		if ($this->exp_month AND $this->exp_year)
+		{
+			$year = 2000 + (int) $this->exp_year;
+			if ( $year < (int) date('Y'))
+			{
+				$this->errors()->add('exp_year', 'card_expired');
+			}
+			elseif ( (int) $this->exp_month < (int) date('n')
+			 AND $year === (int) date('Y'))
+			{
+				$this->errors()->add('exp_month', 'card_expired');
+			}
+		}
+	}
 }
 
