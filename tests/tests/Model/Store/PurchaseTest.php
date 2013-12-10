@@ -13,10 +13,21 @@ use OpenBuildings\Monetary\Source_Static;
  */
 class Model_Store_PurchaseTest extends Testcase_Purchases {
 
+	/**
+	 * @covers Model_Store_Purchase::initialize
+	 */
 	public function test_initialize()
 	{
 		$meta = Jam::meta('store_purchase');
 		$this->assertSame('number', $meta->name_key());
+	}
+
+	/**
+	 * @coversNothing
+	 */
+	public function test_implements_purchasable()
+	{
+		$this->assertInstanceOf('Purchasable', Jam::build('store_purchase'));
 	}
 
 	/**
@@ -318,6 +329,23 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		$expected = array_merge($existing_item, $update_item);
 
 		$this->assertEquals($expected, $store_purchase->items[0]->as_array());
+	}
+
+	/**
+	 * @covers Model_Store_Purchase::is_paid
+	 */
+	public function test_is_paid()
+	{
+		$purchase = $this->getMock('Model_Purchase', array('is_paid'), array('purchase'));
+		$purchase
+			->expects($this->exactly(2))
+				->method('is_paid')
+				->will($this->onConsecutiveCalls(TRUE, FALSE));
+
+		$store_purchase = Jam::build('store_purchase', array('purchase' => $purchase));
+
+		$this->assertTrue($store_purchase->is_paid());
+		$this->assertFalse($store_purchase->is_paid());
 	}
 
 	/**

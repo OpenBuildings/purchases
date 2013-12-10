@@ -7,10 +7,21 @@ use OpenBuildings\Monetary\Monetary;
  */
 class Model_PurchaseTest extends Testcase_Purchases {
 
+	/**
+	 * @covers Model_Purchase::initialize
+	 */
 	public function test_initialize()
 	{
 		$meta = Jam::meta('purchase');
 		$this->assertSame('number', $meta->name_key());
+	}
+
+	/**
+	 * @coversNothing
+	 */
+	public function test_implements_purchasable()
+	{
+		$this->assertInstanceOf('Purchasable', Jam::build('purchase'));
 	}
 
 	/**

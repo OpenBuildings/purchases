@@ -8,7 +8,7 @@ use OpenBuildings\Monetary\Monetary;
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Model_Purchase extends Jam_Model {
+class Kohana_Model_Purchase extends Jam_Model implements Purchasable {
 
 	protected $_monetary;
 

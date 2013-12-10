@@ -6,7 +6,7 @@
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Model_Store_Purchase extends Jam_Model {
+class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable {
 
 	/**
 	 * @codeCoverageIgnore
@@ -180,6 +180,16 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 	public function display_currency()
 	{
 		return $this->get_insist('purchase')->display_currency();
+	}
+
+	/**
+	 * Return TRUE if there is a payment and its status is "paid"
+	 *
+	 * @return boolean
+	 */
+	public function is_paid()
+	{
+		return $this->get_insist('purchase')->is_paid();
 	}
 
 	public function paid_at()
