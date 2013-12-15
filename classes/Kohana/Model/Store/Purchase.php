@@ -6,7 +6,7 @@
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Model_Store_Purchase extends Jam_Model {
+class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable {
 
 	/**
 	 * @codeCoverageIgnore
@@ -25,14 +25,14 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 					'inverse_of' => 'store_purchases'
 				)),
 				'items' => Jam::association('hasmany', array(
-					'inverse_of' => 'store_purchase', 
-					'foreign_model' => 'purchase_item', 
+					'inverse_of' => 'store_purchase',
+					'foreign_model' => 'purchase_item',
 					'delete_on_remove' => Jam_Association::DELETE,
 					'dependent' => Jam_Association::DELETE,
 				)),
 				'refunds' => Jam::association('hasmany', array(
-					'inverse_of' => 'store_purchase', 
-					'foreign_model' => 'store_refund', 
+					'inverse_of' => 'store_purchase',
+					'foreign_model' => 'store_refund',
 					'delete_on_remove' => Jam_Association::DELETE,
 					'dependent' => Jam_Association::DELETE,
 				)),
@@ -50,12 +50,12 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 
 	/**
 	 * Search for the same item in items, (using "is_same()" method, and return its index, or NULL if not found)
-	 * @param  Model_Purchase_Item $new_item 
-	 * @return integer                        
+	 * @param  Model_Purchase_Item $new_item
+	 * @return integer
 	 */
 	public function search_same_item(Model_Purchase_Item $new_item)
 	{
-		foreach ($this->items as $index => $item) 
+		foreach ($this->items as $index => $item)
 		{
 			if ($item->is_same($new_item))
 			{
@@ -66,12 +66,12 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 
 	/**
 	 * Add the item to items or update an existing one (checked using "search_same_item()")
-	 * @param Model_Purchase_Item $new_item 
+	 * @param Model_Purchase_Item $new_item
 	 * @return Model_Store_Purchase self
 	 */
 	public function add_or_update_item(Model_Purchase_Item $new_item)
 	{
-		if (($index = $this->search_same_item($new_item)) !== NULL) 
+		if (($index = $this->search_same_item($new_item)) !== NULL)
 		{
 			$this->items[$index]->quantity += $new_item->quantity;
 		}
@@ -85,14 +85,14 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 	/**
 	 * Return items, filtered, trigger model.filter_items to allow adding custom filters
 	 * @trigger model.filter_items
-	 * @param  array $types 
-	 * @return array        
+	 * @param  array $types
+	 * @return array
 	 */
 	public function items($types = NULL)
 	{
 		$items = $this->items->as_array();
 
-		if ($types) 
+		if ($types)
 		{
 			$items = $this->meta()->events()->trigger('model.filter_items', $this, array($items, (array) $types));
 		}
@@ -112,8 +112,8 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 
 	/**
 	 * Return the sum of the quantities of all the items, filtered.
-	 * @param  array $types 
-	 * @return integer        
+	 * @param  array $types
+	 * @return integer
 	 */
 	public function items_quantity($types = NULL) // @codeCoverageIgnore
 	{
@@ -139,7 +139,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 	/**
 	 * Replace purchase items, filtered. Removes old items
 	 * @param  array $items arrat of Model_Purchase_Item
-	 * @param  array $types 
+	 * @param  array $types
 	 * @return Model_Store_Purchase        self
 	 */
 	public function replace_items($items, $types = NULL)
@@ -161,9 +161,10 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 	}
 
 	/**
-	 * Sum the total price of the items. filtered.
-	 * @param  array $types 
-	 * @return Jam_Price        
+	 * Sum the total price of the filtered items.
+	 *
+	 * @param  array $types
+	 * @return Jam_Price
 	 */
 	public function total_price($types = NULL)
 	{
@@ -172,21 +173,52 @@ class Kohana_Model_Store_Purchase extends Jam_Model {
 		return Jam_Price::sum($prices, $this->currency(), $this->monetary(), $this->display_currency());
 	}
 
+	/**
+	 * Return the currency of all of the price fields in the purchase
+	 *
+	 * @return string
+	 */
 	public function currency()
 	{
 		return $this->get_insist('purchase')->currency();
 	}
 
+	/**
+	 * The currency used in "humanizing" any of the price fields in the purchase
+	 *
+	 * @return string
+	 */
 	public function display_currency()
 	{
 		return $this->get_insist('purchase')->display_currency();
 	}
 
-	public function paid_at()
+	/**
+	 * Return TRUE if there is a payment and its status is "paid"
+	 *
+	 * @return boolean
+	 */
+	public function is_paid()
 	{
-		return $this->get_insist('purchase')->paid_at();	
+		return $this->get_insist('purchase')->is_paid();
 	}
 
+	/**
+	 * Return the date when the associated payment has been created
+	 *
+	 * @return string|NULL
+	 */
+	public function paid_at()
+	{
+		return $this->get_insist('purchase')->paid_at();
+	}
+
+	/**
+	 * Return Monetary::instance() if not frozen.
+	 * Freezable field.
+	 *
+	 * @return OpenBuildings\Monetary\Monetary
+	 */
 	public function monetary()
 	{
 		return $this->get_insist('purchase')->monetary();

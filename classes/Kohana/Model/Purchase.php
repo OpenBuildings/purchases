@@ -8,7 +8,7 @@ use OpenBuildings\Monetary\Monetary;
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Model_Purchase extends Jam_Model {
+class Kohana_Model_Purchase extends Jam_Model implements Purchasable {
 
 	protected $_monetary;
 
@@ -32,7 +32,7 @@ class Kohana_Model_Purchase extends Jam_Model {
 					'dependent' => Jam_Association::DELETE,
 				)),
 				'stores' => Jam::association('manytomany', array(
-					'join_table' => 'store_purchases', 
+					'join_table' => 'store_purchases',
 					'readonly' => TRUE,
 				)),
 				'creator' => Jam::association('creator', array('required' => FALSE)),
@@ -53,9 +53,9 @@ class Kohana_Model_Purchase extends Jam_Model {
 	}
 
 	/**
-	 * Iterate through the existing store_purchases and return the one that is linked to this store. 
+	 * Iterate through the existing store_purchases and return the one that is linked to this store.
 	 * If none exist build one and return it
-	 * @param  Model_Store $store 
+	 * @param  Model_Store $store
 	 * @return Model_Store_Purchase
 	 */
 	public function find_or_build_store_purchase(Model_Store $store)
@@ -76,9 +76,10 @@ class Kohana_Model_Purchase extends Jam_Model {
 
 	/**
 	 * Add item to the store_purchase that matches the store given, if it exists, update the quantity, if the store_purchase does not exist, build it.
-	 * @trigger model.add_item event, pass $new_item
-	 * @param Model_Store              $store    
-	 * @param Model_Purchase_Item $new_item 
+	 *
+	 * @param Model_Store              $store
+	 * @param Model_Purchase_Item $new_item
+	 * @trigger model.add_item event passing $new_item
 	 */
 	public function add_item($store, Model_Purchase_Item $new_item)
 	{
@@ -92,7 +93,9 @@ class Kohana_Model_Purchase extends Jam_Model {
 	}
 
 	/**
-	 * Freezable field. Return Monetary::instance() if not frozen
+	 * Return Monetary::instance() if not frozen.
+	 * Freezable field.
+	 *
 	 * @return OpenBuildings\Monetary\Monetary
 	 */
 	public function monetary()
@@ -102,6 +105,7 @@ class Kohana_Model_Purchase extends Jam_Model {
 
 	/**
 	 * Return the currency for all the field in the purchase
+	 *
 	 * @return string
 	 */
 	public function currency()
@@ -111,7 +115,8 @@ class Kohana_Model_Purchase extends Jam_Model {
 
 	/**
 	 * The currency used in "humanizing" any of the price fields in the purchase
-	 * @return string 
+	 *
+	 * @return string
 	 */
 	public function display_currency()
 	{
@@ -120,6 +125,7 @@ class Kohana_Model_Purchase extends Jam_Model {
 
 	/**
 	 * Return purchase_items, aggregated from all the store_purchases. Can pass filters.
+	 *
 	 * @param  array $types filters
 	 * @return array        Model_Purchase_Items
 	 */
@@ -127,7 +133,7 @@ class Kohana_Model_Purchase extends Jam_Model {
 	{
 		$items = array();
 
-		foreach ($this->store_purchases->as_array() as $store_purchase) 
+		foreach ($this->store_purchases->as_array() as $store_purchase)
 		{
 			$items = array_merge($items, $store_purchase->items($types));
 		}
@@ -136,7 +142,8 @@ class Kohana_Model_Purchase extends Jam_Model {
 	}
 
 	/**
-	 * Return the sum purchase itmes count from all store_purchases
+	 * Return the sum purchase items count from all store_purchases
+	 *
 	 * @param  array $types filters
 	 * @return integer
 	 */
@@ -148,7 +155,7 @@ class Kohana_Model_Purchase extends Jam_Model {
 	/**
 	 * Return the sum of the quantities of all the purchase_items
 	 * @param  array $types filters
-	 * @return integer        
+	 * @return integer
 	 */
 	public function items_quantity($types = NULL)
 	{
@@ -161,11 +168,12 @@ class Kohana_Model_Purchase extends Jam_Model {
 
 	/**
 	 * Run update items on all the store_purchases
-	 * @return Model_Purchase self
+	 *
+	 * @return Model_Purchase $this
 	 */
 	public function update_items()
 	{
-		foreach ($this->store_purchases->as_array() as $store_purchase) 
+		foreach ($this->store_purchases->as_array() as $store_purchase)
 		{
 			$store_purchase->update_items();
 		}
@@ -174,10 +182,11 @@ class Kohana_Model_Purchase extends Jam_Model {
 	}
 
 	/**
-	 * Replace the purchase items from a given type, removing old items 
+	 * Replace the purchase items from a given type, removing old items
+	 *
 	 * @param  array $items array of new items
 	 * @param  array $types filters
-	 * @return Model_Purchase        self
+	 * @return Model_Purchase $this
 	 */
 	public function replace_items($items, $types = NULL)
 	{
@@ -187,7 +196,7 @@ class Kohana_Model_Purchase extends Jam_Model {
 		$replaced = array_intersect_key($grouped, $current);
 		$removed = array_diff_key($current, $grouped);
 
-		foreach ($replaced as $index => $items) 
+		foreach ($replaced as $index => $items)
 		{
 			$current[$index]->replace_items($items, $types);
 		}
@@ -199,8 +208,9 @@ class Kohana_Model_Purchase extends Jam_Model {
 
 	/**
 	 * Return the sum of all the prices from the purchase items
+	 *
 	 * @param  array $types filters
-	 * @return Jam_Price        
+	 * @return Jam_Price
 	 */
 	public function total_price($types = NULL)
 	{
@@ -211,7 +221,8 @@ class Kohana_Model_Purchase extends Jam_Model {
 
 	/**
 	 * Return TRUE if there is a payment and its status is "paid"
-	 * @return boolean 
+	 *
+	 * @return boolean
 	 */
 	public function is_paid()
 	{
@@ -220,7 +231,8 @@ class Kohana_Model_Purchase extends Jam_Model {
 
 	/**
 	 * Return the date when the payment has been created
-	 * @return string 
+	 *
+	 * @return string|NULL
 	 */
 	public function paid_at()
 	{
