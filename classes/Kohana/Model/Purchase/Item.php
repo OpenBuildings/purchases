@@ -138,13 +138,10 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 				':reference' => (string) $this->reference
 			));
 
-		$price = $price
-			->monetary($this->monetary())
-			->convert_to($this->currency());
-
+		$price->monetary($this->monetary());
 		$price->display_currency($this->display_currency());
 
-		return $price;
+		return $price->convert_to($this->currency());
 	}
 
 	/**
@@ -153,12 +150,11 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 	 */
 	public function get_reference_paranoid()
 	{
-		$current_filter = Jam_Behavior_Paranoid::filter();
-		Jam_Behavior_Paranoid::filter(Jam_Behavior_Paranoid::ALL);
-		$reference = $this->get_insist('reference');
-		Jam_Behavior_Paranoid::filter($current_filter);
-
-		return $reference;
+		$self = $this;
+		
+		return Jam_Behavior_Paranoid::with_filter(Jam_Behavior_Paranoid::ALL, function() use ($self) {
+			return $self->get_insist('reference');
+		});
 	}
 
 	/**

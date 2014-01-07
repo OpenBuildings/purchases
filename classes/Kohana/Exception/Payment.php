@@ -19,6 +19,6 @@ class Kohana_Exception_Payment extends Kohana_Exception {
 
 	public function data()
 	{
-		return $data;
+		return $this->data;
 	}
 }
