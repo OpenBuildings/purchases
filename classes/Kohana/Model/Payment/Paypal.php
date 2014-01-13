@@ -171,7 +171,8 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		} 
 		catch (\PayPal\Exception\PPConnectionException $exception) 
 		{
-			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $data['message']), 0, $exception, $exception->getData());
+			$data = $exception->getData();
+			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $data['message']), 0, $exception, $data);
 		}
 
 		foreach ($payment->getLinks() as $link)
@@ -212,7 +213,8 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		} 
 		catch (\PayPal\Exception\PPConnectionException $exception) 
 		{
-			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $data['message']), 0, $exception, $exception->getData());
+			$data = $exception->getData();
+			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $data['message']), 0, $exception, $data);
 		}
 
 
@@ -248,7 +250,8 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		} 
 		catch (\PayPal\Exception\PPConnectionException $exception) 
 		{
-			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $data['message']), 0, $exception, $exception->getData());
+			$data = $exception->getData();
+			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $data['message']), 0, $exception, $data);
 		}
 
 		$refund->raw_response = $response->toArray();
