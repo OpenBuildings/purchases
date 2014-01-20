@@ -165,14 +165,14 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 	{
 		$payment = Model_Payment_Paypal::convert_purchase($this->purchase, $params);
 
-		try 
+		try
 		{
 			$payment->create(Paypal::api());
-		} 
-		catch (\PayPal\Exception\PPConnectionException $exception) 
+		}
+		catch (\PayPal\Exception\PPConnectionException $exception)
 		{
 			$data = $exception->getData();
-			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $data['message']), 0, $exception, $data);
+			throw new Exception_Payment('Payment gateway error: :error', array(':error' => isset($data['message']) ? $data['message'] : $exception->getMessage()), 0, $exception, $data);
 		}
 
 		foreach ($payment->getLinks() as $link)
@@ -185,8 +185,8 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		}
 
 		$this->set(array(
-			'payment_id' => $payment->getId(), 
-			'raw_response' => $payment->toArray(), 
+			'payment_id' => $payment->getId(),
+			'raw_response' => $payment->toArray(),
 			'status' => Model_Payment::PENDING
 		));
 
@@ -201,20 +201,20 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 	 */
 	public function execute_processor(array $params = array())
 	{
-		try 
+		try
 		{
 			$paypal_payment = PayPal\Api\Payment::get($this->payment_id, Paypal::api());
-			
+
 			$execution = new PayPal\Api\PaymentExecution;
 			$execution
 				->setPayerId($params['payer_id']);
 
 			$response = $paypal_payment->execute($execution, Paypal::api());
-		} 
-		catch (\PayPal\Exception\PPConnectionException $exception) 
+		}
+		catch (\PayPal\Exception\PPConnectionException $exception)
 		{
 			$data = $exception->getData();
-			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $data['message']), 0, $exception, $data);
+			throw new Exception_Payment('Payment gateway error: :error', array(':error' => isset($data['message']) ? $data['message'] : $exception->getMessage()), 0, $exception, $data);
 		}
 
 
@@ -241,17 +241,17 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 	{
 		$paypal_refund = Model_Payment_Paypal::convert_refund($refund);
 
-		try 
+		try
 		{
 			$sale = PayPal\Api\Sale::get($this->payment_id, Paypal::api());
 			PayPal\Api\Payment::get($sale->getParentPayment(), Paypal::api());
 
 			$response = $sale->refund($paypal_refund, Paypal::api(TRUE));
-		} 
-		catch (\PayPal\Exception\PPConnectionException $exception) 
+		}
+		catch (\PayPal\Exception\PPConnectionException $exception)
 		{
 			$data = $exception->getData();
-			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $data['message']), 0, $exception, $data);
+			throw new Exception_Payment('Payment gateway error: :error', array(':error' => isset($data['message']) ? $data['message'] : $exception->getMessage()), 0, $exception, $data);
 		}
 
 		$refund->raw_response = $response->toArray();
