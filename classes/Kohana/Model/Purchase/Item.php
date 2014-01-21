@@ -18,6 +18,8 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta
+			// Useful for STI
+			->table('purchase_items')
 			->behaviors(array(
 				'paranoid' => Jam::behavior('paranoid'),
 				'freezable' => Jam::behavior('freezable', array('fields' => 'price', 'parent' => 'store_purchase')),

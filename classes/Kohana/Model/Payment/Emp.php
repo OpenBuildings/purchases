@@ -9,17 +9,6 @@
 class Kohana_Model_Payment_Emp extends Model_Payment {
 
 	/**
-	 * @codeCoverageIgnore
-	 */
-	public static function initialize(Jam_Meta $meta)
-	{
-		parent::initialize($meta);
-
-		$meta
-			->table('payments');
-	}
-
-	/**
 	 * Convert a Model_Purcahse object to an array of parameteres, suited for Emp Payment processor
 	 * Uses discount items, payable items, billing address as well as customer email and ip_address
 	 * If environment != Kohana::PRODUCTION, adds a "test_transaction" => 1

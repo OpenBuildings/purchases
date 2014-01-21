@@ -19,6 +19,7 @@ class Kohana_Model_Payment extends Jam_Model {
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta
+			->table('payments')
 			->behaviors(array(
 				'paranoid' => Jam::behavior('paranoid'),
 			))
