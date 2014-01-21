@@ -57,6 +57,28 @@ class Model_Store_RefundTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Store_Refund::store_purchase_insist
+	 * @expectedException Kohana_Exception
+	 */
+	public function test_store_purchase_insist()
+	{
+		$store_purchase = Jam::find_insist('store_purchase', 1);
+		$refund = $store_purchase->refunds->build(array(
+			'items' => array(
+				array('purchase_item' => $store_purchase->items[0])
+			),
+		));
+
+		$this->assertInstanceOf(
+			'Model_Store_Purchase',
+			$refund->store_purchase_insist()
+		);
+
+		$refund->store_purchase = NULL;
+		$refund->store_purchase_insist();
+	}
+
+	/**
 	 * @expectedException Kohana_Exception
 	 * @covers Model_Store_Refund::purchase_insist
 	 */
@@ -204,5 +226,30 @@ class Model_Store_RefundTest extends Testcase_Purchases {
 			->will($this->returnValue($payment_mock));
 
 		$this->assertSame($store_refund, $store_refund->execute());
+	}
+
+	/**
+	 * @covers Model_Store_Refund::add_purchase_item_refund
+	 */
+	public function test_add_purchase_item_refund()
+	{
+		$store_purchase = Jam::find_insist('store_purchase', 1);
+		$refund = $store_purchase->refunds->build(array(
+			'items' => array(
+				array('purchase_item' => $store_purchase->items[0])
+			),
+		));
+
+		$this->assertSame(0, $store_purchase->items_count('refund'));
+
+		$refund->add_purchase_item_refund();
+
+		$store_purchase->revert();
+
+		$this->assertSame(1, $store_purchase->items_count('refund'));
+		$this->assertEquals(
+			$refund->total_amount()->multiply_by(-1),
+			$store_purchase->total_price('refund')
+		);
 	}
 }
