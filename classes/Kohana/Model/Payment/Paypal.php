@@ -8,16 +8,7 @@
  */
 class Kohana_Model_Payment_Paypal extends Model_Payment {
 
-	/**
-	 * @codeCoverageIgnore
-	 */
-	public static function initialize(Jam_Meta $meta)
-	{
-		parent::initialize($meta);
-
-		$meta
-			->table('payments');
-	}
+	const STATE_COMPLETED = 'completed';
 
 	/**
 	 * Convert a Model_Purchase to a PayPal\Api\Payment object.
@@ -225,7 +216,9 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		$this->set(array(
 			'raw_response' => $sale->toArray(),
 			'payment_id' => $sale->getId(),
-			'status' => ($sale->getState() == 'completed') ? Model_Payment::PAID : $sale->getState(),
+			'status' => ($sale->getState() == static::STATE_COMPLETED)
+				? Model_Payment::PAID
+				: $sale->getState(),
 		));
 
 		return $this;
@@ -255,7 +248,9 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		}
 
 		$refund->raw_response = $response->toArray();
-		$refund->status = ($response->getState() == 'completed') ? Model_Store_Refund::REFUNDED : $response->getState();
+		$refund->status = ($response->getState() == static::STATE_COMPLETED)
+			? Model_Store_Refund::REFUNDED
+			: $response->getState();
 
 		return $this;
 	}

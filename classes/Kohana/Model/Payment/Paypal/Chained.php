@@ -29,9 +29,6 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 	{
 		parent::initialize($meta);
 
-		$meta
-			->table('payments');
-
 		$paypal_mode = Kohana::$config->load('purchases.processor.paypal.config.mode');
 
 		$environment = ($paypal_mode === 'live')
