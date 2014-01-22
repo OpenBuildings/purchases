@@ -117,4 +117,128 @@ class Model_Emp_FormTest extends Testcase_Purchases {
 		Request::$user_agent = $user_agent;
 		$this->assertSame($expected_params, $emp_form->vbv_params($callback_url));
 	}
+
+	public function data_validate()
+	{
+		$past_year = date('y', strtotime('-1 year'));
+		$long_ago_past_year = date('y', strtotime('-5 year'));
+		$future_year = date('y', strtotime('+1 year'));
+		$distant_future_year = date('y', strtotime('+5 year'));
+
+		$current_year = date('y');
+		$current_month = date('m');
+
+		$month_in_the_future = '12';
+		$year_in_the_furutre = $current_year;
+
+		$month_in_the_past = '01';
+		$year_in_the_past = $current_year;
+		$past_error_key = 'exp_month';
+
+		if ($month_in_the_future == $current_month)
+		{
+			$month_in_the_future = '01';
+			$year_in_the_furutre = $future_year;
+			$past_error_key = 'exp_year';
+		}
+		elseif ($month_in_the_past == $current_month)
+		{
+			$month_in_the_past = '12';
+			$year_in_the_past = $past_year;
+			$past_error_key = 'exp_year';
+		}
+
+
+		return array(
+			array(
+				NULL,
+				NULL,
+				array(),
+			),
+			array(
+				FALSE,
+				FALSE,
+				array(),
+			),
+			array(
+				'05',
+				'00',
+				array(
+					'exp_year' => array(
+						'card_expired' => array(),
+					),
+				),
+			),
+			array(
+				'05',
+				$past_year,
+				array(
+					'exp_year' => array(
+						'card_expired' => array(),
+					),
+				),
+			),
+			array(
+				'05',
+				$long_ago_past_year,
+				array(
+					'exp_year' => array(
+						'card_expired' => array(),
+					),
+				),
+			),
+			array(
+				'05',
+				$future_year,
+				array(),
+			),
+			array(
+				'05',
+				$distant_future_year,
+				array(),
+			),
+			array(
+				$current_month,
+				$current_year,
+				array(),
+			),
+			array(
+				$month_in_the_future,
+				$year_in_the_furutre,
+				array(),
+			),
+			array(
+				$month_in_the_future,
+				$year_in_the_furutre,
+				array(),
+			),
+			array(
+				$month_in_the_past,
+				$year_in_the_past,
+				array(
+					$past_error_key => array(
+						'card_expired' => array()
+					),
+				),
+			),
+		);
+	}
+
+	/**
+	 * The data provider for the test is time sensitive.
+	 * You cannot cover the case of an error with `exp_month` during January.
+	 *
+	 * @dataProvider data_validate
+	 * @covers Model_Emp_Form::validate
+	 */
+	public function test_validate($exp_month, $exp_year, $expected_errors)
+	{
+		$emp_form = Jam::build('emp_form', array(
+			'exp_month' => $exp_month,
+			'exp_year' => $exp_year,
+		));
+
+		$emp_form->validate();
+		$this->assertSame($expected_errors, $emp_form->errors()->as_array());
+	}
 }
