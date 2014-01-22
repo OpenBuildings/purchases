@@ -192,7 +192,7 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 		$refund
 			->execute();
 
-		$this->assertEquals(Model_Store_Refund::REFUNDED, $refund->status);
+		$this->assertEquals(Model_Store_Refund::TRANSACTION_REFUNDED, $refund->transaction_status);
 	}
 
 	public function data_transaction_fee()

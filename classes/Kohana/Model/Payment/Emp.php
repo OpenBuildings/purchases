@@ -187,7 +187,7 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 		}
 		
 		$refund->raw_response = $response;
-		$refund->status = ($response['transaction_response'] == 'A') ? Model_Store_Refund::REFUNDED : NULL;
+		$refund->transaction_status = ($response['transaction_response'] == 'A') ? Model_Store_Refund::TRANSACTION_REFUNDED : NULL;
 
 		return $this;
 	}

@@ -34,7 +34,7 @@ CREATE TABLE `store_refunds` (
   `raw_response` TEXT,
   `reason` TEXT,
   `is_deleted` INT(1) UNSIGNED NOT NULL,
-  `status` VARCHAR(20) NOT NULL,
+  `transaction_status` VARCHAR(50) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 

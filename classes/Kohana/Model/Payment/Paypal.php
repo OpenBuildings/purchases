@@ -248,8 +248,8 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		}
 
 		$refund->raw_response = $response->toArray();
-		$refund->status = ($response->getState() == static::STATE_COMPLETED)
-			? Model_Store_Refund::REFUNDED
+		$refund->transaction_status = ($response->getState() == static::STATE_COMPLETED)
+			? Model_Store_Refund::TRANSACTION_REFUNDED
 			: $response->getState();
 
 		return $this;

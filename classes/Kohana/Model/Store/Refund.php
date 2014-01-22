@@ -8,7 +8,7 @@
  */
 class Kohana_Model_Store_Refund extends Jam_Model {
 
-	const REFUNDED = 'refunded';
+	const TRANSACTION_REFUNDED = 'refunded';
 
 	/**
 	 * @codeCoverageIgnore
@@ -25,7 +25,7 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 			))
 			->fields(array(
 				'id' => Jam::field('primary'),
-				'status' => Jam::field('string'),
+				'transaction_status' => Jam::field('string'),
 				'raw_response' => Jam::field('serialized', array('method' => 'json')),
 				'reason' => Jam::field('string'),
 				'created_at' => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
