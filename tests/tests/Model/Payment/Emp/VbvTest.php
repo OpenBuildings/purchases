@@ -72,6 +72,6 @@ class Model_Payment_Emp_VbvTest extends Testcase_Purchases {
 		$refund
 			->execute();
 
-		$this->assertEquals(Model_Store_Refund::REFUNDED, $refund->status);
+		$this->assertEquals(Model_Store_Refund::TRANSACTION_REFUNDED, $refund->transaction_status);
 	}
 }

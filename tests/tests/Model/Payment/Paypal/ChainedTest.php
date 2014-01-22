@@ -157,7 +157,7 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 		$refund
 			->execute();
 
-		$this->assertEquals(Model_Store_Refund::REFUNDED, $refund->status);
+		$this->assertEquals(Model_Store_Refund::TRANSACTION_REFUNDED, $refund->transaction_status);
 	}
 
 	/**
