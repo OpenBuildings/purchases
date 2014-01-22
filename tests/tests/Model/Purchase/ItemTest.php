@@ -19,10 +19,6 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	public function test_validate()
 	{
 		$item = Jam::find('purchase_item', 1);
-		$item->reference = Jam::find('user', 1);
-
-		$this->assertFalse($item->check());
-		$this->assertArrayHasKey('reference', $item->errors()->messages());
 
 		$item = Jam::build('purchase_item', array(
 			'price' => 10, 

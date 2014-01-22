@@ -103,8 +103,24 @@ class Model_PaymentTest extends Testcase_Purchases {
 	public function test_refund()
 	{
 		$params = array('test', 'test2');
-		$refund = $this->getMock('Model_Store_Refund', array('save'), array('store_refund'));
-		$payment = $this->getMock('Model_Payment', array('refund_processor'), array('payment'));
+		$refund = $this->getMock('Model_Store_Refund', array(
+			'save',
+		), array(
+			'store_refund',
+		));
+		
+		$payment = $this->getMock('Model_Payment', array(
+			'refund_processor',
+		), array(
+			'payment',
+		));
+
+		$store_purchase = $this->getMock('Model_Store_Purchase', array(
+			'save',
+			'freeze',
+		), array(
+			'store_purchase'
+		));
 
 		$payment
 			->expects($this->once())
@@ -113,7 +129,22 @@ class Model_PaymentTest extends Testcase_Purchases {
 
 		$refund
 			->expects($this->once())
-			->method('save');
+			->method('save')
+			->will($this->returnValue($refund));
+
+		$store_purchase
+			->expects($this->once())
+			->method('save')
+			->will($this->returnValue($store_purchase));
+
+		$store_purchase
+			->expects($this->once())
+			->method('freeze')
+			->will($this->returnValue($store_purchase));
+
+		$store_purchase->purchase = Jam::build('purchase');
+
+		$refund->store_purchase = $store_purchase;
 
 		$payment->refund($refund, $params);
 

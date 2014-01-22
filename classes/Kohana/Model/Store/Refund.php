@@ -79,17 +79,17 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 
 	public function currency()
 	{
-		return $this->get_insist('store_purchase')->currency();
+		return $this->store_purchase_insist()->currency();
 	}
 
 	public function display_currency()
 	{
-		return $this->get_insist('store_purchase')->display_currency();	
+		return $this->store_purchase_insist()->display_currency();
 	}
 
 	public function monetary()
 	{
-		return $this->get_insist('store_purchase')->monetary();
+		return $this->store_purchase_insist()->monetary();
 	}
 
 	/**
@@ -111,10 +111,15 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 		return $this;
 	}
 
+	public function store_purchase_insist()
+	{
+		return $this->get_insist('store_purchase');
+	}
+
 	public function purchase_insist()
 	{
 		return $this
-			->get_insist('store_purchase')
+			->store_purchase_insist()
 				->get_insist('purchase');
 	}
 
@@ -123,5 +128,25 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 		return $this
 			->purchase_insist()
 				->get_insist('payment');
+	}
+
+	/**
+	 * @return Model_Purchase_Item_Refund the item added
+	 */
+	public function add_purchase_item_refund()
+	{
+		$store_purchase = $this->store_purchase_insist();
+
+		$purchase_item_refund = Jam::build('purchase_item_refund', array(
+			'reference' => $this,
+			'store_purchase' => $store_purchase,
+		));
+
+		$store_purchase->purchase->is_just_frozen = TRUE;
+		$store_purchase->items->add($purchase_item_refund);
+		$store_purchase->freeze()->save();
+		$store_purchase->purchase->is_just_frozen = FALSE;
+
+		return $purchase_item_refund;
 	}
 }

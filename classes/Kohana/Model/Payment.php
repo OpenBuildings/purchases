@@ -22,6 +22,7 @@ class Kohana_Model_Payment extends Jam_Model {
 			->table('payments')
 			->behaviors(array(
 				'paranoid' => Jam::behavior('paranoid'),
+				'payment_refundable' => Jam::behavior('payment_refundable'),
 			))
 			->associations(array(
 				'purchase' => Jam::association('belongsto', array('inverse_of' => 'payment')),
