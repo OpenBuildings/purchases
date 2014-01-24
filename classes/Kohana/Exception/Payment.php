@@ -10,8 +10,13 @@ class Kohana_Exception_Payment extends Kohana_Exception {
 	
 	protected $data;
 
-	public function __construct($message = "", array $variables = NULL, $code = 0, Exception $previous = NULL, array $data = array())
+	public function __construct($message = "", array $variables = NULL, $code = 0, Exception $previous = NULL, $data = array())
 	{
+		if ($data AND ! is_array($data))
+		{
+			$data = json_decode($data, TRUE);
+		}
+
 		parent::__construct($message, $variables, $code, $previous, $data);
 
 		$this->data = $data;
