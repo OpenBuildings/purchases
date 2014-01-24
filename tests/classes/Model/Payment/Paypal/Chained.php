@@ -38,7 +38,7 @@ class Model_Payment_Paypal_Chained extends Kohana_Model_Payment_Paypal_Chained {
 		return array(
 			array(
 				'email' => 'adel-dev@clippings.com',
-				'amount' => $store_refund->total_amount()->as_string($currency),
+				'amount' => $store_refund->amount()->as_string($currency),
 				'primary' => TRUE
 			)
 		);

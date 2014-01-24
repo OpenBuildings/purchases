@@ -32,9 +32,9 @@ class Model_Store_RefundTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Model_Store_Refund::total_amount
+	 * @covers Model_Store_Refund::amount
 	 */
-	public function test_total_amount()
+	public function test_amount()
 	{
 		$store_purchase = Jam::find('purchase', 1)->store_purchases[0];
 		$refund = $store_purchase->refunds->create(array(
@@ -43,17 +43,17 @@ class Model_Store_RefundTest extends Testcase_Purchases {
 			)
 		));
 
-		$this->assertEquals(200, $refund->total_amount()->amount());
+		$this->assertEquals(200, $refund->amount()->amount());
 
-		$refund->items[0]->amount = 10;
+		$refund->amount = 10;
 
-		$this->assertEquals(10, $refund->total_amount()->amount());
-		$this->assertEquals('EUR', $refund->total_amount()->currency());
+		$this->assertEquals(10, $refund->amount()->amount());
+		$this->assertEquals('EUR', $refund->amount()->currency());
 
 		$refund = $store_purchase->refunds->create(array());
 
-		$this->assertEquals(400.0, $refund->total_amount()->amount());
-		$this->assertEquals('EUR', $refund->total_amount()->currency());
+		$this->assertEquals(400.0, $refund->amount()->amount());
+		$this->assertEquals('EUR', $refund->amount()->currency());
 	}
 
 	/**
@@ -248,7 +248,7 @@ class Model_Store_RefundTest extends Testcase_Purchases {
 
 		$this->assertSame(1, $store_purchase->items_count('refund'));
 		$this->assertEquals(
-			$refund->total_amount()->multiply_by(-1),
+			$refund->amount()->multiply_by(-1),
 			$store_purchase->total_price('refund')
 		);
 	}

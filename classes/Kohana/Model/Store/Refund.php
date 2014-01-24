@@ -25,6 +25,7 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 			))
 			->fields(array(
 				'id' => Jam::field('primary'),
+				'amount' => Jam::field('price'),
 				'transaction_status' => Jam::field('string'),
 				'raw_response' => Jam::field('serialized', array('method' => 'json')),
 				'reason' => Jam::field('string'),
@@ -38,7 +39,7 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 	 */
 	public function validate()
 	{
-		$refund_amount = $this->total_amount();
+		$refund_amount = $this->amount();
 		$store_purchase = $this->store_purchase_insist();
 		$previously_refunded_amount = $store_purchase->total_price('refund');
 		$store_purchase_not_refunded_amount = $store_purchase->total_price(array(
@@ -70,20 +71,25 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 	 * Total amount to be refunded
 	 * @return Jam_Price
 	 */
-	public function total_amount()
+	public function amount()
 	{
-		if ( ! count($this->items))
+		if ( ! $this->amount)
 		{
-			return $this->store_purchase->total_price(array('is_payable' => TRUE));
+			if ( ! count($this->items))
+			{
+				$this->amount = $this->store_purchase->total_price(array('is_payable' => TRUE));
+			}
+			else
+			{
+				$amounts = array_map(function($item) {
+					return $item->amount();
+				}, $this->items->as_array());
+
+				$this->amount = Jam_Price::sum($amounts, $this->currency(), $this->monetary(), $this->display_currency());
+			}
 		}
-		else
-		{
-			$amounts = array_map(function($item) {
-				return $item->amount();
-			}, $this->items->as_array());
-			
-			return Jam_Price::sum($amounts, $this->currency(), $this->monetary(), $this->display_currency());
-		}
+
+		return $this->amount;
 	}
 
 	public function currency()
