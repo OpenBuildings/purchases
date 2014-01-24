@@ -116,7 +116,7 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 		}
 		else
 		{
-			$params['amount'] = $refund->total_amount()->as_string($currency);
+			$params['amount'] = $refund->amount()->as_string($currency);
 		}
 
 		return $params;

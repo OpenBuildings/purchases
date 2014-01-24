@@ -23,7 +23,7 @@ class Model_Purchase_Item_RefundTest extends Testcase_Purchases {
 	public function test_get_price()
 	{
 		$mock = $this->getMock('stdClass', array(
-			'total_amount'
+			'amount'
 		));
 
 		$purchase_item = $this->getMock('Model_Purchase_Item_Refund', array(
@@ -41,7 +41,7 @@ class Model_Purchase_Item_RefundTest extends Testcase_Purchases {
 		$purchase_item_refund_price = $refund_amount->multiply_by(-1);
 		$mock
 			->expects($this->once())
-			->method('total_amount')
+			->method('amount')
 			->will($this->returnValue($refund_amount));
 
 		$this->assertEquals($purchase_item_refund_price, $purchase_item->get_price());

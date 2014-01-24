@@ -86,7 +86,7 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		$amount = new PayPal\Api\Amount();
 		$amount
 			->setCurrency($currency)
-			->setTotal($refund->total_amount()->as_string($currency));
+			->setTotal($refund->amount()->as_string($currency));
 
 		$paypal_refund = new PayPal\Api\Refund();
 		$paypal_refund
