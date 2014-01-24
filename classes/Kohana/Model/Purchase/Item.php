@@ -30,6 +30,11 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 					'foreign_key' => 'reference_id',
 					'polymorphic' => 'reference_model',
 				)),
+				'refund_items' => Jam::association('hasmany', array(
+					'foreign_model' => 'store_refund_item',
+					'foreign_key' => 'purchase_item_id',
+					'inverse_of' => 'purchase_item',
+				)),
 			))
 			->fields(array(
 				'id' => Jam::field('primary'),

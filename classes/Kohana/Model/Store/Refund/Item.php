@@ -18,8 +18,12 @@ class Kohana_Model_Store_Refund_Item extends Jam_Model {
 				'paranoid' => Jam::behavior('paranoid'),
 			))
 			->associations(array(
-				'store_refund' => Jam::association('belongsto', array('inverse_of' => 'items')),
-				'purchase_item' => Jam::association('belongsto', array('inverse_of' => 'refund')),
+				'store_refund' => Jam::association('belongsto', array(
+					'inverse_of' => 'items'
+				)),
+				'purchase_item' => Jam::association('belongsto', array(
+					'inverse_of' => 'refund_items',
+				)),
 			))
 			->fields(array(
 				'id' => Jam::field('primary'),
