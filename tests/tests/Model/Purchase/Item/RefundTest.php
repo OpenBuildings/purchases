@@ -13,7 +13,7 @@ class Model_Purchase_Item_RefundTest extends Testcase_Purchases {
 	{
 		$meta = Jam::meta('purchase_item_refund');
 		$this->assertSame('purchase_items', $meta->table());
-		$this->assertFalse($meta->field('is_payable')->default);
+		$this->assertTrue($meta->field('is_payable')->default);
 		$this->assertTrue($meta->field('is_discount')->default);
 	}
 

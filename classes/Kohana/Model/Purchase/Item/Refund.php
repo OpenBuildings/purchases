@@ -18,7 +18,7 @@ class Kohana_Model_Purchase_Item_Refund extends Model_Purchase_Item {
 		$meta
 			->fields(array(
 				'is_payable' => Jam::field('boolean', array(
-					'default' => FALSE,
+					'default' => TRUE,
 				)),
 				'is_discount' => Jam::field('boolean', array(
 					'default' => TRUE,
