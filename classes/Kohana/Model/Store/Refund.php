@@ -38,7 +38,16 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 	 */
 	public function validate()
 	{
-		if ($this->total_amount() > $this->store_purchase->total_price(array('is_payable' => TRUE))) 
+		$refund_amount = $this->total_amount();
+		$store_purchase = $this->store_purchase_insist();
+		$previously_refunded_amount = $store_purchase->total_price('refund');
+		$store_purchase_not_refunded_amount = $store_purchase->total_price(array(
+			'is_payable' => TRUE,
+			'not' => 'refund',
+		));
+
+		if ($refund_amount->add($previously_refunded_amount)
+			->is(Jam_Price::GREATER_THAN, $store_purchase_not_refunded_amount))
 		{
 			$this->errors()->add('items', 'amount_more_than_store_purchase_price');
 		}
