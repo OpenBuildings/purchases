@@ -212,4 +212,17 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 	{
 		throw new BadMethodCallException('You must implement get_price()');
 	}
+
+	public function refunded_amount()
+	{
+		return Jam_Price::sum(
+				array_map(function($refund_item) {
+				return $refund_item->amount();
+			},
+			$this->refund_items->as_array()),
+			$this->currency(),
+			$this->monetary(),
+			$this->display_currency()
+		);
+	}
 }
