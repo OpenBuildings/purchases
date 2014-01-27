@@ -145,6 +145,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$store_purchase->purchase = Jam::build('purchase');
 
 		$refund->store_purchase = $store_purchase;
+		$refund->transaction_status = Model_Store_Refund::TRANSACTION_REFUNDED;
 
 		$payment->refund($refund, $params);
 
