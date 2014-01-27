@@ -330,4 +330,69 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 		$this->setExpectedException('BadMethodCallException', 'You must implement get_price()');
 		Jam::build('purchase_item')->get_price();
 	}
+
+	public function data_refunded_amount()
+	{
+		return array(
+			array(
+				array(),
+				new Jam_Price(0, 'GBP'),
+			),
+			array(
+				array(
+					array('amount' => new Jam_Price(0, 'GBP')),
+				),
+				new Jam_Price(0, 'GBP'),
+			),
+			array(
+				array(
+					array('amount' => new Jam_Price(50, 'GBP')),
+				),
+				new Jam_Price(50, 'GBP'),
+			),
+			array(
+				array(
+					array('amount' => new Jam_Price(150, 'GBP')),
+					array('amount' => new Jam_Price(200, 'GBP')),
+					array('amount' => new Jam_Price(33, 'GBP')),
+				),
+				new Jam_Price(383, 'GBP'),
+			),
+			array(
+				array(
+					array('amount' => new Jam_Price(-150, 'GBP')),
+					array('amount' => new Jam_Price(200, 'GBP')),
+					array('amount' => new Jam_Price(33, 'GBP')),
+				),
+				new Jam_Price(83, 'GBP'),
+			),
+		);
+	}
+
+	/**
+	 * @dataProvider data_refunded_amount
+	 * @covers Model_Purchase_Item::refunded_amount
+	 */
+	public function test_refunded_amount($refund_items, $expected_refunded_amount)
+	{
+		$purchase_item = $this->getMock('Model_Purchase_Item_Product', array(
+			'currency',
+			'monetary',
+			'display_currency',
+		), array(
+			'purchase_item_product',
+		));
+
+		$purchase_item
+			->expects($this->once())
+			->method('currency')
+			->will($this->returnValue('GBP'));
+
+		$purchase_item->refund_items = $refund_items;
+
+		$this->assertEquals(
+			$expected_refunded_amount,
+			$purchase_item->refunded_amount()
+		);
+	}
 }
