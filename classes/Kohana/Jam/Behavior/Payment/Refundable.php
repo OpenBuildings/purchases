@@ -28,6 +28,9 @@ class Kohana_Jam_Behavior_Payment_Refundable extends Jam_Behavior {
 
 	public static function add_purchase_item_refund(Model_Payment $payment, Jam_Event_Data $data, Model_Store_Refund $refund)
 	{
-		$refund->add_purchase_item_refund();
+		if ($refund->transaction_status === Model_Store_Refund::TRANSACTION_REFUNDED)
+		{
+			$refund->add_purchase_item_refund();
+		}
 	}
 }
