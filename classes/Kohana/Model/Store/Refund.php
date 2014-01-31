@@ -22,6 +22,7 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 			->associations(array(
 				'store_purchase' => Jam::association('belongsto', array('inverse_of' => 'refunds')),
 				'items' => Jam::association('hasmany', array('inverse_of' => 'store_refund', 'foreign_model' => 'store_refund_item')),
+				'creator' => Jam::association('creator', array('required' => FALSE)),
 			))
 			->fields(array(
 				'id' => Jam::field('primary'),

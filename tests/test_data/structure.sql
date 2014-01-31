@@ -29,6 +29,7 @@ CREATE TABLE `store_purchases` (
 DROP TABLE IF EXISTS `store_refunds`;
 CREATE TABLE `store_refunds` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `creator_id` INT(10) UNSIGNED NULL,
   `store_purchase_id` INT(10) UNSIGNED NULL,
   `amount` DECIMAL(10,2) NULL,
   `created_at` DATETIME,
