@@ -29,8 +29,7 @@ class Kohana_Model_Store_Refund_Item extends Jam_Model {
 				'id' => Jam::field('primary'),
 				'amount' => Jam::field('price'),
 			))
-			->validator('store_refund', 'purchase_item', array('present' => TRUE))
-			->validator('amount', array('price' => array('greater_than' => 0)));
+			->validator('store_refund', 'purchase_item', array('present' => TRUE));
 	}
 
 	public function validate()
