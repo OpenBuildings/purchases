@@ -73,7 +73,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable {
 	{
 		if (($index = $this->search_same_item($new_item)) !== NULL)
 		{
-			$this->items[$index]->quantity = $this->items[$index]->quantity + 1;
+			$this->items[$index]->quantity = $this->items[$index]->quantity + $new_item->quantity;
 		}
 		else
 		{
