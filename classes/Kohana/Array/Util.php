@@ -12,7 +12,7 @@ class Kohana_Array_Util {
 	{
 		$grouped = array();
 
-		foreach ($array as $i => $item) 
+		foreach ($array as $i => $item)
 		{
 			$item_group = call_user_func($callback, $item, $i);
 
@@ -27,7 +27,7 @@ class Kohana_Array_Util {
 			}
 			else
 			{
-				$grouped[$item_group][] = $item;	
+				$grouped[$item_group][] = $item;
 			}
 		}
 
@@ -36,7 +36,7 @@ class Kohana_Array_Util {
 
 	public static function not_instance_of(array $items, $class)
 	{
-		foreach ($items as $index => $item) 
+		foreach ($items as $index => $item)
 		{
 			if ( ! ($item instanceof $class))
 				return $index;
@@ -47,7 +47,7 @@ class Kohana_Array_Util {
 
 	public static function validate_instance_of(array $items, $class)
 	{
-		if (($index = Array_Util::not_instance_of($items, $class)) !== FALSE) 
+		if (($index = Array_Util::not_instance_of($items, $class)) !== FALSE)
 			throw new Kohana_Exception('The array must be of Model_Purchase_Item object, item [:index] was ":type"', array(
 				':type' => is_object($items[$index]) ? get_class($items[$index]) : gettype($items[$index]),
 				':index' => $index,

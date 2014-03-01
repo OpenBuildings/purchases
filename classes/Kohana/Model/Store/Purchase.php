@@ -169,7 +169,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable {
 	public function total_price($types = NULL)
 	{
 		$prices = array_map(function($item) { return $item->total_price(); }, $this->items($types));
-		
+
 		return Jam_Price::sum($prices, $this->currency(), $this->monetary(), $this->display_currency());
 	}
 

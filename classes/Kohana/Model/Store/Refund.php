@@ -57,9 +57,9 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 
 	public function has_purchase_item(Model_Purchase_Item $purchase_item)
 	{
-		foreach ($this->items->as_array() as $item) 
+		foreach ($this->items->as_array() as $item)
 		{
-			if ($item->purchase_item_id == $purchase_item->id() AND $item->is_full_amount()) 
+			if ($item->purchase_item_id == $purchase_item->id() AND $item->is_full_amount())
 			{
 				return TRUE;
 			}

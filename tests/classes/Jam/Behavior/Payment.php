@@ -16,7 +16,7 @@ class Jam_Behavior_Payment extends Jam_Behavior {
 
 			->bind('model.before_execute', array($this, 'before_execute'))
 			->bind('model.after_execute', array($this, 'after_execute'))
-			
+
 			->bind('model.pay', array($this, 'pay'))
 
 			->bind('model.before_refund', array($this, 'before_refund'))

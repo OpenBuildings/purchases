@@ -6,8 +6,8 @@
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Exception_Payment extends Kohana_Exception {	
-	
+class Kohana_Exception_Payment extends Kohana_Exception {
+
 	protected $data;
 
 	public function __construct($message = "", array $variables = NULL, $code = 0, Exception $previous = NULL, $data = array())

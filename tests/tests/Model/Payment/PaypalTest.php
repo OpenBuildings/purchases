@@ -131,7 +131,7 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 		$this->env->backup_and_set(array(
 			'Paypal::$_api' => NULL,
 			'purchases.processor.paypal.oauth' => array(
-				'client_id' => getenv('PHP_PAYPAL_CLIENT_ID'), 
+				'client_id' => getenv('PHP_PAYPAL_CLIENT_ID'),
 				'secret' => getenv('PHP_PAYPAL_SECRET')
 			),
 		));
@@ -141,8 +141,8 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 			->store_purchases[0]
 				->items
 					->build(array(
-						'quantity' => 1, 
-						'price' => -10, 
+						'quantity' => 1,
+						'price' => -10,
 						'model' => 'purchase_item_promotion',
 						'is_discount' => TRUE,
 						'is_payable' => TRUE,
@@ -154,7 +154,7 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 
 		$this->assertInstanceOf('Model_Payment_Paypal', $purchase->payment);
 		$this->assertNotEquals('', $purchase->payment->payment_id);
-		
+
 		$this
 			->visit($purchase->payment->authorize_url())
 			->wait(5000)
@@ -173,9 +173,9 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 			->wait(5000)
 			->assertHasNoCss('h2', array('text' => 'Review your information'));
 
-		$query = parse_url($this->current_url(), PHP_URL_QUERY);	
+		$query = parse_url($this->current_url(), PHP_URL_QUERY);
 		parse_str($query, $query);
-		
+
 		$this->assertEquals('success', $query['result']);
 
 		$purchase

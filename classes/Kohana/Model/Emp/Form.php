@@ -92,7 +92,7 @@ class Kohana_Model_Emp_Form extends Jam_Validated {
 	{
 		$years = range(date('y'), date('y', strtotime('+'.$years_in_the_furutre.' years')));
 		$labels = range(date('Y'), date('Y', strtotime('+'.$years_in_the_furutre.' years')));
-		
+
 		return array_combine($years, $labels);
 	}
 

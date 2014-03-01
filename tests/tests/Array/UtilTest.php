@@ -13,20 +13,20 @@ class Array_UtilTest extends Testcase_Purchases {
 	{
 		return array(
 			array(
-				array('alpha', 'beta', 'gamma', 'getto', 'atton'), 
-				function($item){ return substr($item, 0, 1); }, 
+				array('alpha', 'beta', 'gamma', 'getto', 'atton'),
+				function($item){ return substr($item, 0, 1); },
 				FALSE,
 				array('a' => array('alpha', 'atton'), 'b' => array('beta'), 'g' => array('gamma', 'getto'))
 			),
 			array(
-				array(10 => 'test1', 100 => 'test2', 90 => 'test3', 21 => '2222', 24 =>'3333'), 
-				function($item){ return substr($item, 0, 1); }, 
+				array(10 => 'test1', 100 => 'test2', 90 => 'test3', 21 => '2222', 24 =>'3333'),
+				function($item){ return substr($item, 0, 1); },
 				FALSE,
 				array('t' => array('test1', 'test2', 'test3'), '2' => array('2222'), '3' => array('3333')),
 			),
 			array(
-				array(10 => 'test1', 100 => 'test2', 23 => 'test3', 321 =>'2222', 90 => '3333'), 
-				function($item){ return substr($item, 0, 1); }, 
+				array(10 => 'test1', 100 => 'test2', 23 => 'test3', 321 =>'2222', 90 => '3333'),
+				function($item){ return substr($item, 0, 1); },
 				TRUE,
 				array('t' => array(10 => 'test1', 100 => 'test2', 23 => 'test3'), '2' => array(321 => '2222'), '3' => array(90 => '3333')),
 			),
@@ -51,7 +51,7 @@ class Array_UtilTest extends Testcase_Purchases {
 			array(array(new Array_Util_Test_Dummy, new stdClass), 'Array_Util_Test_Dummy', 1),
 		);
 	}
-	
+
 	/**
 	 * @dataProvider data_not_instance_of
 	 * @covers Array_Util::not_instance_of
@@ -70,7 +70,7 @@ class Array_UtilTest extends Testcase_Purchases {
 			array(array(new Array_Util_Test_Dummy, new stdClass), 'Array_Util_Test_Dummy', 'The array must be of Model_Purchase_Item object, item [1] was "stdClass"'),
 		);
 	}
-	
+
 	/**
 	 * @dataProvider data_validate_instance_of
 	 * @covers Array_Util::validate_instance_of

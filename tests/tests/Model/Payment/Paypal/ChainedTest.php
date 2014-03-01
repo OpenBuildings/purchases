@@ -18,10 +18,10 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 		$this->env->backup_and_set(array(
 			'Paypal::$_api' => NULL,
 			'purchases.processor.paypal.adaptive.auth' => array(
-				'username' => getenv('PHP_PAYPAL_ADAPTIVE_USERNAME'), 
-				'password' => getenv('PHP_PAYPAL_ADAPTIVE_PASSWORD'), 
-				'signature' => getenv('PHP_PAYPAL_ADAPTIVE_SIGNATURE'), 
-				'app_id' => getenv('PHP_PAYPAL_ADAPTIVE_APP_ID'), 
+				'username' => getenv('PHP_PAYPAL_ADAPTIVE_USERNAME'),
+				'password' => getenv('PHP_PAYPAL_ADAPTIVE_PASSWORD'),
+				'signature' => getenv('PHP_PAYPAL_ADAPTIVE_SIGNATURE'),
+				'app_id' => getenv('PHP_PAYPAL_ADAPTIVE_APP_ID'),
 			),
 		));
 	}
@@ -97,8 +97,8 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 			->store_purchases[0]
 				->items
 					->build(array(
-						'quantity' => 1, 
-						'price' => -10, 
+						'quantity' => 1,
+						'price' => -10,
 						'model' => 'purchase_item_promotion',
 						'is_discount' => TRUE,
 						'is_payable' => TRUE,
@@ -113,7 +113,7 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 
 		$this->assertInstanceOf('Model_Payment_Paypal_Chained', $purchase->payment);
 		$this->assertNotEquals('', $purchase->payment->payment_id);
-		
+
 		$amount_string = $purchase->total_price(array('is_payable' => TRUE))->humanize().' GBP';
 
 		$this

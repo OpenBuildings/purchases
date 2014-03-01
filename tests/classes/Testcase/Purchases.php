@@ -12,7 +12,7 @@ use Openbuildings\EnvironmentBackup as EB;
 abstract class Testcase_Purchases extends PHPUnit_Framework_TestCase {
 
 	public $environment;
-	
+
 	public function setUp()
 	{
 		parent::setUp();
@@ -28,13 +28,13 @@ abstract class Testcase_Purchases extends PHPUnit_Framework_TestCase {
 
 	public function tearDown()
 	{
-		Database::instance()->rollback();	
-		
+		Database::instance()->rollback();
+
 		$this->env->restore();
 
 		parent::tearDown();
 	}
-	
+
 	public function ids(array $items)
 	{
 		return array_values(array_map(function($item){ return $item->id(); }, $items));

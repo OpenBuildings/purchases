@@ -108,7 +108,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 		), array(
 			'store_refund',
 		));
-		
+
 		$payment = $this->getMock('Model_Payment', array(
 			'refund_processor',
 		), array(

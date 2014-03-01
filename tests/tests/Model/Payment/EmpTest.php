@@ -155,19 +155,19 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			'Emp::$_api' => NULL,
 			'Request::$client_ip' => '95.87.212.88',
 			'purchases.processor.emp.threatmatrix' => array(
-				'org_id' => getenv('EMP_TMX'), 
+				'org_id' => getenv('EMP_TMX'),
 				'client_id' => getenv('EMP_CID')
 			),
 			'purchases.processor.emp.api' => array(
-				'gateway_url' => 'https://my.emerchantpay.com', 
-				'api_key' => getenv('EMP_KEY'), 
+				'gateway_url' => 'https://my.emerchantpay.com',
+				'api_key' => getenv('EMP_KEY'),
 				'client_id' => getenv('EMP_CID'),
 				'proxy' => getenv('EMP_PROXY')
 			)
 		));
 
 		Openbuildings\Emp\Remote::get(Emp::threatmatrix()->tracking_url(), array(CURLOPT_PROXY => getenv('EMP_PROXY')));
-		
+
 		$purchase = Jam::find('purchase', 2);
 
 		$purchase
@@ -177,7 +177,7 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 		$purchase
 			->build('payment', array('model' => 'payment_emp'))
 				->execute($this->payment_params);
-		
+
 		$this->assertGreaterThan(0, $purchase->payment->payment_id);
 		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
 

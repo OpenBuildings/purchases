@@ -30,12 +30,12 @@ class Model_Payment_Emp_VbvTest extends Testcase_Purchases {
 			'Request::$user_agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36',
 			'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
 			'purchases.processor.emp.threatmatrix' => array(
-				'org_id' => getenv('EMP_TMX'), 
+				'org_id' => getenv('EMP_TMX'),
 				'client_id' => getenv('EMP_CID'),
 			),
 			'purchases.processor.emp.api' => array(
-				'gateway_url' => 'https://my.emerchantpay.com', 
-				'api_key' => getenv('EMP_KEY'), 
+				'gateway_url' => 'https://my.emerchantpay.com',
+				'api_key' => getenv('EMP_KEY'),
 				'client_id' => getenv('EMP_CID'),
 				'proxy' => getenv('EMP_PROXY'),
 			),
@@ -45,7 +45,7 @@ class Model_Payment_Emp_VbvTest extends Testcase_Purchases {
 		$vbv_params = $form->vbv_params('http://example.com/checkout');
 
 		$purchase = Jam::find('purchase', 2);
-		
+
 		// Set the price to 1 to automatically authorize
 		$purchase->store_purchases[0]->items[0]->price = 1;
 

@@ -13,7 +13,7 @@ class PaypalTest extends Testcase_Purchases_Spiderling {
 		$this->env->backup_and_set(array(
 			'Paypal::$_api' => NULL,
 			'purchases.processor.paypal.oauth' => array(
-				'client_id' => getenv('PHP_PAYPAL_CLIENT_ID'), 
+				'client_id' => getenv('PHP_PAYPAL_CLIENT_ID'),
 				'secret' => getenv('PHP_PAYPAL_SECRET')
 			),
 		));

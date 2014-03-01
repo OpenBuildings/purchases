@@ -25,19 +25,19 @@ class Kohana_Model_Payment_Emp_Vbv extends Model_Payment_Emp {
 
 		$request_params = array_merge($params, $purchase_params);
 
-		try 
+		try
 		{
 			$response = Emp::api()
 				->request(Openbuildings\Emp\Api::VBVMC3D_AUTH, $request_params);
-		} 
-		catch (Openbuildings\Emp\Exception $exception) 
+		}
+		catch (Openbuildings\Emp\Exception $exception)
 		{
 			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $exception->getMessage()), 0, $exception);
 		}
 
 		if (Arr::path($response, 'raw.enrollmentstatus') !== 'Y')
 			throw new Exception_Payment('Credit card not enrolled in VBV/3D Secure');
-		
+
 		$this->_authorize_url = Arr::path($response, 'raw.bouncerURL');
 
 		$this->set(array(
@@ -51,7 +51,7 @@ class Kohana_Model_Payment_Emp_Vbv extends Model_Payment_Emp {
 
 	/**
 	 * Perform a payment of the current purchase, set the reponse in payment_id, raw_response and status.
-	 * @param  array  $params 
+	 * @param  array  $params
 	 * @return Model_Payment_Emp         self
 	 */
 	public function execute_processor(array $params = array())
@@ -60,8 +60,8 @@ class Kohana_Model_Payment_Emp_Vbv extends Model_Payment_Emp {
 			'reference' => $this->purchase->number,
 			'requestid' => $this->payment_id,
 		);
-		
-		try 
+
+		try
 		{
 			$auth_result_response = Emp::api()
 				->request(Openbuildings\Emp\Api::VBVMC3D_RESULT, $auth_result_params);
@@ -75,8 +75,8 @@ class Kohana_Model_Payment_Emp_Vbv extends Model_Payment_Emp {
 
 			$response = Emp::api()
 				->request(Openbuildings\Emp\Api::ORDER_SUBMIT, $params);
-		} 
-		catch (Openbuildings\Emp\Exception $exception) 
+		}
+		catch (Openbuildings\Emp\Exception $exception)
 		{
 			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $exception->getMessage()), 0, $exception);
 		}
@@ -86,8 +86,8 @@ class Kohana_Model_Payment_Emp_Vbv extends Model_Payment_Emp {
 		$status = ($response['transaction_response'] == 'A') ? Model_Payment::PAID : NULL;
 
 		$this->set(array(
-			'payment_id' => $response['transaction_id'], 
-			'raw_response' => $response['raw'], 
+			'payment_id' => $response['transaction_id'],
+			'raw_response' => $response['raw'],
 			'status' => $status
 		));
 

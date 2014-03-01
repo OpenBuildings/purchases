@@ -5,7 +5,7 @@ use OpenBuildings\Monetary\Monetary;
 /**
  * @group model
  * @group model.store_refund
- * 
+ *
  * @package Functest
  * @author Ivan Kerin
  * @copyright  (c) 2011-2013 Despark Ltd.

@@ -6,7 +6,7 @@ use OpenBuildings\Monetary\Source_Static;
 /**
  * @group model
  * @group model.purchase_item
- * 
+ *
  * @package Functest
  * @author Ivan Kerin
  * @copyright  (c) 2011-2013 Despark Ltd.
@@ -21,7 +21,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 		$item = Jam::find('purchase_item', 1);
 
 		$item = Jam::build('purchase_item', array(
-			'price' => 10, 
+			'price' => 10,
 			'store_purchase' => 1,
 			'model' => 'purchase_item_product',
 			'quantity' => 1,
@@ -196,7 +196,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 			->will($this->returnValue($price));
 
 		$this->assertSame($price, $item->price());
-		
+
 		$item->price = new Jam_Price(100, 'EUR');
 
 		$this->assertSame($item->price, $item->price());

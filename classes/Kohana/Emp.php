@@ -17,22 +17,22 @@ class Kohana_Emp {
 
 	public static function api()
 	{
-		if ( ! Emp::$_api) 
+		if ( ! Emp::$_api)
 		{
 			$config = Kohana::$config->load('purchases.processor.emp.api');
 			Emp::$_api = new Api($config['gateway_url'], $config['client_id'], $config['api_key']);
 
-			if (isset($config['proxy'])) 
+			if (isset($config['proxy']))
 			{
 				Emp::$_api->proxy($config['proxy']);
 			}
 
-			if (Emp::is_threatmatrix_enabled()) 
+			if (Emp::is_threatmatrix_enabled())
 			{
 				Emp::$_api->threatmatrix(Emp::threatmatrix());
 			}
 
-			if (Kohana::$environment !== Kohana::PRODUCTION) 
+			if (Kohana::$environment !== Kohana::PRODUCTION)
 			{
 				Emp::$_api->test(TRUE);
 			}
@@ -47,7 +47,7 @@ class Kohana_Emp {
 
 	public static function clear_threatmatrix()
 	{
-		if (Emp::is_threatmatrix_enabled()) 
+		if (Emp::is_threatmatrix_enabled())
 		{
 			Session::instance()->delete(Emp::THREATMATRIX_SESSION_KEY);
 		}

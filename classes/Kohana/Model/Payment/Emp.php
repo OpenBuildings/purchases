@@ -12,9 +12,9 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 	 * Convert a Model_Purcahse object to an array of parameteres, suited for Emp Payment processor
 	 * Uses discount items, payable items, billing address as well as customer email and ip_address
 	 * If environment != Kohana::PRODUCTION, adds a "test_transaction" => 1
-	 * 
-	 * @param  Model_Purchase $purchase 
-	 * @return array                   
+	 *
+	 * @param  Model_Purchase $purchase
+	 * @return array
 	 */
 	public static function convert_purchase(Model_Purchase $purchase)
 	{
@@ -28,12 +28,12 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 			'credit_card_trans_type' => 'sale',
 		);
 
-		if ($purchase->creator) 
+		if ($purchase->creator)
 		{
 			$params['customer_email'] = $purchase->creator->email;
 		}
 
-		foreach ($purchase->items(array('is_payable' => TRUE)) as $i => $item) 
+		foreach ($purchase->items(array('is_payable' => TRUE)) as $i => $item)
 		{
 			$index = $i+1;
 
@@ -66,28 +66,28 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 		}
 
 		return $params;
-	}	
+	}
 
 	/**
 	 * Find the item_id from a cart array, returned from emp
-	 * @param  array  $cart 
-	 * @param  string $id   
-	 * @return string       
+	 * @param  array  $cart
+	 * @param  string $id
+	 * @return string
 	 */
 	public static function find_item_id(array $cart, $id)
 	{
 		$items = isset($cart['item'][0]) ? $cart['item'] : array($cart['item']);
-		foreach ($items as $item) 
+		foreach ($items as $item)
 		{
-			if ($item['code'] == $id) 
+			if ($item['code'] == $id)
 				return $item['id'];
 		}
 	}
 
 	/**
 	 * Convert a Model_Store_Refund object to an array of parameteres, suited for Emp Payment processor. Uses purchase's payment object and its raw_response to extract the needed ids.
-	 * @param  Model_Store_Refund $refund 
-	 * @return array                     
+	 * @param  Model_Store_Refund $refund
+	 * @return array
 	 */
 	public static function convert_refund(Model_Store_Refund $refund)
 	{
@@ -100,9 +100,9 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 			'reason'           => $refund->reason,
 		);
 
-		if (count($refund->items)) 
+		if (count($refund->items))
 		{
-			foreach ($refund->items as $i => $item) 
+			foreach ($refund->items as $i => $item)
 			{
 				$index = $i+1;
 				$item_params = array(
@@ -124,8 +124,8 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 
 	/**
 	 * Calculate the transaction_fee of Emp Payment processor based on the given amount
-	 * @param  Jam_Price $amount 
-	 * @return Jam_Price           
+	 * @param  Jam_Price $amount
+	 * @return Jam_Price
 	 */
 	public function transaction_fee(Jam_Price $amount)
 	{
@@ -136,19 +136,19 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 
 	/**
 	 * Perform a payment of the current purchase, set the reponse in payment_id, raw_response and status.
-	 * @param  array  $params 
+	 * @param  array  $params
 	 * @return Model_Payment_Emp         self
 	 */
 	public function execute_processor(array $params = array())
 	{
 		$params = array_merge($params, Model_Payment_Emp::convert_purchase($this->purchase));
 
-		try 
+		try
 		{
 			$response = Emp::api()
 				->request(Openbuildings\Emp\Api::ORDER_SUBMIT, $params);
-		} 
-		catch (Openbuildings\Emp\Exception $exception) 
+		}
+		catch (Openbuildings\Emp\Exception $exception)
 		{
 			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $exception->getMessage()), 0, $exception);
 		}
@@ -158,8 +158,8 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 		$status = ($response['transaction_response'] == 'A') ? Model_Payment::PAID : NULL;
 
 		$this->set(array(
-			'payment_id' => $response['transaction_id'], 
-			'raw_response' => $response['raw'], 
+			'payment_id' => $response['transaction_id'],
+			'raw_response' => $response['raw'],
 			'status' => $status
 		));
 
@@ -168,24 +168,24 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 
 	/**
 	 * Perform a refund based on a given refund object. Set the refund's raw_response and status accordingly
-	 * @param  Model_Store_Refund $refund        
-	 * @param  array              $custom_params 
+	 * @param  Model_Store_Refund $refund
+	 * @param  array              $custom_params
 	 * @return Model_Payment_Emp                            self
 	 */
 	public function refund_processor(Model_Store_Refund $refund, array $custom_params = array())
 	{
 		$params = Model_Payment_Emp::convert_refund($refund);
 
-		try 
+		try
 		{
 			$response = Emp::api()
 				->request(Openbuildings\Emp\Api::ORDER_CREDIT, $params);
-		} 
-		catch (Openbuildings\Emp\Exception $exception) 
+		}
+		catch (Openbuildings\Emp\Exception $exception)
 		{
 			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $exception->getMessage()), 0, $exception);
 		}
-		
+
 		$refund->raw_response = $response;
 		$refund->transaction_status = ($response['transaction_response'] == 'A') ? Model_Store_Refund::TRANSACTION_REFUNDED : NULL;
 

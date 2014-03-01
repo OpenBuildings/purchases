@@ -5,7 +5,7 @@ use OpenBuildings\Monetary\Monetary;
 /**
  * @group model
  * @group model.store_refund_item
- * 
+ *
  * @package Functest
  * @author Ivan Kerin
  * @copyright  (c) 2011-2013 Despark Ltd.
@@ -110,7 +110,7 @@ class Model_Store_Refund_ItemTest extends Testcase_Purchases {
 		$monetary = new OpenBuildings\Monetary\Monetary;
 
 		$item = $this->getMock('Model_Store_Refund_Item', array('currency', 'display_currency', 'monetary', 'purchase_item_price'), array('store_refund_item'));
-		
+
 		$item
 			->expects($this->exactly(2))
 				->method('purchase_item_price')

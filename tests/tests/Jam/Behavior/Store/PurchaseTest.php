@@ -4,7 +4,7 @@
  * @group jam
  * @group jam.behavior
  * @group jam.behavior.store_purchase
- * 
+ *
  * @package Functest
  * @author Ivan Kerin
  * @copyright  (c) 2011-2013 Despark Ltd.

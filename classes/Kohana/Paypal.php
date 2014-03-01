@@ -15,7 +15,7 @@ class Kohana_Paypal {
 
 	public static function api($reload = FALSE)
 	{
-		if ( ! Paypal::$_api OR $reload) 
+		if ( ! Paypal::$_api OR $reload)
 		{
 			$oauth = Kohana::$config->load('purchases.processor.paypal.oauth');
 			Paypal::$_api = new ApiContext(new OAuthTokenCredential($oauth['client_id'], $oauth['secret']));

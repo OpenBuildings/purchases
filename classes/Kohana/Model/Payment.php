@@ -12,7 +12,7 @@ class Kohana_Model_Payment extends Jam_Model {
 	const PENDING = 'pending';
 
 	public $_authorize_url;
-	
+
 	/**
 	 * @codeCoverageIgnore
 	 */
@@ -41,8 +41,8 @@ class Kohana_Model_Payment extends Jam_Model {
 
 	/**
 	 * Calculate a transaction fee, based on the price provided. By default returns NULL
-	 * @param  Jam_Price $price 
-	 * @return Jam_Price           
+	 * @param  Jam_Price $price
+	 * @return Jam_Price
 	 */
 	public function transaction_fee(Jam_Price $price)
 	{
@@ -51,7 +51,7 @@ class Kohana_Model_Payment extends Jam_Model {
 
 	/**
 	 * This would return the url needed to authorize the purchase by the user, if the payment method requires it
-	 * @return string 
+	 * @return string
 	 */
 	public function authorize_url()
 	{
@@ -141,7 +141,7 @@ class Kohana_Model_Payment extends Jam_Model {
 
 	/**
 	 * Extend this in the child models.
-	 * @param  array  $params 
+	 * @param  array  $params
 	 * @throws Kohana_Exception If method not implemented
 	 */
 	public function authorize_processor(array $params = array())
@@ -151,7 +151,7 @@ class Kohana_Model_Payment extends Jam_Model {
 
 	/**
 	 * Extend this in the child models.
-	 * @param  array  $params 
+	 * @param  array  $params
 	 * @throws Kohana_Exception If method not implemented
 	 */
 	public function execute_processor(array $params = array())
@@ -161,7 +161,7 @@ class Kohana_Model_Payment extends Jam_Model {
 
 	/**
 	 * Extend this in the child models.
-	 * @param  array  $params 
+	 * @param  array  $params
 	 * @throws Kohana_Exception If method not implemented
 	 */
 	public function refund_processor(Model_Store_Refund $refund, array $params = array())

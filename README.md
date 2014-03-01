@@ -66,9 +66,9 @@ This module heavily utilizes jam-monetary - all of its price related methods and
 
 __Purchase_Item flags__
 
-Purchase item has important "flags" 
+Purchase item has important "flags"
 
-- __is_payable__ - that means that this is an item that should be "payed for" by the buyer, and will be added to his total bill. This is needed as some items need to be visible (and calculated) only for the seller for example, but should not appear on the buyer's bill. 
+- __is_payable__ - that means that this is an item that should be "payed for" by the buyer, and will be added to his total bill. This is needed as some items need to be visible (and calculated) only for the seller for example, but should not appear on the buyer's bill.
 - __is_discount__ - this means that the purchase item's price should be negative value. This enforces a validation - discounted items can only have negative prices, whereas normal ones must always have positive prices.
 
 __Item Querying__
@@ -136,7 +136,7 @@ class Some_Model extends Jam_Model {
 		$meta
 			->behaviors(array(
 				'freezable' => Jam::behavior('freezable', array(
-					'fields' => 'price', 
+					'fields' => 'price',
 					'parent' => 'some_parent_model',
 					'associations' => array('some_child', 'some_children'),
 				)),
@@ -156,7 +156,7 @@ public function price()
 }
 ```
 
-The parent association is used in order to find the value of "is_frozen", so that only one model holds the value of the flag. So that if you call "is_frozen()" on a Freezable that has a "parent", then it will get that value from the parent. 
+The parent association is used in order to find the value of "is_frozen", so that only one model holds the value of the flag. So that if you call "is_frozen()" on a Freezable that has a "parent", then it will get that value from the parent.
 
 ## Adding / Updating single items
 
@@ -230,7 +230,7 @@ class Controller_Payment extends Controller_Template {
 			$purchase
 				->build('payment', array('model' => 'payment_paypal_vbv'))
 					->authorize($form->vbv_params('/payment/complete'));
-			
+
 			// We need to save the form somewhere as it is later used for execute method
 			$this->session->set('emp_form', $form->as_array());
 
@@ -252,7 +252,7 @@ class Controller_Payment extends Controller_Template {
 				->payment
 					->execute($form->as_array());
 		}
-			
+
 		$this->template->content = View::factory('payment/complete', array('purchase' => $purchase));
 	}
 }
@@ -377,7 +377,7 @@ public function initialize(Jam_Meta $meta, $name)
 
 public static function change_status(Model_Payment $payment, Jam_Event_Data $data)
 {
-	foreach ($payment->get_insist('purchase')->store_purchases as $store_purchase) 
+	foreach ($payment->get_insist('purchase')->store_purchases as $store_purchase)
 	{
 		$store_purchase->status = Model_Store_Purchase::PAID;
 	}

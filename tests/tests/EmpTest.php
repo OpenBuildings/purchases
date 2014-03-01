@@ -16,7 +16,7 @@ class EmpTest extends Testcase_Purchases {
 			'purchases.processor.emp.threatmatrix' => array('org_id' => '1')
 		));
 
-		$this->assertTrue(Emp::is_threatmatrix_enabled());		
+		$this->assertTrue(Emp::is_threatmatrix_enabled());
 	}
 
 	/**

@@ -21,14 +21,14 @@ class Kohana_Jam_Behavior_Store_Purchase extends Jam_Behavior {
 
 	/**
 	 * Extract values with numeric keys so that array('product', 'shipping, 'is_payable' => TRUE) will return array('product', 'shipping')
-	 * @param  array  $array 
-	 * @return array        
+	 * @param  array  $array
+	 * @return array
 	 */
 	public static function extract_types(array $array)
 	{
 		$types = array();
 
-		foreach ($array as $key => $value) 
+		foreach ($array as $key => $value)
 		{
 			if (is_numeric($key))
 			{
@@ -42,15 +42,15 @@ class Kohana_Jam_Behavior_Store_Purchase extends Jam_Behavior {
 	/**
 	 * filter out items from $items that do not match the given filters.
 	 *
-	 * - is_payable => TRUE|FALSE 
+	 * - is_payable => TRUE|FALSE
 	 * - is_discount => TRUE|FALSE
 	 * - not => array() - do not match items with this types
 	 * - array() - all other non-associative keys are considered type filters, allowing items only with these types
-	 * 
-	 * @param  Model_Store_Purchase $store_purchase 
-	 * @param  Jam_Event_Data       $data           
-	 * @param  array                $items          
-	 * @param  array                $filter         
+	 *
+	 * @param  Model_Store_Purchase $store_purchase
+	 * @param  Jam_Event_Data       $data
+	 * @param  array                $items
+	 * @param  array                $filter
 	 */
 	public function filter_items(Model_Store_Purchase $store_purchase, Jam_Event_Data $data, array $items, array $filter)
 	{

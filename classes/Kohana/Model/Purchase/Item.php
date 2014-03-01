@@ -153,7 +153,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 	public function get_reference_paranoid()
 	{
 		$self = $this;
-		
+
 		return Jam_Behavior_Paranoid::with_filter(Jam_Behavior_Paranoid::ALL, function() use ($self) {
 			return $self->reference;
 		});
@@ -170,13 +170,13 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 
 	/**
 	 * Check if item has been refunded
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public function is_refunded()
 	{
 		foreach ($this->get_insist('store_purchase')->refunds->as_array() as $refund)
 		{
-			if ($refund->has_purchase_item($this)) 
+			if ($refund->has_purchase_item($this))
 			{
 				return TRUE;
 			}

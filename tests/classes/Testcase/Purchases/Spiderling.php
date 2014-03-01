@@ -13,7 +13,7 @@ use Openbuildings\PHPUnitSpiderling\Testcase_Spiderling;
 abstract class Testcase_Purchases_Spiderling extends Testcase_Spiderling {
 
 	public $environment;
-	
+
 	public function setUp()
 	{
 		parent::setUp();
@@ -28,7 +28,7 @@ abstract class Testcase_Purchases_Spiderling extends Testcase_Spiderling {
 
 	public function tearDown()
 	{
-		Database::instance()->rollback();	
+		Database::instance()->rollback();
 		$this->env->restore();
 
 		parent::tearDown();

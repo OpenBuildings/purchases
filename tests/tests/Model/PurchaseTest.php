@@ -57,7 +57,7 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$purchase = Jam::build('purchase');
 
 		$this->assertSame(Monetary::instance(), $purchase->monetary());
-		
+
 		$purchase = Jam::find('purchase', 1);
 
 		$monetary = $purchase->monetary();
