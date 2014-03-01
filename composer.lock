@@ -7,16 +7,16 @@
     "packages": [
         {
             "name": "composer/installers",
-            "version": "v1.0.7",
+            "version": "v1.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "d792632d27e1980d921cbbba12eab7b888338d4c"
+                "reference": "4127333b03e8b4c08d081958548aae5419d1a2fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/d792632d27e1980d921cbbba12eab7b888338d4c",
-                "reference": "d792632d27e1980d921cbbba12eab7b888338d4c",
+                "url": "https://api.github.com/repos/composer/installers/zipball/4127333b03e8b4c08d081958548aae5419d1a2fa",
+                "reference": "4127333b03e8b4c08d081958548aae5419d1a2fa",
                 "shasum": ""
             },
             "replace": {
@@ -46,38 +46,48 @@
                 {
                     "name": "Kyle Robinson Young",
                     "email": "kyle@dontkry.com",
-                    "homepage": "http://dontkry.com",
+                    "homepage": "https://github.com/shama",
                     "role": "Developer"
                 }
             ],
             "description": "A multi-framework Composer library installer",
             "homepage": "http://composer.github.com/installers/",
             "keywords": [
-                "TYPO3 CMS",
-                "TYPO3 Flow",
-                "TYPO3 Neos",
+                "Craft",
+                "Hurad",
+                "MODX Evo",
+                "OXID",
+                "WolfCMS",
                 "agl",
+                "annotatecms",
                 "cakephp",
                 "codeigniter",
                 "concrete5",
+                "croogo",
                 "drupal",
+                "elgg",
                 "fuelphp",
                 "installer",
                 "joomla",
                 "kohana",
                 "laravel",
-                "li3",
                 "lithium",
+                "magento",
                 "mako",
+                "mediawiki",
                 "modulework",
                 "phpbb",
+                "piwik",
                 "ppi",
+                "shopware",
                 "silverstripe",
                 "symfony",
+                "typo3",
                 "wordpress",
-                "zend"
+                "zend",
+                "zikula"
             ],
-            "time": "2013-10-24 16:13:49"
+            "time": "2014-02-24 04:21:34"
         },
         {
             "name": "desarrolla2/cache",
@@ -178,16 +188,16 @@
         },
         {
             "name": "openbuildings/emp",
-            "version": "0.1.8",
+            "version": "0.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/emp.git",
-                "reference": "84ce64e863a0cb1f73e88b0f864fb32b21cbee57"
+                "reference": "cb09e0c81c14ae0c7a5fcb620d5a986463875527"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/emp/zipball/84ce64e863a0cb1f73e88b0f864fb32b21cbee57",
-                "reference": "84ce64e863a0cb1f73e88b0f864fb32b21cbee57",
+                "url": "https://api.github.com/repos/OpenBuildings/emp/zipball/cb09e0c81c14ae0c7a5fcb620d5a986463875527",
+                "reference": "cb09e0c81c14ae0c7a5fcb620d5a986463875527",
                 "shasum": ""
             },
             "require": {
@@ -226,7 +236,7 @@
                 "money",
                 "payments"
             ],
-            "time": "2013-10-31 15:07:39"
+            "time": "2014-02-06 17:24:57"
         },
         {
             "name": "openbuildings/flex-storage",
@@ -268,16 +278,16 @@
         },
         {
             "name": "openbuildings/jam",
-            "version": "0.4.36",
+            "version": "0.4.46",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam.git",
-                "reference": "3df2c944ee52cac9086461a38e39fcd31304844a"
+                "reference": "cc0f8f83c39796ab3c08a8af72ccf73418a5c439"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/3df2c944ee52cac9086461a38e39fcd31304844a",
-                "reference": "3df2c944ee52cac9086461a38e39fcd31304844a",
+                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/cc0f8f83c39796ab3c08a8af72ccf73418a5c439",
+                "reference": "cc0f8f83c39796ab3c08a8af72ccf73418a5c439",
                 "shasum": ""
             },
             "require": {
@@ -317,7 +327,7 @@
                 "upload",
                 "validation"
             ],
-            "time": "2013-11-26 13:08:40"
+            "time": "2014-02-06 11:48:52"
         },
         {
             "name": "openbuildings/jam-auth",
@@ -416,16 +426,16 @@
         },
         {
             "name": "openbuildings/jam-freezable",
-            "version": "0.1.2",
+            "version": "0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam-freezable.git",
-                "reference": "4c1b614affc62b210d98f754f918c4c93a687a7f"
+                "reference": "e5eb35d68bd38747f908713ca9771239710f3676"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam-freezable/zipball/4c1b614affc62b210d98f754f918c4c93a687a7f",
-                "reference": "4c1b614affc62b210d98f754f918c4c93a687a7f",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-freezable/zipball/e5eb35d68bd38747f908713ca9771239710f3676",
+                "reference": "e5eb35d68bd38747f908713ca9771239710f3676",
                 "shasum": ""
             },
             "require": {
@@ -455,7 +465,7 @@
                 "freezing",
                 "jam"
             ],
-            "time": "2013-11-14 07:50:05"
+            "time": "2014-03-01 10:15:15"
         },
         {
             "name": "openbuildings/jam-locations",
@@ -507,16 +517,16 @@
         },
         {
             "name": "openbuildings/jam-monetary",
-            "version": "0.1.16",
+            "version": "0.1.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam-monetary.git",
-                "reference": "190dfe42d280ed089c4cc4cb357394e1d59e0329"
+                "reference": "170df0dbfe292ad1db598473dbb061857f5a800b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam-monetary/zipball/190dfe42d280ed089c4cc4cb357394e1d59e0329",
-                "reference": "190dfe42d280ed089c4cc4cb357394e1d59e0329",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-monetary/zipball/170df0dbfe292ad1db598473dbb061857f5a800b",
+                "reference": "170df0dbfe292ad1db598473dbb061857f5a800b",
                 "shasum": ""
             },
             "require": {
@@ -551,7 +561,7 @@
                 "money",
                 "price"
             ],
-            "time": "2013-10-29 16:40:22"
+            "time": "2014-01-06 15:00:53"
         },
         {
             "name": "openbuildings/monetary",
@@ -771,16 +781,16 @@
         },
         {
             "name": "openbuildings/paypal",
-            "version": "0.4.1",
+            "version": "0.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/paypal.git",
-                "reference": "e5a3d71486788323f5acc9cab0e6a8fc29a3bff7"
+                "reference": "f74e41699636c7906f86cd6462b64e1330928fc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/paypal/zipball/e5a3d71486788323f5acc9cab0e6a8fc29a3bff7",
-                "reference": "e5a3d71486788323f5acc9cab0e6a8fc29a3bff7",
+                "url": "https://api.github.com/repos/OpenBuildings/paypal/zipball/f74e41699636c7906f86cd6462b64e1330928fc4",
+                "reference": "f74e41699636c7906f86cd6462b64e1330928fc4",
                 "shasum": ""
             },
             "require": {
@@ -805,7 +815,7 @@
                     "name": "Haralan Dobrev",
                     "email": "hkdobrev@gmail.com",
                     "homepage": "http://hkdobrev.blogspot.com",
-                    "role": "Author"
+                    "role": "Developer"
                 }
             ],
             "description": "PayPal SDK for ExpressCheckout and AdaptivePayments. Supports recurring payments, simple payments, parallel payments and chained payments.",
@@ -816,20 +826,20 @@
                 "payments",
                 "paypal"
             ],
-            "time": "2013-11-26 17:11:15"
+            "time": "2014-02-06 20:42:21"
         },
         {
             "name": "openbuildings/phpunit-spiderling",
-            "version": "0.1.7",
+            "version": "0.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/phpunit-spiderling.git",
-                "reference": "2ebf1a5b2b7905f3805938667cf673875a0b2108"
+                "reference": "063b6af0533f6447c71cb580d49e720841154962"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/phpunit-spiderling/zipball/2ebf1a5b2b7905f3805938667cf673875a0b2108",
-                "reference": "2ebf1a5b2b7905f3805938667cf673875a0b2108",
+                "url": "https://api.github.com/repos/OpenBuildings/phpunit-spiderling/zipball/063b6af0533f6447c71cb580d49e720841154962",
+                "reference": "063b6af0533f6447c71cb580d49e720841154962",
                 "shasum": ""
             },
             "require": {
@@ -858,20 +868,20 @@
                 }
             ],
             "description": "Use openbuildings/spiderling in phpunit tests",
-            "time": "2013-11-20 15:03:51"
+            "time": "2013-11-28 13:28:13"
         },
         {
             "name": "openbuildings/spiderling",
-            "version": "0.2.12",
+            "version": "0.2.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/spiderling.git",
-                "reference": "7225889985ddf20dfe92b1ad101650526a01533d"
+                "reference": "c061d7c59238df27545c470e7cf6aec8ce4ab9fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/spiderling/zipball/7225889985ddf20dfe92b1ad101650526a01533d",
-                "reference": "7225889985ddf20dfe92b1ad101650526a01533d",
+                "url": "https://api.github.com/repos/OpenBuildings/spiderling/zipball/c061d7c59238df27545c470e7cf6aec8ce4ab9fd",
+                "reference": "c061d7c59238df27545c470e7cf6aec8ce4ab9fd",
                 "shasum": ""
             },
             "require": {
@@ -901,7 +911,7 @@
                 }
             ],
             "description": "Crawl the web with kohana, phantomjs or selenium",
-            "time": "2013-11-19 10:18:16"
+            "time": "2013-12-17 09:42:05"
         },
         {
             "name": "paypal/rest-api-sdk-php",
@@ -998,17 +1008,17 @@
         },
         {
             "name": "symfony/css-selector",
-            "version": "v2.3.7",
+            "version": "v2.3.11",
             "target-dir": "Symfony/Component/CssSelector",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector.git",
-                "reference": "8df20c54ffa650df860a3e42dbcd1fbd25a24977"
+                "reference": "a7450fde13926ab5b796f7884a05e91372dcbccc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/8df20c54ffa650df860a3e42dbcd1fbd25a24977",
-                "reference": "8df20c54ffa650df860a3e42dbcd1fbd25a24977",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/a7450fde13926ab5b796f7884a05e91372dcbccc",
+                "reference": "a7450fde13926ab5b796f7884a05e91372dcbccc",
                 "shasum": ""
             },
             "require": {
@@ -1032,7 +1042,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Symfony Community",
@@ -1045,7 +1057,7 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "http://symfony.com",
-            "time": "2013-10-30 08:30:20"
+            "time": "2014-02-11 10:29:24"
         }
     ],
     "aliases": [

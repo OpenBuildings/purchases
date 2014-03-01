@@ -155,7 +155,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 		$self = $this;
 		
 		return Jam_Behavior_Paranoid::with_filter(Jam_Behavior_Paranoid::ALL, function() use ($self) {
-			return $self->get_insist('reference');
+			return $self->reference;
 		});
 	}
 

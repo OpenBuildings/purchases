@@ -33,9 +33,9 @@ class Model_Purchase_Item_RefundTest extends Testcase_Purchases {
 		));
 
 		$purchase_item
-			->expects($this->once())
+			->expects($this->exactly(2))
 			->method('get_reference_paranoid')
-			->will($this->returnValue($mock));
+			->will($this->onConsecutiveCalls($mock, NULL));
 
 		$refund_amount = new Jam_Price(10.25, 'GBP');
 		$purchase_item_refund_price = $refund_amount->multiply_by(-1);
@@ -45,5 +45,6 @@ class Model_Purchase_Item_RefundTest extends Testcase_Purchases {
 			->will($this->returnValue($refund_amount));
 
 		$this->assertEquals($purchase_item_refund_price, $purchase_item->get_price());
+		$this->assertEquals(new Jam_Price(0, 'GBP'), $purchase_item->get_price());
 	}
 }

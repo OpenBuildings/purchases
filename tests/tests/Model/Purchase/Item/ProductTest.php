@@ -32,16 +32,17 @@ class Model_Purchase_Item_ProductTest extends Testcase_Purchases {
 		));
 
 		$purchase_item
-			->expects($this->once())
+			->expects($this->exactly(2))
 			->method('get_reference_paranoid')
-			->will($this->returnValue($mock));
+			->will($this->onConsecutiveCalls($mock, NULL));
 
 		$mock
 			->expects($this->once())
 			->method('price_for_purchase_item')
 			->with($purchase_item)
-			->will($this->returnValue(10.25));
+			->will($this->returnValue(new Jam_Price(10.25, 'GBP')));
 
-		$this->assertSame(10.25, $purchase_item->get_price());
+		$this->assertEquals(new Jam_Price(10.25, 'GBP'), $purchase_item->get_price());
+		$this->assertEquals(new Jam_Price(0, 'GBP'), $purchase_item->get_price());
 	}
 }

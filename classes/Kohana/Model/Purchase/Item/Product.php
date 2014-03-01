@@ -25,6 +25,7 @@ class Kohana_Model_Purchase_Item_Product extends Model_Purchase_Item {
 
 	public function get_price()
 	{
-		return $this->get_reference_paranoid()->price_for_purchase_item($this);
+		$reference = $this->get_reference_paranoid();
+		return $reference ? $reference->price_for_purchase_item($this) : new Jam_Price(0, 'GBP');
 	}
 }

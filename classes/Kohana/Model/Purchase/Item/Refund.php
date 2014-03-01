@@ -28,6 +28,7 @@ class Kohana_Model_Purchase_Item_Refund extends Model_Purchase_Item {
 
 	public function get_price()
 	{
-		return $this->get_reference_paranoid()->amount()->multiply_by(-1);
+		$reference = $this->get_reference_paranoid();
+		return $reference ? $reference->amount()->multiply_by(-1) : new Jam_Price(0, 'GBP');
 	}
 }
