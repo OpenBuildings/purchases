@@ -9,6 +9,7 @@
 class Kohana_Model_Payment_Paypal extends Model_Payment {
 
 	const STATE_COMPLETED = 'completed';
+	const STATE_PENDING = 'pending';
 
 	/**
 	 * Convert a Model_Purchase to a PayPal\Api\Payment object.
@@ -248,7 +249,7 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		}
 
 		$refund->raw_response = $response->toArray();
-		$refund->transaction_status = ($response->getState() == static::STATE_COMPLETED)
+		$refund->transaction_status = in_array($response->getState(), array(static::STATE_COMPLETED, static::STATE_PENDING))
 			? Model_Store_Refund::TRANSACTION_REFUNDED
 			: $response->getState();
 
