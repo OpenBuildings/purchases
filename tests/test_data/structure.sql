@@ -55,7 +55,7 @@ CREATE TABLE `payments` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `purchase_id` INT(10) UNSIGNED NULL,
   `payment_id` VARCHAR(255) NOT NULL,
-  `model` VARCHAR(50) NOT NULL,
+  `model` VARCHAR(255) NOT NULL,
   `status` VARCHAR(20) NOT NULL,
   `raw_response` TEXT,
   `is_deleted` INT(1) UNSIGNED NOT NULL,

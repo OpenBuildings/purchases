@@ -46,7 +46,7 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		));
 
 		$found_index = $store_purchase->search_same_item($new_item);
-		
+
 		$this->assertSame($first_item, $store_purchase->items[$found_index]);
 
 		$new_item->model = 'purchase_item_shipping';
@@ -283,7 +283,7 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 	public function test_replace_items()
 	{
 		$store_purchase = Jam::find('store_purchase', 2);
-		
+
 		$store_purchase->items->build(array(
 			'id' => 23,
 			'quantity' => 1,
@@ -398,7 +398,7 @@ class Model_Store_PurchaseTest extends Testcase_Purchases {
 		$this->assertEquals('GBP', $store_purchase->display_currency());
 		$this->assertEquals('EUR', $store_purchase->display_currency());
 	}
-	
+
 	/**
 	 * @covers Model_Store_Purchase::monetary
 	 */
