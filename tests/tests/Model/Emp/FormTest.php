@@ -76,7 +76,7 @@ class Model_Emp_FormTest extends Testcase_Purchases {
 			array(
 				array(
 					'cardnumber' => 'qwerhjgf43534fgn3453',
-					'expdate' => 'QWERTYZXCVB',
+					'expdate' => 'ZXCVBQWERTY',
 					'callback_url' => 'ABCDE',
 					'browser_useragent' => 'teeeestiing'
 				),
