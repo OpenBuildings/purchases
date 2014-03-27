@@ -77,7 +77,7 @@ class Kohana_Model_Emp_Form extends Jam_Validated {
 	{
 		return array(
 			'cardnumber' => $this->card_number,
-			'expdate' => $this->exp_month.$this->exp_year,
+			'expdate' => $this->exp_year.$this->exp_month,
 			'callback_url' => $callback_url,
 			'browser_useragent' => Request::$user_agent,
 		);
