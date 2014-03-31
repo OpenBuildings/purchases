@@ -8,6 +8,13 @@
  */
 class Kohana_Model_Payment_Emp_Vbv extends Model_Payment_Emp {
 
+	public static $auth_result_codes = array(
+		'Y' => 'Authentication Successful',
+		'A' => 'Attempts Processing Performed',
+		'N' => 'Authentication Failed',
+		'U' => 'Authentication Could Not Be Performed',
+	);
+
 	/**
 	 * Use the current purchase to generate an "authorize url" where you can go and approve the purchase through paypal's interface.
 	 * @param  array  $params must provide callback_url
@@ -63,13 +70,20 @@ class Kohana_Model_Payment_Emp_Vbv extends Model_Payment_Emp {
 
 		try
 		{
-			$auth_result_response = Emp::api()
+			$auth_response = Emp::api()
 				->request(Openbuildings\Emp\Api::VBVMC3D_RESULT, $auth_result_params);
 
-			if (Arr::path($auth_result_response, 'raw.authenticationstatus') !== 'Y')
-				throw new Exception_Payment('Authentication not complete');
+			$result_code = Arr::path($auth_response, 'raw.authenticationstatus');
 
-			$vbv_auth_params = Arr::extract($auth_result_response['raw'], array('eci', 'xid', 'cavv'));
+			if ($result_code !== 'Y')
+				throw new Exception_Payment(
+					Arr::get(self::$auth_result_codes, $result_code, 'Authentication not complete'),
+					0,
+					NULL,
+					$auth_response['raw']
+				);
+
+			$vbv_auth_params = Arr::extract($auth_response['raw'], array('eci', 'xid', 'cavv'));
 
 			$params = array_merge($params, $vbv_auth_params, Model_Payment_Emp::convert_purchase($this->purchase));
 
