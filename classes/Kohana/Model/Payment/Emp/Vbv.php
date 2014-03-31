@@ -78,6 +78,7 @@ class Kohana_Model_Payment_Emp_Vbv extends Model_Payment_Emp {
 			if ($result_code !== 'Y')
 				throw new Exception_Payment(
 					Arr::get(self::$auth_result_codes, $result_code, 'Authentication not complete'),
+					array(),
 					0,
 					NULL,
 					$auth_response['raw']
