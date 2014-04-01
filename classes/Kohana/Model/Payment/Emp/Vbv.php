@@ -25,7 +25,7 @@ class Kohana_Model_Payment_Emp_Vbv extends Model_Payment_Emp {
 		$currency = $this->purchase->display_currency() ?: $this->purchase->currency();
 
 		$purchase_params = array(
-			'refernece'        => $this->purchase->number,
+			'reference'        => $this->purchase->number,
 			'amount'           => $this->purchase->total_price(array('is_payable' => TRUE))->as_string($currency),
 			'currency'         => $currency,
 		);
