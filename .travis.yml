@@ -1,3 +1,8 @@
+language: php
+
+php:
+  - 5.4
+
 env:
   global:
     - secure: WM6/jFIv5y0fucZqd2kUhHindfgyz2UkRfDor/e+BEeqN9JfJD5kVDyLHIbHSvGXWYah5Nk56I6Wwo3HjPgsdKU1tfatYBNMqRzKHa13sChd4idIrpUJBRKGqWDJeh3h6Cnf5DrudUKPh7AdDN8Nz5kC+CAo5M3LpM919Qu8mz0=
@@ -12,23 +17,25 @@ env:
     - secure: Vl5+/D22WmpwMhzIMVLZU559Mkblw6W5PMJq/bIOORaCpX5E7deBjKzFtRn+McJNvR3lewMF5yFxnEdJBYB7SzVQ10gExGTfVCE9YwlKUzfVo/0rufPjal10vKI42nCr7aThSKpxRo7leAivzOBxTMcWakg+p4+5AfdmAGiO17c=
     - PHP_PAYPAL_ADAPTIVE_APP_ID=APP-80W284485P519543T
 
-language: php
+notifications:
+  email: false
+  slack:
+    secure: JhetEEPz5c84CuTDHks86k6IpUAlv7LFGswafXCMO5/ztXHMU2Mv6w6jnvp/YOuqiX0nWPRJCbRfoVXdEb/VO/AcLDkscwa10foSziPfbjqofNZ/b2+MtQ93UbfHGpFNIUUrMVnY9/7YW9a6TrPqHT196/+B59L/457RWJz0tC0=
 
-php:
-  - 5.4
-
-script:
-  - phpunit --coverage-clover build/logs/clover.xml
+install:
+  - composer selfupdate
+  - composer install --no-interaction
 
 before_script:
   - mkdir -p build/logs
-  - composer selfupdate
-  - composer install --no-interaction
   - mysql -e 'create database `test-purchases`;'
   - mysql --default-character-set=utf8 test-purchases < tests/test_data/structure.sql
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - "nohup java -jar vendor/claylo/selenium-server-standalone/selenium-server-standalone-2.*.jar > /dev/null 2> /dev/null &"
+
+script:
+  - phpunit --coverage-clover build/logs/clover.xml
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
