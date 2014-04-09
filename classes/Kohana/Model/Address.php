@@ -23,7 +23,7 @@ class Kohana_Model_Address extends Jam_Model {
 			))
 			->associations(array(
 				'purchase' => Jam::association('hasone'),
-				'city' => Jam::association('autocreate', array('foreign_model' => 'location')),
+				'city' => Jam::association('autocreate', array('foreign_model' => 'location', 'default_fields' => array('type' => 'city'))),
 				'country' => Jam::association('belongsto', array('foreign_model' => 'location')),
 				'purchase' => Jam::association('hasone'),
 			))

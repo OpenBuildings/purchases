@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "9c2faa3b05209a1483c8f1b32a4ca4f6",
+    "hash": "68d538c9ce040b8dbec66f9637201854",
     "packages": [
         {
             "name": "composer/installers",
@@ -278,16 +278,16 @@
         },
         {
             "name": "openbuildings/jam",
-            "version": "0.4.46",
+            "version": "0.4.49",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam.git",
-                "reference": "cc0f8f83c39796ab3c08a8af72ccf73418a5c439"
+                "reference": "2eca30be408144271b9dea5789d28397c8db1293"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/cc0f8f83c39796ab3c08a8af72ccf73418a5c439",
-                "reference": "cc0f8f83c39796ab3c08a8af72ccf73418a5c439",
+                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/2eca30be408144271b9dea5789d28397c8db1293",
+                "reference": "2eca30be408144271b9dea5789d28397c8db1293",
                 "shasum": ""
             },
             "require": {
@@ -327,7 +327,7 @@
                 "upload",
                 "validation"
             ],
-            "time": "2014-02-06 11:48:52"
+            "time": "2014-04-09 14:01:39"
         },
         {
             "name": "openbuildings/jam-auth",
@@ -379,16 +379,16 @@
         },
         {
             "name": "openbuildings/jam-closuretable",
-            "version": "0.1.0",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam-closuretable.git",
-                "reference": "b4966d8d8d805a3ebb688a8a60b73b0ce6b81e02"
+                "reference": "8f7179487394d3beff5b74ca3279ed6d135d77f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam-closuretable/zipball/b4966d8d8d805a3ebb688a8a60b73b0ce6b81e02",
-                "reference": "b4966d8d8d805a3ebb688a8a60b73b0ce6b81e02",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-closuretable/zipball/8f7179487394d3beff5b74ca3279ed6d135d77f3",
+                "reference": "8f7179487394d3beff5b74ca3279ed6d135d77f3",
                 "shasum": ""
             },
             "require": {
@@ -413,7 +413,7 @@
                 }
             ],
             "description": "Closuretable behavior",
-            "homepage": "https://github.com/OpenBuildings/purchases",
+            "homepage": "https://github.com/OpenBuildings/jam-closuretable",
             "keywords": [
                 "closuretable",
                 "jam",
@@ -422,7 +422,7 @@
                 "structure",
                 "tree"
             ],
-            "time": "2013-09-02 12:41:12"
+            "time": "2014-04-09 10:14:18"
         },
         {
             "name": "openbuildings/jam-freezable",
@@ -1008,17 +1008,17 @@
         },
         {
             "name": "symfony/css-selector",
-            "version": "v2.3.11",
+            "version": "v2.3.12",
             "target-dir": "Symfony/Component/CssSelector",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector.git",
-                "reference": "a7450fde13926ab5b796f7884a05e91372dcbccc"
+                "reference": "fd008ce53fdbcf315d602921abe6fecad19804d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/a7450fde13926ab5b796f7884a05e91372dcbccc",
-                "reference": "a7450fde13926ab5b796f7884a05e91372dcbccc",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/fd008ce53fdbcf315d602921abe6fecad19804d3",
+                "reference": "fd008ce53fdbcf315d602921abe6fecad19804d3",
                 "shasum": ""
             },
             "require": {
@@ -1057,7 +1057,7 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "http://symfony.com",
-            "time": "2014-02-11 10:29:24"
+            "time": "2014-03-26 07:21:50"
         }
     ],
     "aliases": [
