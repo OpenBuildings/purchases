@@ -227,4 +227,43 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 
 		return $this;
 	}
+
+	/**
+	 * Refund amount of the purchases, specified in multiple Model_Store_Refund objects
+	 *
+	 * @param  array  $params
+	 * @throws Kohana_Exception If method not implemented
+	 */
+	public function multiple_refunds_processor(array $store_refunds, array $params = array())
+	{
+		$refund = Payment::instance('Adaptive_Refund');
+		$refund = Model_Payment_Paypal_Chained::config_auth($refund);
+
+		$purchase = $store_refunds[0]->purchase_insist();
+		$currency = $purchase->display_currency() ?: $purchase->currency();
+		$refund->config('currency', $currency);
+
+		$receivers = array();
+		foreach ($store_refunds as $store_refund)
+		{
+			$receivers += Model_Payment_Paypal_Chained::store_refund_receivers($store_refund, $currency);
+		}
+
+		$response = $refund->do_refund(array(
+			self::PAYMENT_ID_KEY => $this->payment_id,
+		), $receivers, count($receivers) > 1);
+
+		$refund_status = $response['refundInfoList.refundInfo(0).refundStatus'];
+		$refund_status = in_array($refund_status, static::$successful_refund_statuses)
+			? Model_Store_Refund::TRANSACTION_REFUNDED
+			: $refund_status;
+
+		foreach ($store_refunds as $store_refund)
+		{
+			$store_refund->raw_response = $response;
+			$store_refund->transaction_status = $refund_status;
+		}
+
+		return $this;
+	}
 }

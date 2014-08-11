@@ -123,6 +123,38 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 	}
 
 	/**
+	 * Convert multiple Model_Store_Refund objects to an array of parameteres, suited for Emp Payment processor. Uses purchase's payment object and its raw_response to extract the needed ids.
+	 * @param  array $refunds
+	 * @return array
+	 */
+	public static function convert_multiple_refunds(array $refunds)
+	{
+		$payment = $refunds[0]->payment_insist();
+		$currency = $refunds[0]->display_currency() ?: $refund->currency();
+
+		$params = array(
+			'order_id'         => $payment->raw_response['order_id'],
+			'trans_id'         => $payment->payment_id,
+			'reason'           => $refunds[0]->reason,
+			'amount'           => 0,
+		);
+
+		foreach ($refunds as $refund)
+		{
+			if (count($refund->items))
+			{
+				throw new Exception_Payment('Multiple refunds do not support refund items');
+			}
+			else
+			{
+				$params['amount'] += $refund->amount()->as_string($currency);
+			}
+		}
+
+		return $params;
+	}
+
+	/**
 	 * Calculate the transaction_fee of Emp Payment processor based on the given amount
 	 * @param  Jam_Price $amount
 	 * @return Jam_Price
@@ -188,6 +220,35 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 
 		$refund->raw_response = $response;
 		$refund->transaction_status = ($response['transaction_response'] == 'A') ? Model_Store_Refund::TRANSACTION_REFUNDED : NULL;
+
+		return $this;
+	}
+
+	/**
+	 * Perform a refund based on multiple store refund objects. Set the refund's raw_response and status accordingly
+	 * @param  array 			  $refunds
+	 * @param  array              $custom_params
+	 * @return Model_Payment_Emp  self
+	 */
+	public function multiple_refunds_processor(array $refunds, array $custom_params = array())
+	{
+		$params = Model_Payment_Emp::convert_multiple_refunds($refunds);
+
+		try
+		{
+			$response = Emp::api()
+				->request(Openbuildings\Emp\Api::ORDER_CREDIT, $params);
+		}
+		catch (Openbuildings\Emp\Exception $exception)
+		{
+			throw new Exception_Payment('Payment gateway error: :error', array(':error' => $exception->getMessage()), 0, $exception);
+		}
+
+		foreach ($refunds as $refund)
+		{
+			$refund->raw_response = $response;
+			$refund->transaction_status = ($response['transaction_response'] == 'A') ? Model_Store_Refund::TRANSACTION_REFUNDED : NULL;
+		}
 
 		return $this;
 	}

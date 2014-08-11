@@ -97,6 +97,30 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 	}
 
 	/**
+	 * Convert multiple Model_Store_Refund objects to a PayPal\Api\Refund
+	 *
+	 * @param  array $refund
+	 * @return PayPal\Api\Refund
+	 */
+	public static function convert_multiple_refunds(array $refunds)
+	{
+		$currency = $refund[0]->display_currency() ?: $refund[0]->currency();
+
+		$amount = new PayPal\Api\Amount();
+		$amount
+			->setCurrency($currency)
+			->setTotal(array_reduce($refunds, function ($sum, $refund) {
+				return $sum += $refund->amount()->as_string($currency);
+			}));
+
+		$paypal_refund = new PayPal\Api\Refund();
+		$paypal_refund
+			->setAmount($amount);
+
+		return $paypal_refund;
+	}
+
+	/**
 	 * Calculate transaction percent based on the price
 	 * @param  Jam_Price $total
 	 * @return float
@@ -252,6 +276,40 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 		$refund->transaction_status = in_array($response->getState(), array(static::STATE_COMPLETED, static::STATE_PENDING))
 			? Model_Store_Refund::TRANSACTION_REFUNDED
 			: $response->getState();
+
+		return $this;
+	}
+
+	/**
+	 * Refund amount of the purchase, specified in multiple Model_Store_Refund objects
+	 * @param  array                $refunds
+	 * @param  array                $custom_params
+	 * @return Model_Payment_Paypal self
+	 */
+	public function multiple_refunds_processor(array $refunds, array $custom_params = array())
+	{
+		$paypal_refund = Model_Payment_Paypal::convert_multiple_refunds($refunds);
+
+		try
+		{
+			$sale = PayPal\Api\Sale::get($this->payment_id, Paypal::api());
+			PayPal\Api\Payment::get($sale->getParentPayment(), Paypal::api());
+
+			$response = $sale->refund($paypal_refund, Paypal::api(TRUE));
+		}
+		catch (\PayPal\Exception\PPConnectionException $exception)
+		{
+			$data = $exception->getData();
+			throw new Exception_Payment('Payment gateway error: :error', array(':error' => isset($data['message']) ? $data['message'] : $exception->getMessage()), 0, $exception, $data);
+		}
+
+		foreach ($refunds as $refund)
+		{
+			$refund->raw_response = $response->toArray();
+			$refund->transaction_status = in_array($response->getState(), array(static::STATE_COMPLETED, static::STATE_PENDING))
+				? Model_Store_Refund::TRANSACTION_REFUNDED
+				: $response->getState();
+		}
 
 		return $this;
 	}

@@ -140,6 +140,28 @@ class Kohana_Model_Payment extends Jam_Model {
 	}
 
 	/**
+	 * Execute multiple store refunds as a single refund request
+	 * @param  array $refunds pass this to refund_processor()
+	 * @param  array $custom_params pass this to refund_processor()
+	 * @return Model_Payment self
+	 */
+	public function refund_multiple(array $refunds, array $custom_params = array())
+	{
+		$this->meta()->events()->trigger('model.before_refund_multiple', $this, array($refunds, $custom_params));
+
+		$this->refund_multiple_processor($refunds, $custom_params);
+
+		foreach ($refunds as $refund)
+		{
+			$refund->save();
+		}
+
+		$this->meta()->events()->trigger('model.after_refund_multiple', $this, array($refunds, $custom_params));
+
+		return $this;
+	}
+
+	/**
 	 * Extend this in the child models.
 	 * @param  array  $params
 	 * @throws Kohana_Exception If method not implemented
@@ -165,6 +187,16 @@ class Kohana_Model_Payment extends Jam_Model {
 	 * @throws Kohana_Exception If method not implemented
 	 */
 	public function refund_processor(Model_Store_Refund $refund, array $params = array())
+	{
+		throw new Kohana_Exception('This payment does not support refunds');
+	}
+
+	/**
+	 * Extend this in the child models.
+	 * @param  array  $params
+	 * @throws Kohana_Exception If method not implemented
+	 */
+	public function multiple_refunds_processor(array $refunds, array $params = array())
 	{
 		throw new Kohana_Exception('This payment does not support refunds');
 	}
