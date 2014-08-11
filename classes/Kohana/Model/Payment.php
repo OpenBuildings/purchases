@@ -145,18 +145,18 @@ class Kohana_Model_Payment extends Jam_Model {
 	 * @param  array $custom_params pass this to refund_processor()
 	 * @return Model_Payment self
 	 */
-	public function refund_multiple(array $refunds, array $custom_params = array())
+	public function full_refund(array $refunds, array $custom_params = array())
 	{
-		$this->meta()->events()->trigger('model.before_refund_multiple', $this, array($refunds, $custom_params));
+		$this->meta()->events()->trigger('model.before_full_refund', $this, array($refunds, $custom_params));
 
-		$this->refund_multiple_processor($refunds, $custom_params);
+		$this->multiple_refunds_processor($refunds, $custom_params);
 
 		foreach ($refunds as $refund)
 		{
 			$refund->save();
 		}
 
-		$this->meta()->events()->trigger('model.after_refund_multiple', $this, array($refunds, $custom_params));
+		$this->meta()->events()->trigger('model.after_full_refund', $this, array($refunds, $custom_params));
 
 		return $this;
 	}

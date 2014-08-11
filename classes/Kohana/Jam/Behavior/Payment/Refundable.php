@@ -23,6 +23,10 @@ class Kohana_Jam_Behavior_Payment_Refundable extends Jam_Behavior {
 			->bind(
 				'model.after_refund',
 				'Jam_Behavior_Payment_Refundable::add_purchase_item_refund'
+			)
+			->bind(
+				'model.after_full_refund',
+				'Jam_Behavior_Payment_Refundable::add_multiple_purchase_item_refunds'
 			);
 	}
 
@@ -31,6 +35,14 @@ class Kohana_Jam_Behavior_Payment_Refundable extends Jam_Behavior {
 		if ($refund->transaction_status === Model_Store_Refund::TRANSACTION_REFUNDED)
 		{
 			$refund->add_purchase_item_refund();
+		}
+	}
+
+	public static function add_multiple_purchase_item_refunds(Model_Payment $payment, Jam_Event_Data $data, array $refunds)
+	{
+		foreach ($refunds as $refund)
+		{
+			static::add_purchase_item_refund($payment, $data, $refund);
 		}
 	}
 }
