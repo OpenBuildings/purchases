@@ -198,6 +198,6 @@ class Kohana_Model_Payment extends Jam_Model {
 	 */
 	public function multiple_refunds_processor(array $refunds, array $params = array())
 	{
-		throw new Kohana_Exception('This payment does not support refunds');
+		throw new Kohana_Exception('This payment does not support multiple refunds');
 	}
 }

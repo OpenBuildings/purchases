@@ -154,6 +154,94 @@ class Model_PaymentTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Payment::full_refund
+	 */
+	public function test_full_refund()
+	{
+		$params = array('test', 'test2');
+		$refund = $this->getMock('Model_Store_Refund', array(
+			'save',
+		), array(
+			'store_refund',
+		));
+
+		$refund2 = $this->getMock('Model_Store_Refund', array(
+			'save',
+		), array(
+			'store_refund',
+		));
+
+		$payment = $this->getMock('Model_Payment', array(
+			'multiple_refunds_processor',
+		), array(
+			'payment',
+		));
+
+		$store_purchase = $this->getMock('Model_Store_Purchase', array(
+			'save',
+			'freeze',
+		), array(
+			'store_purchase'
+		));
+
+		$store_purchase2 = $this->getMock('Model_Store_Purchase', array(
+			'save',
+			'freeze',
+		), array(
+			'store_purchase'
+		));
+
+		$payment
+			->expects($this->once())
+			->method('multiple_refunds_processor')
+			->with($this->identicalTo(array($refund, $refund2)), $this->equalTo($params));
+
+		$refund
+			->expects($this->once())
+			->method('save')
+			->will($this->returnValue($refund));
+
+		$refund2
+			->expects($this->once())
+			->method('save')
+			->will($this->returnValue($refund2));
+
+		$store_purchase
+			->expects($this->once())
+			->method('save')
+			->will($this->returnValue($store_purchase));
+
+		$store_purchase
+			->expects($this->once())
+			->method('freeze')
+			->will($this->returnValue($store_purchase));
+
+		$store_purchase2
+			->expects($this->once())
+			->method('save')
+			->will($this->returnValue($store_purchase2));
+
+		$store_purchase2
+			->expects($this->once())
+			->method('freeze')
+			->will($this->returnValue($store_purchase2));
+
+		$store_purchase->purchase = Jam::build('purchase');
+		$store_purchase2->purchase = $store_purchase->purchase;
+
+		$refund->store_purchase = $store_purchase;
+		$refund->transaction_status = Model_Store_Refund::TRANSACTION_REFUNDED;
+
+		$refund2->store_purchase = $store_purchase2;
+		$refund2->transaction_status = Model_Store_Refund::TRANSACTION_REFUNDED;
+
+		$payment->full_refund(array($refund, $refund2), $params);
+
+		$this->assertTrue($payment->before_full_refund_called);
+		$this->assertTrue($payment->after_full_refund_called);
+	}
+
+	/**
 	 * @covers Model_Payment::transaction_fee
 	 */
 	public function test_transaction_fee()
@@ -195,5 +283,17 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$payment = Jam::build('payment');
 		$refund = Jam::build('store_refund');
 		$payment->refund_processor($refund);
+	}
+
+	/**
+	 * @covers Model_Payment::multiple_refunds_processor
+	 * @expectedException Kohana_Exception
+	 * @expectedExceptionMessage This payment does not support multiple refunds
+	 */
+	public function test_multiple_refunds_processor()
+	{
+		$payment = Jam::build('payment');
+		$refund = Jam::build('store_refund');
+		$payment->multiple_refunds_processor(array($refund));
 	}
 }

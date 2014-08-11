@@ -145,6 +145,35 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Payment_Emp::convert_multiple_refunds
+	 */
+	public function test_convert_multiple_refunds()
+	{
+		$purchase = Jam::find('purchase', 4);
+		$store_purchase = $purchase->store_purchases[0];
+		$store_purchase2 = $purchase->store_purchases[1];
+
+		$refund = $store_purchase->refunds->create(array(
+			'reason' => 'Faulty Product',
+		));
+
+		$refund2 = $store_purchase2->refunds->create(array(
+			'reason' => 'Faulty Product',
+		));
+
+		$params = Model_Payment_Emp::convert_multiple_refunds(array($refund, $refund2));
+
+		$expected = array(
+			'order_id' => '5580813',
+			'trans_id' => '22222',
+			'reason' => 'Faulty Product',
+			'amount' => '440.4',
+		);
+
+		$this->assertEquals($expected, $params);
+	}
+
+	/**
 	 * @covers Model_Store_Refund::execute
 	 * @covers Model_Payment_Emp::refund_processor
 	 * @covers Model_Payment_Emp::execute_processor

@@ -26,8 +26,8 @@ CREATE TABLE `store_purchases` (
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `store_refunds`;
-CREATE TABLE `store_refunds` (
+DROP TABLE IF EXISTS `refunds`;
+CREATE TABLE `refunds` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `creator_id` INT(10) UNSIGNED NULL,
   `store_purchase_id` INT(10) UNSIGNED NULL,
@@ -40,8 +40,8 @@ CREATE TABLE `store_refunds` (
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `store_refund_items`;
-CREATE TABLE `store_refund_items` (
+DROP TABLE IF EXISTS `refund_items`;
+CREATE TABLE `refund_items` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `store_refund_id` INT(10) UNSIGNED NULL,
   `purchase_item_id` INT(10) UNSIGNED NULL,
@@ -206,7 +206,8 @@ VALUES
 
 INSERT INTO `payments` (`id`, `purchase_id`, `payment_id`, `model`, `status`, `raw_response`, `is_deleted`)
 VALUES
-  (1,1,'11111','payment_emp','paid','{"order_id":"5580812","order_total":"400.00","order_datetime":"2013-08-13 15:04:37","order_status":"Paid","cart":{"item":[{"id":"5657022","code":"1","name":"Chair","description":{},"qty":"1","digital":"0","discount":"0","predefined":"0","unit_price":"200.00"},{"id":"5657032","code":2,"name":"Rug","description":{},"qty":"1","digital":"0","discount":"0","predefined":"0","unit_price":"200.00"}]},"transaction":{"type":"sale","response":"A","response_code":"0","response_text":"approved","trans_id":"1078663342","account_id":"635172"}}',0);
+  (1,1,'11111','payment_emp','paid','{"order_id":"5580812","order_total":"400.00","order_datetime":"2013-08-13 15:04:37","order_status":"Paid","cart":{"item":[{"id":"5657022","code":"1","name":"Chair","description":{},"qty":"1","digital":"0","discount":"0","predefined":"0","unit_price":"200.00"},{"id":"5657032","code":2,"name":"Rug","description":{},"qty":"1","digital":"0","discount":"0","predefined":"0","unit_price":"200.00"}]},"transaction":{"type":"sale","response":"A","response_code":"0","response_text":"approved","trans_id":"1078663342","account_id":"635172"}}',0),
+  (2,4,'22222','payment_emp','paid','{"order_id":"5580813","order_total":"440.40","order_datetime":"2013-08-13 15:04:37","order_status":"Paid","cart":{"item":[{"id":"5657042","code":"1","name":"Chair","description":{},"qty":"1","digital":"0","discount":"0","predefined":"0","unit_price":"290.40"},{"id":"5657062","code":2,"name":"Rug","description":{},"qty":"1","digital":"0","discount":"0","predefined":"0","unit_price":"150.00"}]},"transaction":{"type":"sale","response":"A","response_code":"0","response_text":"approved","trans_id":"1078663343","account_id":"635172"}}',0);
 
 # Dump of table products
 # ------------------------------------------------------------
@@ -215,7 +216,8 @@ INSERT INTO `products` (`id`, `name`, `price`, `currency`, `store_id`, `is_delet
 VALUES
   (1,'Chair',290.40,'GBP',1, 0),
   (2,'Rug',30.00,'GBP',1, 0),
-  (3,'Matrass',130.99,'EUR',1, 0);
+  (3,'Matrass',130.99,'EUR',1, 0),
+  (4,'Table',150.00,'GBP',4, 0);
 
 # Dump of table purchases
 # ------------------------------------------------------------
@@ -224,7 +226,8 @@ INSERT INTO `purchases` (`id`, `creator_id`, `number`, `currency`, `billing_addr
 VALUES
   (1,1,'CNV7IC','EUR',1,'O:31:\"OpenBuildings\\Monetary\\Monetary\":3:{s:20:\"\0*\0_default_currency\";s:3:\"GBP\";s:10:\"\0*\0_source\";C:33:\"OpenBuildings\\Monetary\\Source_ECB\":775:{a:33:{s:3:\"USD\";s:6:\"1.3357\";s:3:\"JPY\";s:6:\"132.05\";s:3:\"BGN\";s:6:\"1.9558\";s:3:\"CZK\";s:6:\"25.769\";s:3:\"DKK\";s:6:\"7.4566\";s:3:\"GBP\";s:7:\"0.83850\";s:3:\"HUF\";s:6:\"298.78\";s:3:\"LTL\";s:6:\"3.4528\";s:3:\"LVL\";s:6:\"0.7025\";s:3:\"PLN\";s:6:\"4.1944\";s:3:\"RON\";s:6:\"4.4588\";s:3:\"SEK\";s:6:\"8.6943\";s:3:\"CHF\";s:6:\"1.2374\";s:3:\"NOK\";s:6:\"7.8920\";s:3:\"HRK\";s:6:\"7.5955\";s:3:\"RUB\";s:7:\"43.0625\";s:3:\"TRY\";s:6:\"2.6592\";s:3:\"AUD\";s:6:\"1.4248\";s:3:\"BRL\";s:6:\"3.0086\";s:3:\"CAD\";s:6:\"1.3759\";s:3:\"CNY\";s:6:\"8.1748\";s:3:\"HKD\";s:7:\"10.3570\";s:3:\"IDR\";s:8:\"14855.82\";s:3:\"ILS\";s:6:\"4.7205\";s:3:\"INR\";s:7:\"83.9450\";s:3:\"KRW\";s:7:\"1444.54\";s:3:\"MXN\";s:7:\"17.2205\";s:3:\"MYR\";s:6:\"4.3945\";s:3:\"NZD\";s:6:\"1.6267\";s:3:\"PHP\";s:6:\"58.090\";s:3:\"SGD\";s:6:\"1.6824\";s:3:\"THB\";s:6:\"42.342\";s:3:\"ZAR\";s:7:\"13.0230\";}}s:13:\"\0*\0_precision\";i:2;}',1,0),
   (2,1,'AAV7IC','GBP',1,'',0,0),
-  (3,1,'BBV7IC','GBP',1,'',0,0);
+  (3,1,'BBV7IC','GBP',1,'',0,0),
+  (4,1,'QQQQQQ','GBP',1,'O:31:\"OpenBuildings\\Monetary\\Monetary\":3:{s:20:\"\0*\0_default_currency\";s:3:\"GBP\";s:10:\"\0*\0_source\";C:33:\"OpenBuildings\\Monetary\\Source_ECB\":775:{a:33:{s:3:\"USD\";s:6:\"1.3357\";s:3:\"JPY\";s:6:\"132.05\";s:3:\"BGN\";s:6:\"1.9558\";s:3:\"CZK\";s:6:\"25.769\";s:3:\"DKK\";s:6:\"7.4566\";s:3:\"GBP\";s:7:\"0.83850\";s:3:\"HUF\";s:6:\"298.78\";s:3:\"LTL\";s:6:\"3.4528\";s:3:\"LVL\";s:6:\"0.7025\";s:3:\"PLN\";s:6:\"4.1944\";s:3:\"RON\";s:6:\"4.4588\";s:3:\"SEK\";s:6:\"8.6943\";s:3:\"CHF\";s:6:\"1.2374\";s:3:\"NOK\";s:6:\"7.8920\";s:3:\"HRK\";s:6:\"7.5955\";s:3:\"RUB\";s:7:\"43.0625\";s:3:\"TRY\";s:6:\"2.6592\";s:3:\"AUD\";s:6:\"1.4248\";s:3:\"BRL\";s:6:\"3.0086\";s:3:\"CAD\";s:6:\"1.3759\";s:3:\"CNY\";s:6:\"8.1748\";s:3:\"HKD\";s:7:\"10.3570\";s:3:\"IDR\";s:8:\"14855.82\";s:3:\"ILS\";s:6:\"4.7205\";s:3:\"INR\";s:7:\"83.9450\";s:3:\"KRW\";s:7:\"1444.54\";s:3:\"MXN\";s:7:\"17.2205\";s:3:\"MYR\";s:6:\"4.3945\";s:3:\"NZD\";s:6:\"1.6267\";s:3:\"PHP\";s:6:\"58.090\";s:3:\"SGD\";s:6:\"1.6824\";s:3:\"THB\";s:6:\"42.342\";s:3:\"ZAR\";s:7:\"13.0230\";}}s:13:\"\0*\0_precision\";i:2;}',1,0);
 
 INSERT INTO `addresses` (`id`,`country_id`,`city_id`,`email`,`first_name`,`last_name`,`phone`,`zip`,`line1`,`line2`,`state`,`fax`,`is_deleted`)
 VALUES
@@ -238,7 +241,9 @@ INSERT INTO `store_purchases` (`id`, `number`, `store_id`, `purchase_id`, `is_de
 VALUES
   (1,'3S2GJG',1,1,0),
   (2,'AA2GJG',1,2,0),
-  (3,'RRRRRR',3,3,0);
+  (3,'RRRRRR',3,3,0),
+  (4,'ZZZZZZ',1,4,0),
+  (5,'YYYYYY',4,4,0);
 
 # Dump of table purchase_items
 # ------------------------------------------------------------
@@ -247,7 +252,9 @@ INSERT INTO `purchase_items` (`id`, `store_purchase_id`, `reference_id`, `refere
 VALUES
   (1,1,1,'product',200.00,1,'purchase_item_product',1,0,0),
   (2,1,1,'variation',200.00,1,'purchase_item_product',1,0,0),
-  (3,2,1,'product',NULL,1,'purchase_item_product',1,0,0);
+  (3,2,1,'product',NULL,1,'purchase_item_product',1,0,0),
+  (4,4,1,'product',290.40,1,'purchase_item_product',1,0,0),
+  (5,5,4,'product',150.00,1,'purchase_item_product',1,0,0);
 
 # Dump of table stores
 # ------------------------------------------------------------
@@ -256,7 +263,8 @@ INSERT INTO `stores` (`id`, `name`, `paypal_email`, `is_deleted`)
 VALUES
   (1,'Example Store', 'teststore@clippings.com', 0),
   (2,'Empty Store', 'test-store@clippings.com', 0),
-  (3,'Deleted Store', NULL, 1);
+  (3,'Deleted Store', NULL, 1),
+  (4,'Other Store', 'otherstore@clippings.com', 0);
 
 # Dump of table users
 # ------------------------------------------------------------
