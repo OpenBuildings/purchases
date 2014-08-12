@@ -26,8 +26,8 @@ CREATE TABLE `store_purchases` (
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `refunds`;
-CREATE TABLE `refunds` (
+DROP TABLE IF EXISTS `store_refunds`;
+CREATE TABLE `store_refunds` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `creator_id` INT(10) UNSIGNED NULL,
   `store_purchase_id` INT(10) UNSIGNED NULL,
@@ -40,8 +40,8 @@ CREATE TABLE `refunds` (
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `refund_items`;
-CREATE TABLE `refund_items` (
+DROP TABLE IF EXISTS `store_refund_items`;
+CREATE TABLE `store_refund_items` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `store_refund_id` INT(10) UNSIGNED NULL,
   `purchase_item_id` INT(10) UNSIGNED NULL,
