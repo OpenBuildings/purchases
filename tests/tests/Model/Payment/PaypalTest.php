@@ -120,6 +120,35 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 	}
 
 	/**
+	 * @covers Model_Payment_Paypal::convert_multiple_refunds
+	 */
+		public function test_convert_multiple_refunds()
+	{
+		$purchase = Jam::find('purchase', 4);
+		$store_purchase = $purchase->store_purchases[0];
+		$store_purchase2 = $purchase->store_purchases[1];
+
+		$refund = $store_purchase->refunds->create(array(
+			'reason' => 'Faulty Product',
+		));
+		$refund2 = $store_purchase2->refunds->create(array(
+			'reason' => 'Faulty Product',
+		));
+
+		$paypal_refund = Model_Payment_Paypal::convert_multiple_refunds(array($refund, $refund2));
+		$this->assertInstanceOf('Paypal\Api\Refund', $paypal_refund);
+
+		$expected = array(
+			'amount' => array(
+				'currency' => 'GBP',
+				'total' => '440.40',
+			)
+		);
+
+		$this->assertEquals($expected, $paypal_refund->toArray());
+	}
+
+	/**
 	 * @covers Model_Payment_Paypal::execute_processor
 	 * @covers Model_Payment_Paypal::authorize_processor
 	 * @covers Model_Payment_Paypal::authorize_url
@@ -196,6 +225,71 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 			->execute();
 
 		$this->assertEquals(Model_Store_Refund::TRANSACTION_REFUNDED, $refund->transaction_status);
+	}
+
+
+	/**
+	 * @covers Model_Payment_Paypal::multiple_refunds_processor
+	 * @driver selenium
+	 */
+	public function test_multiple_refunds_processor()
+	{
+		$this->env->backup_and_set(array(
+			'Paypal::$_api' => NULL,
+			'purchases.processor.paypal.oauth' => array(
+				'client_id' => getenv('PHP_PAYPAL_CLIENT_ID'),
+				'secret' => getenv('PHP_PAYPAL_SECRET')
+			),
+		));
+
+		$purchase = Jam::find('purchase', 4);
+
+		$purchase
+			->build('payment', array('model' => 'payment_paypal'))
+				->authorize(array('success_url' => 'http://example.com?result=success', 'cancel_url' => 'http://example.com?result=cancel'));
+
+		$this->assertInstanceOf('Model_Payment_Paypal', $purchase->payment);
+		$this->assertNotEquals('', $purchase->payment->payment_id);
+
+		$this
+			->visit($purchase->payment->authorize_url())
+			->wait(5000)
+			->assertHasCss('h3', array('text' => 'Your order summary'))
+			->next_wait_time(5000)
+			->click_on('div.panel', array('text' => 'Log in to your account to complete the purchase'))
+			->next_wait_time(5000)
+			->fill_in('login_email', 'buyer@openbuildings.com')
+			->fill_in('PayPal password', '12345678')
+			->wait(5000)
+			->click_button('Log In')
+			->wait(5000)
+			->assertHasCss('h2', array('text' => 'Review your information'))
+			->assertHasCss('span.grandTotal', array('text' => $purchase->total_price(array('is_payable' => TRUE))))
+			->click_button('Continue')
+			->wait(5000)
+			->assertHasNoCss('h2', array('text' => 'Review your information'));
+
+		$query = parse_url($this->current_url(), PHP_URL_QUERY);
+		parse_str($query, $query);
+
+		$this->assertEquals('success', $query['result']);
+
+		$purchase
+			->payment
+				->execute(array('payer_id' => $query['PayerID']));
+
+		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
+
+		$store_purchase = $purchase->store_purchases[0];
+		$store_purchase2 = $purchase->store_purchases[1];
+
+		$refund = $store_purchase->refunds->create();
+		$refund2 = $store_purchase2->refunds->create();
+
+		$purchase->payment->multiple_refunds_processor(array($refund, $refund2));
+
+		$this->assertEquals(Model_Store_Refund::TRANSACTION_REFUNDED, $refund->transaction_status);
+		$this->assertEquals(Model_Store_Refund::TRANSACTION_REFUNDED, $refund2->transaction_status);
 	}
 
 	public function data_transaction_fee()
