@@ -131,12 +131,13 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 	{
 		$payment = $refunds[0]->payment_insist();
 		$currency = $refunds[0]->display_currency() ?: $refund->currency();
+		$monetary = $refunds[0]->monetary();
+		$amounts = array();
 
 		$params = array(
 			'order_id'         => $payment->raw_response['order_id'],
 			'trans_id'         => $payment->payment_id,
 			'reason'           => $refunds[0]->reason,
-			'amount'           => 0,
 		);
 
 		foreach ($refunds as $refund)
@@ -147,9 +148,11 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 			}
 			else
 			{
-				$params['amount'] += $refund->amount()->as_string($currency);
+				$amounts[] = $refund->amount();
 			}
 		}
+
+		$params['amount'] = Jam_Price::sum($amounts, $currency, $monetary)->as_string($currency);
 
 		return $params;
 	}

@@ -104,14 +104,26 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 	 */
 	public static function convert_multiple_refunds(array $refunds)
 	{
-		$currency = $refund[0]->display_currency() ?: $refund[0]->currency();
+		$currency = $refunds[0]->display_currency() ?: $refunds[0]->currency();
+		$monetary = $refunds[0]->monetary();
+		$amounts = array();
+
+		foreach ($refunds as $refund)
+		{
+			if (count($refund->items))
+			{
+				throw new Exception_Payment('Multiple refunds do not support refund items');
+			}
+			else
+			{
+				$amounts[] = $refund->amount();
+			}
+		}
 
 		$amount = new PayPal\Api\Amount();
 		$amount
 			->setCurrency($currency)
-			->setTotal(array_reduce($refunds, function ($sum, $refund) {
-				return $sum += $refund->amount()->as_string($currency);
-			}));
+			->setTotal(Jam_Price::sum($amounts, $currency, $monetary)->as_string($currency));
 
 		$paypal_refund = new PayPal\Api\Refund();
 		$paypal_refund
