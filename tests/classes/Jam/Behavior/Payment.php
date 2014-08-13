@@ -20,7 +20,10 @@ class Jam_Behavior_Payment extends Jam_Behavior {
 			->bind('model.pay', array($this, 'pay'))
 
 			->bind('model.before_refund', array($this, 'before_refund'))
-			->bind('model.after_refund', array($this, 'after_refund'));
+			->bind('model.after_refund', array($this, 'after_refund'))
+
+			->bind('model.before_full_refund', array($this, 'before_full_refund'))
+			->bind('model.after_full_refund', array($this, 'after_full_refund'));
 
 	}
 
@@ -67,5 +70,15 @@ class Jam_Behavior_Payment extends Jam_Behavior {
 	public function after_refund(Model_Payment $payment, Jam_Event_Data $data)
 	{
 		$payment->after_refund_called = TRUE;
+	}
+
+	public function before_full_refund(Model_Payment $payment, Jam_Event_Data $data)
+	{
+		$payment->before_full_refund_called = TRUE;
+	}
+
+	public function after_full_refund(Model_Payment $payment, Jam_Event_Data $data)
+	{
+		$payment->after_full_refund_called = TRUE;
 	}
 }

@@ -145,6 +145,35 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Payment_Emp::convert_multiple_refunds
+	 */
+	public function test_convert_multiple_refunds()
+	{
+		$purchase = Jam::find('purchase', 4);
+		$store_purchase = $purchase->store_purchases[0];
+		$store_purchase2 = $purchase->store_purchases[1];
+
+		$refund = $store_purchase->refunds->create(array(
+			'reason' => 'Faulty Product',
+		));
+
+		$refund2 = $store_purchase2->refunds->create(array(
+			'reason' => 'Faulty Product',
+		));
+
+		$params = Model_Payment_Emp::convert_multiple_refunds(array($refund, $refund2));
+
+		$expected = array(
+			'order_id' => '5580813',
+			'trans_id' => '22222',
+			'reason' => 'Faulty Product',
+			'amount' => '440.40',
+		);
+
+		$this->assertEquals($expected, $params);
+	}
+
+	/**
 	 * @covers Model_Store_Refund::execute
 	 * @covers Model_Payment_Emp::refund_processor
 	 * @covers Model_Payment_Emp::execute_processor
@@ -193,6 +222,53 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			->execute();
 
 		$this->assertEquals(Model_Store_Refund::TRANSACTION_REFUNDED, $refund->transaction_status);
+	}
+
+	/**
+	 * @covers Model_Payment_Emp::multiple_refunds_processor
+	 */
+	public function test_full_refund()
+	{
+		$this->env->backup_and_set(array(
+			'Emp::$_api' => NULL,
+			'Request::$client_ip' => '95.87.212.88',
+			'purchases.processor.emp.threatmatrix' => array(
+				'org_id' => getenv('EMP_TMX'),
+				'client_id' => getenv('EMP_CID')
+			),
+			'purchases.processor.emp.api' => array(
+				'gateway_url' => 'https://my.emerchantpay.com',
+				'api_key' => getenv('EMP_KEY'),
+				'client_id' => getenv('EMP_CID'),
+				'proxy' => getenv('EMP_PROXY')
+			)
+		));
+
+		Openbuildings\Emp\Remote::get(Emp::threatmatrix()->tracking_url(), array(CURLOPT_PROXY => getenv('EMP_PROXY')));
+
+		$purchase = Jam::find('purchase', 4);
+
+		$purchase
+			->freeze()
+			->save();
+
+		$purchase
+			->build('payment', array('model' => 'payment_emp'))
+				->execute($this->payment_params);
+
+		$this->assertGreaterThan(0, $purchase->payment->payment_id);
+		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
+
+		$store_purchase = $purchase->store_purchases[0];
+		$store_purchase2 = $purchase->store_purchases[1];
+
+		$refund = $store_purchase->refunds->create();
+		$refund2 = $store_purchase2->refunds->create();
+
+		$purchase->payment->multiple_refunds_processor(array($refund, $refund2));
+
+		$this->assertEquals(Model_Store_Refund::TRANSACTION_REFUNDED, $refund->transaction_status);
+		$this->assertEquals(Model_Store_Refund::TRANSACTION_REFUNDED, $refund2->transaction_status);
 	}
 
 	public function data_transaction_fee()
