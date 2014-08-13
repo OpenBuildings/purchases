@@ -229,9 +229,9 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 
 	/**
 	 * Perform a refund based on multiple store refund objects. Set the refund's raw_response and status accordingly
-	 * @param  array 			  $refunds
-	 * @param  array              $custom_params
-	 * @return Model_Payment_Emp  self
+	 * @param  Model_Store_Refund[]	$refunds
+	 * @param  array                $custom_params
+	 * @return Model_Payment_Emp    self
 	 */
 	public function multiple_refunds_processor(array $refunds, array $custom_params = array())
 	{

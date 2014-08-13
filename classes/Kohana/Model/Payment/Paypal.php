@@ -294,7 +294,7 @@ class Kohana_Model_Payment_Paypal extends Model_Payment {
 
 	/**
 	 * Refund amount of the purchase, specified in multiple Model_Store_Refund objects
-	 * @param  array                $refunds
+	 * @param  Model_Store_Refund[] $refunds
 	 * @param  array                $custom_params
 	 * @return Model_Payment_Paypal self
 	 */

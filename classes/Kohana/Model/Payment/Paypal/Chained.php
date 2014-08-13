@@ -229,10 +229,10 @@ class Kohana_Model_Payment_Paypal_Chained extends Model_Payment {
 	}
 
 	/**
-	 * Refund amount of the purchases, specified in multiple Model_Store_Refund objects
-	 *
-	 * @param  array  $params
-	 * @throws Kohana_Exception If method not implemented
+	 * Refund amount of the purchase, specified in multiple Model_Store_Refund objects
+	 * @param  Model_Store_Refund[]         $refunds
+	 * @param  array                        $custom_params
+	 * @return Model_Payment_Paypal_Chained self
 	 */
 	public function multiple_refunds_processor(array $store_refunds, array $params = array())
 	{
