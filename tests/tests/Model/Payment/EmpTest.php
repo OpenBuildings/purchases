@@ -142,6 +142,47 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 		);
 
 		$this->assertEquals($expected, $params);
+
+		// Testing full store purchase refund that also is full purchase refund
+		$refund = $store_purchase->refunds->create(array(
+			'reason' => 'Full Store And Purchase Refund',
+			'items' => array(
+				array('purchase_item' => $store_purchase->items[0]),
+				array('purchase_item' => $store_purchase->items[1]),
+			)
+		));
+
+		$params = Model_Payment_Emp::convert_refund($refund);
+
+		$expected = array(
+			'order_id' => '5580812',
+			'trans_id' => '11111',
+			'reason' => 'Full Store And Purchase Refund',
+			'amount' => '400.00',
+		);
+
+		// Testing full store purchase refund, but not full purchase refund
+		$purchase = Jam::find('purchase', 4);
+		$store_purchase = $purchase->store_purchases[0];
+
+		$refund = $store_purchase->refunds->create(array(
+			'reason' => 'Full Store But Not Purchase Refund',
+			'items' => array(
+				array('purchase_item' => $store_purchase->items[0]),
+			)
+		));
+
+		$params = Model_Payment_Emp::convert_refund($refund);
+
+		$expected = array(
+			'order_id' => '5580813',
+			'trans_id' => '22222',
+			'reason' => 'Full Store But Not Purchase Refund',
+			'item_1_id' => '5657042',
+			'item_1_amount' => '290.40',
+		);
+
+		$this->assertEquals($expected, $params);
 	}
 
 	/**
