@@ -100,7 +100,8 @@ class Kohana_Model_Payment_Emp extends Model_Payment {
 			'reason'           => $refund->reason,
 		);
 
-		$is_full_refund = $refund->amount() == $refund->purchase_insist()->total_price(array('is_payable' => TRUE));
+		$is_full_refund = $refund->amount()->is(Jam_Price::EQUAL_TO,
+			$refund->purchase_insist()->total_price(array('is_payable' => TRUE)));
 
 		if (count($refund->items) AND ! $is_full_refund)
 		{
