@@ -161,6 +161,8 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 			'amount' => '400.00',
 		);
 
+		$this->assertEquals($expected, $params);
+
 		// Testing full store purchase refund, but not full purchase refund
 		$purchase = Jam::find('purchase', 4);
 		$store_purchase = $purchase->store_purchases[0];
