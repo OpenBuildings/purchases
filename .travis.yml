@@ -28,8 +28,8 @@ install:
 
 before_script:
   - mkdir -p build/logs
-  - mysql -e 'create database `test-purchases`;'
-  - mysql --default-character-set=utf8 test-purchases < tests/test_data/structure.sql
+  - mysql -e 'create database `OpenBuildings/purchases`;'
+  - mysql --default-character-set=utf8 OpenBuildings/purchases < tests/test_data/structure.sql
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - "nohup java -jar vendor/claylo/selenium-server-standalone/selenium-server-standalone-2.*.jar > /dev/null 2> /dev/null &"

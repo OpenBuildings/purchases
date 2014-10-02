@@ -30,7 +30,7 @@ Kohana::$config
 			'type'       => 'MySQL',
 			'connection' => array(
 				'hostname'   => 'localhost',
-				'database'   => 'test-purchases',
+				'database'   => 'OpenBuildings/purchases',
 				'username'   => 'root',
 				'password'   => '',
 				'persistent' => TRUE,
