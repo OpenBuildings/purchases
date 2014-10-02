@@ -8,6 +8,7 @@ return array(
 			// 	'client_id' => '00000',
 			// 	'api_key' => 'aaaaaa',
 			// 	'proxy' => 'aaaaaa',
+			// 	'options' => array('custom options'),
 			// ),
 			// 'threatmatrix' => array(
 			// 	'org_id' => 'lygdph9h',

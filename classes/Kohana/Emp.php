@@ -27,6 +27,11 @@ class Kohana_Emp {
 				Emp::$_api->proxy($config['proxy']);
 			}
 
+			if (isset($config['options']))
+			{
+				Emp::$_api->options($config['options']);
+			}
+
 			if (Emp::is_threatmatrix_enabled())
 			{
 				Emp::$_api->threatmatrix(Emp::threatmatrix());

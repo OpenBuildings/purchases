@@ -52,7 +52,13 @@ class EmpTest extends Testcase_Purchases {
 		$this->env->backup_and_set(array(
 			'Emp::$_api' => NULL,
 			'purchases.processor.emp.threatmatrix' => array('org_id' => 'TESTORG', 'client_id' => 'TESTCLIENT'),
-			'purchases.processor.emp.api' => array('gateway_url' => 'http://example.com', 'api_key' => 'TESTAPI', 'client_id' => 'TESTCLIENT', 'proxy' => 'PROXY')
+			'purchases.processor.emp.api' => array(
+				'gateway_url' => 'http://example.com',
+				'api_key' => 'TESTAPI',
+				'client_id' => 'TESTCLIENT',
+				'proxy' => 'PROXY',
+				'options' => array(CURLOPT_TIMEOUT => 10),
+			)
 		));
 
 		$api = Emp::api();
@@ -62,6 +68,7 @@ class EmpTest extends Testcase_Purchases {
 		$this->assertEquals('http://example.com', $api->gateway_url());
 		$this->assertEquals('TESTCLIENT', $api->client_id());
 		$this->assertEquals('PROXY', $api->proxy());
+		$this->assertEquals(array(CURLOPT_TIMEOUT => 10), $api->options());
 		$this->assertEquals(Emp::threatmatrix(), $api->threatmatrix());
 	}
 }
