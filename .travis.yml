@@ -35,7 +35,7 @@ before_script:
   - "nohup java -jar vendor/claylo/selenium-server-standalone/selenium-server-standalone-2.*.jar > /dev/null 2> /dev/null &"
 
 script:
-  - phpunit --coverage-clover build/logs/clover.xml
+  - phpunit --stderr --coverage-clover build/logs/clover.xml
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
