@@ -1,30 +1,32 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "68d538c9ce040b8dbec66f9637201854",
+    "hash": "257f000a6a235a8b0608ce1917d13d4f",
     "packages": [
         {
             "name": "composer/installers",
-            "version": "v1.0.12",
+            "version": "v1.0.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "4127333b03e8b4c08d081958548aae5419d1a2fa"
+                "reference": "74fb0a7a1a23696d9c8cc2fba5903f6711cdd067"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/4127333b03e8b4c08d081958548aae5419d1a2fa",
-                "reference": "4127333b03e8b4c08d081958548aae5419d1a2fa",
+                "url": "https://api.github.com/repos/composer/installers/zipball/74fb0a7a1a23696d9c8cc2fba5903f6711cdd067",
+                "reference": "74fb0a7a1a23696d9c8cc2fba5903f6711cdd067",
                 "shasum": ""
             },
             "replace": {
+                "roundcube/plugin-installer": "*",
                 "shama/baton": "*"
             },
             "require-dev": {
                 "composer/composer": "1.0.*@dev",
-                "phpunit/phpunit": "3.7.*"
+                "phpunit/phpunit": "4.1.*"
             },
             "type": "composer-installer",
             "extra": {
@@ -46,21 +48,23 @@
                 {
                     "name": "Kyle Robinson Young",
                     "email": "kyle@dontkry.com",
-                    "homepage": "https://github.com/shama",
-                    "role": "Developer"
+                    "homepage": "https://github.com/shama"
                 }
             ],
             "description": "A multi-framework Composer library installer",
             "homepage": "http://composer.github.com/installers/",
             "keywords": [
                 "Craft",
+                "Dolibarr",
                 "Hurad",
                 "MODX Evo",
                 "OXID",
                 "WolfCMS",
                 "agl",
                 "annotatecms",
+                "bitrix",
                 "cakephp",
+                "chef",
                 "codeigniter",
                 "concrete5",
                 "croogo",
@@ -76,9 +80,12 @@
                 "mako",
                 "mediawiki",
                 "modulework",
+                "moodle",
                 "phpbb",
                 "piwik",
                 "ppi",
+                "puppet",
+                "roundcube",
                 "shopware",
                 "silverstripe",
                 "symfony",
@@ -87,7 +94,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2014-02-24 04:21:34"
+            "time": "2014-08-18 20:00:12"
         },
         {
             "name": "desarrolla2/cache",
@@ -188,16 +195,16 @@
         },
         {
             "name": "openbuildings/emp",
-            "version": "0.1.10",
+            "version": "0.1.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/emp.git",
-                "reference": "fda7034f2ae4fe7df2a87de695f129be4220b47e"
+                "reference": "11fd3878bc0d24fdc65e376d36839b9983358554"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/emp/zipball/fda7034f2ae4fe7df2a87de695f129be4220b47e",
-                "reference": "fda7034f2ae4fe7df2a87de695f129be4220b47e",
+                "url": "https://api.github.com/repos/OpenBuildings/emp/zipball/11fd3878bc0d24fdc65e376d36839b9983358554",
+                "reference": "11fd3878bc0d24fdc65e376d36839b9983358554",
                 "shasum": ""
             },
             "require": {
@@ -218,13 +225,11 @@
                 {
                     "name": "Ivan Kerin",
                     "email": "ivan@openbuildings.com",
-                    "homepage": "https://github.com/OpenBuildings/jam",
                     "role": "Author"
                 },
                 {
                     "name": "Haralan Dobrev",
-                    "email": "hdobrev@despark.com",
-                    "role": "Author"
+                    "email": "hdobrev@despark.com"
                 }
             ],
             "description": "Payments for eMerchantPay (EMP) https://www.emerchantpay.com/",
@@ -236,20 +241,20 @@
                 "money",
                 "payments"
             ],
-            "time": "2014-03-24 09:57:47"
+            "time": "2014-10-02 09:13:56"
         },
         {
             "name": "openbuildings/flex-storage",
-            "version": "v0.1.2",
+            "version": "0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/flex-storage.git",
-                "reference": "v0.1.2"
+                "reference": "780d09228a3e4e5a3086c1f55592304502efe987"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/flex-storage/zipball/v0.1.2",
-                "reference": "v0.1.2",
+                "url": "https://api.github.com/repos/OpenBuildings/flex-storage/zipball/780d09228a3e4e5a3086c1f55592304502efe987",
+                "reference": "780d09228a3e4e5a3086c1f55592304502efe987",
                 "shasum": ""
             },
             "require": {
@@ -274,20 +279,20 @@
                 }
             ],
             "description": "Flexible storage provider for files (rackspace, aws, ftp, local)",
-            "time": "2013-08-14 07:24:02"
+            "time": "2014-07-08 12:07:06"
         },
         {
             "name": "openbuildings/jam",
-            "version": "0.4.49",
+            "version": "0.4.59",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam.git",
-                "reference": "2eca30be408144271b9dea5789d28397c8db1293"
+                "reference": "361bc4dd3a95c7f96962cc00e53add7b778525e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/2eca30be408144271b9dea5789d28397c8db1293",
-                "reference": "2eca30be408144271b9dea5789d28397c8db1293",
+                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/361bc4dd3a95c7f96962cc00e53add7b778525e0",
+                "reference": "361bc4dd3a95c7f96962cc00e53add7b778525e0",
                 "shasum": ""
             },
             "require": {
@@ -296,7 +301,8 @@
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "openbuildings/kohana-test-bootsrap": "0.1.*"
+                "openbuildings/kohana-test-bootsrap": "0.1.*",
+                "phpunit/phpunit-dom-assertions": "1.0.*@dev"
             },
             "suggest": {
                 "openbuildings/jam-auth": "A Kohana Auth implementation for Jam, with services",
@@ -313,7 +319,6 @@
                 {
                     "name": "Ivan Kerin",
                     "email": "ivan@openbuildings.com",
-                    "homepage": "https://github.com/OpenBuildings/jam",
                     "role": "Author"
                 }
             ],
@@ -327,7 +332,7 @@
                 "upload",
                 "validation"
             ],
-            "time": "2014-04-09 14:01:39"
+            "time": "2014-09-26 08:35:49"
         },
         {
             "name": "openbuildings/jam-auth",
@@ -469,22 +474,22 @@
         },
         {
             "name": "openbuildings/jam-locations",
-            "version": "0.1.1",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam-locations.git",
-                "reference": "1b3183467f376f99451cfdc7445c07b11a83d0cf"
+                "reference": "af9ca9e817652a6c72a532bfe858b17ff42733b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam-locations/zipball/1b3183467f376f99451cfdc7445c07b11a83d0cf",
-                "reference": "1b3183467f376f99451cfdc7445c07b11a83d0cf",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-locations/zipball/af9ca9e817652a6c72a532bfe858b17ff42733b3",
+                "reference": "af9ca9e817652a6c72a532bfe858b17ff42733b3",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "*",
                 "openbuildings/jam-closuretable": "0.1.*",
-                "php": ">=5.4.0"
+                "php": ">=5.3.0"
             },
             "require-dev": {
                 "ext-geoip": "*",
@@ -513,7 +518,7 @@
                 "kohana",
                 "location"
             ],
-            "time": "2013-09-26 07:02:11"
+            "time": "2014-04-16 08:27:51"
         },
         {
             "name": "openbuildings/jam-monetary",
@@ -606,6 +611,7 @@
                 {
                     "name": "Haralan Dobrev",
                     "email": "hdobrev@despark.com",
+                    "homepage": "https://github.com/hkdobrev",
                     "role": "Author"
                 },
                 {
@@ -633,12 +639,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/rackspace/php-opencloud.git",
-                "reference": "V1.5.10"
+                "reference": "f4c4bbbae8b108c572b346a7cd350c62122451d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rackspace/php-opencloud/zipball/V1.5.10",
-                "reference": "V1.5.10",
+                "url": "https://api.github.com/repos/rackspace/php-opencloud/zipball/f4c4bbbae8b108c572b346a7cd350c62122451d5",
+                "reference": "f4c4bbbae8b108c572b346a7cd350c62122451d5",
                 "shasum": ""
             },
             "require": {
@@ -662,7 +668,8 @@
                 },
                 {
                     "name": "Jamie Hannaford",
-                    "email": "jamie@limetree.org"
+                    "email": "jamie.hannaford@rackspace.com",
+                    "homepage": "https://github.com/jamiehannaford"
                 }
             ],
             "description": "Rackspace open cloud php library",
@@ -830,16 +837,16 @@
         },
         {
             "name": "openbuildings/phpunit-spiderling",
-            "version": "0.1.8",
+            "version": "0.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/phpunit-spiderling.git",
-                "reference": "063b6af0533f6447c71cb580d49e720841154962"
+                "reference": "1556011990fc9f0a946fc26216785ab3aa4755cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/phpunit-spiderling/zipball/063b6af0533f6447c71cb580d49e720841154962",
-                "reference": "063b6af0533f6447c71cb580d49e720841154962",
+                "url": "https://api.github.com/repos/OpenBuildings/phpunit-spiderling/zipball/1556011990fc9f0a946fc26216785ab3aa4755cd",
+                "reference": "1556011990fc9f0a946fc26216785ab3aa4755cd",
                 "shasum": ""
             },
             "require": {
@@ -868,20 +875,20 @@
                 }
             ],
             "description": "Use openbuildings/spiderling in phpunit tests",
-            "time": "2013-11-28 13:28:13"
+            "time": "2014-05-07 11:28:48"
         },
         {
             "name": "openbuildings/spiderling",
-            "version": "0.2.14",
+            "version": "0.2.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/spiderling.git",
-                "reference": "c061d7c59238df27545c470e7cf6aec8ce4ab9fd"
+                "reference": "332bc5b11049efaefd4595b1a77bbb6b401ca22f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/spiderling/zipball/c061d7c59238df27545c470e7cf6aec8ce4ab9fd",
-                "reference": "c061d7c59238df27545c470e7cf6aec8ce4ab9fd",
+                "url": "https://api.github.com/repos/OpenBuildings/spiderling/zipball/332bc5b11049efaefd4595b1a77bbb6b401ca22f",
+                "reference": "332bc5b11049efaefd4595b1a77bbb6b401ca22f",
                 "shasum": ""
             },
             "require": {
@@ -906,12 +913,11 @@
                 {
                     "name": "Ivan Kerin",
                     "email": "ivan@openbuildings.com",
-                    "homepage": "https://github.com/OpenBuildings/jam",
                     "role": "Author"
                 }
             ],
             "description": "Crawl the web with kohana, phantomjs or selenium",
-            "time": "2013-12-17 09:42:05"
+            "time": "2014-09-11 11:14:42"
         },
         {
             "name": "paypal/rest-api-sdk-php",
@@ -1008,17 +1014,17 @@
         },
         {
             "name": "symfony/css-selector",
-            "version": "v2.3.12",
+            "version": "v2.3.20",
             "target-dir": "Symfony/Component/CssSelector",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector.git",
-                "reference": "fd008ce53fdbcf315d602921abe6fecad19804d3"
+                "reference": "9b320f7b6baa094032996e3e7170ced7405f64f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/fd008ce53fdbcf315d602921abe6fecad19804d3",
-                "reference": "fd008ce53fdbcf315d602921abe6fecad19804d3",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/9b320f7b6baa094032996e3e7170ced7405f64f3",
+                "reference": "9b320f7b6baa094032996e3e7170ced7405f64f3",
                 "shasum": ""
             },
             "require": {
@@ -1041,23 +1047,21 @@
             ],
             "authors": [
                 {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com",
-                    "homepage": "http://fabien.potencier.org",
-                    "role": "Lead Developer"
-                },
-                {
                     "name": "Symfony Community",
                     "homepage": "http://symfony.com/contributors"
                 },
                 {
                     "name": "Jean-François Simon",
                     "email": "jeanfrancois.simon@sensiolabs.com"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
                 }
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "http://symfony.com",
-            "time": "2014-03-26 07:21:50"
+            "time": "2014-09-22 08:32:35"
         }
     ],
     "aliases": [
@@ -1067,6 +1071,7 @@
     "stability-flags": [
 
     ],
+    "prefer-stable": false,
     "platform": {
         "php": ">=5.3.0"
     },
