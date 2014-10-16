@@ -30,7 +30,7 @@
 	"require-dev": {
 		"openbuildings/kohana-test-bootsrap": "0.1.*",
 		"openbuildings/environment-backup": "0.1.*",
-		"paypal/rest-api-sdk-php": "0.7.*",
+		"paypal/rest-api-sdk-php": "~0.13.1",
 		"openbuildings/paypal": "0.4.*",
 		"openbuildings/phpunit-spiderling": "0.1.*",
 		"claylo/selenium-server-standalone": "2.*"

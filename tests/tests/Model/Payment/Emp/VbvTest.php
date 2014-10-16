@@ -24,6 +24,7 @@ class Model_Payment_Emp_VbvTest extends Testcase_Purchases {
 	 */
 	public function test_execute()
 	{
+		$this->markTestSkipped('VBV in test environment has changed to use actual user confirmation in the browser like the live environment.');
 		$this->env->backup_and_set(array(
 			'Emp::$_api' => NULL,
 			'Request::$client_ip' => '95.87.212.88',
