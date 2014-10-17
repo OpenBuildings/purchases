@@ -1,6 +1,8 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
 use OpenBuildings\Monetary\Monetary;
+use Clippings\Freezable\FreezableCollectionTrait;
+use Clippings\Freezable\FreezableInterface;
 
 /**
  * @package    Openbuildings\Purchases
@@ -8,7 +10,12 @@ use OpenBuildings\Monetary\Monetary;
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Model_Purchase extends Jam_Model implements Purchasable {
+class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableInterface {
+
+	use FreezableCollectionTrait {
+		performFreeze as freezeCollection;
+		performUnfreeze as unfreezeCollection;
+	}
 
 	protected $_monetary;
 
@@ -21,7 +28,6 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable {
 			->name_key('number')
 			->behaviors(array(
 				'tokenable' => Jam::behavior('tokenable', array('uppercase' => TRUE, 'field' => 'number')),
-				'freezable' => Jam::behavior('freezable', array('fields' => 'monetary', 'associations' => 'store_purchases')),
 				'paranoid' => Jam::behavior('paranoid'),
 			))
 			->associations(array(
@@ -46,6 +52,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable {
 				'id'              => Jam::field('primary'),
 				'currency'        => Jam::field('string'),
 				'monetary'        => Jam::field('serialized'),
+				'is_frozen'          => Jam::field('boolean'),
 				'created_at'      => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
 				'updated_at'      => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			))
@@ -100,7 +107,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable {
 	 */
 	public function monetary()
 	{
-		return $this->monetary ? $this->monetary : Monetary::instance();
+		return $this->isFrozen() ? $this->monetary : Monetary::instance();
 	}
 
 	/**
@@ -246,5 +253,36 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable {
 		}, $this->store_purchases->as_array());
 
 		return $this->check();
+	}
+
+	public function isFrozen()
+	{
+		return $this->is_frozen;
+	}
+
+	public function setFrozen($frozen)
+	{
+		$this->is_frozen = (bool) $frozen;
+
+		return $this;
+	}
+
+	public function performFreeze()
+	{
+		$this->freezeCollection();
+
+		$this->monetary = $this->monetary();
+	}
+
+	public function performUnfreeze()
+	{
+		$this->unfreezeCollection();
+
+		$this->monetary = NULL;
+	}
+
+	public function getItems()
+	{
+		return $this->store_purchases;
 	}
 }

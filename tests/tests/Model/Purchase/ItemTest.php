@@ -191,11 +191,13 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 		$item->store_purchase = Jam::find('store_purchase', 1);
 		$price = new Jam_Price(10, 'USD');
 
-		$item->expects($this->once())
+		$item->expects($this->exactly(2))
 			->method('compute_price')
 			->will($this->returnValue($price));
 
 		$this->assertSame($price, $item->price());
+
+		$item->freeze();
 
 		$item->price = new Jam_Price(100, 'EUR');
 

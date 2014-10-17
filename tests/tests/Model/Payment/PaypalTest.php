@@ -22,6 +22,7 @@ class Model_Payment_PaypalTest extends Testcase_Purchases_Spiderling {
 			'price' => -10,
 			'model' => 'purchase_item_promotion',
 			'is_discount' => TRUE,
+			'is_frozen' => TRUE,
 			'is_payable' => TRUE,
 		));
 

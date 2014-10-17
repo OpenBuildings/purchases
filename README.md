@@ -124,39 +124,78 @@ $purchase->is_frozen();
 
 Once the purchase has been frozen and saved, any change to the frozen fields / associations will be treated as validation errors.
 
-## Freezable Behavior
+## Freezable traits
 
-In order for that to work across all the models of the purchase, the Freezable behavior is used. It has 3 parameters "associations", "parent" and "fields"
+In order for that to work across all the models of the purchase, the [`clippings/freezable`](https://github.com/clippings/freezable) package is used. It has useful traits for keeping some values or collections frozen.
 
 ```php
-class Some_Model extends Jam_Model {
+class Model_Purchase extends Jam_Model {
+
+	use Clippings\Freezable\FreezableCollectionTrait {
+		performFreeze as freezeCollection;
+		performUnfreeze as unfreezeCollection;
+	};
 
 	public static function initialize(Jam_Meta $meta)
 	{
 		$meta
-			->behaviors(array(
-				'freezable' => Jam::behavior('freezable', array(
-					'fields' => 'price',
-					'parent' => 'some_parent_model',
-					'associations' => array('some_child', 'some_children'),
-				)),
+			->associations(array(
+				'store_purchases' => Jam::association('has_many'),
+			))
+			->fields(array(
+				'is_frozen' => Jam::field('boolean'),
+				'price' => Jam::field('serializable'),
 			));
+	}
+
+	public function price()
+	{
+		return $this->isFrozen() ? $this->price : $this->computePrice();
+	}
+
+	public function isFrozen()
+	{
+		return $this->is_frozen;
+	}
+
+	public function setFrozen($frozen)
+	{
+		$this->is_frozen = (bool) $frozen;
+
+		return $this;
+	}
+
+	public function performFreeze()
+	{
+		$this->freezeCollection();
+
+		$this->price = $this->price();
+	}
+
+	public function performUnfreeze()
+	{
+		$this->unfreezeCollection();
+
+		$this->price = NULL;
+	}
+
+	public function getItems()
+	{
+		return $this->books;
 	}
 	//...
 }
 ```
 
 That means that whenever the model is "frozen" then the field named "price" will be assigned the value of the method "price()".
-And all the associations will be also "frozen". The associations themselves have to be Freezable in order for this to work. And the price() method, as well as any other fields, have to take into account the value of the field. E.g.
+And all the associations will be also "frozen". The associations themselves have to be Freezable (implement the `FreezableInterface`) in order for this to work. And the price() method, as well as any other fields, have to take into account if the object is frozen. E.g.
 
 ```
 public function price()
 {
-	return $this->price ? $this->price : $this->compute_price();
+	return $this->isFrozen() ? $this->price : $this->compute_price();
 }
 ```
-
-The parent association is used in order to find the value of "is_frozen", so that only one model holds the value of the flag. So that if you call "is_frozen()" on a Freezable that has a "parent", then it will get that value from the parent.
 
 ## Adding / Updating single items
 

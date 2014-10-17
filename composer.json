@@ -21,11 +21,11 @@
 		"php": ">=5.3.0",
 		"composer/installers": "*",
 		"openbuildings/jam": ">=0.4.35",
-		"openbuildings/jam-freezable": "0.1.*",
 		"openbuildings/emp": "~0.1.11",
 		"openbuildings/jam-auth": "0.2.*",
 		"openbuildings/jam-monetary": "0.1.*",
-		"openbuildings/jam-locations": "0.1.*"
+		"openbuildings/jam-locations": "0.1.*",
+		"clippings/freezable": "0.2.*"
 	},
 	"require-dev": {
 		"openbuildings/kohana-test-bootsrap": "0.1.*",

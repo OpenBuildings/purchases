@@ -32,6 +32,7 @@ class Model_Payment_EmpTest extends Testcase_Purchases {
 		$promo = Jam::build('purchase_item_promotion', array(
 			'quantity' => 1,
 			'price' => -10,
+			'is_frozen' => TRUE,
 			'is_discount' => TRUE,
 			'is_payable' => TRUE,
 		));
