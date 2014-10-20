@@ -1,55 +1,40 @@
 <?php
 
+use Omnipay\Omnipay;
+
 /**
  * @group model.payment
  */
 class Model_PaymentTest extends Testcase_Purchases {
 
+	public $payment_params = array(
+		'card' => array(
+			'name'			=> 'TEST HOLDER',
+			'number'		=> '4242424242424242',
+			'expiryMonth'	=> '10',
+			'expiryYear'	=> '19',
+			'cvv'			=> '123',
+		),
+	);
+
 	/**
-	 * @covers Model_Payment::authorize
+	 * @covers Model_Payment::purchase
 	 */
-	public function test_authorize()
+	public function test_purchase()
 	{
+		$gateway = Omnipay::create('Dummy');
 		$params = array('test', 'test2');
-		$payment = $this->getMock('Model_Payment', array('authorize_processor'), array('payment'));
+		$payment = $this->getMock('Model_Payment', array('execute_purchase'), array('payment'));
 		$purchase = $this->getMock('Model_Purchase', array('save'), array('purchase'));
 		$payment->purchase = $purchase;
 
 		$payment
 			->expects($this->once())
-			->method('authorize_processor')
-			->with($this->equalTo($params));
-
-		$purchase
-			->expects($this->once())
-			->method('save');
-
-		$payment->authorize($params);
-
-		$this->assertTrue($payment->before_first_operation_called);
-		$this->assertTrue($payment->before_authorize_called);
-		$this->assertTrue($payment->after_authorize_called);
-	}
-
-	/**
-	 * @covers Model_Payment::execute
-	 */
-	public function test_execute()
-	{
-		$params = array('test', 'test2');
-		$payment = $this->getMock('Model_Payment', array('execute_processor', 'loaded'), array('payment'));
-		$purchase = $this->getMock('Model_Purchase', array('save'), array('purchase'));
-		$payment->purchase = $purchase;
-
-		$payment
-			->expects($this->once())
-			->method('execute_processor')
-			->with($this->equalTo($params));
-
-		$payment
-			->expects($this->once())
-			->method('loaded')
-			->will($this->returnValue(FALSE));
+			->method('execute_purchase')
+			->with(
+				$this->identicalTo($gateway),
+				$this->equalTo($params)
+			);
 
 		$payment->status = Model_Payment::PAID;
 
@@ -57,51 +42,287 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->expects($this->once())
 			->method('save');
 
-		$payment->execute($params);
+		$payment->purchase($gateway, $params);
 
-		$this->assertTrue($payment->before_first_operation_called);
-		$this->assertTrue($payment->before_execute_called);
-		$this->assertTrue($payment->after_execute_called);
+		$this->assertTrue($payment->before_purchase_called);
+		$this->assertTrue($payment->after_purchase_called);
 		$this->assertTrue($payment->pay_called);
 	}
 
 	/**
-	 * @covers Model_Payment::execute
+	 * @covers Model_Payment::purchase
 	 */
-	public function test_execute_not_call_before_first_operation_called()
+	public function test_purchase_not_successful()
 	{
+		$gateway = Omnipay::create('Dummy');
 		$params = array('test', 'test2');
-		$payment = $this->getMock('Model_Payment', array('execute_processor', 'loaded'), array('payment'));
+		$payment = $this->getMock('Model_Payment', array('execute_purchase'), array('payment'));
 		$purchase = $this->getMock('Model_Purchase', array('save'), array('purchase'));
 		$payment->purchase = $purchase;
 
 		$payment
 			->expects($this->once())
-			->method('execute_processor')
-			->with($this->equalTo($params));
-
-		$payment
-			->expects($this->once())
-			->method('loaded')
-			->will($this->returnValue(TRUE));
+			->method('execute_purchase')
+			->with(
+				$this->identicalTo($gateway),
+				$this->equalTo($params)
+			);
 
 		$purchase
 			->expects($this->once())
 			->method('save');
 
-		$payment->execute($params);
+		$payment->purchase($gateway, $params);
 
-		$this->assertNull($payment->before_first_operation_called);
-		$this->assertTrue($payment->before_execute_called);
-		$this->assertTrue($payment->after_execute_called);
+		$this->assertTrue($payment->before_purchase_called);
+		$this->assertTrue($payment->after_purchase_called);
 		$this->assertNull($payment->pay_called);
 	}
+
+	/**
+	 * @covers Model_Payment::complete_purchase
+	 */
+	public function test_complete_purchase()
+	{
+		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$purchase = $this->getMock('Model_Purchase', array('save'), array('purchase'));
+
+		$purchase
+			->expects($this->once())
+			->method('save');
+
+		$payment = $purchase->build('payment', array('type' => 'Dummy', 'status' => Model_Payment::PENDING));
+
+		$payment->complete_purchase($gateway, $this->payment_params);
+
+		$this->assertTrue($payment->before_complete_purchase_called);
+		$this->assertTrue($payment->after_complete_purchase_called);
+		$this->assertTrue($payment->pay_called);
+	}
+
+	/**
+	 * @covers Model_Payment::complete_purchase
+	 */
+	public function test_complete_purchase_not_successfull()
+	{
+		// Omnipay Dummy Gateway logic for returning a non successful response
+		$this->payment_params['card']['number'] = 4111111111111111;
+
+		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$purchase = $this->getMock('Model_Purchase', array('save'), array('purchase'));
+
+		$purchase
+			->expects($this->once())
+			->method('save');
+
+		$payment = $purchase->build('payment', array('type' => 'Dummy', 'status' => Model_Payment::PENDING));
+
+		$payment->complete_purchase($gateway, $this->payment_params);
+
+		$this->assertTrue($payment->before_complete_purchase_called);
+		$this->assertTrue($payment->after_complete_purchase_called);
+		$this->assertNull($payment->pay_called);
+	}
+
+	/**
+	 * @covers Model_Payment::complete_purchase
+	 * @expectedException Exception_Payment
+	 * @expectedExceptionMessage You must initiate a purchase before completing it
+	 */
+	public function test_complete_purchase_not_pending()
+	{
+		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$purchase = $this->getMock('Model_Purchase', NULL, array('purchase'));
+
+		$payment = $purchase->build('payment', array('type' => 'Dummy'));
+
+		$payment->complete_purchase($gateway, $this->payment_params);
+	}
+
+	/**
+	 * @covers Model_Payment::execute_purchase
+	 */
+	public function test_execute_purchase()
+	{
+		$gateway = Omnipay::create('Dummy');
+		$purchase = Jam::find('purchase', 2);
+
+		$purchase
+			->freeze()
+			->save();
+
+		$purchase
+			->build('payment', array('type' => 'Dummy'))
+				->execute_purchase($gateway, $this->payment_params);
+
+		$this->assertGreaterThan(0, $purchase->payment->payment_id);
+		$this->assertNotNull($purchase->payment->raw_response);
+		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
+	}
+
+	/**
+	 * @covers Model_Payment::execute_purchase
+	 */
+	public function test_execute_purchase_not_successful()
+	{
+		// Omnipay Dummy Gateway logic for returning a non successful response
+		$this->payment_params['card']['number'] = 4111111111111111;
+
+		$gateway = Omnipay::create('Dummy');
+		$purchase = Jam::find('purchase', 2);
+
+		$purchase
+			->freeze()
+			->save();
+
+		$purchase
+			->build('payment', array('type' => 'Dummy'))
+				->execute_purchase($gateway, $this->payment_params);
+
+		$this->assertGreaterThan(0, $purchase->payment->payment_id);
+		$this->assertNotNull($purchase->payment->raw_response);
+		$this->assertEmpty($purchase->payment->status);
+	}
+
+	/**
+	 * @covers Model_Payment::execute_purchase
+	 */
+	public function test_execute_purchase_redirect()
+	{
+		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$purchase = Jam::find('purchase', 2);
+
+		$purchase
+			->freeze()
+			->save();
+
+		$purchase
+			->build('payment', array('type' => 'Dummy'))
+				->execute_purchase($gateway, $this->payment_params);
+
+		$this->assertGreaterThan(0, $purchase->payment->payment_id);
+		$this->assertNotNull($purchase->payment->raw_response);
+		$this->assertEquals(Model_Payment::PENDING, $purchase->payment->status);
+	}
+
+	/**
+	 * @covers Model_Payment::execute_complete_purchase
+	 */
+	public function test_execute_complete_purchase()
+	{
+		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$purchase = Jam::find('purchase', 2);
+
+		$purchase
+			->freeze()
+			->save();
+
+		$purchase
+			->build('payment', array('type' => 'Dummy', 'status' => Model_Payment::PENDING))
+				->execute_complete_purchase($gateway, $this->payment_params);
+
+		$this->assertGreaterThan(0, $purchase->payment->payment_id);
+		$this->assertNotNull($purchase->payment->raw_response);
+		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
+	}
+
+	/**
+	 * @covers Model_Payment::execute_complete_purchase
+	 */
+	public function test_execute_complete_purchase_not_successful()
+	{
+		// Omnipay Dummy Gateway logic for returning a non successful response
+		$this->payment_params['card']['number'] = 4111111111111111;
+
+		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$purchase = Jam::find('purchase', 2);
+
+		$purchase
+			->freeze()
+			->save();
+
+		$purchase
+			->build('payment', array('type' => 'Dummy', 'status' => Model_Payment::PENDING))
+				->execute_complete_purchase($gateway, $this->payment_params);
+
+		$this->assertGreaterThan(0, $purchase->payment->payment_id);
+		$this->assertNotNull($purchase->payment->raw_response);
+		$this->assertNotEquals(Model_Payment::PAID, $purchase->payment->status);
+	}
+
+	/**
+	 * @covers Model_Payment::convert_purchase
+	 */
+	public function test_convert_purchase()
+	{
+		$this->env->backup_and_set(array(
+			'Request::$client_ip' => '1.1.1.1',
+		));
+
+		$purchase = Jam::find('purchase', 1);
+
+		$promo = Jam::build('purchase_item_promotion', array(
+			'quantity' => 1,
+			'price' => -10,
+			'is_discount' => TRUE,
+			'is_payable' => TRUE,
+		));
+
+		$purchase->store_purchases[0]->items []= $promo;
+
+		$params = $purchase
+			->build('payment', array('type' => 'Dummy'))
+				->convert_purchase();
+
+		$expected = array(
+			'transactionReference' => 'CNV7IC',
+			'currency' => 'EUR',
+			'clientIp' => '1.1.1.1',
+			'card' => array(
+				'email' => 'user@example.com',
+				'firstName' => 'name1',
+				'lastName' => 'name2',
+				'address1' => 'Street 1',
+				'address2' => 'House 1',
+				'city' => 'London',
+				'country' => 'GB',
+				'postcode' => 'ZIP',
+				'phone' => 'phone123',
+			),
+			'items' => array(
+				array(
+					"name"			=> 1,
+					"description"	=> 'chair',
+					"quantity"		=> 1,
+					"price"			=> '200.00',
+				),
+				array(
+					"name"			=> 2,
+					"description"	=> 'red..',
+					"quantity"		=> 1,
+					"price"			=> '200.00',
+				),
+				array(
+					"name"			=> $promo->id(),
+					"description"	=> 'promotion',
+					"quantity"		=> 1,
+					"price"			=> '-10.00',
+				),
+			),
+			'amount' => '390.00',
+		);
+
+		$this->assertEquals($expected, $params);
+	}
+
+
 
 	/**
 	 * @covers Model_Payment::refund
 	 */
 	public function test_refund()
 	{
+		$gateway = Omnipay::create('Dummy');
 		$params = array('test', 'test2');
 		$refund = $this->getMock('Model_Store_Refund', array(
 			'save',
@@ -110,7 +331,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 		));
 
 		$payment = $this->getMock('Model_Payment', array(
-			'refund_processor',
+			'execute_refund',
 		), array(
 			'payment',
 		));
@@ -124,8 +345,12 @@ class Model_PaymentTest extends Testcase_Purchases {
 
 		$payment
 			->expects($this->once())
-			->method('refund_processor')
-			->with($this->identicalTo($refund), $this->equalTo($params));
+			->method('execute_refund')
+			->with(
+				$this->identicalTo($gateway),
+				$this->identicalTo($refund),
+				$this->equalTo($params)
+			);
 
 		$refund
 			->expects($this->once())
@@ -147,10 +372,156 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$refund->store_purchase = $store_purchase;
 		$refund->transaction_status = Model_Store_Refund::TRANSACTION_REFUNDED;
 
-		$payment->refund($refund, $params);
+		$payment->refund($gateway, $refund, $params);
 
 		$this->assertTrue($payment->before_refund_called);
 		$this->assertTrue($payment->after_refund_called);
+	}
+
+	/**
+	 * @covers Model_Payment::execute_refund
+	 */
+	public function test_execute_refund()
+	{
+		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$purchase = Jam::find('purchase', 1);
+		$store_purchase = $purchase->store_purchases[0];
+		$payment = $purchase->payment;
+
+		$refund = $store_purchase->refunds->create(array(
+			'reason' => 'Faulty Product',
+			'items' => array(
+				array('purchase_item' => $store_purchase->items[0]),
+				array('purchase_item' => $store_purchase->items[1], 'amount' => 20),
+			),
+		));
+		$payment->execute_refund($gateway, $refund);
+
+		$this->assertNotNull($refund->raw_response);
+		$this->assertEquals(Model_Store_Refund::TRANSACTION_REFUNDED, $refund->transaction_status);
+	}
+
+	public function test_execute_refund_not_successful()
+	{
+		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$purchase = Jam::find('purchase', 1);
+		$store_purchase = $purchase->store_purchases[0];
+		$payment = $purchase->payment;
+
+		$refund = $store_purchase->refunds->create(array(
+			'reason' => 'Faulty Product Fail',
+			'items' => array(
+				array('purchase_item' => $store_purchase->items[0]),
+				array('purchase_item' => $store_purchase->items[1], 'amount' => 20),
+			),
+		));
+		$payment->execute_refund($gateway, $refund);
+
+		$this->assertNotNull($refund->raw_response);
+		$this->assertEquals(NULL, $refund->transaction_status);
+	}
+
+	/**
+	 * @covers Model_Payment::convert_refund
+	 */
+	public function test_convert_refund()
+	{
+		$purchase = Jam::find('purchase', 1);
+		$store_purchase = $purchase->store_purchases[0];
+		$payment = $purchase->payment;
+
+		$refund = $store_purchase->refunds->create(array(
+			'reason' => 'Faulty Product',
+			'items' => array(
+				array('purchase_item' => $store_purchase->items[0]),
+				array('purchase_item' => $store_purchase->items[1], 'amount' => 20),
+			)
+		));
+
+		$params = $payment->convert_refund($refund);
+
+		$expected = array(
+			'transactionId' => '5580812',
+			'transactionReference' => '11111',
+			'reason' => 'Faulty Product',
+			'items' => array(
+				array(
+					'name' => $store_purchase->items[0]->id(),
+					'price' => '200.00',
+				),
+				array(
+					'name' => $store_purchase->items[1]->id(),
+					'price' => '20.00',
+				),
+			),
+			'amount' => '220.00',
+		);
+
+		$this->assertEquals($expected, $params);
+
+
+		$refund = $store_purchase->refunds->create(array(
+			'reason' => 'Full Refund',
+		));
+
+		$params = $payment->convert_refund($refund);
+
+		$expected = array(
+			'transactionId' => '5580812',
+			'transactionReference' => '11111',
+			'reason' => 'Full Refund',
+			'amount' => '400.00',
+		);
+
+		$this->assertEquals($expected, $params);
+
+		// Testing full store purchase refund that also is full purchase refund
+		$refund = $store_purchase->refunds->create(array(
+			'reason' => 'Full Store And Purchase Refund',
+			'items' => array(
+				array('purchase_item' => $store_purchase->items[0]),
+				array('purchase_item' => $store_purchase->items[1]),
+			)
+		));
+
+		$params = $payment->convert_refund($refund);
+
+		$expected = array(
+			'transactionId' => '5580812',
+			'transactionReference' => '11111',
+			'reason' => 'Full Store And Purchase Refund',
+			'amount' => '400.00',
+		);
+
+		$this->assertEquals($expected, $params);
+
+		// Testing full store purchase refund, but not full purchase refund
+		$purchase = Jam::find('purchase', 4);
+		$store_purchase = $purchase->store_purchases[0];
+
+		$refund = $store_purchase->refunds->create(array(
+			'reason' => 'Full Store But Not Purchase Refund',
+			'items' => array(
+				array('purchase_item' => $store_purchase->items[0]),
+			)
+		));
+
+		$params = $payment->convert_refund($refund);
+
+		$expected = array(
+			'transactionId' => '5580813',
+			'transactionReference' => '22222',
+			'reason' => 'Full Store But Not Purchase Refund',
+			'items' => array(
+				array(
+					'name' => $store_purchase->items[0]->id(),
+					'price' => '290.40',
+				),
+			),
+			'amount' => '290.40',
+		);
+
+		$this->assertEquals($expected, $params);
 	}
 
 	/**
@@ -158,6 +529,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 	 */
 	public function test_full_refund()
 	{
+		$gateway = Omnipay::create('Dummy');
 		$params = array('test', 'test2');
 		$refund = $this->getMock('Model_Store_Refund', array(
 			'save',
@@ -172,7 +544,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 		));
 
 		$payment = $this->getMock('Model_Payment', array(
-			'multiple_refunds_processor',
+			'execute_multiple_refunds',
 		), array(
 			'payment',
 		));
@@ -193,8 +565,12 @@ class Model_PaymentTest extends Testcase_Purchases {
 
 		$payment
 			->expects($this->once())
-			->method('multiple_refunds_processor')
-			->with($this->identicalTo(array($refund, $refund2)), $this->equalTo($params));
+			->method('execute_multiple_refunds')
+			->with(
+				$this->identicalTo($gateway),
+				$this->identicalTo(array($refund, $refund2)),
+				$this->equalTo($params)
+			);
 
 		$refund
 			->expects($this->once())
@@ -235,65 +611,64 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$refund2->store_purchase = $store_purchase2;
 		$refund2->transaction_status = Model_Store_Refund::TRANSACTION_REFUNDED;
 
-		$payment->full_refund(array($refund, $refund2), $params);
+		$payment->full_refund($gateway, array($refund, $refund2), $params);
 
 		$this->assertTrue($payment->before_full_refund_called);
 		$this->assertTrue($payment->after_full_refund_called);
 	}
 
 	/**
-	 * @covers Model_Payment::transaction_fee
+	 * @covers Model_Payment::execute_multiple_refunds
 	 */
-	public function test_transaction_fee()
+	public function test_execute_multiple_refunds()
 	{
-		$payment = Jam::build('payment');
-		$result = $payment->transaction_fee(new Jam_Price(10, 'GBP'));
-		$this->assertNull($result);
+		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$purchase = Jam::find('purchase', 4);
+		$store_purchase = $purchase->store_purchases[0];
+		$store_purchase2 = $purchase->store_purchases[1];
+
+		$refund = $store_purchase->refunds->create(array(
+			'reason' => 'Faulty Product',
+		));
+
+		$refund2 = $store_purchase2->refunds->create(array(
+			'reason' => 'Faulty Product',
+		));
+
+		$purchase->payment->execute_multiple_refunds($gateway, array($refund, $refund2));
+
+		$this->assertNotNull($refund->raw_response);
+		$this->assertEquals(Model_Store_Refund::TRANSACTION_REFUNDED, $refund->transaction_status);
+		$this->assertNotNull($refund2->raw_response);
+		$this->assertEquals(Model_Store_Refund::TRANSACTION_REFUNDED, $refund2->transaction_status);
 	}
 
 	/**
-	 * @covers Model_Payment::execute_processor
-	 * @expectedException Kohana_Exception
-	 * @expectedExceptionMessage This payment does not support execute
+	 * @covers Model_Payment::convert_multiple_refunds
 	 */
-	public function test_execute_processor()
+	public function test_convert_multiple_refunds()
 	{
-		$payment = Jam::build('payment');
-		$payment->execute_processor();
-	}
+		$purchase = Jam::find('purchase', 4);
+		$store_purchase = $purchase->store_purchases[0];
+		$store_purchase2 = $purchase->store_purchases[1];
 
-	/**
-	 * @covers Model_Payment::authorize_processor
-	 * @expectedException Kohana_Exception
-	 * @expectedExceptionMessage This payment does not support authorize
-	 */
-	public function test_authorize_processor()
-	{
-		$payment = Jam::build('payment');
-		$payment->authorize_processor();
-	}
+		$refund = $store_purchase->refunds->create(array(
+			'reason' => 'Faulty Product',
+		));
 
-	/**
-	 * @covers Model_Payment::refund_processor
-	 * @expectedException Kohana_Exception
-	 * @expectedExceptionMessage This payment does not support refund
-	 */
-	public function test_refund_processor()
-	{
-		$payment = Jam::build('payment');
-		$refund = Jam::build('store_refund');
-		$payment->refund_processor($refund);
-	}
+		$refund2 = $store_purchase2->refunds->create(array(
+			'reason' => 'Faulty Product',
+		));
 
-	/**
-	 * @covers Model_Payment::multiple_refunds_processor
-	 * @expectedException Kohana_Exception
-	 * @expectedExceptionMessage This payment does not support multiple refunds
-	 */
-	public function test_multiple_refunds_processor()
-	{
-		$payment = Jam::build('payment');
-		$refund = Jam::build('store_refund');
-		$payment->multiple_refunds_processor(array($refund));
+		$params = $purchase->payment->convert_multiple_refunds(array($refund, $refund2));
+
+		$expected = array(
+			'transactionId' => '5580813',
+			'transactionReference' => '22222',
+			'reason' => 'Faulty Product',
+			'amount' => '440.40',
+		);
+
+		$this->assertEquals($expected, $params);
 	}
 }

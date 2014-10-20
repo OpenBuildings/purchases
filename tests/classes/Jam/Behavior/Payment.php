@@ -8,14 +8,11 @@ class Jam_Behavior_Payment extends Jam_Behavior {
 
 		$meta->events()
 
-			->bind('model.before_first_operation', array($this, 'before_first_operation'))
-			->bind('model.after_first_operation', array($this, 'after_first_operation'))
+			->bind('model.before_purchase', array($this, 'before_purchase'))
+			->bind('model.after_purchase', array($this, 'after_purchase'))
 
-			->bind('model.before_authorize', array($this, 'before_authorize'))
-			->bind('model.after_authorize', array($this, 'after_authorize'))
-
-			->bind('model.before_execute', array($this, 'before_execute'))
-			->bind('model.after_execute', array($this, 'after_execute'))
+			->bind('model.before_complete_purchase', array($this, 'before_complete_purchase'))
+			->bind('model.after_complete_purchase', array($this, 'after_complete_purchase'))
 
 			->bind('model.pay', array($this, 'pay'))
 
@@ -27,34 +24,24 @@ class Jam_Behavior_Payment extends Jam_Behavior {
 
 	}
 
-	public function before_first_operation(Model_Payment $payment, Jam_Event_Data $data)
+	public function before_purchase(Model_Payment $payment, Jam_Event_Data $data)
 	{
-		$payment->before_first_operation_called = TRUE;
+		$payment->before_purchase_called = TRUE;
 	}
 
-	public function after_first_operation(Model_Payment $payment, Jam_Event_Data $data)
+	public function after_purchase(Model_Payment $payment, Jam_Event_Data $data)
 	{
-		$payment->after_first_operation_called = TRUE;
+		$payment->after_purchase_called = TRUE;
 	}
 
-	public function before_authorize(Model_Payment $payment, Jam_Event_Data $data)
+	public function before_complete_purchase(Model_Payment $payment, Jam_Event_Data $data)
 	{
-		$payment->before_authorize_called = TRUE;
+		$payment->before_complete_purchase_called = TRUE;
 	}
 
-	public function after_authorize(Model_Payment $payment, Jam_Event_Data $data)
+	public function after_complete_purchase(Model_Payment $payment, Jam_Event_Data $data)
 	{
-		$payment->after_authorize_called = TRUE;
-	}
-
-	public function before_execute(Model_Payment $payment, Jam_Event_Data $data)
-	{
-		$payment->before_execute_called = TRUE;
-	}
-
-	public function after_execute(Model_Payment $payment, Jam_Event_Data $data)
-	{
-		$payment->after_execute_called = TRUE;
+		$payment->after_complete_purchase_called = TRUE;
 	}
 
 	public function pay(Model_Payment $payment, Jam_Event_Data $data)
