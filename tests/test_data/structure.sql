@@ -6,8 +6,8 @@ CREATE TABLE `purchases` (
   `number` VARCHAR(40) NOT NULL,
   `currency` VARCHAR(3) NOT NULL,
   `monetary` TEXT,
-  `is_frozen` INT(1) UNSIGNED NOT NULL DEFAULT 0,
   `is_deleted` INT(1) UNSIGNED NOT NULL DEFAULT 0,
+  `is_frozen` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
   `created_at` DATETIME,
   `updated_at` DATETIME,
   PRIMARY KEY  (`id`),
@@ -21,6 +21,7 @@ CREATE TABLE `store_purchases` (
   `store_id` INT(10) UNSIGNED NULL,
   `purchase_id` INT(10) UNSIGNED NULL,
   `is_deleted` INT(1) UNSIGNED NOT NULL,
+  `is_frozen` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
   `created_at` DATETIME,
   `updated_at` DATETIME,
   PRIMARY KEY  (`id`)
@@ -76,6 +77,7 @@ CREATE TABLE `purchase_items` (
   `is_payable` INT(1) UNSIGNED NOT NULL,
   `is_discount` INT(1) UNSIGNED NOT NULL,
   `is_deleted` INT(1) UNSIGNED NOT NULL,
+  `is_frozen` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
   `created_at` DATETIME,
   `updated_at` DATETIME,
   PRIMARY KEY  (`id`)
@@ -237,24 +239,24 @@ VALUES
 # Dump of table store_purchases
 # ------------------------------------------------------------
 
-INSERT INTO `store_purchases` (`id`, `number`, `store_id`, `purchase_id`, `is_deleted`)
+INSERT INTO `store_purchases` (`id`, `number`, `store_id`, `purchase_id`, `is_frozen`, `is_deleted`)
 VALUES
-  (1,'3S2GJG',1,1,0),
-  (2,'AA2GJG',1,2,0),
-  (3,'RRRRRR',3,3,0),
-  (4,'ZZZZZZ',1,4,0),
-  (5,'YYYYYY',4,4,0);
+  (1,'3S2GJG',1,1,1,0),
+  (2,'AA2GJG',1,2,0,0),
+  (3,'RRRRRR',3,3,0,0),
+  (4,'ZZZZZZ',1,4,1,0),
+  (5,'YYYYYY',4,4,1,0);
 
 # Dump of table purchase_items
 # ------------------------------------------------------------
 
-INSERT INTO `purchase_items` (`id`, `store_purchase_id`, `reference_id`, `reference_model`, `price`, `quantity`, `model`, `is_payable`, `is_discount`, `is_deleted`)
+INSERT INTO `purchase_items` (`id`, `store_purchase_id`, `reference_id`, `reference_model`, `price`, `quantity`, `model`, `is_payable`, `is_discount`, `is_frozen`, `is_deleted`)
 VALUES
-  (1,1,1,'product',200.00,1,'purchase_item_product',1,0,0),
-  (2,1,1,'variation',200.00,1,'purchase_item_product',1,0,0),
-  (3,2,1,'product',NULL,1,'purchase_item_product',1,0,0),
-  (4,4,1,'product',290.40,1,'purchase_item_product',1,0,0),
-  (5,5,4,'product',150.00,1,'purchase_item_product',1,0,0);
+  (1,1,1,'product',200.00,1,'purchase_item_product',1,0,1,0),
+  (2,1,1,'variation',200.00,1,'purchase_item_product',1,0,1,0),
+  (3,2,1,'product',NULL,1,'purchase_item_product',1,0,0,0),
+  (4,4,1,'product',290.40,1,'purchase_item_product',1,0,1,0),
+  (5,5,4,'product',150.00,1,'purchase_item_product',1,0,1,0);
 
 # Dump of table stores
 # ------------------------------------------------------------

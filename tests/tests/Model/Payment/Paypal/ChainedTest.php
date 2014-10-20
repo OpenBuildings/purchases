@@ -39,6 +39,7 @@ class Model_Payment_Paypal_ChainedTest extends Testcase_Purchases_Spiderling {
 			'quantity' => 1,
 			'price' => -10,
 			'model' => 'purchase_item_promotion',
+			'is_frozen' => TRUE,
 			'is_discount' => TRUE,
 			'is_payable' => TRUE,
 		));

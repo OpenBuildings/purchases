@@ -1,6 +1,8 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
 use OpenBuildings\Monetary\Monetary;
+use Clippings\Freezable\FreezableTrait;
+use Clippings\Freezable\FreezableInterface;
 
 /**
  * @package    Openbuildings\Purchases
@@ -8,7 +10,9 @@ use OpenBuildings\Monetary\Monetary;
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Model_Purchase_Item extends Jam_Model {
+class Kohana_Model_Purchase_Item extends Jam_Model implements FreezableInterface {
+
+	use FreezableTrait;
 
 	const STI_PREFIX = 'purchase_item_';
 
@@ -22,7 +26,6 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 			->table('purchase_items')
 			->behaviors(array(
 				'paranoid' => Jam::behavior('paranoid'),
-				'freezable' => Jam::behavior('freezable', array('fields' => 'price', 'parent' => 'store_purchase')),
 			))
 			->associations(array(
 				'store_purchase' => Jam::association('belongsto', array('inverse_of' => 'items')),
@@ -43,6 +46,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 				'price' => Jam::field('price'),
 				'is_payable' => Jam::field('boolean'),
 				'is_discount' => Jam::field('boolean'),
+				'is_frozen' => Jam::field('boolean'),
 				'created_at' => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
 				'updated_at' => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			))
@@ -165,7 +169,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 	 */
 	public function price()
 	{
-		return ($this->price === NULL) ? $this->compute_price() : $this->price;
+		return $this->isFrozen() ? $this->price : $this->compute_price();
 	}
 
 	/**
@@ -225,5 +229,27 @@ class Kohana_Model_Purchase_Item extends Jam_Model {
 			$this->monetary(),
 			$this->display_currency()
 		);
+	}
+
+	public function isFrozen()
+	{
+		return $this->is_frozen;
+	}
+
+	public function setFrozen($frozen)
+	{
+		$this->is_frozen = (bool) $frozen;
+
+		return $this;
+	}
+
+	public function performFreeze()
+	{
+		$this->price = $this->compute_price();
+	}
+
+	public function performUnfreeze()
+	{
+		$this->price = NULL;
 	}
 }

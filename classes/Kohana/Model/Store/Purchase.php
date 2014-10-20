@@ -1,12 +1,17 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
+use Clippings\Freezable\FreezableCollectionTrait;
+use Clippings\Freezable\FreezableInterface;
+
 /**
  * @package    Openbuildings\Purchases
  * @author     Ivan Kerin <ikerin@gmail.com>
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable {
+class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable, FreezableInterface {
+
+	use FreezableCollectionTrait;
 
 	/**
 	 * @codeCoverageIgnore
@@ -18,7 +23,6 @@ class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable {
 			->behaviors(array(
 				'tokenable' => Jam::behavior('tokenable', array('uppercase' => TRUE, 'field' => 'number')),
 				'paranoid' => Jam::behavior('paranoid'),
-				'freezable' => Jam::behavior('freezable', array('associations' => 'items', 'parent' => 'purchase')),
 			))
 			->associations(array(
 				'purchase' => Jam::association('belongsto', array(
@@ -42,6 +46,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable {
 			))
 			->fields(array(
 				'id' => Jam::field('primary'),
+				'is_frozen' => Jam::field('boolean'),
 				'created_at'      => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
 				'updated_at'      => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			))
@@ -245,5 +250,22 @@ class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable {
 		return Jam_Behavior_Paranoid::with_filter(Jam_Behavior_Paranoid::ALL, function() {
 			return $this->store;
 		});
+	}
+
+	public function isFrozen()
+	{
+		return $this->is_frozen;
+	}
+
+	public function setFrozen($frozen)
+	{
+		$this->is_frozen = (bool) $frozen;
+
+		return $this;
+	}
+
+	public function getItems()
+	{
+		return $this->items;
 	}
 }

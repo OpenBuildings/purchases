@@ -16,7 +16,6 @@ Kohana::modules(array(
 	'database'         => MODPATH.'database',
 	'auth'             => MODPATH.'auth',
 	'jam'              => __DIR__.'/../modules/jam',
-	'jam-freezable'    => __DIR__.'/../modules/jam-freezable',
 	'jam-auth'         => __DIR__.'/../modules/jam-auth',
 	'jam-monetary'     => __DIR__.'/../modules/jam-monetary',
 	'jam-closuretable' => __DIR__.'/../modules/jam-closuretable',
