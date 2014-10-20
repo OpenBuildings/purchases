@@ -116,10 +116,10 @@ $purchase
 	->save();
 ```
 
-If you want to modify the purchase after that, you'll have to ``unfreeze()`` it. Also if you want to know the state of the purchase, there is ``is_frozen`` flag.
+If you want to modify the purchase after that, you'll have to ``unfreeze()`` it. Also if you want to know the state of the purchase, there is ``isFrozen`` flag.
 ```php
 $purchase->unfreeze();
-$purchase->is_frozen();
+$purchase->isFrozen();
 ```
 
 Once the purchase has been frozen and saved, any change to the frozen fields / associations will be treated as validation errors.
