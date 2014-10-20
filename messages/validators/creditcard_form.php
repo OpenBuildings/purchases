@@ -1,10 +1,10 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
 return array(
-	'exp_year' => array(
+	'expiryYear' => array(
 		'card_expired' => 'Your card has expired',
 	),
-	'exp_month' => array(
+	'expiryMonth' => array(
 		'card_expired' => 'Your card has expired',
 	),
 );
