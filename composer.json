@@ -25,7 +25,8 @@
 		"openbuildings/jam-auth": "0.2.*",
 		"openbuildings/jam-monetary": "0.1.*",
 		"openbuildings/jam-locations": "0.1.*",
-		"clippings/freezable": "0.2.*"
+		"clippings/freezable": "0.2.*",
+		"omnipay/common": "~2.0"
 	},
 	"require-dev": {
 		"openbuildings/kohana-test-bootsrap": "0.1.*",
@@ -33,7 +34,8 @@
 		"paypal/rest-api-sdk-php": "~0.13.1",
 		"openbuildings/paypal": "0.4.*",
 		"openbuildings/phpunit-spiderling": "0.1.*",
-		"claylo/selenium-server-standalone": "2.*"
+		"claylo/selenium-server-standalone": "2.*",
+		"omnipay/dummy": "~2.0"
 	},
 	"suggest": {
 		"openbuildings/shipping": "Extends purchases functionality with shipping and delivery",
