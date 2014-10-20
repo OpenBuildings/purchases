@@ -21,7 +21,7 @@ class Kohana_Model_CreditCard_Form extends Jam_Validated {
 					'filters' => array('trim')
 				)),
 				'number' => Jam::field('string', array(
-					'filters' => array('Model_Emp_Form::process_credit_card')
+					'filters' => array('Model_CreditCard_Form::process_credit_card')
 				)),
 				'expiryMonth' => Jam::field('string'),
 				'expiryYear' => Jam::field('string'),
