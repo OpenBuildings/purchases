@@ -158,10 +158,8 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 			'store_purchase' => $store_purchase,
 		));
 
-		$store_purchase->purchase->is_just_frozen = TRUE;
 		$store_purchase->items->add($purchase_item_refund);
 		$store_purchase->freeze()->save();
-		$store_purchase->purchase->is_just_frozen = FALSE;
 
 		return $purchase_item_refund;
 	}
