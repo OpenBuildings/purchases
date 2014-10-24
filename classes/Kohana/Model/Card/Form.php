@@ -8,7 +8,7 @@
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Model_CreditCard_Form extends Jam_Validated {
+class Kohana_Model_Card_Form extends Jam_Validated {
 
 	/**
 	 * @codeCoverageIgnore
@@ -21,7 +21,7 @@ class Kohana_Model_CreditCard_Form extends Jam_Validated {
 					'filters' => array('trim')
 				)),
 				'number' => Jam::field('string', array(
-					'filters' => array('Model_CreditCard_Form::process_credit_card')
+					'filters' => array('Model_Card_Form::process_credit_card')
 				)),
 				'expiryMonth' => Jam::field('string'),
 				'expiryYear' => Jam::field('string'),

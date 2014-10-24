@@ -1,29 +1,29 @@
 <?php
 
 /**
- * @group model.creditcard_form
+ * @group model.card_form
  */
-class Model_CreditCard_FormTest extends Testcase_Purchases {
+class Model_Card_FormTest extends Testcase_Purchases {
 
 	/**
-	 * @covers Model_CreditCard_Form::months
+	 * @covers Model_Card_Form::months
 	 */
 	public function test_months()
 	{
-		$this->assertCount(12, Model_CreditCard_Form::months());
+		$this->assertCount(12, Model_Card_Form::months());
 	}
 
 	/**
-	 * @covers Model_CreditCard_Form::years
+	 * @covers Model_Card_Form::years
 	 */
 	public function test_years()
 	{
-		$years = Model_CreditCard_Form::years();
+		$years = Model_Card_Form::years();
 		$this->assertCount(25, $years);
 		$this->assertEquals(date('Y'), reset($years));
 		$this->assertEquals(date('y'), key($years));
 
-		$years = Model_CreditCard_Form::years(12);
+		$years = Model_Card_Form::years(12);
 		$this->assertCount(13, $years);
 		$this->assertEquals(date('Y'), reset($years));
 		$this->assertEquals(date('y'), key($years));
@@ -42,16 +42,16 @@ class Model_CreditCard_FormTest extends Testcase_Purchases {
 
 	/**
 	 * @dataProvider data_process_credit_card
-	 * @covers Model_CreditCard_Form::process_credit_card
+	 * @covers Model_Card_Form::process_credit_card
 	 */
 	public function test_process_credit_card($cc, $expected)
 	{
-		$this->assertEquals($expected, Model_CreditCard_Form::process_credit_card($cc));
+		$this->assertEquals($expected, Model_Card_Form::process_credit_card($cc));
 	}
 
 	public function test_filters()
 	{
-		$form = Jam::build('creditcard_form', array(
+		$form = Jam::build('card_form', array(
 			'name' => ' Mr. Thompson  	',
 			'number' => '4111 1111 1111 1111',
 			'expiryMonth' => '01',
@@ -104,18 +104,18 @@ class Model_CreditCard_FormTest extends Testcase_Purchases {
 
 	/**
 	 * @dataProvider data_vbv_params
-	 * @covers Model_CreditCard_Form::vbv_params
+	 * @covers Model_Card_Form::vbv_params
 	 * @backupGlobals
 	 */
 	public function test_vbv_params($expected_params, $number, $expiryMonth, $expiryYear, $callback_url, $user_agent)
 	{
-		$creditcard_form = Jam::build('creditcard_form');
-		$creditcard_form->number = $number;
-		$creditcard_form->expiryMonth = $expiryMonth;
-		$creditcard_form->expiryYear = $expiryYear;
+		$card_form = Jam::build('card_form');
+		$card_form->number = $number;
+		$card_form->expiryMonth = $expiryMonth;
+		$card_form->expiryYear = $expiryYear;
 
 		Request::$user_agent = $user_agent;
-		$this->assertSame($expected_params, $creditcard_form->vbv_params($callback_url));
+		$this->assertSame($expected_params, $card_form->vbv_params($callback_url));
 	}
 
 	public function data_validate()
@@ -229,16 +229,16 @@ class Model_CreditCard_FormTest extends Testcase_Purchases {
 	 * You cannot cover the case of an error with `expiryMonth` during January.
 	 *
 	 * @dataProvider data_validate
-	 * @covers Model_CreditCard_Form::validate
+	 * @covers Model_Card_Form::validate
 	 */
 	public function test_validate($expiryMonth, $expiryYear, $expected_errors)
 	{
-		$creditcard_form = Jam::build('creditcard_form', array(
+		$card_form = Jam::build('card_form', array(
 			'expiryMonth' => $expiryMonth,
 			'expiryYear' => $expiryYear,
 		));
 
-		$creditcard_form->validate();
-		$this->assertSame($expected_errors, $creditcard_form->errors()->as_array());
+		$card_form->validate();
+		$this->assertSame($expected_errors, $card_form->errors()->as_array());
 	}
 }
