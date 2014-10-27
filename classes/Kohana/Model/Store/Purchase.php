@@ -252,6 +252,20 @@ class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable, Free
 		});
 	}
 
+	public function freeze()
+	{
+		$this->performFreeze();
+		$this->setFrozen(true);
+		return $this;
+	}
+
+	public function unfreeze()
+	{
+		$this->performUnfreeze();
+		$this->setFrozen(false);
+		return $this;
+	}
+
 	public function isFrozen()
 	{
 		return $this->is_frozen;
