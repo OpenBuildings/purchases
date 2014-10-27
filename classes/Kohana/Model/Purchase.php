@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
 use OpenBuildings\Monetary\Monetary;
-use Clippings\Freezable\FreezableCollectionTrait;
+use Clippings\Freezable\FreezableTrait;
 use Clippings\Freezable\FreezableInterface;
 
 /**
@@ -12,9 +12,9 @@ use Clippings\Freezable\FreezableInterface;
  */
 class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableInterface {
 
-	use FreezableCollectionTrait {
-		performFreeze as freezeCollection;
-		performUnfreeze as unfreezeCollection;
+	use FreezableTrait {
+		freeze as parentFreeze;
+		unfreeze as parentUnfreeze;
 	}
 
 	protected $_monetary;
@@ -255,12 +255,30 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 		return $this->check();
 	}
 
+	public function freeze()
+	{
+		$this->parentFreeze();
+
+		$this->freezeCollection();
+
+		return $this;
+	}
+
+	public function unfreeze()
+	{
+		$this->parentUnfreeze();
+
+		$this->unfreezeCollection();
+
+		return $this;
+	}
+
 	public function isFrozen()
 	{
 		return $this->is_frozen;
 	}
 
-	public function setFrozen($frozen)
+	protected function setFrozen($frozen)
 	{
 		$this->is_frozen = (bool) $frozen;
 
@@ -269,20 +287,27 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 
 	public function performFreeze()
 	{
-		$this->freezeCollection();
-
 		$this->monetary = $this->monetary();
 	}
 
 	public function performUnfreeze()
 	{
-		$this->unfreezeCollection();
-
 		$this->monetary = NULL;
 	}
 
-	public function getItems()
+	public function freezeCollection()
 	{
-		return $this->store_purchases;
+		foreach ($this->store_purchases as $store_purchase)
+		{
+			$store_purchase->freeze();
+		}
+	}
+
+	public function unfreezeCollection()
+	{
+		foreach ($this->store_purchases as $store_purchase)
+		{
+			$store_purchase->unfreeze();
+		}
 	}
 }

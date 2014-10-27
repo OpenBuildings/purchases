@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
-use Clippings\Freezable\FreezableCollectionTrait;
+use Clippings\Freezable\FreezableTrait;
 use Clippings\Freezable\FreezableInterface;
 
 /**
@@ -11,7 +11,7 @@ use Clippings\Freezable\FreezableInterface;
  */
 class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable, FreezableInterface {
 
-	use FreezableCollectionTrait;
+	use FreezableTrait;
 
 	/**
 	 * @codeCoverageIgnore
@@ -257,15 +257,30 @@ class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable, Free
 		return $this->is_frozen;
 	}
 
-	public function setFrozen($frozen)
+	protected function setFrozen($frozen)
 	{
 		$this->is_frozen = (bool) $frozen;
 
 		return $this;
 	}
 
-	public function getItems()
+	public function performFreeze()
 	{
-		return $this->items;
+		foreach ($this->items as $item)
+		{
+			$item->freeze();
+		}
+
+		return $this;
+	}
+
+	public function performUnfreeze()
+	{
+		foreach ($this->items as $item)
+		{
+			$item->unfreeze();
+		}
+
+		return $this;
 	}
 }
