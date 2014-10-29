@@ -91,7 +91,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->expects($this->once())
 			->method('save');
 
-		$payment = $purchase->build('payment', array('type' => 'Dummy', 'status' => Model_Payment::PENDING));
+		$payment = $purchase->build('payment', array('method' => 'Dummy', 'status' => Model_Payment::PENDING));
 
 		$payment->complete_purchase($gateway, $this->payment_params);
 
@@ -115,7 +115,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->expects($this->once())
 			->method('save');
 
-		$payment = $purchase->build('payment', array('type' => 'Dummy', 'status' => Model_Payment::PENDING));
+		$payment = $purchase->build('payment', array('method' => 'Dummy', 'status' => Model_Payment::PENDING));
 
 		$payment->complete_purchase($gateway, $this->payment_params);
 
@@ -134,7 +134,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
 		$purchase = $this->getMock('Model_Purchase', NULL, array('purchase'));
 
-		$payment = $purchase->build('payment', array('type' => 'Dummy'));
+		$payment = $purchase->build('payment', array('method' => 'Dummy'));
 
 		$payment->complete_purchase($gateway, $this->payment_params);
 	}
@@ -152,7 +152,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->save();
 
 		$purchase
-			->build('payment', array('type' => 'Dummy'))
+			->build('payment', array('method' => 'Dummy'))
 				->execute_purchase($gateway, $this->payment_params);
 
 		$this->assertGreaterThan(0, $purchase->payment->payment_id);
@@ -176,7 +176,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->save();
 
 		$purchase
-			->build('payment', array('type' => 'Dummy'))
+			->build('payment', array('method' => 'Dummy'))
 				->execute_purchase($gateway, $this->payment_params);
 
 		$this->assertGreaterThan(0, $purchase->payment->payment_id);
@@ -197,7 +197,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->save();
 
 		$purchase
-			->build('payment', array('type' => 'Dummy'))
+			->build('payment', array('method' => 'Dummy'))
 				->execute_purchase($gateway, $this->payment_params);
 
 		$this->assertGreaterThan(0, $purchase->payment->payment_id);
@@ -218,7 +218,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->save();
 
 		$purchase
-			->build('payment', array('type' => 'Dummy', 'status' => Model_Payment::PENDING))
+			->build('payment', array('method' => 'Dummy', 'status' => Model_Payment::PENDING))
 				->execute_complete_purchase($gateway, $this->payment_params);
 
 		$this->assertGreaterThan(0, $purchase->payment->payment_id);
@@ -242,7 +242,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->save();
 
 		$purchase
-			->build('payment', array('type' => 'Dummy', 'status' => Model_Payment::PENDING))
+			->build('payment', array('method' => 'Dummy', 'status' => Model_Payment::PENDING))
 				->execute_complete_purchase($gateway, $this->payment_params);
 
 		$this->assertGreaterThan(0, $purchase->payment->payment_id);
@@ -271,24 +271,13 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$purchase->store_purchases[0]->items []= $promo;
 
 		$params = $purchase
-			->build('payment', array('type' => 'Dummy'))
+			->build('payment', array('method' => 'Dummy'))
 				->convert_purchase();
 
 		$expected = array(
 			'transactionReference' => 'CNV7IC',
 			'currency' => 'EUR',
 			'clientIp' => '1.1.1.1',
-			'card' => array(
-				'email' => 'user@example.com',
-				'firstName' => 'name1',
-				'lastName' => 'name2',
-				'address1' => 'Street 1',
-				'address2' => 'House 1',
-				'city' => 'London',
-				'country' => 'GB',
-				'postcode' => 'ZIP',
-				'phone' => 'phone123',
-			),
 			'items' => array(
 				array(
 					"name"			=> 1,
@@ -310,6 +299,24 @@ class Model_PaymentTest extends Testcase_Purchases {
 				),
 			),
 			'amount' => '390.00',
+		);
+
+		$this->assertEquals($expected, $params);
+
+		$params = $purchase
+			->build('payment', array('method' => 'Dummy'))
+				->convert_purchase(TRUE);
+
+		$expected['card'] = array(
+			'email' => 'user@example.com',
+			'firstName' => 'name1',
+			'lastName' => 'name2',
+			'address1' => 'Street 1',
+			'address2' => 'House 1',
+			'city' => 'London',
+			'country' => 'GB',
+			'postcode' => 'ZIP',
+			'phone' => 'phone123',
 		);
 
 		$this->assertEquals($expected, $params);
@@ -441,7 +448,6 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$params = $payment->convert_refund($refund);
 
 		$expected = array(
-			'transactionId' => '5580812',
 			'transactionReference' => '11111',
 			'reason' => 'Faulty Product',
 			'items' => array(
@@ -455,6 +461,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 				),
 			),
 			'amount' => '220.00',
+			'currency' => 'EUR',
 		);
 
 		$this->assertEquals($expected, $params);
@@ -467,10 +474,10 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$params = $payment->convert_refund($refund);
 
 		$expected = array(
-			'transactionId' => '5580812',
 			'transactionReference' => '11111',
 			'reason' => 'Full Refund',
 			'amount' => '400.00',
+			'currency' => 'EUR',
 		);
 
 		$this->assertEquals($expected, $params);
@@ -487,10 +494,10 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$params = $payment->convert_refund($refund);
 
 		$expected = array(
-			'transactionId' => '5580812',
 			'transactionReference' => '11111',
 			'reason' => 'Full Store And Purchase Refund',
 			'amount' => '400.00',
+			'currency' => 'EUR',
 		);
 
 		$this->assertEquals($expected, $params);
@@ -509,7 +516,6 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$params = $payment->convert_refund($refund);
 
 		$expected = array(
-			'transactionId' => '5580813',
 			'transactionReference' => '22222',
 			'reason' => 'Full Store But Not Purchase Refund',
 			'items' => array(
@@ -519,6 +525,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 				),
 			),
 			'amount' => '290.40',
+			'currency' => 'GBP',
 		);
 
 		$this->assertEquals($expected, $params);
@@ -663,10 +670,10 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$params = $purchase->payment->convert_multiple_refunds(array($refund, $refund2));
 
 		$expected = array(
-			'transactionId' => '5580813',
 			'transactionReference' => '22222',
 			'reason' => 'Faulty Product',
 			'amount' => '440.40',
+			'currency' => 'GBP',
 		);
 
 		$this->assertEquals($expected, $params);

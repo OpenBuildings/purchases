@@ -29,14 +29,14 @@ class Kohana_Model_Payment extends Jam_Model {
 			))
 			->fields(array(
 				'id' => Jam::field('primary'),
-				'type' => Jam::field('string'),
+				'method' => Jam::field('string'),
 				'payment_id' => Jam::field('string'),
 				'raw_response' => Jam::field('serialized', array('method' => 'json')),
 				'status' => Jam::field('string'),
 				'created_at' => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
 				'updated_at' => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			))
-			->validator('purchase', 'type', array('present' => TRUE));
+			->validator('purchase', 'method', array('present' => TRUE));
 	}
 
 	/**
@@ -82,7 +82,8 @@ class Kohana_Model_Payment extends Jam_Model {
 	 */
 	public function execute_purchase(GatewayInterface $gateway, array $params = array())
 	{
-		$params = Arr::merge($this->convert_purchase(), $params);
+		$include_card = (isset($params['card']) && isset($params['card']['number']));
+		$params = Arr::merge($params, $this->convert_purchase($include_card));
 
 		$response = $gateway->purchase($params)->send();
 
@@ -139,7 +140,8 @@ class Kohana_Model_Payment extends Jam_Model {
 	 */
 	public function execute_complete_purchase(GatewayInterface $gateway, array $params = array())
 	{
-		$params = Arr::merge($params, $this->convert_purchase());
+		$include_card = (isset($params['card']) && isset($params['card']['number']));
+		$params = Arr::merge($params, $this->convert_purchase($include_card));
 
 		$response = $gateway->completePurchase($params)->send();
 
@@ -159,34 +161,37 @@ class Kohana_Model_Payment extends Jam_Model {
 	 *
 	 * @return array
 	 */
-	public function convert_purchase()
+	public function convert_purchase($include_card = FALSE)
 	{
 		$currency = $this->purchase->display_currency() ?: $this->purchase->currency();
 
 		$params = array(
-			'transactionReference' => $this->purchase->number,
+			'transactionReference' => $this->purchase->payment_id ?: $this->purchase->number,
 			'currency' => $currency,
 			'clientIp' => Request::$client_ip
 		);
 
-		if ($this->purchase->creator)
+		if ($include_card)
 		{
-			$params['card']['email'] = $this->purchase->creator->email;
-		}
+			if ($this->purchase->creator)
+			{
+				$params['card']['email'] = $this->purchase->creator->email;
+			}
 
-		if (($billing = $this->purchase->billing_address))
-		{
-			$params['card'] = array_merge($params['card'], array_filter(array(
-				'firstName'	=> $billing->first_name,
-				'lastName'	=> $billing->last_name,
-				'address1'	=> $billing->line1,
-				'address2'	=> $billing->line2,
-				'city'		=> $billing->city ? $billing->city->name() : NULL,
-				'country'	=> $billing->country ? $billing->country->short_name : NULL,
-				'postcode'	=> $billing->zip,
-				'email'		=> $billing->email,
-				'phone'		=> $billing->phone,
-			)));
+			if (($billing = $this->purchase->billing_address))
+			{
+				$params['card'] = array_merge($params['card'], array_filter(array(
+					'firstName'	=> $billing->first_name,
+					'lastName'	=> $billing->last_name,
+					'address1'	=> $billing->line1,
+					'address2'	=> $billing->line2,
+					'city'		=> $billing->city ? $billing->city->name() : NULL,
+					'country'	=> $billing->country ? $billing->country->short_name : NULL,
+					'postcode'	=> $billing->zip,
+					'email'		=> $billing->email,
+					'phone'		=> $billing->phone,
+				)));
+			}
 		}
 
 		$params['items'] = array_map(function ($item) use ($currency) {
@@ -260,9 +265,9 @@ class Kohana_Model_Payment extends Jam_Model {
 		$currency = $refund->display_currency() ?: $refund->currency();
 
 		$params = array(
-			'transactionId'			=> $payment->raw_response['order_id'],
 			'transactionReference'	=> $payment->payment_id,
 			'reason'				=> $refund->reason,
+			'currency'				=> $currency,
 		);
 
 		$is_full_refund = $refund->amount()->is(Jam_Price::EQUAL_TO,
@@ -343,9 +348,9 @@ class Kohana_Model_Payment extends Jam_Model {
 		$amounts = array();
 
 		$params = array(
-			'transactionId'			=> $payment->raw_response['order_id'],
 			'transactionReference'	=> $payment->payment_id,
 			'reason'				=> $refunds[0]->reason,
+			'currency'				=> $currency,
 		);
 
 		foreach ($refunds as $refund)
