@@ -15,7 +15,6 @@ env:
     - secure: L/zdXZ/QvLoKzi9waLoktc/zY6IluQX2YxYTfxfVXnH3uMNvBL2ULd4FiwCHhFF8Scg1XxfS5XrdQ1jhkwBXmdNubu36bxMbCcYYtgJ8clgKt/YuN8gD46uwB2CIY+RHIFVYlnnPx4KvAAo3ZD4LpqA3p2PKIJAejXVfugEzNxg=
     - secure: YYKm9uiW+zz3tA4k3r8PAGSTZXXAUw1rByN48FfvxRIMjxwawxyes7XI+bMy0HCdycp1eJclYNxB14MyLJH4VfsR4FmcFQvHnsNV8m3l93tezie82fBT5iwZpWttkJoUnwkWIltKXh3WlsErY07jMCtsto8SfaRcHzUL0Zr+svo=
     - secure: Vl5+/D22WmpwMhzIMVLZU559Mkblw6W5PMJq/bIOORaCpX5E7deBjKzFtRn+McJNvR3lewMF5yFxnEdJBYB7SzVQ10gExGTfVCE9YwlKUzfVo/0rufPjal10vKI42nCr7aThSKpxRo7leAivzOBxTMcWakg+p4+5AfdmAGiO17c=
-    - PHP_PAYPAL_ADAPTIVE_APP_ID=APP-80W284485P519543T
 
 notifications:
   email: false
@@ -30,9 +29,6 @@ before_script:
   - mkdir -p build/logs
   - mysql -e 'create database `OpenBuildings/purchases`;'
   - mysql --default-character-set=utf8 OpenBuildings/purchases < tests/test_data/structure.sql
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - "nohup java -jar vendor/claylo/selenium-server-standalone/selenium-server-standalone-2.*.jar > /dev/null 2> /dev/null &"
 
 script:
   - phpunit --stderr --coverage-clover build/logs/clover.xml

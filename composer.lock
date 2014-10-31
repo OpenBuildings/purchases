@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "abcb91b945152df39d53521520fe43c8",
+    "hash": "e4f99bbd222e7aba328c9c3c04e3629d",
     "packages": [
         {
             "name": "clippings/freezable",
@@ -532,56 +532,6 @@
             "time": "2014-09-17 00:38:32"
         },
         {
-            "name": "openbuildings/emp",
-            "version": "0.1.11",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/OpenBuildings/emp.git",
-                "reference": "11fd3878bc0d24fdc65e376d36839b9983358554"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/emp/zipball/11fd3878bc0d24fdc65e376d36839b9983358554",
-                "reference": "11fd3878bc0d24fdc65e376d36839b9983358554",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Openbuildings\\Emp\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Ivan Kerin",
-                    "email": "ivan@openbuildings.com",
-                    "role": "Author"
-                },
-                {
-                    "name": "Haralan Dobrev",
-                    "email": "hdobrev@despark.com"
-                }
-            ],
-            "description": "Payments for eMerchantPay (EMP) https://www.emerchantpay.com/",
-            "homepage": "https://github.com/OpenBuildings/emp",
-            "keywords": [
-                "EMP",
-                "credit cards",
-                "eMerchantPay",
-                "money",
-                "payments"
-            ],
-            "time": "2014-10-02 09:13:56"
-        },
-        {
             "name": "openbuildings/flex-storage",
             "version": "0.1.3",
             "source": {
@@ -974,17 +924,17 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.5.5",
+            "version": "v2.5.6",
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher.git",
-                "reference": "f6281337bf5f985f585d1db6a83adb05ce531f46"
+                "reference": "804eb28dbbfba9ffdab21fe2066744906cea2212"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/f6281337bf5f985f585d1db6a83adb05ce531f46",
-                "reference": "f6281337bf5f985f585d1db6a83adb05ce531f46",
+                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/804eb28dbbfba9ffdab21fe2066744906cea2212",
+                "reference": "804eb28dbbfba9ffdab21fe2066744906cea2212",
                 "shasum": ""
             },
             "require": {
@@ -1027,21 +977,21 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "http://symfony.com",
-            "time": "2014-09-28 15:56:11"
+            "time": "2014-10-01 15:43:05"
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v2.5.5",
+            "version": "v2.5.6",
             "target-dir": "Symfony/Component/HttpFoundation",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "650e115af152d7a5e857d01c2cdb9a22809de9b4"
+                "reference": "56111fc8ba8bcad93d367532babecc6ce17f66ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/650e115af152d7a5e857d01c2cdb9a22809de9b4",
-                "reference": "650e115af152d7a5e857d01c2cdb9a22809de9b4",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/56111fc8ba8bcad93d367532babecc6ce17f66ce",
+                "reference": "56111fc8ba8bcad93d367532babecc6ce17f66ce",
                 "shasum": ""
             },
             "require": {
@@ -1080,42 +1030,10 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2014-09-25 09:52:29"
+            "time": "2014-10-24 05:49:22"
         }
     ],
     "packages-dev": [
-        {
-            "name": "claylo/selenium-server-standalone",
-            "version": "2.32.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/claylo/selenium-server-standalone.git",
-                "reference": "8ceae6ce2b2257e7f0cee573640e77a3591af111"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/claylo/selenium-server-standalone/zipball/8ceae6ce2b2257e7f0cee573640e77a3591af111",
-                "reference": "8ceae6ce2b2257e7f0cee573640e77a3591af111",
-                "shasum": ""
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "OpenQA",
-                    "homepage": "http://seleniumhq.org/"
-                }
-            ],
-            "description": "Composer distribution of Selenium Server Standalone, the browser automation framework.",
-            "keywords": [
-                "selenium",
-                "testing"
-            ],
-            "time": "2013-04-17 02:08:23"
-        },
         {
             "name": "omnipay/dummy",
             "version": "v2.1.1",
@@ -1247,55 +1165,6 @@
             "time": "2013-10-01 08:57:54"
         },
         {
-            "name": "openbuildings/paypal",
-            "version": "0.4.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/OpenBuildings/paypal.git",
-                "reference": "f74e41699636c7906f86cd6462b64e1330928fc4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/paypal/zipball/f74e41699636c7906f86cd6462b64e1330928fc4",
-                "reference": "f74e41699636c7906f86cd6462b64e1330928fc4",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=5.3.5"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "OpenBuildings\\PayPal\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Haralan Dobrev",
-                    "email": "hkdobrev@gmail.com",
-                    "homepage": "http://hkdobrev.blogspot.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PayPal SDK for ExpressCheckout and AdaptivePayments. Supports recurring payments, simple payments, parallel payments and chained payments.",
-            "keywords": [
-                "AdaptivePayments",
-                "ExpressCheckout",
-                "api",
-                "payments",
-                "paypal"
-            ],
-            "time": "2014-02-06 20:42:21"
-        },
-        {
             "name": "openbuildings/phpunit-spiderling",
             "version": "0.1.9",
             "source": {
@@ -1380,66 +1249,18 @@
             "time": "2014-09-11 11:14:42"
         },
         {
-            "name": "paypal/rest-api-sdk-php",
-            "version": "v0.13.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/paypal/rest-api-sdk-php.git",
-                "reference": "dcc147ac7e3d2954ed56b70b4beb00b6d3d1b7e8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/paypal/rest-api-sdk-php/zipball/dcc147ac7e3d2954ed56b70b4beb00b6d3d1b7e8",
-                "reference": "dcc147ac7e3d2954ed56b70b4beb00b6d3d1b7e8",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "PayPal": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache2"
-            ],
-            "authors": [
-                {
-                    "name": "PayPal",
-                    "homepage": "https://github.com/paypal/rest-api-sdk-php/contributors"
-                }
-            ],
-            "description": "PayPal's PHP SDK for REST APIs",
-            "homepage": "https://github.com/paypal/rest-api-sdk-php",
-            "keywords": [
-                "payments",
-                "paypal",
-                "rest",
-                "sdk"
-            ],
-            "time": "2014-10-15 21:06:08"
-        },
-        {
             "name": "symfony/css-selector",
-            "version": "v2.3.20",
+            "version": "v2.3.21",
             "target-dir": "Symfony/Component/CssSelector",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector.git",
-                "reference": "9b320f7b6baa094032996e3e7170ced7405f64f3"
+                "reference": "d9943386b648d21746bed25cc24f61fab1387943"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/9b320f7b6baa094032996e3e7170ced7405f64f3",
-                "reference": "9b320f7b6baa094032996e3e7170ced7405f64f3",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/d9943386b648d21746bed25cc24f61fab1387943",
+                "reference": "d9943386b648d21746bed25cc24f61fab1387943",
                 "shasum": ""
             },
             "require": {
@@ -1476,7 +1297,7 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "http://symfony.com",
-            "time": "2014-09-22 08:32:35"
+            "time": "2014-10-09 12:30:02"
         }
     ],
     "aliases": [],
