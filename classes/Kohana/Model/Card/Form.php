@@ -20,7 +20,7 @@ class Kohana_Model_Card_Form extends Jam_Validated {
 				'name' => Jam::field('string', array(
 					'filters' => array('trim')
 				)),
-				'number' => Jam::field('string', array(
+				'cardNumber' => Jam::field('string', array(
 					'filters' => array('Model_Card_Form::process_credit_card')
 				)),
 				'expiryMonth' => Jam::field('string'),
@@ -29,7 +29,7 @@ class Kohana_Model_Card_Form extends Jam_Validated {
 			))
 			->validator(
 				'name',
-				'number',
+				'cardNumber',
 				'expiryMonth',
 				'expiryYear',
 				'cvv',
@@ -43,7 +43,7 @@ class Kohana_Model_Card_Form extends Jam_Validated {
 					'maximum' => 40,
 				)
 			))
-			->validator('number', array(
+			->validator('cardNumber', array(
 				'length' => array(
 					'maximum' => 20,
 				),
@@ -68,6 +68,23 @@ class Kohana_Model_Card_Form extends Jam_Validated {
 			));
 	}
 
+	/**
+	 * Overriding the default implementation, because Omnipay's CreditCard class expects 'number' instead of 'cardNumber'
+	 * but 'number' is too generic and can cause problems with data sanitizers
+	 */
+	public function as_array(array $fields = NULL)
+	{
+		$result = parent::as_array($fields);
+
+		if (array_key_exists('cardNumber', $result))
+		{
+			$result['number'] = $result['cardNumber'];
+			unset($result['cardNumber']);
+		}
+
+		return $result;
+	}
+
 	public static function process_credit_card($card)
 	{
 		return preg_replace('/\s|\-/', '', $card);
@@ -76,7 +93,7 @@ class Kohana_Model_Card_Form extends Jam_Validated {
 	public function vbv_params($callback_url)
 	{
 		return array(
-			'cardnumber' => $this->number,
+			'cardnumber' => $this->cardNumber,
 			'expdate' => $this->expiryYear.$this->expiryMonth,
 			'callback_url' => $callback_url,
 			'browser_useragent' => Request::$user_agent,

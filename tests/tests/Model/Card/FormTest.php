@@ -49,11 +49,27 @@ class Model_Card_FormTest extends Testcase_Purchases {
 		$this->assertEquals($expected, Model_Card_Form::process_credit_card($cc));
 	}
 
+	/**
+	 * @covers Model_Card_Form::as_array
+	 */
+	public function test_as_array()
+	{
+		$card_form = Jam::build('card_form');
+		$card_form->name = 'Test User';
+		$card_form->cardNumber = 'qwerhjgf43534fgn3453';
+
+		$result = $card_form->as_array();
+
+		$this->assertFalse(array_key_exists('cardNumber', $result));
+		$this->assertTrue(array_key_exists('number', $result));
+		$this->assertEquals($card_form->cardNumber, $result['number']);
+	}
+
 	public function test_filters()
 	{
 		$form = Jam::build('card_form', array(
 			'name' => ' Mr. Thompson  	',
-			'number' => '4111 1111 1111 1111',
+			'cardNumber' => '4111 1111 1111 1111',
 			'expiryMonth' => '01',
 			'expiryYear' => '25',
 			'cvv' => ' 123 	',
@@ -110,7 +126,7 @@ class Model_Card_FormTest extends Testcase_Purchases {
 	public function test_vbv_params($expected_params, $number, $expiryMonth, $expiryYear, $callback_url, $user_agent)
 	{
 		$card_form = Jam::build('card_form');
-		$card_form->number = $number;
+		$card_form->cardNumber = $number;
 		$card_form->expiryMonth = $expiryMonth;
 		$card_form->expiryYear = $expiryYear;
 
