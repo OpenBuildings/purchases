@@ -266,6 +266,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 			'price' => -10,
 			'is_discount' => TRUE,
 			'is_payable' => TRUE,
+			'is_frozen' => TRUE,
 		));
 
 		$purchase->store_purchases[0]->items []= $promo;
