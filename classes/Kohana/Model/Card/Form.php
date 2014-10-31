@@ -73,16 +73,6 @@ class Kohana_Model_Card_Form extends Jam_Validated {
 		return preg_replace('/\s|\-/', '', $card);
 	}
 
-	public function vbv_params($callback_url)
-	{
-		return array(
-			'cardnumber' => $this->number,
-			'expdate' => $this->expiryYear.$this->expiryMonth,
-			'callback_url' => $callback_url,
-			'browser_useragent' => Request::$user_agent,
-		);
-	}
-
 	public static function months()
 	{
 		return array('01' => '01', '02' => '02', '03' => '03', '04' => '04', '05' => '05', '06' => '06', '07' => '07', '08' => '08', '09' => '09', '10' => '10', '11' => '11', '12' => '12');

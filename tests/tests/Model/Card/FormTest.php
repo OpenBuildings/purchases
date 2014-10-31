@@ -70,54 +70,6 @@ class Model_Card_FormTest extends Testcase_Purchases {
 		$this->assertEquals($expected, $form->as_array());
 	}
 
-	public function data_vbv_params()
-	{
-		return array(
-			array(
-				array(
-					'cardnumber' => 'qwerhjgf43534fgn3453',
-					'expdate' => 'ZXCVBQWERTY',
-					'callback_url' => 'ABCDE',
-					'browser_useragent' => 'teeeestiing'
-				),
-				'qwerh jgf4 353 4fgn3453',
-				'QWERTY',
-				'ZXCVB',
-				'ABCDE',
-				'teeeestiing'
-			),
-			array(
-				array(
-					'cardnumber' => '',
-					'expdate' => '2013',
-					'callback_url' => 'example.com',
-					'browser_useragent' => 'test user agent'
-				),
-				'   ',
-				NULL,
-				'2013',
-				'example.com',
-				'test user agent'
-			),
-		);
-	}
-
-	/**
-	 * @dataProvider data_vbv_params
-	 * @covers Model_Card_Form::vbv_params
-	 * @backupGlobals
-	 */
-	public function test_vbv_params($expected_params, $number, $expiryMonth, $expiryYear, $callback_url, $user_agent)
-	{
-		$card_form = Jam::build('card_form');
-		$card_form->number = $number;
-		$card_form->expiryMonth = $expiryMonth;
-		$card_form->expiryYear = $expiryYear;
-
-		Request::$user_agent = $user_agent;
-		$this->assertSame($expected_params, $card_form->vbv_params($callback_url));
-	}
-
 	public function data_validate()
 	{
 		$past_year = date('y', strtotime('-1 year'));
