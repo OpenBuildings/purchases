@@ -166,7 +166,7 @@ class Kohana_Model_Payment extends Jam_Model {
 		$currency = $this->purchase->display_currency() ?: $this->purchase->currency();
 
 		$params = array(
-			'transactionReference' => $this->purchase->payment_id ?: $this->purchase->number,
+			'transactionReference' => $this->payment_id ?: $this->purchase->number,
 			'currency' => $currency,
 			'clientIp' => Request::$client_ip
 		);
