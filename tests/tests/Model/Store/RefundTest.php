@@ -1,6 +1,7 @@
 <?php
 
 use OpenBuildings\Monetary\Monetary;
+use Omnipay\Omnipay;
 
 /**
  * @group model
@@ -198,6 +199,9 @@ class Model_Store_RefundTest extends Testcase_Purchases {
 	 */
 	public function test_execute()
 	{
+		$gateway = Omnipay::create('Dummy');
+		$refund_params = array();
+
 		$store_refund = $this->getMock('Model_Store_Refund', array(
 			'check_insist',
 			'payment_insist',
@@ -214,7 +218,7 @@ class Model_Store_RefundTest extends Testcase_Purchases {
 		$payment_mock
 			->expects($this->once())
 			->method('refund')
-			->with($store_refund);
+			->with($gateway, $store_refund, $refund_params);
 
 		$store_refund
 			->expects($this->once())
@@ -225,7 +229,7 @@ class Model_Store_RefundTest extends Testcase_Purchases {
 			->method('payment_insist')
 			->will($this->returnValue($payment_mock));
 
-		$this->assertSame($store_refund, $store_refund->execute());
+		$this->assertSame($store_refund, $store_refund->execute($gateway, $refund_params));
 	}
 
 	/**

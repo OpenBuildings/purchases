@@ -1,5 +1,7 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
+use Omnipay\Common\GatewayInterface;
+
 /**
  * @package    Openbuildings\Purchases
  * @author     Ivan Kerin <ikerin@gmail.com>
@@ -110,10 +112,13 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 
 	/**
 	 * Call payment->refund
-	 * @throws Kohana_Exception If payment is not "paid"
-	 * @return Model_Store_refund self
+	 *
+	 * @param	\Omnipay\Common\GatewayInterface			$gateway Omnipay payment gateway
+	 * @param	array										$params pass this to the gateway
+	 * @throws	Kohana_Exception If payment is not "paid"
+	 * @return	Model_Store_refund self
 	 */
-	public function execute()
+	public function execute(GatewayInterface $gateway, array $params = array())
 	{
 		$this->check_insist();
 
@@ -122,7 +127,7 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 		if ($payment->status !== Model_Payment::PAID)
 			throw new Kohana_Exception('Payment must be payed in order to perform a refund');
 
-		$payment->refund($this);
+		$payment->refund($gateway, $this, $params);
 
 		return $this;
 	}

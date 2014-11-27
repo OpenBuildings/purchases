@@ -1,5 +1,7 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
+use Omnipay\Common\GatewayInterface;
+
 /**
  * @package    Openbuildings\Purchases
  * @author     Ivan Kerin <ikerin@gmail.com>
@@ -10,8 +12,6 @@ class Kohana_Model_Payment extends Jam_Model {
 
 	const PAID = 'paid';
 	const PENDING = 'pending';
-
-	public $_authorize_url;
 
 	/**
 	 * @codeCoverageIgnore
@@ -29,14 +29,14 @@ class Kohana_Model_Payment extends Jam_Model {
 			))
 			->fields(array(
 				'id' => Jam::field('primary'),
-				'model' => Jam::field('polymorphic'),
+				'method' => Jam::field('string'),
 				'payment_id' => Jam::field('string'),
 				'raw_response' => Jam::field('serialized', array('method' => 'json')),
 				'status' => Jam::field('string'),
 				'created_at' => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
 				'updated_at' => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			))
-			->validator('purchase', 'model', array('present' => TRUE));
+			->validator('purchase', 'method', array('present' => TRUE));
 	}
 
 	/**
@@ -50,154 +50,323 @@ class Kohana_Model_Payment extends Jam_Model {
 	}
 
 	/**
-	 * This would return the url needed to authorize the purchase by the user, if the payment method requires it
-	 * @return string
+	 * Executes the purchase and handles events before and after the execution
+	 * @param	\Omnipay\Common\GatewayInterface			$gateway Omnipay payment gateway
+	 * @param	array										$params pass this to the gateway
+	 * @return	\Omnipay\Common\Message\ResponseInterface	$response payment gateway response
 	 */
-	public function authorize_url()
+	public function purchase(GatewayInterface $gateway, array $params = array())
 	{
-		return $this->_authorize_url;
-	}
+		$this->meta()->events()->trigger('model.before_purchase', $this, array($params));
 
-	/**
-	 * Execute authorize_processor and model.before_authorize and model.after_authorize. Save the model after authorize_processor()
-	 * @param  array  $params pass this to authorize_processor()
-	 * @return Model_Payment  self
-	 */
-	public function authorize(array $params = array())
-	{
-		$this->meta()->events()->trigger('model.before_authorize', $this, array($params));
-		$first_operation = ! $this->loaded();
+		$response = $this->execute_purchase($gateway, $params);
 
-		if ($first_operation)
-		{
-			$this->meta()->events()->trigger('model.before_first_operation', $this, array($params));
-		}
-
-		$this->authorize_processor($params);
 		$this->purchase->payment = $this;
 		$this->purchase->save();
 
-		if ($first_operation)
-		{
-			$this->meta()->events()->trigger('model.after_first_operation', $this, array($params));
-		}
-
-		$this->meta()->events()->trigger('model.after_authorize', $this, array($params));
-
-		return $this;
-	}
-
-	/**
-	 * Execute execute_processor and model.before_execute and model.after_execute. Save the model after execute_processor()
-	 * @param  array  $params pass this to execute_processor()
-	 * @return Model_Payment  self
-	 */
-	public function execute(array $params = array())
-	{
-		$this->meta()->events()->trigger('model.before_execute', $this, array($params));
-		$first_operation = ! $this->loaded();
-
-		if ($first_operation)
-		{
-			$this->meta()->events()->trigger('model.before_first_operation', $this, array($params));
-		}
-
-		$this->execute_processor($params);
-		$this->purchase->payment = $this;
-		$this->purchase->save();
-
-		if ($first_operation)
-		{
-			$this->meta()->events()->trigger('model.after_first_operation', $this, array($params));
-		}
-
-		$this->meta()->events()->trigger('model.after_execute', $this, array($params));
+		$this->meta()->events()->trigger('model.after_purchase', $this, array($params));
 
 		if ($this->status === Model_Payment::PAID)
 		{
 			$this->meta()->events()->trigger('model.pay', $this, array($params));
 		}
 
-		return $this;
+		return $response;
 	}
 
 	/**
-	 * Execute refund_processor and model.before_refund and model.after_refund. Save the refund model after refund_processor()
-	 * @param  Model_Store_Refund  $refund pass this to refund_processor()
-	 * @param  array  $custom_params pass this to refund_processor()
-	 * @return Model_Payment  self
+	 * Executes the purchase with the provided payment gateway
+	 * @param	\Omnipay\Common\GatewayInterface			$gateway Omnipay payment gateway
+	 * @param	array										$params pass this to the gateway
+	 * @return	\Omnipay\Common\Message\ResponseInterface	$response payment gateway response
 	 */
-	public function refund(Model_Store_Refund $refund, array $custom_params = array())
+	public function execute_purchase(GatewayInterface $gateway, array $params = array())
 	{
-		$this->meta()->events()->trigger('model.before_refund', $this, array($refund, $custom_params));
+		$include_card = (isset($params['card']) && isset($params['card']['number']));
+		$params = Arr::merge($params, $this->convert_purchase($include_card));
 
-		$this->refund_processor($refund, $custom_params);
+		$response = $gateway->purchase($params)->send();
+
+		$this->payment_id = $response->getTransactionReference();
+		$this->raw_response = $response->getData();
+
+		if ($response->isSuccessful())
+		{
+			$this->status = Model_Payment::PAID;
+		}
+		else if ($response->isRedirect())
+		{
+			$this->status = Model_Payment::PENDING;
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Completes an off site purchase and handles events before and after the completion
+	 * @param	\Omnipay\Common\GatewayInterface			$gateway Omnipay payment gateway
+	 * @param	array										$params pass this to the gateway
+	 * @return	\Omnipay\Common\Message\ResponseInterface	$response payment gateway response
+	 */
+	public function complete_purchase(GatewayInterface $gateway, array $params = array())
+	{
+		if ($this->status !== Model_Payment::PENDING)
+		{
+			throw new Exception_Payment('You must initiate a purchase before completing it');
+		}
+
+		$this->meta()->events()->trigger('model.before_complete_purchase', $this, array($params));
+
+		$response = $this->execute_complete_purchase($gateway, $params);
+
+		$this->purchase->payment = $this;
+		$this->purchase->save();
+
+		$this->meta()->events()->trigger('model.after_complete_purchase', $this, array($params));
+
+		if ($this->status === Model_Payment::PAID)
+		{
+			$this->meta()->events()->trigger('model.pay', $this, array($params));
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Completes an off site purchase with the provided payment gateway
+	 * @param	\Omnipay\Common\GatewayInterface			$gateway Omnipay payment gateway
+	 * @param	array										$params pass this to the gateway
+	 * @return	\Omnipay\Common\Message\ResponseInterface	$response payment gateway response
+	 */
+	public function execute_complete_purchase(GatewayInterface $gateway, array $params = array())
+	{
+		$include_card = (isset($params['card']) && isset($params['card']['number']));
+		$params = Arr::merge($params, $this->convert_purchase($include_card));
+
+		$response = $gateway->completePurchase($params)->send();
+
+		$this->payment_id = $response->getTransactionReference();
+		$this->raw_response = $response->getData();
+
+		if ($response->isSuccessful())
+		{
+			$this->status = Model_Payment::PAID;
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Convert a Model_Purchase object to an array of parameteres, suited for Omnipay
+	 *
+	 * @return array
+	 */
+	public function convert_purchase($include_card = FALSE)
+	{
+		$currency = $this->purchase->display_currency() ?: $this->purchase->currency();
+
+		$params = array(
+			'transactionReference' => $this->payment_id ?: $this->purchase->number,
+			'currency' => $currency,
+			'clientIp' => Request::$client_ip
+		);
+
+		if ($include_card)
+		{
+			if ($this->purchase->creator)
+			{
+				$params['card']['email'] = $this->purchase->creator->email;
+			}
+
+			if (($billing = $this->purchase->billing_address))
+			{
+				$params['card'] = array_merge($params['card'], array_filter(array(
+					'firstName'	=> $billing->first_name,
+					'lastName'	=> $billing->last_name,
+					'address1'	=> $billing->line1,
+					'address2'	=> $billing->line2,
+					'city'		=> $billing->city ? $billing->city->name() : NULL,
+					'country'	=> $billing->country ? $billing->country->short_name : NULL,
+					'postcode'	=> $billing->zip,
+					'email'		=> $billing->email,
+					'phone'		=> $billing->phone,
+				)));
+			}
+		}
+
+		$params['items'] = array_map(function ($item) use ($currency) {
+			$name = str_pad($item->reference ? URL::title($item->reference->name(), ' ', TRUE) : $item->type(), 5, '.');
+
+			return array(
+				"name"			=> $item->id(),
+				"description"	=> $name,
+				"quantity"		=> $item->quantity,
+				"price"			=> $item->price()->as_string($currency),
+			);
+		}, $this->purchase->items(array('is_payable' => TRUE)));
+
+		$params['amount'] = Jam_Price::sum(
+			array_map(
+				function($item) { return $item['price']; },
+				$params['items']
+			), $currency)->as_string();
+
+		return $params;
+	}
+
+	/**
+	 * Executes the refund and handles events before and after the execution
+	 * @param	\Omnipay\Common\GatewayInterface			$gateway Omnipay payment gateway
+	 * @param	Model_Store_Refund							$refund
+	 * @param	array										$params pass this to the gateway
+	 * @return	\Omnipay\Common\Message\ResponseInterface	$response payment gateway response
+	 */
+	public function refund(GatewayInterface $gateway, Model_Store_Refund $refund, array $params = array())
+	{
+		$this->meta()->events()->trigger('model.before_refund', $this, array($refund, $params));
+
+		$response = $this->execute_refund($gateway, $refund, $params);
+
 		$refund->save();
 
-		$this->meta()->events()->trigger('model.after_refund', $this, array($refund, $custom_params));
+		$this->meta()->events()->trigger('model.after_refund', $this, array($refund, $params));
 
-		return $this;
+		return $response;
 	}
 
 	/**
-	 * Execute multiple store refunds as a single refund request
-	 * @param  Model_Store_Refund[] $refunds pass this to refund_processor()
-	 * @param  array                $custom_params pass this to refund_processor()
-	 * @return Model_Payment        self
+	 * Executes the refund with the provided payment gateway
+	 * @param	\Omnipay\Common\GatewayInterface			$gateway Omnipay payment gateway
+	 * @param	Model_Store_Refund							$refund
+	 * @param	array										$params pass this to the gateway
+	 * @return	\Omnipay\Common\Message\ResponseInterface	$response payment gateway response
 	 */
-	public function full_refund(array $refunds, array $custom_params = array())
+	public function execute_refund(GatewayInterface $gateway, Model_Store_Refund $refund, array $params = array())
 	{
-		$this->meta()->events()->trigger('model.before_full_refund', $this, array($refunds, $custom_params));
+		$params = Arr::merge($this->convert_refund($refund), $params);
 
-		$this->multiple_refunds_processor($refunds, $custom_params);
+		$response = $gateway->refund($params)->send();
+
+		$refund->raw_response = $response->getData();
+		$refund->transaction_status = ($response->isSuccessful()) ? Model_Store_Refund::TRANSACTION_REFUNDED : NULL;
+
+		return $response;
+
+	}
+
+	/**
+	 * Convert a Model_Store_Refund object to an array of parameteres, suited for Omnipay
+	 * @param  Model_Store_Refund $refund
+	 * @return array
+	 */
+	public function convert_refund(Model_Store_Refund $refund)
+	{
+		$payment = $refund->payment_insist();
+		$currency = $refund->display_currency() ?: $refund->currency();
+
+		$params = array(
+			'transactionReference'	=> $payment->payment_id,
+			'reason'				=> $refund->reason,
+			'currency'				=> $currency,
+		);
+
+		$is_full_refund = $refund->amount()->is(Jam_Price::EQUAL_TO,
+			$refund->purchase_insist()->total_price(array('is_payable' => TRUE)));
+
+		if (count($refund->items) AND ! $is_full_refund)
+		{
+			$params['items'] = array_map(function ($item) use ($currency) {
+				return array(
+					"name"			=> $item->purchase_item->id(),
+					"price"			=> $item->amount()->as_string($currency),
+				);
+			}, $refund->items->as_array());
+		}
+
+		$params['amount'] = $refund->amount()->as_string($currency);
+
+		return $params;
+	}
+
+	/**
+	 * Executes multiple refunds and handles events before and after the execution
+	 * @param	\Omnipay\Common\GatewayInterface			$gateway Omnipay payment gateway
+	 * @param	Model_Store_Refund[]						$refunds
+	 * @param	array										$params pass this to the gateway
+	 * @return	\Omnipay\Common\Message\ResponseInterface	$response payment gateway response
+	 */
+	public function full_refund(GatewayInterface $gateway, array $refunds, array $params = array())
+	{
+		$this->meta()->events()->trigger('model.before_full_refund', $this, array($refunds, $params));
+
+		$response = $this->execute_multiple_refunds($gateway, $refunds, $params);
 
 		foreach ($refunds as $refund)
 		{
 			$refund->save();
 		}
 
-		$this->meta()->events()->trigger('model.after_full_refund', $this, array($refunds, $custom_params));
+		$this->meta()->events()->trigger('model.after_full_refund', $this, array($refunds, $params));
 
-		return $this;
+		return $response;
 	}
 
 	/**
-	 * Extend this in the child models.
-	 * @param  array  $params
-	 * @throws Kohana_Exception If method not implemented
+	 * Executes multiple refunds with the provided payment gateway
+	 * @param	\Omnipay\Common\GatewayInterface			$gateway Omnipay payment gateway
+	 * @param	Model_Store_Refund[]						$refunds
+	 * @param	array										$params pass this to the gateway
+	 * @return	\Omnipay\Common\Message\ResponseInterface	$response payment gateway response
 	 */
-	public function authorize_processor(array $params = array())
+	public function execute_multiple_refunds(GatewayInterface $gateway, array $refunds, array $params = array())
 	{
-		throw new Kohana_Exception('This payment does not support authorize');
+		$params = Arr::merge($this->convert_multiple_refunds($refunds), $params);
+
+		$response = $gateway->refund($params)->send();
+
+		$raw_response = $response->getData();
+		$status = ($response->isSuccessful()) ? Model_Store_Refund::TRANSACTION_REFUNDED : NULL;
+
+		foreach ($refunds as $refund)
+		{
+			$refund->raw_response = $raw_response;
+			$refund->transaction_status = $status;
+		}
+
+		return $response;
 	}
 
 	/**
-	 * Extend this in the child models.
-	 * @param  array  $params
-	 * @throws Kohana_Exception If method not implemented
+	 * Convert multiple Model_Store_Refund objects to an array of parameteres, suited for Omnipay
+	 * @param  array $refunds
+	 * @return array
 	 */
-	public function execute_processor(array $params = array())
+	public static function convert_multiple_refunds(array $refunds)
 	{
-		throw new Kohana_Exception('This payment does not support execute');
-	}
+		$payment = $refunds[0]->payment_insist();
+		$currency = $refunds[0]->display_currency() ?: $refund->currency();
+		$amounts = array();
 
-	/**
-	 * Extend this in the child models.
-	 * @param  array  $params
-	 * @throws Kohana_Exception If method not implemented
-	 */
-	public function refund_processor(Model_Store_Refund $refund, array $params = array())
-	{
-		throw new Kohana_Exception('This payment does not support refunds');
-	}
+		$params = array(
+			'transactionReference'	=> $payment->payment_id,
+			'reason'				=> $refunds[0]->reason,
+			'currency'				=> $currency,
+		);
 
-	/**
-	 * Extend this in the child models.
-	 * @param  Model_Store_Refund[] $params
-	 * @throws Kohana_Exception If method not implemented
-	 */
-	public function multiple_refunds_processor(array $refunds, array $params = array())
-	{
-		throw new Kohana_Exception('This payment does not support multiple refunds');
+		foreach ($refunds as $refund)
+		{
+			if (count($refund->items))
+			{
+				throw new Exception_Payment('Multiple refunds do not support refund items');
+			}
+			else
+			{
+				$amounts[] = $refund->amount();
+			}
+		}
+
+		$params['amount'] = Jam_Price::sum($amounts, $currency)->as_string($currency);
+
+		return $params;
 	}
 }

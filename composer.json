@@ -21,25 +21,21 @@
 		"php": ">=5.3.0",
 		"composer/installers": "*",
 		"openbuildings/jam": ">=0.4.35",
-		"openbuildings/emp": "~0.1.11",
 		"openbuildings/jam-auth": "0.2.*",
 		"openbuildings/jam-monetary": "0.1.*",
 		"openbuildings/jam-locations": "0.1.*",
-		"clippings/freezable": "0.2.*"
+		"clippings/freezable": "0.2.*",
+		"omnipay/common": "~2.0"
 	},
 	"require-dev": {
 		"openbuildings/kohana-test-bootsrap": "0.1.*",
 		"openbuildings/environment-backup": "0.1.*",
-		"paypal/rest-api-sdk-php": "~0.13.1",
-		"openbuildings/paypal": "0.4.*",
 		"openbuildings/phpunit-spiderling": "0.1.*",
-		"claylo/selenium-server-standalone": "2.*"
+		"omnipay/dummy": "~2.0"
 	},
 	"suggest": {
 		"openbuildings/shipping": "Extends purchases functionality with shipping and delivery",
-		"openbuildings/promotions": "Extends purchases functionality with promotions and gift cards",
-		"openbuildings/paypal": "Require this package if you need to use PayPal payments with ChainedPayments",
-		"paypal/rest-api-sdk-php": "Require this package if you need to use PayPal payments with REST API"
+		"openbuildings/promotions": "Extends purchases functionality with promotions and gift cards"
 	},
 	"extra": {
 		"branch-alias": {

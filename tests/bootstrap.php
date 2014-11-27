@@ -10,7 +10,9 @@ spl_autoload_register(function($class)
 	}
 });
 
-require_once __DIR__.'/../vendor/autoload.php';
+$loader = require_once __DIR__.'/../vendor/autoload.php';
+$loader->addPsr4('Test\\Omnipay\\Dummy\\', __DIR__.'/src');
+
 
 Kohana::modules(array(
 	'database'         => MODPATH.'database',

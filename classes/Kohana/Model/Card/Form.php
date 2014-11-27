@@ -1,14 +1,14 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
 /**
- * This form is used to ease creating html form for credit cards, that use emp paymnet processor
+ * This form is used to ease creating html form for credit cards
  *
  * @package    Openbuildings\Purchases
  * @author     Ivan Kerin <ikerin@gmail.com>
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Model_Emp_Form extends Jam_Validated {
+class Kohana_Model_Card_Form extends Jam_Validated {
 
 	/**
 	 * @codeCoverageIgnore
@@ -17,33 +17,33 @@ class Kohana_Model_Emp_Form extends Jam_Validated {
 	{
 		$meta
 			->fields(array(
-				'card_holder_name' => Jam::field('string', array(
+				'name' => Jam::field('string', array(
 					'filters' => array('trim')
 				)),
-				'card_number' => Jam::field('string', array(
-					'filters' => array('Model_Emp_Form::process_credit_card')
+				'number' => Jam::field('string', array(
+					'filters' => array('Model_Card_Form::process_credit_card')
 				)),
-				'exp_month' => Jam::field('string'),
-				'exp_year' => Jam::field('string'),
+				'expiryMonth' => Jam::field('string'),
+				'expiryYear' => Jam::field('string'),
 				'cvv' => Jam::field('string', array('filters' => array('trim'))),
 			))
 			->validator(
-				'card_holder_name',
-				'card_number',
-				'exp_month',
-				'exp_year',
+				'name',
+				'number',
+				'expiryMonth',
+				'expiryYear',
 				'cvv',
 				array(
 					'present' => TRUE,
 				)
 			)
-			->validator('card_holder_name',	array(
+			->validator('name',	array(
 				'length' => array(
 					'minimum' => 3,
 					'maximum' => 40,
 				)
 			))
-			->validator('card_number', array(
+			->validator('number', array(
 				'length' => array(
 					'maximum' => 20,
 				),
@@ -51,12 +51,12 @@ class Kohana_Model_Emp_Form extends Jam_Validated {
 					'credit_card' => TRUE,
 				)
 			))
-			->validator('exp_month', array(
+			->validator('expiryMonth', array(
 				'format' => array(
 					'regex' => '/\d{2}/',
 				)
 			))
-			->validator('exp_year',	array(
+			->validator('expiryYear',	array(
 				'format' => array(
 					'regex' => '/\d{2}/',
 				)
@@ -71,16 +71,6 @@ class Kohana_Model_Emp_Form extends Jam_Validated {
 	public static function process_credit_card($card)
 	{
 		return preg_replace('/\s|\-/', '', $card);
-	}
-
-	public function vbv_params($callback_url)
-	{
-		return array(
-			'cardnumber' => $this->card_number,
-			'expdate' => $this->exp_year.$this->exp_month,
-			'callback_url' => $callback_url,
-			'browser_useragent' => Request::$user_agent,
-		);
 	}
 
 	public static function months()
@@ -98,17 +88,17 @@ class Kohana_Model_Emp_Form extends Jam_Validated {
 
 	public function validate()
 	{
-		if ($this->exp_month AND $this->exp_year)
+		if ($this->expiryMonth AND $this->expiryYear)
 		{
-			$year = 2000 + (int) $this->exp_year;
+			$year = 2000 + (int) $this->expiryYear;
 			if ( $year < (int) date('Y'))
 			{
-				$this->errors()->add('exp_year', 'card_expired');
+				$this->errors()->add('expiryYear', 'card_expired');
 			}
-			elseif ( (int) $this->exp_month < (int) date('n')
+			elseif ( (int) $this->expiryMonth < (int) date('n')
 			 AND $year === (int) date('Y'))
 			{
-				$this->errors()->add('exp_month', 'card_expired');
+				$this->errors()->add('expiryMonth', 'card_expired');
 			}
 		}
 	}
