@@ -22,7 +22,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 
 		$item = Jam::build('purchase_item', array(
 			'price' => 10,
-			'store_purchase' => 1,
+			'brand_purchase' => 1,
 			'model' => 'purchase_item_product',
 			'quantity' => 1,
 			'is_payable' => TRUE
@@ -63,21 +63,21 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Model_Purchase_Item::group_by_store_purchase
+	 * @covers Model_Purchase_Item::group_by_brand_purchase
 	 */
-	public function test_group_by_store_purchase()
+	public function test_group_by_brand_purchase()
 	{
 		$items = array(
-			Jam::build('purchase_item', array('id' => 10, 'store_purchase_id' => 1)),
-			Jam::build('purchase_item', array('id' => 20, 'store_purchase_id' => 1)),
-			Jam::build('purchase_item', array('id' => 30, 'store_purchase_id' => 12)),
-			array('id' => 40, 'store_purchase_id' => 13),
-			array('id' => 50, 'store_purchase_id' => 13),
+			Jam::build('purchase_item', array('id' => 10, 'brand_purchase_id' => 1)),
+			Jam::build('purchase_item', array('id' => 20, 'brand_purchase_id' => 1)),
+			Jam::build('purchase_item', array('id' => 30, 'brand_purchase_id' => 12)),
+			array('id' => 40, 'brand_purchase_id' => 13),
+			array('id' => 50, 'brand_purchase_id' => 13),
 			1,
 			array('id' => 2),
 		);
 
-		$groups = Model_Purchase_Item::group_by_store_purchase($items);
+		$groups = Model_Purchase_Item::group_by_brand_purchase($items);
 
 		$this->assertEquals(array('1', '12', '13'), array_keys($groups));
 
@@ -137,13 +137,13 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	{
 		$monetary = new Monetary;
 
-		$store_purchase = $this->getMock('Model_Store_Purchase', array('monetary'), array('store_purchase'));
-		$store_purchase
+		$brand_purchase = $this->getMock('Model_Brand_Purchase', array('monetary'), array('brand_purchase'));
+		$brand_purchase
 			->expects($this->once())
 				->method('monetary')
 				->will($this->returnValue($monetary));
 
-		$purchase_item = Jam::build('purchase_item', array('store_purchase' => $store_purchase));
+		$purchase_item = Jam::build('purchase_item', array('brand_purchase' => $brand_purchase));
 
 		$this->assertSame($monetary, $purchase_item->monetary());
 	}
@@ -153,13 +153,13 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_currency()
 	{
-		$store_purchase = $this->getMock('Model_Store_Purchase', array('currency'), array('store_purchase'));
-		$store_purchase
+		$brand_purchase = $this->getMock('Model_Brand_Purchase', array('currency'), array('brand_purchase'));
+		$brand_purchase
 			->expects($this->exactly(2))
 				->method('currency')
 				->will($this->onConsecutiveCalls('GBP', 'EUR'));
 
-		$purchase_item = Jam::build('purchase_item', array('store_purchase' => $store_purchase));
+		$purchase_item = Jam::build('purchase_item', array('brand_purchase' => $brand_purchase));
 
 		$this->assertEquals('GBP', $purchase_item->currency());
 		$this->assertEquals('EUR', $purchase_item->currency());
@@ -170,13 +170,13 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_display_currency()
 	{
-		$store_purchase = $this->getMock('Model_Store_Purchase', array('display_currency'), array('store_purchase'));
-		$store_purchase
+		$brand_purchase = $this->getMock('Model_Brand_Purchase', array('display_currency'), array('brand_purchase'));
+		$brand_purchase
 			->expects($this->exactly(2))
 				->method('display_currency')
 				->will($this->onConsecutiveCalls('GBP', 'EUR'));
 
-		$purchase_item = Jam::build('purchase_item', array('store_purchase' => $store_purchase));
+		$purchase_item = Jam::build('purchase_item', array('brand_purchase' => $brand_purchase));
 
 		$this->assertEquals('GBP', $purchase_item->display_currency());
 		$this->assertEquals('EUR', $purchase_item->display_currency());
@@ -188,7 +188,7 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	public function test_price()
 	{
 		$item = $this->getMock('Model_Purchase_Item', array('compute_price'), array('purchase_item'));
-		$item->store_purchase = Jam::find('store_purchase', 1);
+		$item->brand_purchase = Jam::find('brand_purchase', 1);
 		$price = new Jam_Price(10, 'USD');
 
 		$item->expects($this->exactly(2))
@@ -230,10 +230,10 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_is_refunded()
 	{
-		$refund = $this->getMock('Model_Store_Refund', array('has_purchase_item'), array('store_refund'));
+		$refund = $this->getMock('Model_Brand_Refund', array('has_purchase_item'), array('brand_refund'));
 
 		$item = Jam::build('purchase_item', array(
-			'store_purchase' => array(
+			'brand_purchase' => array(
 				'refunds' => array($refund),
 			)
 		));

@@ -9,7 +9,7 @@ use Clippings\Freezable\FreezableInterface;
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable, FreezableInterface {
+class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, FreezableInterface {
 
 	use FreezableTrait;
 
@@ -26,22 +26,22 @@ class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable, Free
 			))
 			->associations(array(
 				'purchase' => Jam::association('belongsto', array(
-					'inverse_of' => 'store_purchases'
+					'inverse_of' => 'brand_purchases'
 				)),
 				'items' => Jam::association('hasmany', array(
-					'inverse_of' => 'store_purchase',
+					'inverse_of' => 'brand_purchase',
 					'foreign_model' => 'purchase_item',
 					'delete_on_remove' => Jam_Association::DELETE,
 					'dependent' => Jam_Association::DELETE,
 				)),
 				'refunds' => Jam::association('hasmany', array(
-					'inverse_of' => 'store_purchase',
-					'foreign_model' => 'store_refund',
+					'inverse_of' => 'brand_purchase',
+					'foreign_model' => 'brand_refund',
 					'delete_on_remove' => Jam_Association::DELETE,
 					'dependent' => Jam_Association::DELETE,
 				)),
-				'store' => Jam::association('belongsto', array(
-					'inverse_of' => 'store_purchases',
+				'brand' => Jam::association('belongsto', array(
+					'inverse_of' => 'brand_purchases',
 				)),
 			))
 			->fields(array(
@@ -50,7 +50,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable, Free
 				'created_at'      => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
 				'updated_at'      => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			))
-			->validator('purchase', 'store', array('present' => TRUE));
+			->validator('purchase', 'brand', array('present' => TRUE));
 	}
 
 	/**
@@ -72,7 +72,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable, Free
 	/**
 	 * Add the item to items or update an existing one (checked using "search_same_item()")
 	 * @param Model_Purchase_Item $new_item
-	 * @return Model_Store_Purchase self
+	 * @return Model_Brand_Purchase self
 	 */
 	public function add_or_update_item(Model_Purchase_Item $new_item)
 	{
@@ -132,7 +132,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable, Free
 	/**
 	 * Trigger model.update_items
 	 * @trigger model.update_items
-	 * @return Model_Store_Purchase self
+	 * @return Model_Brand_Purchase self
 	 */
 	public function update_items()
 	{
@@ -145,7 +145,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable, Free
 	 * Replace purchase items, filtered. Removes old items
 	 * @param  array $items arrat of Model_Purchase_Item
 	 * @param  array $types
-	 * @return Model_Store_Purchase        self
+	 * @return Model_Brand_Purchase        self
 	 */
 	public function replace_items($items, $types = NULL)
 	{
@@ -230,7 +230,7 @@ class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable, Free
 	}
 
 	/**
-	 * Return the ratio of this store_purchase as part of the whole purchase
+	 * Return the ratio of this brand_purchase as part of the whole purchase
 	 * @param  string|arrat $types filter
 	 * @return integer
 	 */
@@ -245,10 +245,10 @@ class Kohana_Model_Store_Purchase extends Jam_Model implements Purchasable, Free
 		return $price->amount() / $total_price->amount();
 	}
 
-	public function store()
+	public function brand()
 	{
 		return Jam_Behavior_Paranoid::with_filter(Jam_Behavior_Paranoid::ALL, function() {
-			return $this->store;
+			return $this->brand;
 		});
 	}
 

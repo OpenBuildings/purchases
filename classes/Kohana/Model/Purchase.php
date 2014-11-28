@@ -31,14 +31,14 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 				'paranoid' => Jam::behavior('paranoid'),
 			))
 			->associations(array(
-				'store_purchases' => Jam::association('hasmany', array(
+				'brand_purchases' => Jam::association('hasmany', array(
 					'inverse_of' => 'purchase',
-					'foreign_model' => 'store_purchase',
+					'foreign_model' => 'brand_purchase',
 					'delete_on_remove' => Jam_Association::DELETE,
 					'dependent' => Jam_Association::DELETE,
 				)),
-				'stores' => Jam::association('manytomany', array(
-					'join_table' => 'store_purchases',
+				'brands' => Jam::association('manytomany', array(
+					'join_table' => 'brand_purchases',
 					'readonly' => TRUE,
 				)),
 				'creator' => Jam::association('creator', array('required' => FALSE)),
@@ -60,38 +60,38 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	}
 
 	/**
-	 * Iterate through the existing store_purchases and return the one that is linked to this store.
+	 * Iterate through the existing brand_purchases and return the one that is linked to this brand.
 	 * If none exist build one and return it
-	 * @param  Model_Store $store
-	 * @return Model_Store_Purchase
+	 * @param  Model_Brand $brand
+	 * @return Model_Brand_Purchase
 	 */
-	public function find_or_build_store_purchase(Model_Store $store)
+	public function find_or_build_brand_purchase(Model_Brand $brand)
 	{
-		$store_purchases = $this->store_purchases->as_array('store_id');
+		$brand_purchases = $this->brand_purchases->as_array('brand_id');
 
-		if (isset($store_purchases[$store->id()]))
+		if (isset($brand_purchases[$brand->id()]))
 		{
-			$store_purchase = $store_purchases[$store->id()];
+			$brand_purchase = $brand_purchases[$brand->id()];
 		}
 		else
 		{
-			$store_purchase = $this->store_purchases->build(array('store' => $store));
+			$brand_purchase = $this->brand_purchases->build(array('brand' => $brand));
 		}
 
-		return $store_purchase;
+		return $brand_purchase;
 	}
 
 	/**
-	 * Add item to the store_purchase that matches the store given, if it exists, update the quantity, if the store_purchase does not exist, build it.
+	 * Add item to the brand_purchase that matches the brand given, if it exists, update the quantity, if the brand_purchase does not exist, build it.
 	 *
-	 * @param Model_Store              $store
+	 * @param Model_Brand              $brand
 	 * @param Model_Purchase_Item $new_item
 	 * @trigger model.add_item event passing $new_item
 	 */
-	public function add_item($store, Model_Purchase_Item $new_item)
+	public function add_item($brand, Model_Purchase_Item $new_item)
 	{
 		$this
-			->find_or_build_store_purchase($store)
+			->find_or_build_brand_purchase($brand)
 				->add_or_update_item($new_item);
 
 		$this->meta()->events()->trigger('model.add_item', $this, array($new_item));
@@ -131,7 +131,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	}
 
 	/**
-	 * Return purchase_items, aggregated from all the store_purchases. Can pass filters.
+	 * Return purchase_items, aggregated from all the brand_purchases. Can pass filters.
 	 *
 	 * @param  array $types filters
 	 * @return array        Model_Purchase_Items
@@ -140,16 +140,16 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	{
 		$items = array();
 
-		foreach ($this->store_purchases->as_array() as $store_purchase)
+		foreach ($this->brand_purchases->as_array() as $brand_purchase)
 		{
-			$items = array_merge($items, $store_purchase->items($types));
+			$items = array_merge($items, $brand_purchase->items($types));
 		}
 
 		return $items;
 	}
 
 	/**
-	 * Return the sum purchase items count from all store_purchases
+	 * Return the sum purchase items count from all brand_purchases
 	 *
 	 * @param  array $types filters
 	 * @return integer
@@ -174,15 +174,15 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	}
 
 	/**
-	 * Run update items on all the store_purchases
+	 * Run update items on all the brand_purchases
 	 *
 	 * @return Model_Purchase $this
 	 */
 	public function update_items()
 	{
-		foreach ($this->store_purchases->as_array() as $store_purchase)
+		foreach ($this->brand_purchases->as_array() as $brand_purchase)
 		{
-			$store_purchase->update_items();
+			$brand_purchase->update_items();
 		}
 
 		return $this;
@@ -197,8 +197,8 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	 */
 	public function replace_items($items, $types = NULL)
 	{
-		$grouped = Model_Purchase_Item::group_by_store_purchase($items);
-		$current = $this->store_purchases->as_array('id');
+		$grouped = Model_Purchase_Item::group_by_brand_purchase($items);
+		$current = $this->brand_purchases->as_array('id');
 
 		$replaced = array_intersect_key($grouped, $current);
 		$removed = array_diff_key($current, $grouped);
@@ -208,7 +208,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 			$current[$index]->replace_items($items, $types);
 		}
 
-		$this->store_purchases->remove(array_values($removed));
+		$this->brand_purchases->remove(array_values($removed));
 
 		return $this;
 	}
@@ -248,9 +248,9 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 
 	public function recheck()
 	{
-		$this->store_purchases = array_map(function($item){
+		$this->brand_purchases = array_map(function($item){
 			return $item->set('items', $item->items);
-		}, $this->store_purchases->as_array());
+		}, $this->brand_purchases->as_array());
 
 		return $this->check();
 	}
@@ -297,17 +297,17 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 
 	public function freezeCollection()
 	{
-		foreach ($this->store_purchases as $store_purchase)
+		foreach ($this->brand_purchases as $brand_purchase)
 		{
-			$store_purchase->freeze();
+			$brand_purchase->freeze();
 		}
 	}
 
 	public function unfreezeCollection()
 	{
-		foreach ($this->store_purchases as $store_purchase)
+		foreach ($this->brand_purchases as $brand_purchase)
 		{
-			$store_purchase->unfreeze();
+			$brand_purchase->unfreeze();
 		}
 	}
 }

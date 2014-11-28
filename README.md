@@ -6,7 +6,7 @@
 [![Latest Stable Version](https://poser.pugx.org/openbuildings/purchases/v/stable.png)](https://packagist.org/packages/openbuildings/purchases)
 
 
-This is a Kohana module that gives you out of the box functionality for multi-store purchases (each purchase may have Items from different sellers, each handling their portion of products independently)
+This is a Kohana module that gives you out of the box functionality for multi-brand purchases (each purchase may have Items from different sellers, each handling their portion of products independently)
 
 It has support for eMerchantPay and Paypal at the moment
 
@@ -56,9 +56,9 @@ class Model_User extends Kohana_Model_User {
 }
 ```
 
-## Purchase, Store Purchase and Purchase Items
+## Purchase, Brand Purchase and Purchase Items
 
-The basic structure of the purchase is one purchase, representing the user's view of what is happening, that has several Store_Purchase objects, one for each store, and each one of these has a "Purchase_Items" assigned to it.
+The basic structure of the purchase is one purchase, representing the user's view of what is happening, that has several Brand_Purchase objects, one for each brand, and each one of these has a "Purchase_Items" assigned to it.
 
 ## Prices
 
@@ -72,15 +72,15 @@ Purchase item has important "flags"
 - __is_discount__ - this means that the purchase item's price should be negative value. This enforces a validation - discounted items can only have negative prices, whereas normal ones must always have positive prices.
 
 __Item Querying__
-You can query items of the Store Purchase with the ``items()`` method:
+You can query items of the Brand Purchase with the ``items()`` method:
 
 ```php
-$store_purchase->items(); // return all the purchase items as an array
-$store_purchase->items('product'); // return all the purchase items with model "purchase_item_product" as an array
-$store_purchase->items(array('product', 'shipping')); // return all the purchase items with model "purchase_item_product" or "purchase_item_shipping" as an array
-$store_purchase->items(array('is_payable' => TRUE)); // return all the purchase items with flag "is_payable" set to TRUE as an array
-$store_purchase->items(array('is_payable' => TRUE, 'product')); // return all the purchase items with flag "is_payable" set to TRUE and are with model "purchase_item_product" as an array
-$store_purchase->items(array('not' => 'shipping')); // return all the purchase items that are not instance of model "purchase_item_shipping"
+$brand_purchase->items(); // return all the purchase items as an array
+$brand_purchase->items('product'); // return all the purchase items with model "purchase_item_product" as an array
+$brand_purchase->items(array('product', 'shipping')); // return all the purchase items with model "purchase_item_product" or "purchase_item_shipping" as an array
+$brand_purchase->items(array('is_payable' => TRUE)); // return all the purchase items with flag "is_payable" set to TRUE as an array
+$brand_purchase->items(array('is_payable' => TRUE, 'product')); // return all the purchase items with flag "is_payable" set to TRUE and are with model "purchase_item_product" as an array
+$brand_purchase->items(array('not' => 'shipping')); // return all the purchase items that are not instance of model "purchase_item_shipping"
 ```
 
 All of these types of queries can be used by ``items_count()`` and ``total_price()``
@@ -88,22 +88,22 @@ All of these types of queries can be used by ``items_count()`` and ``total_price
 There is also "items_quantity" which sums the quantities of all the items, matched by the filters.
 
 ```php
-$store_purchase->items_count(array('product', 'shipping'));
-$store_purchase->total_price(array('is_payable' = TRUE));
-$store_purchase->items_quantity(array('is_payable' = TRUE));
+$brand_purchase->items_count(array('product', 'shipping'));
+$brand_purchase->total_price(array('is_payable' = TRUE));
+$brand_purchase->items_quantity(array('is_payable' = TRUE));
 ```
 
-All of these methods can also be executed on Model_Purchase objects, giving you an aggregate of all the store_purchases. For example:
+All of these methods can also be executed on Model_Purchase objects, giving you an aggregate of all the brand_purchases. For example:
 
 ```php
-// This will return the quantity of all the payable items in all the store_purchases of this purchase.
+// This will return the quantity of all the payable items in all the brand_purchases of this purchase.
 $purchase->items_quantity(array('is_payable' => TRUE));
 ```
 
-There is a special method that is available only on the Model_Store_Purchase object. ``total_price_ratio`` - it will return what part of the whole purchase is the particular store purchase (from 0 to 1). You can pass filters to it too so only certain purchase_items will be taken into account.
+There is a special method that is available only on the Model_Brand_Purchase object. ``total_price_ratio`` - it will return what part of the whole purchase is the particular brand purchase (from 0 to 1). You can pass filters to it too so only certain purchase_items will be taken into account.
 
 ```php
-$store_purchase->total_price_ratio(array('is_payable' => TRUE)); // Will return e.g. 0.6
+$brand_purchase->total_price_ratio(array('is_payable' => TRUE)); // Will return e.g. 0.6
 ```
 
 ## Price Freezing
@@ -140,7 +140,7 @@ class Model_Purchase extends Jam_Model {
 	{
 		$meta
 			->associations(array(
-				'store_purchases' => Jam::association('has_many'),
+				'brand_purchases' => Jam::association('has_many'),
 			))
 			->fields(array(
 				'is_frozen' => Jam::field('boolean'),
@@ -199,12 +199,12 @@ public function price()
 
 ## Adding / Updating single items
 
-You can add an item to the purchase with the ``add_item()`` method. It would search all the purchase items in all the store_items, If the same item is found elsewhere it would update its quantity, otherwise it would add it to the appropriate store_item (or create that if none exist):
+You can add an item to the purchase with the ``add_item()`` method. It would search all the purchase items in all the brand_items, If the same item is found elsewhere it would update its quantity, otherwise it would add it to the appropriate brand_item (or create that if none exist):
 
 ```
 
 $purchse
-	->add_item($store, $new_purchase_item);
+	->add_item($brand, $new_purchase_item);
 
 ```
 
@@ -368,18 +368,18 @@ $purchase->billing_address = Jam::build('address', array(
 
 ## Refunds
 
-Refunds are performed with special Model_Store_Refund objects - each refund is specific to a store purchase - if you do not set any custom items, then all of them will be refunded (the whole transaction) otherwise, you can add Model_Store_Refund_Item objects for refunding specific items (partial refund).
+Refunds are performed with special Model_Brand_Refund objects - each refund is specific to a brand purchase - if you do not set any custom items, then all of them will be refunded (the whole transaction) otherwise, you can add Model_Brand_Refund_Item objects for refunding specific items (partial refund).
 
 ```php
-$store_purchase = // Load store purchase
+$brand_purchase = // Load brand purchase
 
-$refund = $store_purchase->refunds->create(array(
+$refund = $brand_purchase->refunds->create(array(
 	'items' => array(
 		// The whole price of a specific item
-		array('purchase_item' => $store_purchase->items[0])
+		array('purchase_item' => $brand_purchase->items[0])
 
 		// Parital amount of an item
-		array('purchase_item' => $store_purchase->items[1], 'amount' => 100)
+		array('purchase_item' => $brand_purchase->items[1], 'amount' => 100)
 	)
 ));
 
@@ -387,7 +387,7 @@ $refund
 	->execute();
 ```
 
-Later you can retrieve the refunds from the store purchase or issue multiple refunds
+Later you can retrieve the refunds from the brand purchase or issue multiple refunds
 
 ## Extending payment
 
@@ -416,9 +416,9 @@ public function initialize(Jam_Meta $meta, $name)
 
 public static function change_status(Model_Payment $payment, Jam_Event_Data $data)
 {
-	foreach ($payment->get_insist('purchase')->store_purchases as $store_purchase)
+	foreach ($payment->get_insist('purchase')->brand_purchases as $brand_purchase)
 	{
-		$store_purchase->status = Model_Store_Purchase::PAID;
+		$brand_purchase->status = Model_Brand_Purchase::PAID;
 	}
 
 	$payment->purchase = $payment->purchase;
@@ -426,11 +426,11 @@ public static function change_status(Model_Payment $payment, Jam_Event_Data $dat
 //...
 ```
 
-Refund events also send the Model_Store_Refund object as the third argument.
+Refund events also send the Model_Brand_Refund object as the third argument.
 
 ## Updating Items and Extending Updates
 
-Both ``store_purchase`` and ``purchase`` have an update_items method, which trigger the store_purchase's event 'model.update_items'. This is used mainly by external modules that can hook into purchases and add / update purchase_items when that event is triggered. For example openbuildings/shipping module uses that to add / update shipping items.
+Both ``brand_purchase`` and ``purchase`` have an update_items method, which trigger the brand_purchase's event 'model.update_items'. This is used mainly by external modules that can hook into purchases and add / update purchase_items when that event is triggered. For example openbuildings/shipping module uses that to add / update shipping items.
 
 For example we might have a behavior like this:
 
@@ -446,12 +446,12 @@ class Jam_Behavior_MyBehavios extends Jam_Behavior {
 				->bind('model.update_items', array($this, 'update_items'));
 	}
 
-	public function update_items(Model_Store_Purchase $store_purchase, Jam_Event_Data $data)
+	public function update_items(Model_Brand_Purchase $brand_purchase, Jam_Event_Data $data)
 	{
-		if ( ! $store_purchase->items('shipping'))
+		if ( ! $brand_purchase->items('shipping'))
 		{
-			$store_purchase->items []= Jam::build('purchase_item_shipping', array(
-				'reference' => $store_purchase->shipping // some shipping object
+			$brand_purchase->items []= Jam::build('purchase_item_shipping', array(
+				'reference' => $brand_purchase->shipping // some shipping object
 			));
 		}
 	}
@@ -476,7 +476,7 @@ class Jam_Behavior_MyBehavios extends Jam_Behavior {
 				->bind('model.filter_items', array($this, 'filter_items'));
 	}
 
-	public function filter_shipping_items(Model_Store_Purchase $store_purchase, Jam_Event_Data $data, array $items, array $filter)
+	public function filter_shipping_items(Model_Brand_Purchase $brand_purchase, Jam_Event_Data $data, array $items, array $filter)
 	{
 		$items = is_array($data->return) ? $data->return : $items;
 		$filtered = array();

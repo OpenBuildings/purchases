@@ -3,13 +3,13 @@
 /**
  * @group jam
  * @group jam.behavior
- * @group jam.behavior.store_purchase
+ * @group jam.behavior.brand_purchase
  *
  * @package Functest
  * @author Ivan Kerin
  * @copyright  (c) 2011-2013 Despark Ltd.
  */
-class Jam_Behavior_Store_PurchaseTest extends Testcase_Purchases {
+class Jam_Behavior_Brand_PurchaseTest extends Testcase_Purchases {
 
 	public function data_extract_types()
 	{
@@ -21,12 +21,12 @@ class Jam_Behavior_Store_PurchaseTest extends Testcase_Purchases {
 	}
 
 	/**
-	 * @covers Jam_Behavior_Store_Purchase::extract_types
+	 * @covers Jam_Behavior_Brand_Purchase::extract_types
 	 * @dataProvider data_extract_types
 	 */
 	public function test_extract_types($array, $expected)
 	{
-		$assoc = Jam_Behavior_Store_Purchase::extract_types($array, $expected);
+		$assoc = Jam_Behavior_Brand_Purchase::extract_types($array, $expected);
 		$this->assertEquals($expected, $assoc);
 	}
 }

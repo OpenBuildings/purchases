@@ -217,11 +217,11 @@ class Kohana_Model_Payment extends Jam_Model {
 	/**
 	 * Executes the refund and handles events before and after the execution
 	 * @param	\Omnipay\Common\GatewayInterface			$gateway Omnipay payment gateway
-	 * @param	Model_Store_Refund							$refund
+	 * @param	Model_Brand_Refund							$refund
 	 * @param	array										$params pass this to the gateway
 	 * @return	\Omnipay\Common\Message\ResponseInterface	$response payment gateway response
 	 */
-	public function refund(GatewayInterface $gateway, Model_Store_Refund $refund, array $params = array())
+	public function refund(GatewayInterface $gateway, Model_Brand_Refund $refund, array $params = array())
 	{
 		$this->meta()->events()->trigger('model.before_refund', $this, array($refund, $params));
 
@@ -237,29 +237,29 @@ class Kohana_Model_Payment extends Jam_Model {
 	/**
 	 * Executes the refund with the provided payment gateway
 	 * @param	\Omnipay\Common\GatewayInterface			$gateway Omnipay payment gateway
-	 * @param	Model_Store_Refund							$refund
+	 * @param	Model_Brand_Refund							$refund
 	 * @param	array										$params pass this to the gateway
 	 * @return	\Omnipay\Common\Message\ResponseInterface	$response payment gateway response
 	 */
-	public function execute_refund(GatewayInterface $gateway, Model_Store_Refund $refund, array $params = array())
+	public function execute_refund(GatewayInterface $gateway, Model_Brand_Refund $refund, array $params = array())
 	{
 		$params = Arr::merge($this->convert_refund($refund), $params);
 
 		$response = $gateway->refund($params)->send();
 
 		$refund->raw_response = $response->getData();
-		$refund->transaction_status = ($response->isSuccessful()) ? Model_Store_Refund::TRANSACTION_REFUNDED : NULL;
+		$refund->transaction_status = ($response->isSuccessful()) ? Model_Brand_Refund::TRANSACTION_REFUNDED : NULL;
 
 		return $response;
 
 	}
 
 	/**
-	 * Convert a Model_Store_Refund object to an array of parameteres, suited for Omnipay
-	 * @param  Model_Store_Refund $refund
+	 * Convert a Model_Brand_Refund object to an array of parameteres, suited for Omnipay
+	 * @param  Model_Brand_Refund $refund
 	 * @return array
 	 */
-	public function convert_refund(Model_Store_Refund $refund)
+	public function convert_refund(Model_Brand_Refund $refund)
 	{
 		$payment = $refund->payment_insist();
 		$currency = $refund->display_currency() ?: $refund->currency();
@@ -291,7 +291,7 @@ class Kohana_Model_Payment extends Jam_Model {
 	/**
 	 * Executes multiple refunds and handles events before and after the execution
 	 * @param	\Omnipay\Common\GatewayInterface			$gateway Omnipay payment gateway
-	 * @param	Model_Store_Refund[]						$refunds
+	 * @param	Model_Brand_Refund[]						$refunds
 	 * @param	array										$params pass this to the gateway
 	 * @return	\Omnipay\Common\Message\ResponseInterface	$response payment gateway response
 	 */
@@ -314,7 +314,7 @@ class Kohana_Model_Payment extends Jam_Model {
 	/**
 	 * Executes multiple refunds with the provided payment gateway
 	 * @param	\Omnipay\Common\GatewayInterface			$gateway Omnipay payment gateway
-	 * @param	Model_Store_Refund[]						$refunds
+	 * @param	Model_Brand_Refund[]						$refunds
 	 * @param	array										$params pass this to the gateway
 	 * @return	\Omnipay\Common\Message\ResponseInterface	$response payment gateway response
 	 */
@@ -325,7 +325,7 @@ class Kohana_Model_Payment extends Jam_Model {
 		$response = $gateway->refund($params)->send();
 
 		$raw_response = $response->getData();
-		$status = ($response->isSuccessful()) ? Model_Store_Refund::TRANSACTION_REFUNDED : NULL;
+		$status = ($response->isSuccessful()) ? Model_Brand_Refund::TRANSACTION_REFUNDED : NULL;
 
 		foreach ($refunds as $refund)
 		{
@@ -337,7 +337,7 @@ class Kohana_Model_Payment extends Jam_Model {
 	}
 
 	/**
-	 * Convert multiple Model_Store_Refund objects to an array of parameteres, suited for Omnipay
+	 * Convert multiple Model_Brand_Refund objects to an array of parameteres, suited for Omnipay
 	 * @param  array $refunds
 	 * @return array
 	 */
