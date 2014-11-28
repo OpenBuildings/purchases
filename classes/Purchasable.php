@@ -3,7 +3,7 @@
 /**
  * Implement me if you are anything like a purchase.
  *
- * E.g. Model_Purchase, Model_Store_Purchase or another sub-purchase.
+ * E.g. Model_Purchase, Model_Brand_Purchase or another sub-purchase.
  */
 interface Purchasable {
 
@@ -33,7 +33,7 @@ interface Purchasable {
 	public function items_quantity($types = NULL);
 
 	/**
-	 * Run update items on all of the children (store purchases, purchase items)
+	 * Run update items on all of the children (brand purchases, purchase items)
 	 *
 	 * @return Purchasable $this
 	 */

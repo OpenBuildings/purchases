@@ -12,17 +12,17 @@ class Jam_Behavior_Payment_RefundableTest extends Testcase_Purchases {
 
 	public function test_add_purchase_item_refund()
 	{
-		$refund = $this->getMock('Model_Store_Refund', array(
+		$refund = $this->getMock('Model_Brand_Refund', array(
 			'add_purchase_item_refund',
 		), array(
-			'store_refund',
+			'brand_refund',
 		));
 
 		$refund
 			->expects($this->once())
 			->method('add_purchase_item_refund');
 
-		$refund->transaction_status = Model_Store_Refund::TRANSACTION_REFUNDED;
+		$refund->transaction_status = Model_Brand_Refund::TRANSACTION_REFUNDED;
 
 		Jam_Behavior_Payment_Refundable::add_purchase_item_refund(
 			Jam::build('payment'),
@@ -41,16 +41,16 @@ class Jam_Behavior_Payment_RefundableTest extends Testcase_Purchases {
 
 	public function test_add_multiple_purchase_item_refunds()
 	{
-		$refund = $this->getMock('Model_Store_Refund', array(
+		$refund = $this->getMock('Model_Brand_Refund', array(
 			'add_purchase_item_refund',
 		), array(
-			'store_refund',
+			'brand_refund',
 		));
 
-		$refund2 = $this->getMock('Model_Store_Refund', array(
+		$refund2 = $this->getMock('Model_Brand_Refund', array(
 			'add_purchase_item_refund',
 		), array(
-			'store_refund',
+			'brand_refund',
 		));
 
 		$refund
@@ -61,8 +61,8 @@ class Jam_Behavior_Payment_RefundableTest extends Testcase_Purchases {
 			->expects($this->once())
 			->method('add_purchase_item_refund');
 
-		$refund->transaction_status = Model_Store_Refund::TRANSACTION_REFUNDED;
-		$refund2->transaction_status = Model_Store_Refund::TRANSACTION_REFUNDED;
+		$refund->transaction_status = Model_Brand_Refund::TRANSACTION_REFUNDED;
+		$refund2->transaction_status = Model_Brand_Refund::TRANSACTION_REFUNDED;
 
 		Jam_Behavior_Payment_Refundable::add_multiple_purchase_item_refunds(
 			Jam::build('payment'),

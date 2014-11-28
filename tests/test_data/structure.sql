@@ -14,11 +14,11 @@ CREATE TABLE `purchases` (
   KEY `fk_user_id` (`creator_id`)
 ) ENGINE=INNODB  DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `store_purchases`;
-CREATE TABLE `store_purchases` (
+DROP TABLE IF EXISTS `brand_purchases`;
+CREATE TABLE `brand_purchases` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `number` VARCHAR(40) NOT NULL,
-  `store_id` INT(10) UNSIGNED NULL,
+  `brand_id` INT(10) UNSIGNED NULL,
   `purchase_id` INT(10) UNSIGNED NULL,
   `is_deleted` INT(1) UNSIGNED NOT NULL,
   `is_frozen` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
@@ -27,11 +27,11 @@ CREATE TABLE `store_purchases` (
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `store_refunds`;
-CREATE TABLE `store_refunds` (
+DROP TABLE IF EXISTS `brand_refunds`;
+CREATE TABLE `brand_refunds` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `creator_id` INT(10) UNSIGNED NULL,
-  `store_purchase_id` INT(10) UNSIGNED NULL,
+  `brand_purchase_id` INT(10) UNSIGNED NULL,
   `amount` DECIMAL(10,2) NULL,
   `created_at` DATETIME,
   `raw_response` TEXT,
@@ -41,10 +41,10 @@ CREATE TABLE `store_refunds` (
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `store_refund_items`;
-CREATE TABLE `store_refund_items` (
+DROP TABLE IF EXISTS `brand_refund_items`;
+CREATE TABLE `brand_refund_items` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `store_refund_id` INT(10) UNSIGNED NULL,
+  `brand_refund_id` INT(10) UNSIGNED NULL,
   `purchase_item_id` INT(10) UNSIGNED NULL,
   `amount` DECIMAL(10,2) NULL,
   `is_deleted` INT(1) UNSIGNED NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE `payments` (
 DROP TABLE IF EXISTS `purchase_items`;
 CREATE TABLE `purchase_items` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `store_purchase_id` INT(10) UNSIGNED NULL,
+  `brand_purchase_id` INT(10) UNSIGNED NULL,
   `reference_id` INT(10) UNSIGNED NULL,
   `reference_model` VARCHAR(40) NULL,
   `price` DECIMAL(10,2) NULL,
@@ -99,8 +99,8 @@ CREATE TABLE `users` (
   UNIQUE KEY `uniq_email` (`email`)
 ) ENGINE=INNODB  DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `stores`;
-CREATE TABLE `stores` (
+DROP TABLE IF EXISTS `brands`;
+CREATE TABLE `brands` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(254) NOT NULL,
   `currency` VARCHAR(3) NOT NULL,
@@ -115,7 +115,7 @@ CREATE TABLE `products` (
   `name` VARCHAR(254) NOT NULL,
   `price` DECIMAL(10,2) NOT NULL,
   `currency` VARCHAR(3) NOT NULL,
-  `store_id` INT(10) UNSIGNED NULL,
+  `brand_id` INT(10) UNSIGNED NULL,
   `is_deleted` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB  DEFAULT CHARSET=utf8;
@@ -214,7 +214,7 @@ VALUES
 # Dump of table products
 # ------------------------------------------------------------
 
-INSERT INTO `products` (`id`, `name`, `price`, `currency`, `store_id`, `is_deleted`)
+INSERT INTO `products` (`id`, `name`, `price`, `currency`, `brand_id`, `is_deleted`)
 VALUES
   (1,'Chair',290.40,'GBP',1, 0),
   (2,'Rug',30.00,'GBP',1, 0),
@@ -236,10 +236,10 @@ VALUES
   (1,7,9,'user@example.com','name1', 'name2','phone123','ZIP','Street 1', 'House 1', '', 'faz123', 0),
   (2,7,9,'user@example.com','name1', 'name2','phone123','ZIP','Street 1', 'House 1', '', 'faz123', 0);
 
-# Dump of table store_purchases
+# Dump of table brand_purchases
 # ------------------------------------------------------------
 
-INSERT INTO `store_purchases` (`id`, `number`, `store_id`, `purchase_id`, `is_frozen`, `is_deleted`)
+INSERT INTO `brand_purchases` (`id`, `number`, `brand_id`, `purchase_id`, `is_frozen`, `is_deleted`)
 VALUES
   (1,'3S2GJG',1,1,1,0),
   (2,'AA2GJG',1,2,0,0),
@@ -250,7 +250,7 @@ VALUES
 # Dump of table purchase_items
 # ------------------------------------------------------------
 
-INSERT INTO `purchase_items` (`id`, `store_purchase_id`, `reference_id`, `reference_model`, `price`, `quantity`, `model`, `is_payable`, `is_discount`, `is_frozen`, `is_deleted`)
+INSERT INTO `purchase_items` (`id`, `brand_purchase_id`, `reference_id`, `reference_model`, `price`, `quantity`, `model`, `is_payable`, `is_discount`, `is_frozen`, `is_deleted`)
 VALUES
   (1,1,1,'product',200.00,1,'purchase_item_product',1,0,1,0),
   (2,1,1,'variation',200.00,1,'purchase_item_product',1,0,1,0),
@@ -258,15 +258,15 @@ VALUES
   (4,4,1,'product',290.40,1,'purchase_item_product',1,0,1,0),
   (5,5,4,'product',150.00,1,'purchase_item_product',1,0,1,0);
 
-# Dump of table stores
+# Dump of table brands
 # ------------------------------------------------------------
 
-INSERT INTO `stores` (`id`, `name`, `paypal_email`, `is_deleted`)
+INSERT INTO `brands` (`id`, `name`, `paypal_email`, `is_deleted`)
 VALUES
-  (1,'Example Store', 'teststore@clippings.com', 0),
-  (2,'Empty Store', 'test-store@clippings.com', 0),
-  (3,'Deleted Store', NULL, 1),
-  (4,'Other Store', 'otherstore@clippings.com', 0);
+  (1,'Example Brand', 'testbrand@clippings.com', 0),
+  (2,'Empty Brand', 'test-brand@clippings.com', 0),
+  (3,'Deleted Brand', NULL, 1),
+  (4,'Other Brand', 'otherbrand@clippings.com', 0);
 
 # Dump of table users
 # ------------------------------------------------------------

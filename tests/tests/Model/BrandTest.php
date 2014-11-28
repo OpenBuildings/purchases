@@ -1,12 +1,12 @@
 <?php
 
 /**
- * @group model.store
+ * @group model.brand
  */
-class Model_StoreTest extends Testcase_Purchases {
+class Model_BrandTest extends Testcase_Purchases {
 
 	/**
-	 * @covers Model_Store::purchases_total_price
+	 * @covers Model_Brand::purchases_total_price
 	 */
 	public function test_purchases_total_price()
 	{
@@ -29,8 +29,8 @@ class Model_StoreTest extends Testcase_Purchases {
 			->with($this->equalTo($types))
 			->will($this->returnValue($price2));
 
-		$store = Jam::build('store', array('currency' => 'GBP', 'purchases' => array($purchase1,	$purchase2)));
+		$brand = Jam::build('brand', array('currency' => 'GBP', 'purchases' => array($purchase1,	$purchase2)));
 
-		$this->assertEquals(new Jam_Price(42, 'GBP'), $store->purchases_total_price($types));
+		$this->assertEquals(new Jam_Price(42, 'GBP'), $brand->purchases_total_price($types));
 	}
 }

@@ -6,7 +6,7 @@
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Jam_Behavior_Store_Purchase extends Jam_Behavior {
+class Kohana_Jam_Behavior_Brand_Purchase extends Jam_Behavior {
 
 	/**
 	 * @codeCoverageIgnore
@@ -47,14 +47,14 @@ class Kohana_Jam_Behavior_Store_Purchase extends Jam_Behavior {
 	 * - not => array() - do not match items with this types
 	 * - array() - all other non-associative keys are considered type filters, allowing items only with these types
 	 *
-	 * @param  Model_Store_Purchase $store_purchase
+	 * @param  Model_Brand_Purchase $brand_purchase
 	 * @param  Jam_Event_Data       $data
 	 * @param  array                $items
 	 * @param  array                $filter
 	 */
-	public function filter_items(Model_Store_Purchase $store_purchase, Jam_Event_Data $data, array $items, array $filter)
+	public function filter_items(Model_Brand_Purchase $brand_purchase, Jam_Event_Data $data, array $items, array $filter)
 	{
-		$types = Jam_Behavior_Store_Purchase::extract_types($filter);
+		$types = Jam_Behavior_Brand_Purchase::extract_types($filter);
 
 		$items = is_array($data->return) ? $data->return : $items;
 		$filtered = array();

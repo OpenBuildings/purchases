@@ -269,7 +269,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 			'is_frozen' => TRUE,
 		));
 
-		$purchase->store_purchases[0]->items []= $promo;
+		$purchase->brand_purchases[0]->items []= $promo;
 
 		$params = $purchase
 			->build('payment', array('method' => 'Dummy'))
@@ -332,10 +332,10 @@ class Model_PaymentTest extends Testcase_Purchases {
 	{
 		$gateway = Omnipay::create('Dummy');
 		$params = array('test', 'test2');
-		$refund = $this->getMock('Model_Store_Refund', array(
+		$refund = $this->getMock('Model_Brand_Refund', array(
 			'save',
 		), array(
-			'store_refund',
+			'brand_refund',
 		));
 
 		$payment = $this->getMock('Model_Payment', array(
@@ -344,11 +344,11 @@ class Model_PaymentTest extends Testcase_Purchases {
 			'payment',
 		));
 
-		$store_purchase = $this->getMock('Model_Store_Purchase', array(
+		$brand_purchase = $this->getMock('Model_Brand_Purchase', array(
 			'save',
 			'freeze',
 		), array(
-			'store_purchase'
+			'brand_purchase'
 		));
 
 		$payment
@@ -365,20 +365,20 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->method('save')
 			->will($this->returnValue($refund));
 
-		$store_purchase
+		$brand_purchase
 			->expects($this->once())
 			->method('save')
-			->will($this->returnValue($store_purchase));
+			->will($this->returnValue($brand_purchase));
 
-		$store_purchase
+		$brand_purchase
 			->expects($this->once())
 			->method('freeze')
-			->will($this->returnValue($store_purchase));
+			->will($this->returnValue($brand_purchase));
 
-		$store_purchase->purchase = Jam::build('purchase');
+		$brand_purchase->purchase = Jam::build('purchase');
 
-		$refund->store_purchase = $store_purchase;
-		$refund->transaction_status = Model_Store_Refund::TRANSACTION_REFUNDED;
+		$refund->brand_purchase = $brand_purchase;
+		$refund->transaction_status = Model_Brand_Refund::TRANSACTION_REFUNDED;
 
 		$payment->refund($gateway, $refund, $params);
 
@@ -393,34 +393,34 @@ class Model_PaymentTest extends Testcase_Purchases {
 	{
 		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
 		$purchase = Jam::find('purchase', 1);
-		$store_purchase = $purchase->store_purchases[0];
+		$brand_purchase = $purchase->brand_purchases[0];
 		$payment = $purchase->payment;
 
-		$refund = $store_purchase->refunds->create(array(
+		$refund = $brand_purchase->refunds->create(array(
 			'reason' => 'Faulty Product',
 			'items' => array(
-				array('purchase_item' => $store_purchase->items[0]),
-				array('purchase_item' => $store_purchase->items[1], 'amount' => 20),
+				array('purchase_item' => $brand_purchase->items[0]),
+				array('purchase_item' => $brand_purchase->items[1], 'amount' => 20),
 			),
 		));
 		$payment->execute_refund($gateway, $refund);
 
 		$this->assertNotNull($refund->raw_response);
-		$this->assertEquals(Model_Store_Refund::TRANSACTION_REFUNDED, $refund->transaction_status);
+		$this->assertEquals(Model_Brand_Refund::TRANSACTION_REFUNDED, $refund->transaction_status);
 	}
 
 	public function test_execute_refund_not_successful()
 	{
 		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
 		$purchase = Jam::find('purchase', 1);
-		$store_purchase = $purchase->store_purchases[0];
+		$brand_purchase = $purchase->brand_purchases[0];
 		$payment = $purchase->payment;
 
-		$refund = $store_purchase->refunds->create(array(
+		$refund = $brand_purchase->refunds->create(array(
 			'reason' => 'Faulty Product Fail',
 			'items' => array(
-				array('purchase_item' => $store_purchase->items[0]),
-				array('purchase_item' => $store_purchase->items[1], 'amount' => 20),
+				array('purchase_item' => $brand_purchase->items[0]),
+				array('purchase_item' => $brand_purchase->items[1], 'amount' => 20),
 			),
 		));
 		$payment->execute_refund($gateway, $refund);
@@ -435,14 +435,14 @@ class Model_PaymentTest extends Testcase_Purchases {
 	public function test_convert_refund()
 	{
 		$purchase = Jam::find('purchase', 1);
-		$store_purchase = $purchase->store_purchases[0];
+		$brand_purchase = $purchase->brand_purchases[0];
 		$payment = $purchase->payment;
 
-		$refund = $store_purchase->refunds->create(array(
+		$refund = $brand_purchase->refunds->create(array(
 			'reason' => 'Faulty Product',
 			'items' => array(
-				array('purchase_item' => $store_purchase->items[0]),
-				array('purchase_item' => $store_purchase->items[1], 'amount' => 20),
+				array('purchase_item' => $brand_purchase->items[0]),
+				array('purchase_item' => $brand_purchase->items[1], 'amount' => 20),
 			)
 		));
 
@@ -453,11 +453,11 @@ class Model_PaymentTest extends Testcase_Purchases {
 			'reason' => 'Faulty Product',
 			'items' => array(
 				array(
-					'name' => $store_purchase->items[0]->id(),
+					'name' => $brand_purchase->items[0]->id(),
 					'price' => '200.00',
 				),
 				array(
-					'name' => $store_purchase->items[1]->id(),
+					'name' => $brand_purchase->items[1]->id(),
 					'price' => '20.00',
 				),
 			),
@@ -468,7 +468,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$this->assertEquals($expected, $params);
 
 
-		$refund = $store_purchase->refunds->create(array(
+		$refund = $brand_purchase->refunds->create(array(
 			'reason' => 'Full Refund',
 		));
 
@@ -483,12 +483,12 @@ class Model_PaymentTest extends Testcase_Purchases {
 
 		$this->assertEquals($expected, $params);
 
-		// Testing full store purchase refund that also is full purchase refund
-		$refund = $store_purchase->refunds->create(array(
-			'reason' => 'Full Store And Purchase Refund',
+		// Testing full brand purchase refund that also is full purchase refund
+		$refund = $brand_purchase->refunds->create(array(
+			'reason' => 'Full Brand And Purchase Refund',
 			'items' => array(
-				array('purchase_item' => $store_purchase->items[0]),
-				array('purchase_item' => $store_purchase->items[1]),
+				array('purchase_item' => $brand_purchase->items[0]),
+				array('purchase_item' => $brand_purchase->items[1]),
 			)
 		));
 
@@ -496,21 +496,21 @@ class Model_PaymentTest extends Testcase_Purchases {
 
 		$expected = array(
 			'transactionReference' => '11111',
-			'reason' => 'Full Store And Purchase Refund',
+			'reason' => 'Full Brand And Purchase Refund',
 			'amount' => '400.00',
 			'currency' => 'EUR',
 		);
 
 		$this->assertEquals($expected, $params);
 
-		// Testing full store purchase refund, but not full purchase refund
+		// Testing full brand purchase refund, but not full purchase refund
 		$purchase = Jam::find('purchase', 4);
-		$store_purchase = $purchase->store_purchases[0];
+		$brand_purchase = $purchase->brand_purchases[0];
 
-		$refund = $store_purchase->refunds->create(array(
-			'reason' => 'Full Store But Not Purchase Refund',
+		$refund = $brand_purchase->refunds->create(array(
+			'reason' => 'Full Brand But Not Purchase Refund',
 			'items' => array(
-				array('purchase_item' => $store_purchase->items[0]),
+				array('purchase_item' => $brand_purchase->items[0]),
 			)
 		));
 
@@ -518,10 +518,10 @@ class Model_PaymentTest extends Testcase_Purchases {
 
 		$expected = array(
 			'transactionReference' => '22222',
-			'reason' => 'Full Store But Not Purchase Refund',
+			'reason' => 'Full Brand But Not Purchase Refund',
 			'items' => array(
 				array(
-					'name' => $store_purchase->items[0]->id(),
+					'name' => $brand_purchase->items[0]->id(),
 					'price' => '290.40',
 				),
 			),
@@ -539,16 +539,16 @@ class Model_PaymentTest extends Testcase_Purchases {
 	{
 		$gateway = Omnipay::create('Dummy');
 		$params = array('test', 'test2');
-		$refund = $this->getMock('Model_Store_Refund', array(
+		$refund = $this->getMock('Model_Brand_Refund', array(
 			'save',
 		), array(
-			'store_refund',
+			'brand_refund',
 		));
 
-		$refund2 = $this->getMock('Model_Store_Refund', array(
+		$refund2 = $this->getMock('Model_Brand_Refund', array(
 			'save',
 		), array(
-			'store_refund',
+			'brand_refund',
 		));
 
 		$payment = $this->getMock('Model_Payment', array(
@@ -557,18 +557,18 @@ class Model_PaymentTest extends Testcase_Purchases {
 			'payment',
 		));
 
-		$store_purchase = $this->getMock('Model_Store_Purchase', array(
+		$brand_purchase = $this->getMock('Model_Brand_Purchase', array(
 			'save',
 			'freeze',
 		), array(
-			'store_purchase'
+			'brand_purchase'
 		));
 
-		$store_purchase2 = $this->getMock('Model_Store_Purchase', array(
+		$brand_purchase2 = $this->getMock('Model_Brand_Purchase', array(
 			'save',
 			'freeze',
 		), array(
-			'store_purchase'
+			'brand_purchase'
 		));
 
 		$payment
@@ -590,34 +590,34 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->method('save')
 			->will($this->returnValue($refund2));
 
-		$store_purchase
+		$brand_purchase
 			->expects($this->once())
 			->method('save')
-			->will($this->returnValue($store_purchase));
+			->will($this->returnValue($brand_purchase));
 
-		$store_purchase
+		$brand_purchase
 			->expects($this->once())
 			->method('freeze')
-			->will($this->returnValue($store_purchase));
+			->will($this->returnValue($brand_purchase));
 
-		$store_purchase2
+		$brand_purchase2
 			->expects($this->once())
 			->method('save')
-			->will($this->returnValue($store_purchase2));
+			->will($this->returnValue($brand_purchase2));
 
-		$store_purchase2
+		$brand_purchase2
 			->expects($this->once())
 			->method('freeze')
-			->will($this->returnValue($store_purchase2));
+			->will($this->returnValue($brand_purchase2));
 
-		$store_purchase->purchase = Jam::build('purchase');
-		$store_purchase2->purchase = $store_purchase->purchase;
+		$brand_purchase->purchase = Jam::build('purchase');
+		$brand_purchase2->purchase = $brand_purchase->purchase;
 
-		$refund->store_purchase = $store_purchase;
-		$refund->transaction_status = Model_Store_Refund::TRANSACTION_REFUNDED;
+		$refund->brand_purchase = $brand_purchase;
+		$refund->transaction_status = Model_Brand_Refund::TRANSACTION_REFUNDED;
 
-		$refund2->store_purchase = $store_purchase2;
-		$refund2->transaction_status = Model_Store_Refund::TRANSACTION_REFUNDED;
+		$refund2->brand_purchase = $brand_purchase2;
+		$refund2->transaction_status = Model_Brand_Refund::TRANSACTION_REFUNDED;
 
 		$payment->full_refund($gateway, array($refund, $refund2), $params);
 
@@ -632,23 +632,23 @@ class Model_PaymentTest extends Testcase_Purchases {
 	{
 		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
 		$purchase = Jam::find('purchase', 4);
-		$store_purchase = $purchase->store_purchases[0];
-		$store_purchase2 = $purchase->store_purchases[1];
+		$brand_purchase = $purchase->brand_purchases[0];
+		$brand_purchase2 = $purchase->brand_purchases[1];
 
-		$refund = $store_purchase->refunds->create(array(
+		$refund = $brand_purchase->refunds->create(array(
 			'reason' => 'Faulty Product',
 		));
 
-		$refund2 = $store_purchase2->refunds->create(array(
+		$refund2 = $brand_purchase2->refunds->create(array(
 			'reason' => 'Faulty Product',
 		));
 
 		$purchase->payment->execute_multiple_refunds($gateway, array($refund, $refund2));
 
 		$this->assertNotNull($refund->raw_response);
-		$this->assertEquals(Model_Store_Refund::TRANSACTION_REFUNDED, $refund->transaction_status);
+		$this->assertEquals(Model_Brand_Refund::TRANSACTION_REFUNDED, $refund->transaction_status);
 		$this->assertNotNull($refund2->raw_response);
-		$this->assertEquals(Model_Store_Refund::TRANSACTION_REFUNDED, $refund2->transaction_status);
+		$this->assertEquals(Model_Brand_Refund::TRANSACTION_REFUNDED, $refund2->transaction_status);
 	}
 
 	/**
@@ -657,14 +657,14 @@ class Model_PaymentTest extends Testcase_Purchases {
 	public function test_convert_multiple_refunds()
 	{
 		$purchase = Jam::find('purchase', 4);
-		$store_purchase = $purchase->store_purchases[0];
-		$store_purchase2 = $purchase->store_purchases[1];
+		$brand_purchase = $purchase->brand_purchases[0];
+		$brand_purchase2 = $purchase->brand_purchases[1];
 
-		$refund = $store_purchase->refunds->create(array(
+		$refund = $brand_purchase->refunds->create(array(
 			'reason' => 'Faulty Product',
 		));
 
-		$refund2 = $store_purchase2->refunds->create(array(
+		$refund2 = $brand_purchase2->refunds->create(array(
 			'reason' => 'Faulty Product',
 		));
 

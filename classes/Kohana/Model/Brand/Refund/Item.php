@@ -6,7 +6,7 @@
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Model_Store_Refund_Item extends Jam_Model {
+class Kohana_Model_Brand_Refund_Item extends Jam_Model {
 
 	/**
 	 * @codeCoverageIgnore
@@ -18,7 +18,7 @@ class Kohana_Model_Store_Refund_Item extends Jam_Model {
 				'paranoid' => Jam::behavior('paranoid'),
 			))
 			->associations(array(
-				'store_refund' => Jam::association('belongsto', array(
+				'brand_refund' => Jam::association('belongsto', array(
 					'inverse_of' => 'items'
 				)),
 				'purchase_item' => Jam::association('belongsto', array(
@@ -29,7 +29,7 @@ class Kohana_Model_Store_Refund_Item extends Jam_Model {
 				'id' => Jam::field('primary'),
 				'amount' => Jam::field('price'),
 			))
-			->validator('store_refund', 'purchase_item', array('present' => TRUE));
+			->validator('brand_refund', 'purchase_item', array('present' => TRUE));
 	}
 
 	public function validate()
@@ -45,17 +45,17 @@ class Kohana_Model_Store_Refund_Item extends Jam_Model {
 
 	public function currency()
 	{
-		return $this->get_insist('store_refund')->currency();
+		return $this->get_insist('brand_refund')->currency();
 	}
 
 	public function display_currency()
 	{
-		return $this->get_insist('store_refund')->display_currency();
+		return $this->get_insist('brand_refund')->display_currency();
 	}
 
 	public function monetary()
 	{
-		return $this->get_insist('store_refund')->monetary();
+		return $this->get_insist('brand_refund')->monetary();
 	}
 
 	public function is_full_amount()

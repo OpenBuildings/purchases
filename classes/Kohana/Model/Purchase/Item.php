@@ -28,13 +28,13 @@ class Kohana_Model_Purchase_Item extends Jam_Model implements FreezableInterface
 				'paranoid' => Jam::behavior('paranoid'),
 			))
 			->associations(array(
-				'store_purchase' => Jam::association('belongsto', array('inverse_of' => 'items')),
+				'brand_purchase' => Jam::association('belongsto', array('inverse_of' => 'items')),
 				'reference' => Jam::association('belongsto', array(
 					'foreign_key' => 'reference_id',
 					'polymorphic' => 'reference_model',
 				)),
 				'refund_items' => Jam::association('hasmany', array(
-					'foreign_model' => 'store_refund_item',
+					'foreign_model' => 'brand_refund_item',
 					'foreign_key' => 'purchase_item_id',
 					'inverse_of' => 'purchase_item',
 				)),
@@ -57,11 +57,11 @@ class Kohana_Model_Purchase_Item extends Jam_Model implements FreezableInterface
 	}
 
 	/**
-	 * Return items, grouped by store_purchase_id
+	 * Return items, grouped by brand_purchase_id
 	 * @param  array  $items array of Purchase_Items
 	 * @return array
 	 */
-	public static function group_by_store_purchase(array $items)
+	public static function group_by_brand_purchase(array $items)
 	{
 		$items = Jam_Array_Model::factory()
 			->model('purchase_item')
@@ -69,7 +69,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model implements FreezableInterface
 			->set($items);
 
 		return Array_Util::group_by($items, function($item) {
-			return $item->store_purchase_id;
+			return $item->brand_purchase_id;
 		});
 	}
 
@@ -105,30 +105,30 @@ class Kohana_Model_Purchase_Item extends Jam_Model implements FreezableInterface
 	}
 
 	/**
-	 * Return the monetary for this purchase item, get it from parent store_purchase
+	 * Return the monetary for this purchase item, get it from parent brand_purchase
 	 * @return OpenBuildings\Monetary\Montary
 	 */
 	public function monetary()
 	{
-		return $this->get_insist('store_purchase')->monetary();
+		return $this->get_insist('brand_purchase')->monetary();
 	}
 
 	/**
-	 * Return the currency for this purchase item, get it from parent store_purchase
+	 * Return the currency for this purchase item, get it from parent brand_purchase
 	 * @return string
 	 */
 	public function currency()
 	{
-		return $this->get_insist('store_purchase')->currency();
+		return $this->get_insist('brand_purchase')->currency();
 	}
 
 	/**
-	 * Return the display_currency for this purchase item, get it from parent store_purchase
+	 * Return the display_currency for this purchase item, get it from parent brand_purchase
 	 * @return string
 	 */
 	public function display_currency()
 	{
-		return $this->get_insist('store_purchase')->display_currency();
+		return $this->get_insist('brand_purchase')->display_currency();
 	}
 
 	/**
@@ -178,7 +178,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model implements FreezableInterface
 	 */
 	public function is_refunded()
 	{
-		foreach ($this->get_insist('store_purchase')->refunds->as_array() as $refund)
+		foreach ($this->get_insist('brand_purchase')->refunds->as_array() as $refund)
 		{
 			if ($refund->has_purchase_item($this))
 			{

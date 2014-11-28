@@ -1,6 +1,6 @@
 <?php
 
-class Kohana_Model_Store extends Jam_Model {
+class Kohana_Model_Brand extends Jam_Model {
 
 	/**
 	 * @codeCoverageIgnore
@@ -12,14 +12,14 @@ class Kohana_Model_Store extends Jam_Model {
 				'paranoid' => Jam::behavior('paranoid'),
 			))
 			->associations(array(
-				'store_purchases' => Jam::association('hasmany', array(
-					'inverse_of' => 'store',
-					'foreign_model' => 'store_purchase',
+				'brand_purchases' => Jam::association('hasmany', array(
+					'inverse_of' => 'brand',
+					'foreign_model' => 'brand_purchase',
 					'delete_on_remove' => Jam_Association::DELETE,
 				)),
 				'purchases' => Jam::association('manytomany', array(
 					'foreign_model' => 'purchase',
-					'join_table' => 'store_purchases',
+					'join_table' => 'brand_purchases',
 				)),
 			))
 			->fields(array(

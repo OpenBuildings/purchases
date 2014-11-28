@@ -8,7 +8,7 @@ use Omnipay\Common\GatewayInterface;
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  */
-class Kohana_Model_Store_Refund extends Jam_Model {
+class Kohana_Model_Brand_Refund extends Jam_Model {
 
 	const TRANSACTION_REFUNDED = 'refunded';
 
@@ -22,8 +22,8 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 				'paranoid' => Jam::behavior('paranoid'),
 			))
 			->associations(array(
-				'store_purchase' => Jam::association('belongsto', array('inverse_of' => 'refunds')),
-				'items' => Jam::association('hasmany', array('inverse_of' => 'store_refund', 'foreign_model' => 'store_refund_item')),
+				'brand_purchase' => Jam::association('belongsto', array('inverse_of' => 'refunds')),
+				'items' => Jam::association('hasmany', array('inverse_of' => 'brand_refund', 'foreign_model' => 'brand_refund_item')),
 				'creator' => Jam::association('creator', array('required' => FALSE)),
 			))
 			->fields(array(
@@ -34,7 +34,7 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 				'reason' => Jam::field('string'),
 				'created_at' => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			))
-			->validator('store_purchase', array('present' => TRUE));
+			->validator('brand_purchase', array('present' => TRUE));
 	}
 
 	/**
@@ -43,17 +43,17 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 	public function validate()
 	{
 		$refund_amount = $this->amount();
-		$store_purchase = $this->store_purchase_insist();
-		$previously_refunded_amount = $store_purchase->total_price('refund');
-		$store_purchase_not_refunded_amount = $store_purchase->total_price(array(
+		$brand_purchase = $this->brand_purchase_insist();
+		$previously_refunded_amount = $brand_purchase->total_price('refund');
+		$brand_purchase_not_refunded_amount = $brand_purchase->total_price(array(
 			'is_payable' => TRUE,
 			'not' => 'refund',
 		));
 
 		if ($refund_amount->add($previously_refunded_amount)
-			->is(Jam_Price::GREATER_THAN, $store_purchase_not_refunded_amount))
+			->is(Jam_Price::GREATER_THAN, $brand_purchase_not_refunded_amount))
 		{
-			$this->errors()->add('items', 'amount_more_than_store_purchase_price');
+			$this->errors()->add('items', 'amount_more_than_brand_purchase_price');
 		}
 	}
 
@@ -80,7 +80,7 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 		{
 			if ( ! count($this->items))
 			{
-				$this->amount = $this->store_purchase->total_price(array('is_payable' => TRUE));
+				$this->amount = $this->brand_purchase->total_price(array('is_payable' => TRUE));
 			}
 			else
 			{
@@ -97,17 +97,17 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 
 	public function currency()
 	{
-		return $this->store_purchase_insist()->currency();
+		return $this->brand_purchase_insist()->currency();
 	}
 
 	public function display_currency()
 	{
-		return $this->store_purchase_insist()->display_currency();
+		return $this->brand_purchase_insist()->display_currency();
 	}
 
 	public function monetary()
 	{
-		return $this->store_purchase_insist()->monetary();
+		return $this->brand_purchase_insist()->monetary();
 	}
 
 	/**
@@ -116,7 +116,7 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 	 * @param	\Omnipay\Common\GatewayInterface			$gateway Omnipay payment gateway
 	 * @param	array										$params pass this to the gateway
 	 * @throws	Kohana_Exception If payment is not "paid"
-	 * @return	Model_Store_refund self
+	 * @return	Model_Brand_refund self
 	 */
 	public function execute(GatewayInterface $gateway, array $params = array())
 	{
@@ -132,15 +132,15 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 		return $this;
 	}
 
-	public function store_purchase_insist()
+	public function brand_purchase_insist()
 	{
-		return $this->get_insist('store_purchase');
+		return $this->get_insist('brand_purchase');
 	}
 
 	public function purchase_insist()
 	{
 		return $this
-			->store_purchase_insist()
+			->brand_purchase_insist()
 				->get_insist('purchase');
 	}
 
@@ -156,15 +156,15 @@ class Kohana_Model_Store_Refund extends Jam_Model {
 	 */
 	public function add_purchase_item_refund()
 	{
-		$store_purchase = $this->store_purchase_insist();
+		$brand_purchase = $this->brand_purchase_insist();
 
 		$purchase_item_refund = Jam::build('purchase_item_refund', array(
 			'reference' => $this,
-			'store_purchase' => $store_purchase,
+			'brand_purchase' => $brand_purchase,
 		));
 
-		$store_purchase->items->add($purchase_item_refund);
-		$store_purchase->freeze()->save();
+		$brand_purchase->items->add($purchase_item_refund);
+		$brand_purchase->freeze()->save();
 
 		return $purchase_item_refund;
 	}
