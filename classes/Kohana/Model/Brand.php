@@ -31,13 +31,4 @@ class Kohana_Model_Brand extends Jam_Model {
 				'present' => TRUE
 			));
 	}
-
-	public function purchases_total_price($types)
-	{
-		$prices = array_map(function($purchase) use ($types) {
-			return $purchase->total_price($types);
-		}, $this->purchases->as_array());
-
-		return Jam_Price::sum($prices, $this->currency);
-	}
 }
