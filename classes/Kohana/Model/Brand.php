@@ -25,7 +25,6 @@ class Kohana_Model_Brand extends Jam_Model {
 			->fields(array(
 				'id' => Jam::field('primary'),
 				'name' => Jam::field('string'),
-				'currency' => Jam::field('string'),
 			))
 			->validator('name', array(
 				'present' => TRUE

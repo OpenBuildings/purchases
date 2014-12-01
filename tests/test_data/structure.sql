@@ -103,7 +103,6 @@ DROP TABLE IF EXISTS `brands`;
 CREATE TABLE `brands` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(254) NOT NULL,
-  `currency` VARCHAR(3) NOT NULL,
   `paypal_email` VARCHAR(100) NULL,
   `is_deleted` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)
