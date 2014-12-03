@@ -103,7 +103,6 @@ DROP TABLE IF EXISTS `brands`;
 CREATE TABLE `brands` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(254) NOT NULL,
-  `paypal_email` VARCHAR(100) NULL,
   `is_deleted` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)
 ) ENGINE=INNODB  DEFAULT CHARSET=utf8;
@@ -260,12 +259,12 @@ VALUES
 # Dump of table brands
 # ------------------------------------------------------------
 
-INSERT INTO `brands` (`id`, `name`, `paypal_email`, `is_deleted`)
+INSERT INTO `brands` (`id`, `name`, `is_deleted`)
 VALUES
-  (1,'Example Brand', 'testbrand@clippings.com', 0),
-  (2,'Empty Brand', 'test-brand@clippings.com', 0),
-  (3,'Deleted Brand', NULL, 1),
-  (4,'Other Brand', 'otherbrand@clippings.com', 0);
+  (1,'Example Brand', 0),
+  (2,'Empty Brand', 0),
+  (3,'Deleted Brand', 1),
+  (4,'Other Brand', 0);
 
 # Dump of table users
 # ------------------------------------------------------------
