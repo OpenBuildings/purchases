@@ -19,7 +19,10 @@ class Kohana_Exception_Payment extends Kohana_Exception {
 
 		parent::__construct($message, $variables, $code, $previous, $data);
 
-		$this->data = $data;
+		if (is_array($data))
+		{
+			$this->data = $data;
+		}
 	}
 
 	public function data()
