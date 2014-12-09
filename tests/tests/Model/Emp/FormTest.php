@@ -139,7 +139,6 @@ class Model_Emp_FormTest extends Testcase_Purchases {
 		{
 			$month_in_the_future = '01';
 			$year_in_the_furutre = $future_year;
-			$past_error_key = 'exp_year';
 		}
 		elseif ($month_in_the_past == $current_month)
 		{
