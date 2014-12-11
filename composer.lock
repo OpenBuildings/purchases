@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8b2b1cb1857cd3971070b25211c1172f",
+    "hash": "201179ba42c0794630ad06b2d00f3114",
     "packages": [
         {
             "name": "clippings/freezable",
@@ -188,52 +188,6 @@
                 "redis"
             ],
             "time": "2013-07-10 12:22:00"
-        },
-        {
-            "name": "facebook/php-sdk",
-            "version": "v3.2.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/facebook/facebook-php-sdk.git",
-                "reference": "6714042fa2f5979d4c64c7d11fb4bcab16bdf6cb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/facebook/facebook-php-sdk/zipball/6714042fa2f5979d4c64c7d11fb4bcab16bdf6cb",
-                "reference": "6714042fa2f5979d4c64c7d11fb4bcab16bdf6cb",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "php": ">=5.2.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache2"
-            ],
-            "authors": [
-                {
-                    "name": "Facebook",
-                    "homepage": "https://github.com/facebook/facebook-php-sdk/contributors"
-                }
-            ],
-            "description": "Facebook PHP SDK",
-            "homepage": "https://github.com/facebook/facebook-php-sdk",
-            "keywords": [
-                "facebook",
-                "sdk"
-            ],
-            "time": "2013-11-19 23:11:14"
         },
         {
             "name": "guzzle/common",
@@ -624,25 +578,25 @@
         },
         {
             "name": "openbuildings/jam-auth",
-            "version": "0.2.3",
+            "version": "0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam-auth.git",
-                "reference": "88097b132467b64e2985bc67ca218e162a33d7c1"
+                "reference": "e9bb8bd25f03d39f3247c9bc7e9eb4390c0224b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam-auth/zipball/88097b132467b64e2985bc67ca218e162a33d7c1",
-                "reference": "88097b132467b64e2985bc67ca218e162a33d7c1",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-auth/zipball/e9bb8bd25f03d39f3247c9bc7e9eb4390c0224b9",
+                "reference": "e9bb8bd25f03d39f3247c9bc7e9eb4390c0224b9",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "*",
-                "facebook/php-sdk": "3.2.*",
                 "openbuildings/jam": "0.4.*",
                 "php": ">=5.3.0"
             },
             "require-dev": {
+                "facebook/php-sdk": "3.2.*",
                 "openbuildings/kohana-test-bootsrap": "0.1.*"
             },
             "type": "kohana-module",
@@ -654,7 +608,6 @@
                 {
                     "name": "Ivan Kerin",
                     "email": "ivan@openbuildings.com",
-                    "homepage": "https://github.com/OpenBuildings/jam",
                     "role": "Author"
                 }
             ],
@@ -668,7 +621,7 @@
                 "kohana",
                 "login"
             ],
-            "time": "2013-09-18 07:28:00"
+            "time": "2014-12-09 15:27:57"
         },
         {
             "name": "openbuildings/jam-closuretable",
@@ -856,6 +809,7 @@
                 {
                     "name": "Haralan Dobrev",
                     "email": "hdobrev@despark.com",
+                    "homepage": "https://github.com/hkdobrev",
                     "role": "Author"
                 },
                 {
@@ -883,12 +837,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/rackspace/php-opencloud.git",
-                "reference": "V1.5.10"
+                "reference": "f4c4bbbae8b108c572b346a7cd350c62122451d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rackspace/php-opencloud/zipball/V1.5.10",
-                "reference": "V1.5.10",
+                "url": "https://api.github.com/repos/rackspace/php-opencloud/zipball/f4c4bbbae8b108c572b346a7cd350c62122451d5",
+                "reference": "f4c4bbbae8b108c572b346a7cd350c62122451d5",
                 "shasum": ""
             },
             "require": {
@@ -912,7 +866,8 @@
                 },
                 {
                     "name": "Jamie Hannaford",
-                    "email": "jamie@limetree.org"
+                    "email": "jamie.hannaford@rackspace.com",
+                    "homepage": "https://github.com/jamiehannaford"
                 }
             ],
             "description": "Rackspace open cloud php library",
@@ -924,17 +879,17 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.5.6",
+            "version": "v2.6.1",
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher.git",
-                "reference": "804eb28dbbfba9ffdab21fe2066744906cea2212"
+                "reference": "720fe9bca893df7ad1b4546649473b5afddf0216"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/804eb28dbbfba9ffdab21fe2066744906cea2212",
-                "reference": "804eb28dbbfba9ffdab21fe2066744906cea2212",
+                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/720fe9bca893df7ad1b4546649473b5afddf0216",
+                "reference": "720fe9bca893df7ad1b4546649473b5afddf0216",
                 "shasum": ""
             },
             "require": {
@@ -943,7 +898,8 @@
             "require-dev": {
                 "psr/log": "~1.0",
                 "symfony/config": "~2.0",
-                "symfony/dependency-injection": "~2.0,<2.6.0",
+                "symfony/dependency-injection": "~2.6",
+                "symfony/expression-language": "~2.6",
                 "symfony/stopwatch": "~2.2"
             },
             "suggest": {
@@ -953,7 +909,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5-dev"
+                    "dev-master": "2.6-dev"
                 }
             },
             "autoload": {
@@ -977,21 +933,21 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-01 15:43:05"
+            "time": "2014-12-02 20:19:20"
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v2.5.6",
+            "version": "v2.6.1",
             "target-dir": "Symfony/Component/HttpFoundation",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "56111fc8ba8bcad93d367532babecc6ce17f66ce"
+                "reference": "0109221f3cf012bf027768ad3e4236dae1af5332"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/56111fc8ba8bcad93d367532babecc6ce17f66ce",
-                "reference": "56111fc8ba8bcad93d367532babecc6ce17f66ce",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/0109221f3cf012bf027768ad3e4236dae1af5332",
+                "reference": "0109221f3cf012bf027768ad3e4236dae1af5332",
                 "shasum": ""
             },
             "require": {
@@ -1003,7 +959,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5-dev"
+                    "dev-master": "2.6-dev"
                 }
             },
             "autoload": {
@@ -1030,7 +986,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-24 05:49:22"
+            "time": "2014-12-02 20:19:20"
         }
     ],
     "packages-dev": [
@@ -1250,17 +1206,17 @@
         },
         {
             "name": "symfony/css-selector",
-            "version": "v2.3.21",
+            "version": "v2.3.23",
             "target-dir": "Symfony/Component/CssSelector",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector.git",
-                "reference": "d9943386b648d21746bed25cc24f61fab1387943"
+                "reference": "f886003774b307148a0b105f74ff11a564cb31b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/d9943386b648d21746bed25cc24f61fab1387943",
-                "reference": "d9943386b648d21746bed25cc24f61fab1387943",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/f886003774b307148a0b105f74ff11a564cb31b1",
+                "reference": "f886003774b307148a0b105f74ff11a564cb31b1",
                 "shasum": ""
             },
             "require": {
@@ -1297,7 +1253,7 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-09 12:30:02"
+            "time": "2014-11-30 13:33:44"
         }
     ],
     "aliases": [],
