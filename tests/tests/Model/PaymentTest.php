@@ -321,9 +321,24 @@ class Model_PaymentTest extends Testcase_Purchases {
 		);
 
 		$this->assertEquals($expected, $params);
+
+		$purchase->creator = NULL;
+
+		$params = $purchase
+			->build('payment', array('method' => 'Dummy'))
+				->convert_purchase(TRUE);
+
+		$expected['card'] = array(
+			'firstName' => 'name1',
+			'lastName' => 'name2',
+			'address1' => 'Street 1',
+			'address2' => 'House 1',
+			'city' => 'London',
+			'country' => 'GB',
+			'postcode' => 'ZIP',
+			'phone' => 'phone123',
+		);
 	}
-
-
 
 	/**
 	 * @covers Model_Payment::refund

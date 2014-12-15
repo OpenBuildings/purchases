@@ -173,6 +173,8 @@ class Kohana_Model_Payment extends Jam_Model {
 
 		if ($include_card)
 		{
+			$params['card'] = array();
+
 			if ($this->purchase->creator)
 			{
 				$params['card']['email'] = $this->purchase->creator->email;
