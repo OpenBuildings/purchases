@@ -492,7 +492,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$expected = array(
 			'transactionReference' => '11111',
 			'reason' => 'Full Refund',
-			'amount' => '400.00',
+			'amount' => '600.00',
 			'currency' => 'EUR',
 		);
 
@@ -512,7 +512,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$expected = array(
 			'transactionReference' => '11111',
 			'reason' => 'Full Brand And Purchase Refund',
-			'amount' => '400.00',
+			'amount' => '600.00',
 			'currency' => 'EUR',
 		);
 
