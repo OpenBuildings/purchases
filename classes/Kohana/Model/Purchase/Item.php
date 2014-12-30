@@ -194,9 +194,13 @@ class Kohana_Model_Purchase_Item extends Jam_Model implements FreezableInterface
 	 */
 	public function total_price()
 	{
-		return $this
-			->price()
-				->multiply_by($this->quantity);
+		$item_price = $this->price();
+
+		// Round before multiplying.
+		// Payment processors work only with 2 digits of precision.
+		$item_price->amount(round($item_price->amount(), 2));
+
+		return $item_price->multiply_by($this->quantity);
 	}
 
 	public function type()
