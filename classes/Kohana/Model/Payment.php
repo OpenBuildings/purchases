@@ -207,11 +207,7 @@ class Kohana_Model_Payment extends Jam_Model {
 			);
 		}, $this->purchase->items(array('is_payable' => TRUE)));
 
-		$params['amount'] = Jam_Price::sum(
-			array_map(
-				function($item) { return $item['price']; },
-				$params['items']
-			), $currency)->as_string();
+		$params['amount'] = $this->purchase->total_price()->as_string($currency);
 
 		return $params;
 	}

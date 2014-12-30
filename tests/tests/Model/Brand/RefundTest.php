@@ -53,7 +53,7 @@ class Model_Brand_RefundTest extends Testcase_Purchases {
 
 		$refund = $brand_purchase->refunds->create(array());
 
-		$this->assertEquals(400.0, $refund->amount()->amount());
+		$this->assertEquals(600.0, $refund->amount()->amount());
 		$this->assertEquals('EUR', $refund->amount()->currency());
 	}
 

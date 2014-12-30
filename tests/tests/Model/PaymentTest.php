@@ -289,7 +289,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 				array(
 					"name"			=> 2,
 					"description"	=> 'red..',
-					"quantity"		=> 1,
+					"quantity"		=> 2,
 					"price"			=> '200.00',
 				),
 				array(
@@ -299,7 +299,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 					"price"			=> '-10.00',
 				),
 			),
-			'amount' => '390.00',
+			'amount' => '590.00',
 		);
 
 		$this->assertEquals($expected, $params);
@@ -492,7 +492,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$expected = array(
 			'transactionReference' => '11111',
 			'reason' => 'Full Refund',
-			'amount' => '400.00',
+			'amount' => '600.00',
 			'currency' => 'EUR',
 		);
 
@@ -512,7 +512,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$expected = array(
 			'transactionReference' => '11111',
 			'reason' => 'Full Brand And Purchase Refund',
-			'amount' => '400.00',
+			'amount' => '600.00',
 			'currency' => 'EUR',
 		);
 

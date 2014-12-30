@@ -94,7 +94,7 @@ class Model_Brand_PurchaseTest extends Testcase_Purchases {
 		$brand_purchase->add_or_update_item($existing_item_variation);
 
 		$this->assertCount(2, $brand_purchase->items);
-		$this->assertEquals(3, $brand_purchase->items[1]->quantity);
+		$this->assertEquals(4, $brand_purchase->items[1]->quantity);
 
 		$brand_purchase->add_or_update_item($new_item_product);
 

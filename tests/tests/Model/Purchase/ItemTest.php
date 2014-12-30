@@ -254,17 +254,21 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	{
 		$item = $this->getMock('Model_Purchase_Item', array('price'), array('purchase_item'));
 
-		$price = new Jam_Price(10, 'USD');
+		// Price should be rounded for payment processors
+		$price = new Jam_Price(65.795, 'USD');
 
-		$item->expects($this->exactly(2))
+		$item->expects($this->exactly(3))
 			->method('price')
 			->will($this->returnValue($price));
 
+		$item->quantity = 1;
+		$this->assertEquals(65.8, $item->total_price()->amount());
+
 		$item->quantity = 2;
-		$this->assertEquals(20, $item->total_price()->amount());
+		$this->assertEquals(131.6, $item->total_price()->amount());
 
 		$item->quantity = 3;
-		$this->assertEquals(30, $item->total_price()->amount());
+		$this->assertEquals(197.4, $item->total_price()->amount());
 	}
 
 	/**

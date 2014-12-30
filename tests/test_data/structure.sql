@@ -251,7 +251,7 @@ VALUES
 INSERT INTO `purchase_items` (`id`, `brand_purchase_id`, `reference_id`, `reference_model`, `price`, `quantity`, `model`, `is_payable`, `is_discount`, `is_frozen`, `is_deleted`)
 VALUES
   (1,1,1,'product',200.00,1,'purchase_item_product',1,0,1,0),
-  (2,1,1,'variation',200.00,1,'purchase_item_product',1,0,1,0),
+  (2,1,1,'variation',200.00,2,'purchase_item_product',1,0,1,0),
   (3,2,1,'product',NULL,1,'purchase_item_product',1,0,0,0),
   (4,4,1,'product',290.40,1,'purchase_item_product',1,0,1,0),
   (5,5,4,'product',150.00,1,'purchase_item_product',1,0,1,0);
