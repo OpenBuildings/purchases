@@ -244,6 +244,11 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 			->will($this->onConsecutiveCalls(FALSE, TRUE));
 
 		$this->assertFalse($item->is_refunded());
+		$this->assertFalse($item->is_refunded());
+
+		$refund->transaction_status = Model_Brand_Refund::TRANSACTION_REFUNDED;
+
+		$this->assertFalse($item->is_refunded());
 		$this->assertTrue($item->is_refunded());
 	}
 

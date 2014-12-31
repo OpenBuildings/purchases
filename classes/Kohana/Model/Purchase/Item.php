@@ -180,7 +180,8 @@ class Kohana_Model_Purchase_Item extends Jam_Model implements FreezableInterface
 	{
 		foreach ($this->get_insist('brand_purchase')->refunds->as_array() as $refund)
 		{
-			if ($refund->has_purchase_item($this))
+			if ($refund->transaction_status === Model_Brand_Refund::TRANSACTION_REFUNDED
+				AND $refund->has_purchase_item($this))
 			{
 				return TRUE;
 			}
