@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "201179ba42c0794630ad06b2d00f3114",
+    "hash": "9d2ff8269a3a36e24c8d7d2937da36ed",
     "packages": [
         {
             "name": "clippings/freezable",
@@ -50,16 +50,16 @@
         },
         {
             "name": "composer/installers",
-            "version": "v1.0.18",
+            "version": "v1.0.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "74fb0a7a1a23696d9c8cc2fba5903f6711cdd067"
+                "reference": "1bff8aa77a18f3616f468ed8000cf86a5725bac3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/74fb0a7a1a23696d9c8cc2fba5903f6711cdd067",
-                "reference": "74fb0a7a1a23696d9c8cc2fba5903f6711cdd067",
+                "url": "https://api.github.com/repos/composer/installers/zipball/1bff8aa77a18f3616f468ed8000cf86a5725bac3",
+                "reference": "1bff8aa77a18f3616f468ed8000cf86a5725bac3",
                 "shasum": ""
             },
             "replace": {
@@ -101,6 +101,8 @@
                 "Hurad",
                 "MODX Evo",
                 "OXID",
+                "SMF",
+                "Thelia",
                 "WolfCMS",
                 "agl",
                 "annotatecms",
@@ -110,9 +112,11 @@
                 "codeigniter",
                 "concrete5",
                 "croogo",
+                "dokuwiki",
                 "drupal",
                 "elgg",
                 "fuelphp",
+                "grav",
                 "installer",
                 "joomla",
                 "kohana",
@@ -136,7 +140,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2014-08-18 20:00:12"
+            "time": "2015-01-11 03:51:11"
         },
         {
             "name": "desarrolla2/cache",
@@ -389,16 +393,16 @@
         },
         {
             "name": "omnipay/common",
-            "version": "v2.3.1",
+            "version": "v2.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/omnipay-common.git",
-                "reference": "2c83349327ed3534237043a7a882cbaff55a7866"
+                "reference": "e4c54a314a2529c1008ad3f77e9eef26ed1f311b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/omnipay-common/zipball/2c83349327ed3534237043a7a882cbaff55a7866",
-                "reference": "2c83349327ed3534237043a7a882cbaff55a7866",
+                "url": "https://api.github.com/repos/thephpleague/omnipay-common/zipball/e4c54a314a2529c1008ad3f77e9eef26ed1f311b",
+                "reference": "e4c54a314a2529c1008ad3f77e9eef26ed1f311b",
                 "shasum": ""
             },
             "require": {
@@ -448,7 +452,25 @@
                     "TargetPay_Ideal",
                     "TargetPay_Mrcash",
                     "TwoCheckout",
-                    "WorldPay"
+                    "WorldPay",
+                    "Alipay Bank",
+                    "AliPay Dual Func",
+                    "Alipay Express",
+                    "Alipay Mobile Express",
+                    "Alipay Secured",
+                    "Alipay Wap Express",
+                    "Cybersource",
+                    "DataCash",
+                    "Ecopayz",
+                    "Neteller",
+                    "Pacnet",
+                    "PaymentSense",
+                    "Realex Remote",
+                    "SecPay (PayPoint.net)",
+                    "Sisow",
+                    "Skrill",
+                    "YandexMoney",
+                    "YandexMoneyIndividual"
                 ]
             },
             "autoload": {
@@ -483,7 +505,7 @@
                 "payment",
                 "purchase"
             ],
-            "time": "2014-09-17 00:38:32"
+            "time": "2015-01-11 04:54:29"
         },
         {
             "name": "openbuildings/flex-storage",
@@ -525,16 +547,16 @@
         },
         {
             "name": "openbuildings/jam",
-            "version": "0.4.59",
+            "version": "0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam.git",
-                "reference": "361bc4dd3a95c7f96962cc00e53add7b778525e0"
+                "reference": "6dba32cc578cf58d22dfd9916ac33ae794194021"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/361bc4dd3a95c7f96962cc00e53add7b778525e0",
-                "reference": "361bc4dd3a95c7f96962cc00e53add7b778525e0",
+                "url": "https://api.github.com/repos/OpenBuildings/jam/zipball/6dba32cc578cf58d22dfd9916ac33ae794194021",
+                "reference": "6dba32cc578cf58d22dfd9916ac33ae794194021",
                 "shasum": ""
             },
             "require": {
@@ -574,25 +596,25 @@
                 "upload",
                 "validation"
             ],
-            "time": "2014-09-26 08:35:49"
+            "time": "2015-02-09 14:58:09"
         },
         {
             "name": "openbuildings/jam-auth",
-            "version": "0.3.0",
+            "version": "0.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam-auth.git",
-                "reference": "e9bb8bd25f03d39f3247c9bc7e9eb4390c0224b9"
+                "reference": "e991a02c75755b4e30bddc843a3dad6c63219f21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam-auth/zipball/e9bb8bd25f03d39f3247c9bc7e9eb4390c0224b9",
-                "reference": "e9bb8bd25f03d39f3247c9bc7e9eb4390c0224b9",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-auth/zipball/e991a02c75755b4e30bddc843a3dad6c63219f21",
+                "reference": "e991a02c75755b4e30bddc843a3dad6c63219f21",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "*",
-                "openbuildings/jam": "0.4.*",
+                "openbuildings/jam": "~0.5.0",
                 "php": ">=5.3.0"
             },
             "require-dev": {
@@ -621,25 +643,25 @@
                 "kohana",
                 "login"
             ],
-            "time": "2014-12-09 15:27:57"
+            "time": "2015-02-09 16:24:06"
         },
         {
             "name": "openbuildings/jam-closuretable",
-            "version": "0.1.1",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam-closuretable.git",
-                "reference": "8f7179487394d3beff5b74ca3279ed6d135d77f3"
+                "reference": "9cefdc810e6a1e3dbc3322780394102b84e65918"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam-closuretable/zipball/8f7179487394d3beff5b74ca3279ed6d135d77f3",
-                "reference": "8f7179487394d3beff5b74ca3279ed6d135d77f3",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-closuretable/zipball/9cefdc810e6a1e3dbc3322780394102b84e65918",
+                "reference": "9cefdc810e6a1e3dbc3322780394102b84e65918",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "*",
-                "openbuildings/jam": "0.4.*",
+                "openbuildings/jam": "~0.5.0",
                 "php": ">=5.3.0"
             },
             "require-dev": {
@@ -654,7 +676,6 @@
                 {
                     "name": "Ivan Kerin",
                     "email": "ivan@openbuildings.com",
-                    "homepage": "https://github.com/OpenBuildings/jam",
                     "role": "Author"
                 }
             ],
@@ -668,7 +689,7 @@
                 "structure",
                 "tree"
             ],
-            "time": "2014-04-09 10:14:18"
+            "time": "2015-02-09 16:09:16"
         },
         {
             "name": "openbuildings/jam-locations",
@@ -720,22 +741,22 @@
         },
         {
             "name": "openbuildings/jam-monetary",
-            "version": "0.1.18",
+            "version": "0.1.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenBuildings/jam-monetary.git",
-                "reference": "170df0dbfe292ad1db598473dbb061857f5a800b"
+                "reference": "b431213561995a67c8a08f2fcf543db9d2585311"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenBuildings/jam-monetary/zipball/170df0dbfe292ad1db598473dbb061857f5a800b",
-                "reference": "170df0dbfe292ad1db598473dbb061857f5a800b",
+                "url": "https://api.github.com/repos/OpenBuildings/jam-monetary/zipball/b431213561995a67c8a08f2fcf543db9d2585311",
+                "reference": "b431213561995a67c8a08f2fcf543db9d2585311",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "*",
-                "openbuildings/jam": "0.4.*",
-                "openbuildings/monetary": "0.4.*",
+                "openbuildings/jam": "~0.5.0",
+                "openbuildings/monetary": "~0.4.1",
                 "php": ">=5.3.0"
             },
             "require-dev": {
@@ -750,7 +771,6 @@
                 {
                     "name": "Ivan Kerin",
                     "email": "ivan@openbuildings.com",
-                    "homepage": "https://github.com/OpenBuildings/jam",
                     "role": "Author"
                 }
             ],
@@ -764,7 +784,7 @@
                 "money",
                 "price"
             ],
-            "time": "2014-01-06 15:00:53"
+            "time": "2015-02-09 16:48:03"
         },
         {
             "name": "openbuildings/monetary",
@@ -879,17 +899,17 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.6.1",
+            "version": "v2.6.4",
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher.git",
-                "reference": "720fe9bca893df7ad1b4546649473b5afddf0216"
+                "reference": "f75989f3ab2743a82fe0b03ded2598a2b1546813"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/720fe9bca893df7ad1b4546649473b5afddf0216",
-                "reference": "720fe9bca893df7ad1b4546649473b5afddf0216",
+                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/f75989f3ab2743a82fe0b03ded2598a2b1546813",
+                "reference": "f75989f3ab2743a82fe0b03ded2598a2b1546813",
                 "shasum": ""
             },
             "require": {
@@ -897,10 +917,10 @@
             },
             "require-dev": {
                 "psr/log": "~1.0",
-                "symfony/config": "~2.0",
+                "symfony/config": "~2.0,>=2.0.5",
                 "symfony/dependency-injection": "~2.6",
                 "symfony/expression-language": "~2.6",
-                "symfony/stopwatch": "~2.2"
+                "symfony/stopwatch": "~2.3"
             },
             "suggest": {
                 "symfony/dependency-injection": "",
@@ -933,21 +953,21 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "http://symfony.com",
-            "time": "2014-12-02 20:19:20"
+            "time": "2015-02-01 16:10:57"
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v2.6.1",
+            "version": "v2.6.4",
             "target-dir": "Symfony/Component/HttpFoundation",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "0109221f3cf012bf027768ad3e4236dae1af5332"
+                "reference": "8fa63d614d56ccfe033e30411d90913cfc483ff6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/0109221f3cf012bf027768ad3e4236dae1af5332",
-                "reference": "0109221f3cf012bf027768ad3e4236dae1af5332",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/8fa63d614d56ccfe033e30411d90913cfc483ff6",
+                "reference": "8fa63d614d56ccfe033e30411d90913cfc483ff6",
                 "shasum": ""
             },
             "require": {
@@ -986,7 +1006,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2014-12-02 20:19:20"
+            "time": "2015-02-01 16:10:57"
         }
     ],
     "packages-dev": [
@@ -1206,17 +1226,17 @@
         },
         {
             "name": "symfony/css-selector",
-            "version": "v2.3.23",
+            "version": "v2.3.25",
             "target-dir": "Symfony/Component/CssSelector",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector.git",
-                "reference": "f886003774b307148a0b105f74ff11a564cb31b1"
+                "reference": "202ff2f0ba271d1a77f937b3ae177887da9241d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/f886003774b307148a0b105f74ff11a564cb31b1",
-                "reference": "f886003774b307148a0b105f74ff11a564cb31b1",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/202ff2f0ba271d1a77f937b3ae177887da9241d7",
+                "reference": "202ff2f0ba271d1a77f937b3ae177887da9241d7",
                 "shasum": ""
             },
             "require": {
@@ -1253,13 +1273,14 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "http://symfony.com",
-            "time": "2014-11-30 13:33:44"
+            "time": "2015-01-01 12:56:52"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": ">=5.3.0"
     },
