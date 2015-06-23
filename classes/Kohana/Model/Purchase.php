@@ -297,7 +297,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 
 	public function freezeCollection()
 	{
-		foreach ($this->brand_purchases as $brand_purchase)
+		foreach ($this->brand_purchases->as_array() as $brand_purchase)
 		{
 			$brand_purchase->freeze();
 		}
@@ -305,7 +305,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 
 	public function unfreezeCollection()
 	{
-		foreach ($this->brand_purchases as $brand_purchase)
+		foreach ($this->brand_purchases->as_array() as $brand_purchase)
 		{
 			$brand_purchase->unfreeze();
 		}
