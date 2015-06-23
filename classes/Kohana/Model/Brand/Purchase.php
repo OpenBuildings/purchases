@@ -280,7 +280,7 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 
 	public function performFreeze()
 	{
-		foreach ($this->items as $item)
+		foreach ($this->items->as_array() as $item)
 		{
 			$item->freeze();
 		}
@@ -290,7 +290,7 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 
 	public function performUnfreeze()
 	{
-		foreach ($this->items as $item)
+		foreach ($this->items->as_array() as $item)
 		{
 			$item->unfreeze();
 		}
