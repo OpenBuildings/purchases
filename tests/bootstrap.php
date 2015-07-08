@@ -28,10 +28,9 @@ Kohana::modules(array(
 Kohana::$config
 	->load('database')
 		->set('default', array(
-			'type'       => 'MySQL',
+			'type'       => 'PDO',
 			'connection' => array(
-				'hostname'   => 'localhost',
-				'database'   => 'OpenBuildings/purchases',
+				'dsn'        => 'mysql:host=localhost;dbname=OpenBuildings/purchases',
 				'username'   => 'root',
 				'password'   => '',
 				'persistent' => TRUE,
