@@ -99,6 +99,17 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 		return $this;
 	}
 
+	public function remove_item($brand, Model_Purchase_Item $item)
+	{
+		$this
+			->find_or_build_brand_purchase($brand)
+				->remove_item($item);
+
+		$this->meta()->events()->trigger('model.remove_item', $this, array($item));
+
+		return $this;
+	}
+
 	/**
 	 * Return Monetary::instance() if not frozen.
 	 * Freezable field.

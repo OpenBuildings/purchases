@@ -87,6 +87,18 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 		return $this;
 	}
 
+	public function remove_item(Model_Purchase_Item $item)
+	{
+		$index = $this->search_same_item($item);
+
+		if (null !== $index)
+		{
+			unset($this->items[$index]);
+		}
+
+		return $this;
+	}
+
 	/**
 	 * Return items, filtered, trigger model.filter_items to allow adding custom filters
 	 * @trigger model.filter_items

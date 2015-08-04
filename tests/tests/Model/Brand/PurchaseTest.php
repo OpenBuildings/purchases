@@ -108,6 +108,21 @@ class Model_Brand_PurchaseTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Brand_Purchase::remove_item
+	 */
+	public function test_remove_item()
+	{
+		$purchase = Jam::find('purchase', 1)->unfreeze();
+		$brand_purchase = $purchase->brand_purchases[0];
+
+		$this->assertCount(2, $brand_purchase->items('product'));
+
+		$purchase_item = Arr::get($brand_purchase->items('product'), 0);
+		$brand_purchase->remove_item($purchase_item);
+		$this->assertCount(1, $brand_purchase->items('product'));
+	}
+
+	/**
 	 * @covers Model_Brand_Purchase::items
 	 * @covers Jam_Behavior_Brand_Purchase::filter_items
 	 * @covers Model_Brand_Purchase::items_count
