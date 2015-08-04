@@ -228,6 +228,19 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Purchase::remove_item
+	 */
+	public function test_remove_item()
+	{
+		$purchase = Jam::find('purchase', 1)->unfreeze();
+		$this->assertCount(2, $purchase->items('product'));
+
+		$purchase_item = Arr::get($purchase->items('product'), 0);
+		$purchase->remove_item($purchase_item->brand_purchase->brand, $purchase_item);
+		$this->assertCount(1, $purchase->items('product'));
+	}
+
+	/**
 	 * @covers Model_Purchase::total_price
 	 */
 	public function test_total_price()
