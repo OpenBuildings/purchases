@@ -50,6 +50,29 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	}
 
 	/**
+	 * @covers Model_Purchase::find_brand_purchase
+	 */
+	public function test_find_brand_purchase()
+	{
+		$purchase = Jam::find('purchase', 1);
+		$brand1 = Jam::find('brand', 1);
+		$brand2 = Jam::find('brand', 2);
+
+		$brand_purchase = $purchase->find_brand_purchase($brand1);
+		$this->assertSame($purchase->brand_purchases[0], $brand_purchase);
+		$this->assertTrue($brand_purchase->loaded());
+
+		$expected_brand = $purchase->brand_purchases[0]->brand;
+
+		$brand_purchase = $purchase->find_brand_purchase($expected_brand);
+		$this->assertSame($purchase->brand_purchases[0], $brand_purchase);
+		$this->assertSame($purchase->brand_purchases[0]->brand, $brand_purchase->brand);
+
+		$brand_purchase = $purchase->find_brand_purchase($brand2);
+		$this->assertNull($brand_purchase);
+	}
+
+	/**
 	 * @covers Model_Purchase::monetary
 	 */
 	public function test_monetary()
@@ -238,6 +261,11 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$purchase_item = Arr::get($purchase->items('product'), 0);
 		$purchase->remove_item($purchase_item->brand_purchase->brand, $purchase_item);
 		$this->assertCount(1, $purchase->items('product'));
+
+		$purchase_item = Arr::get($purchase->items('product'), 0);
+		$purchase->remove_item($purchase_item->brand_purchase->brand, $purchase_item);
+		$this->assertCount(0, $purchase->items('product'));
+		$this->assertCount(0, $purchase->brand_purchases);
 	}
 
 	/**

@@ -62,23 +62,39 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	/**
 	 * Iterate through the existing brand_purchases and return the one that is linked to this brand.
 	 * If none exist build one and return it
+	 *
 	 * @param  Model_Brand $brand
 	 * @return Model_Brand_Purchase
 	 */
 	public function find_or_build_brand_purchase(Model_Brand $brand)
 	{
+		$brand_purchase = $this->find_brand_purchase($brand);
+
+		if ($brand_purchase)
+		{
+			return $brand_purchase;
+		}
+
+		return $this->brand_purchases->build(array('brand' => $brand));
+	}
+
+	/**
+	 * Iterate through the existing brand_purchases and return the one that is linked to this brand.
+	 * If none exist return NULL
+	 *
+	 * @param  Model_Brand $brand
+	 * @return Model_Brand_Purchase
+	 */
+	public function find_brand_purchase(Model_Brand $brand)
+	{
 		$brand_purchases = $this->brand_purchases->as_array('brand_id');
 
 		if (isset($brand_purchases[$brand->id()]))
 		{
-			$brand_purchase = $brand_purchases[$brand->id()];
-		}
-		else
-		{
-			$brand_purchase = $this->brand_purchases->build(array('brand' => $brand));
+			return $brand_purchases[$brand->id()];
 		}
 
-		return $brand_purchase;
+		return NULL;
 	}
 
 	/**
@@ -101,11 +117,19 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 
 	public function remove_item($brand, Model_Purchase_Item $item)
 	{
-		$this
-			->find_or_build_brand_purchase($brand)
-				->remove_item($item);
+		$brand_purchase = $this->find_brand_purchase($brand);
 
-		$this->meta()->events()->trigger('model.remove_item', $this, array($item));
+		if ($brand_purchase)
+		{
+			$brand_purchase->remove_item($item);
+
+			if (0 === $brand_purchase->items_count('product'))
+			{
+				$this->brand_purchases->remove($brand_purchase);
+			}
+
+			$this->meta()->events()->trigger('model.remove_item', $this, array($item));
+		}
 
 		return $this;
 	}
