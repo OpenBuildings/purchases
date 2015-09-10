@@ -197,6 +197,8 @@ class Model_Card_FormTest extends Testcase_Purchases {
 	{
 		return array(
 			array('John Smith', true),
+			array('Jöhñ Smìth', true),
+			array('D\'Artanian', true),
 			array('Dr. John Alexander-Smith', true),
 			array('<script>alert(1);</script>', false),
 			array('U(*DSFSL', false),
