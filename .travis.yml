@@ -8,6 +8,11 @@ php:
   - 5.6
   - 7
 
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: 7
+
 env:
   global:
     - secure: WM6/jFIv5y0fucZqd2kUhHindfgyz2UkRfDor/e+BEeqN9JfJD5kVDyLHIbHSvGXWYah5Nk56I6Wwo3HjPgsdKU1tfatYBNMqRzKHa13sChd4idIrpUJBRKGqWDJeh3h6Cnf5DrudUKPh7AdDN8Nz5kC+CAo5M3LpM919Qu8mz0=
