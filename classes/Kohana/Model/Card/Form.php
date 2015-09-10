@@ -41,6 +41,9 @@ class Kohana_Model_Card_Form extends Jam_Validated {
 				'length' => array(
 					'minimum' => 3,
 					'maximum' => 40,
+				),
+				'format' => array(
+					'regex' => "/^[a-zA-Z\.\- ]+$/",
 				)
 			))
 			->validator('number', array(

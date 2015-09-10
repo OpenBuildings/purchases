@@ -192,4 +192,30 @@ class Model_Card_FormTest extends Testcase_Purchases {
 		$card_form->validate();
 		$this->assertSame($expected_errors, $card_form->errors()->as_array());
 	}
+
+	public function data_validate_name()
+	{
+		return array(
+			array('John Smith', true),
+			array('Dr. John Alexander-Smith', true),
+			array('<script>alert(1);</script>', false),
+			array('U(*DSFSL', false),
+		);
+	}
+
+	/**
+	 * @dataProvider data_validate_name
+	 */
+	public function test_validate_name($name, $is_valid)
+	{
+		$card_form = Jam::build('card_form', array(
+			'name' => $name,
+			'number' => '4111111111111111',
+			'expiryMonth' => '05',
+			'expiryYear' => date('y', strtotime('+1 year')),
+			'cvv' => '123',
+		));
+
+		$this->assertSame($is_valid, $card_form->check());
+	}
 }
