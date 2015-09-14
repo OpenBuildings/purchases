@@ -38,13 +38,13 @@ class Kohana_Model_Card_Form extends Jam_Validated {
 				)
 			)
 			->validator('name',	array(
+				'format' => array(
+					'regex' => "/^[\p{L}\p{M}\.\-\' ]+$/u",
+				),
 				'length' => array(
 					'minimum' => 3,
 					'maximum' => 40,
 				),
-				'format' => array(
-					'regex' => "/^[\p{L}\p{M}\.\-\' ]+$/u",
-				)
 			))
 			->validator('number', array(
 				'length' => array(
