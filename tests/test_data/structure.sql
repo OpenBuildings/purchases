@@ -87,7 +87,6 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(254) NOT NULL,
-  `username` VARCHAR(32) NOT NULL DEFAULT '',
   `password` VARCHAR(64) NOT NULL,
   `logins` INT(10) UNSIGNED NOT NULL DEFAULT '0',
   `last_login` INT(10) UNSIGNED,
@@ -95,7 +94,6 @@ CREATE TABLE `users` (
   `twitter_uid` VARCHAR(100),
   `last_login_ip` VARCHAR(40),
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `uniq_username` (`username`),
   UNIQUE KEY `uniq_email` (`email`)
 ) ENGINE=INNODB  DEFAULT CHARSET=utf8;
 
@@ -269,9 +267,9 @@ VALUES
 # Dump of table users
 # ------------------------------------------------------------
 
-INSERT INTO `users` (`id`, `email`, `username`, `password`, `logins`, `last_login`, `facebook_uid`, `twitter_uid`, `last_login_ip`)
+INSERT INTO `users` (`id`, `email`, `password`, `logins`, `last_login`, `facebook_uid`, `twitter_uid`, `last_login_ip`)
 VALUES
-  (1,'admin@example.com','admin','f02c9f1f724ebcf9db6784175cb6bd82663380a5f8bd78c57ad20d5dfd953f15',5,1374320224,'facebook-test','','10.20.10.1');
+  (1,'admin@example.com','f02c9f1f724ebcf9db6784175cb6bd82663380a5f8bd78c57ad20d5dfd953f15',5,1374320224,'facebook-test','','10.20.10.1');
 
 
 # Dump of table variations
