@@ -222,6 +222,10 @@ class Kohana_Model_Purchase_Item extends Jam_Model implements FreezableInterface
 		throw new BadMethodCallException('You must implement get_price()');
 	}
 
+	/**
+	 * @deprecated 0.9.1 Having refund items per purchase item is deprecated
+	 * @return Jam_Price
+	 */
 	public function refunded_amount()
 	{
 		$amounts = array_map(function($refund_item) {
