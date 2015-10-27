@@ -57,6 +57,11 @@ class Kohana_Model_Brand_Refund extends Jam_Model {
 		}
 	}
 
+	/**
+	 * @deprecated 0.9.2 Having brand refund items per purchase item is deprecated
+	 * @param  Model_Purchase_Item $purchase_item
+	 * @return boolean
+	 */
 	public function has_purchase_item(Model_Purchase_Item $purchase_item)
 	{
 		foreach ($this->items->as_array() as $item)

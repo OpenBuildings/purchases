@@ -174,6 +174,8 @@ class Kohana_Model_Purchase_Item extends Jam_Model implements FreezableInterface
 
 	/**
 	 * Check if item has been refunded
+	 *
+	 * @deprecated 0.9.2 Having brand refund items per purchase item is deprecated
 	 * @return boolean
 	 */
 	public function is_refunded()
