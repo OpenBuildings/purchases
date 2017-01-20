@@ -155,7 +155,7 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 
 	/**
 	 * Replace purchase items, filtered. Removes old items
-	 * @param  array $items arrat of Model_Purchase_Item
+	 * @param  array $items array of Model_Purchase_Item
 	 * @param  array $types
 	 * @return Model_Brand_Purchase        self
 	 */
@@ -243,7 +243,7 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 
 	/**
 	 * Return the ratio of this brand_purchase as part of the whole purchase
-	 * @param  string|arrat $types filter
+	 * @param  string|array $types filter
 	 * @return integer
 	 */
 	public function total_price_ratio($types)
