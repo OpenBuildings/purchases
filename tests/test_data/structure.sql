@@ -130,7 +130,7 @@ DROP TABLE IF EXISTS `locations`;
 CREATE TABLE `locations` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
-  `short_name` varchar(10) NOT NULL,
+  `short_name` varchar(10) NULL,
   `type` varchar(100) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

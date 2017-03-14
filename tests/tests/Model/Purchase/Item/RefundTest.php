@@ -22,15 +22,14 @@ class Model_Purchase_Item_RefundTest extends Testcase_Purchases {
 	 */
 	public function test_get_price()
 	{
-		$mock = $this->getMock('stdClass', array(
-			'amount'
-		));
+		$mock = $this->getMockBuilder('stdClass')
+			->setMethods(array('amount'))
+			->getMock();
 
-		$purchase_item = $this->getMock('Model_Purchase_Item_Refund', array(
-			'get_reference_paranoid'
-		), array(
-			'purchase_item_refund'
-		));
+		$purchase_item = $this->getMockBuilder('Model_Purchase_Item_Refund')
+			->setMethods(array('get_reference_paranoid'))
+			->setConstructorArgs(array('purchase_item_refund'))
+			->getMock();
 
 		$purchase_item
 			->expects($this->exactly(2))

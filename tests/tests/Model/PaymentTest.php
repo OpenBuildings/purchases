@@ -24,8 +24,14 @@ class Model_PaymentTest extends Testcase_Purchases {
 	{
 		$gateway = Omnipay::create('Dummy');
 		$params = array('test', 'test2');
-		$payment = $this->getMock('Model_Payment', array('execute_purchase'), array('payment'));
-		$purchase = $this->getMock('Model_Purchase', array('save'), array('purchase'));
+		$payment = $this->getMockBuilder('Model_Payment')
+			->setMethods(array('execute_purchase'))
+			->setConstructorArgs(array('payment'))
+			->getMock();
+		$purchase = $this->getMockBuilder('Model_Purchase')
+			->setMethods(array('save'))
+			->setConstructorArgs(array('purchase'))
+			->getMock();
 		$payment->purchase = $purchase;
 
 		$payment
@@ -56,8 +62,14 @@ class Model_PaymentTest extends Testcase_Purchases {
 	{
 		$gateway = Omnipay::create('Dummy');
 		$params = array('test', 'test2');
-		$payment = $this->getMock('Model_Payment', array('execute_purchase'), array('payment'));
-		$purchase = $this->getMock('Model_Purchase', array('save'), array('purchase'));
+		$payment = $this->getMockBuilder('Model_Payment')
+			->setMethods(array('execute_purchase'))
+			->setConstructorArgs(array('payment'))
+			->getMock();
+		$purchase = $this->getMockBuilder('Model_Purchase')
+			->setMethods(array('save'))
+			->setConstructorArgs(array('purchase'))
+			->getMock();
 		$payment->purchase = $purchase;
 
 		$payment
@@ -85,7 +97,10 @@ class Model_PaymentTest extends Testcase_Purchases {
 	public function test_complete_purchase()
 	{
 		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
-		$purchase = $this->getMock('Model_Purchase', array('save'), array('purchase'));
+		$purchase = $this->getMockBuilder('Model_Purchase')
+			->setMethods(array('save'))
+			->setConstructorArgs(array('purchase'))
+			->getMock();
 
 		$purchase
 			->expects($this->once())
@@ -109,7 +124,10 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$this->payment_params['card']['number'] = 4111111111111111;
 
 		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
-		$purchase = $this->getMock('Model_Purchase', array('save'), array('purchase'));
+		$purchase = $this->getMockBuilder('Model_Purchase')
+			->setMethods(array('save'))
+			->setConstructorArgs(array('purchase'))
+			->getMock();
 
 		$purchase
 			->expects($this->once())
@@ -132,7 +150,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 	public function test_complete_purchase_not_pending()
 	{
 		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
-		$purchase = $this->getMock('Model_Purchase', NULL, array('purchase'));
+		$purchase = Jam::build('purchase');
 
 		$payment = $purchase->build('payment', array('method' => 'Dummy'));
 
@@ -347,24 +365,20 @@ class Model_PaymentTest extends Testcase_Purchases {
 	{
 		$gateway = Omnipay::create('Dummy');
 		$params = array('test', 'test2');
-		$refund = $this->getMock('Model_Brand_Refund', array(
-			'save',
-		), array(
-			'brand_refund',
-		));
+		$refund = $this->getMockBuilder('Model_Brand_Refund')
+			->setMethods(array('save'))
+			->setConstructorArgs(array('brand_refund'))
+			->getMock();
 
-		$payment = $this->getMock('Model_Payment', array(
-			'execute_refund',
-		), array(
-			'payment',
-		));
+		$payment = $this->getMockBuilder('Model_Payment')
+			->setMethods(array('execute_refund'))
+			->setConstructorArgs(array('payment'))
+			->getMock();
 
-		$brand_purchase = $this->getMock('Model_Brand_Purchase', array(
-			'save',
-			'freeze',
-		), array(
-			'brand_purchase'
-		));
+		$brand_purchase = $this->getMockBuilder('Model_Brand_Purchase')
+			->setMethods(array('save', 'freeze'))
+			->setConstructorArgs(array('brand_purchase'))
+			->getMock();
 
 		$payment
 			->expects($this->once())
@@ -554,37 +568,30 @@ class Model_PaymentTest extends Testcase_Purchases {
 	{
 		$gateway = Omnipay::create('Dummy');
 		$params = array('test', 'test2');
-		$refund = $this->getMock('Model_Brand_Refund', array(
-			'save',
-		), array(
-			'brand_refund',
-		));
+		$refund = $this->getMockBuilder('Model_Brand_Refund')
+			->setMethods(array('save'))
+			->setConstructorArgs(array('brand_refund'))
+			->getMock();
 
-		$refund2 = $this->getMock('Model_Brand_Refund', array(
-			'save',
-		), array(
-			'brand_refund',
-		));
+		$refund2 = $this->getMockBuilder('Model_Brand_Refund')
+			->setMethods(array('save'))
+			->setConstructorArgs(array('brand_refund'))
+			->getMock();
 
-		$payment = $this->getMock('Model_Payment', array(
-			'execute_multiple_refunds',
-		), array(
-			'payment',
-		));
+		$payment = $this->getMockBuilder('Model_Payment')
+			->setMethods(array('execute_multiple_refunds'))
+			->setConstructorArgs(array('payment'))
+			->getMock();
 
-		$brand_purchase = $this->getMock('Model_Brand_Purchase', array(
-			'save',
-			'freeze',
-		), array(
-			'brand_purchase'
-		));
+		$brand_purchase = $this->getMockBuilder('Model_Brand_Purchase')
+			->setMethods(array('save', 'freeze'))
+			->setConstructorArgs(array('brand_purchase'))
+			->getMock();
 
-		$brand_purchase2 = $this->getMock('Model_Brand_Purchase', array(
-			'save',
-			'freeze',
-		), array(
-			'brand_purchase'
-		));
+		$brand_purchase2 = $this->getMockBuilder('Model_Brand_Purchase')
+			->setMethods(array('save', 'freeze'))
+			->setConstructorArgs(array('brand_purchase'))
+			->getMock();
 
 		$payment
 			->expects($this->once())

@@ -50,7 +50,7 @@ before_script:
   - mysql --default-character-set=utf8 OpenBuildings/purchases < tests/test_data/structure.sql
 
 script:
-  - phpunit --stderr --coverage-clover build/logs/clover.xml
+  - vendor/bin/phpunit --stderr --coverage-clover build/logs/clover.xml
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
