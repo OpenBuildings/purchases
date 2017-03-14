@@ -168,7 +168,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	/**
 	 * Return purchase_items, aggregated from all the brand_purchases. Can pass filters.
 	 *
-	 * @param  array $types filters
+	 * @param  array|string $types filters
 	 * @return array        Model_Purchase_Items
 	 */
 	public function items($types = NULL)

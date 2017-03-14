@@ -102,7 +102,7 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 	/**
 	 * Return items, filtered, trigger model.filter_items to allow adding custom filters
 	 * @trigger model.filter_items
-	 * @param  array $types
+	 * @param  array|string $types
 	 * @return array
 	 */
 	public function items($types = NULL)
