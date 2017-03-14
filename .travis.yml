@@ -42,8 +42,7 @@ notifications:
     secure: JhetEEPz5c84CuTDHks86k6IpUAlv7LFGswafXCMO5/ztXHMU2Mv6w6jnvp/YOuqiX0nWPRJCbRfoVXdEb/VO/AcLDkscwa10foSziPfbjqofNZ/b2+MtQ93UbfHGpFNIUUrMVnY9/7YW9a6TrPqHT196/+B59L/457RWJz0tC0=
 
 install:
-  - composer selfupdate
-  - composer install --no-interaction
+  - travis_retry composer install --no-interaction --no-progress --prefer-dist
 
 before_script:
   - mkdir -p build/logs
