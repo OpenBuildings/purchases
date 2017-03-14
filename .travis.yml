@@ -16,6 +16,9 @@ branches:
   only:
     - master
 
+git:
+  depth: 5
+
 cache:
   directories:
   - $HOME/.composer/cache
