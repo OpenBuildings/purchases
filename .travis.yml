@@ -3,15 +3,19 @@ language: php
 sudo: false
 
 php:
-  - 5.4
-  - 5.5
   - 5.6
-  - 7
+  - 7.0
+  - 7.1
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - php: 7
+
+branches:
+  only:
+    - master
+
+git:
+  depth: 5
 
 cache:
   directories:
@@ -36,8 +40,7 @@ notifications:
     secure: JhetEEPz5c84CuTDHks86k6IpUAlv7LFGswafXCMO5/ztXHMU2Mv6w6jnvp/YOuqiX0nWPRJCbRfoVXdEb/VO/AcLDkscwa10foSziPfbjqofNZ/b2+MtQ93UbfHGpFNIUUrMVnY9/7YW9a6TrPqHT196/+B59L/457RWJz0tC0=
 
 install:
-  - composer selfupdate
-  - composer install --no-interaction
+  - travis_retry composer install --no-interaction --no-progress --prefer-dist
 
 before_script:
   - mkdir -p build/logs
@@ -45,8 +48,8 @@ before_script:
   - mysql --default-character-set=utf8 OpenBuildings/purchases < tests/test_data/structure.sql
 
 script:
-  - phpunit --stderr --coverage-clover build/logs/clover.xml
+  - vendor/bin/phpunit --stderr --coverage-clover build/logs/clover.xml
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --access-token="d1d5cb6de62405b524c87b69eb5a52b93fce8641c807c7dbb46311f94844fc10" --format=php-clover build/logs/clover.xml
+  - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml

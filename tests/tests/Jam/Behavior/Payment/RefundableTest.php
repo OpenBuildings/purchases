@@ -12,11 +12,10 @@ class Jam_Behavior_Payment_RefundableTest extends Testcase_Purchases {
 
 	public function test_add_purchase_item_refund()
 	{
-		$refund = $this->getMock('Model_Brand_Refund', array(
-			'add_purchase_item_refund',
-		), array(
-			'brand_refund',
-		));
+		$refund = $this->getMockBuilder('Model_Brand_Refund')
+			->setMethods(array('add_purchase_item_refund'))
+			->setConstructorArgs(array('brand_refund'))
+			->getMock();
 
 		$refund
 			->expects($this->once())
@@ -41,17 +40,15 @@ class Jam_Behavior_Payment_RefundableTest extends Testcase_Purchases {
 
 	public function test_add_multiple_purchase_item_refunds()
 	{
-		$refund = $this->getMock('Model_Brand_Refund', array(
-			'add_purchase_item_refund',
-		), array(
-			'brand_refund',
-		));
+		$refund = $this->getMockBuilder('Model_Brand_Refund')
+			->setMethods(array('add_purchase_item_refund'))
+			->setConstructorArgs(array('brand_refund'))
+			->getMock();
 
-		$refund2 = $this->getMock('Model_Brand_Refund', array(
-			'add_purchase_item_refund',
-		), array(
-			'brand_refund',
-		));
+		$refund2 = $this->getMockBuilder('Model_Brand_Refund')
+			->setMethods(array('add_purchase_item_refund'))
+			->setConstructorArgs(array('brand_refund'))
+			->getMock();
 
 		$refund
 			->expects($this->once())

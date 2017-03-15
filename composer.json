@@ -18,21 +18,32 @@
 		}
 	],
 	"require": {
-		"php": ">=5.3.0",
+		"php": "^5.4 | ^7.0",
 		"composer/installers": "*",
-		"openbuildings/jam": "~0.5.0",
+		"openbuildings/jam": "^0.5",
 		"openbuildings/jam-auth": "^0.4.0",
-		"openbuildings/jam-monetary": "~0.1.19",
-		"openbuildings/jam-locations": "0.1.*",
-		"clippings/freezable": "0.2.*",
-		"omnipay/common": "~2.0"
+		"openbuildings/jam-monetary": "^0.1.19",
+		"openbuildings/jam-locations": "^0.1",
+		"clippings/freezable": "^0.2",
+		"omnipay/common": "^2.0",
+		"kohana/core": "^3.3",
+		"kohana/database": "^3.3.4"
 	},
 	"require-dev": {
-		"openbuildings/kohana-test-bootsrap": "0.1.*",
 		"openbuildings/environment-backup": "0.1.*",
 		"openbuildings/phpunit-spiderling": "0.1.*",
-		"omnipay/dummy": "~2.0"
+		"omnipay/dummy": "~2.0",
+		"phpunit/phpunit": "^5.0",
+		"openbuildings/kohana-test-bootstrap": "^0.2.0"
 	},
+    "autoload-dev": {
+        "psr-4": {
+            "Test\\Omnipay\\Dummy\\": "tests/src"
+        },
+        "classmap": [
+        	"tests/classes"
+        ]
+    },
 	"suggest": {
 		"openbuildings/shipping": "Extends purchases functionality with shipping and delivery",
 		"openbuildings/promotions": "Extends purchases functionality with promotions and gift cards"

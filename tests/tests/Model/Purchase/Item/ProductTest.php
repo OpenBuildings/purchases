@@ -21,15 +21,14 @@ class Model_Purchase_Item_ProductTest extends Testcase_Purchases {
 	 */
 	public function test_get_price()
 	{
-		$mock = $this->getMock('stdClass', array(
-			'price_for_purchase_item'
-		));
+		$mock = $this->getMockBuilder('stdClass')
+			->setMethods(array('price_for_purchase_item'))
+			->getMock();
 
-		$purchase_item = $this->getMock('Model_Purchase_Item_Product', array(
-			'get_reference_paranoid'
-		), array(
-			'purchase_item_product'
-		));
+		$purchase_item = $this->getMockBuilder('Model_Purchase_Item_Product')
+			->setMethods(array('get_reference_paranoid'))
+			->setConstructorArgs(array('purchase_item_product'))
+			->getMock();
 
 		$purchase_item
 			->expects($this->exactly(2))

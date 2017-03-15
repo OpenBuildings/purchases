@@ -122,7 +122,10 @@ class Model_Brand_RefundTest extends Testcase_Purchases {
 	 */
 	public function test_currency()
 	{
-		$brand_purchase = $this->getMock('Model_Brand_Purchase', array('currency'), array('brand_purchase'));
+		$brand_purchase = $this->getMockBuilder('Model_Brand_Purchase')
+			->setMethods(array('currency'))
+			->setConstructorArgs(array('brand_purchase'))
+			->getMock();
 		$brand_purchase
 			->expects($this->exactly(2))
 				->method('currency')
@@ -139,7 +142,10 @@ class Model_Brand_RefundTest extends Testcase_Purchases {
 	 */
 	public function test_display_currency()
 	{
-		$brand_purchase = $this->getMock('Model_Brand_Purchase', array('display_currency'), array('brand_purchase'));
+		$brand_purchase = $this->getMockBuilder('Model_Brand_Purchase')
+			->setMethods(array('display_currency'))
+			->setConstructorArgs(array('brand_purchase'))
+			->getMock();
 		$brand_purchase
 			->expects($this->exactly(2))
 				->method('display_currency')
@@ -158,7 +164,10 @@ class Model_Brand_RefundTest extends Testcase_Purchases {
 	{
 		$monetary = new OpenBuildings\Monetary\Monetary;
 
-		$brand_purchase = $this->getMock('Model_Brand_Purchase', array('monetary'), array('brand_purchase'));
+		$brand_purchase = $this->getMockBuilder('Model_Brand_Purchase')
+			->setMethods(array('monetary'))
+			->setConstructorArgs(array('brand_purchase'))
+			->getMock();
 		$brand_purchase
 			->expects($this->once())
 				->method('monetary')
@@ -174,7 +183,10 @@ class Model_Brand_RefundTest extends Testcase_Purchases {
 	 */
 	public function test_has_purchase_item()
 	{
-		$item = $this->getMock('Model_Brand_Refund_Item', array('is_full_amount'), array('brand_refund_item'));
+		$item = $this->getMockBuilder('Model_Brand_Refund_Item')
+			->setMethods(array('is_full_amount'))
+			->setConstructorArgs(array('brand_refund_item'))
+			->getMock();
 		$item
 			->expects($this->exactly(2))
 				->method('is_full_amount')
@@ -202,16 +214,19 @@ class Model_Brand_RefundTest extends Testcase_Purchases {
 		$gateway = Omnipay::create('Dummy');
 		$refund_params = array();
 
-		$brand_refund = $this->getMock('Model_Brand_Refund', array(
-			'check_insist',
-			'payment_insist',
-		), array(
-			'brand_refund'
-		));
+		$brand_refund = $this->getMockBuilder('Model_Brand_Refund')
+			->setMethods(array(
+				'check_insist',
+				'payment_insist',
+			))
+			->setConstructorArgs(array('brand_refund'))
+			->getMock();
 
-		$payment_mock = $this->getMock('stdClass', array(
-			'refund'
-		));
+		$payment_mock = $this->getMockBuilder('stdClass')
+			->setMethods(array(
+				'refund'
+			))
+			->getMock();
 
 		$payment_mock->status = Model_Payment::PAID;
 

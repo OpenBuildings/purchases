@@ -142,7 +142,10 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_paid_at()
 	{
-		$purchase = $this->getMock('Model_Purchase', array('is_paid'), array('purchase'));
+		$purchase = $this->getMockBuilder('Model_Purchase')
+			->setMethods(array('is_paid'))
+			->setConstructorArgs(array('purchase'))
+			->getMock();
 		$purchase->payment = Jam::build('payment', array('created_at' => '2013-02-02 10:00:00'));
 
 		$purchase
@@ -280,13 +283,19 @@ class Model_PurchaseTest extends Testcase_Purchases {
 		$price1 = new Jam_Price(5, 'EUR');
 		$price2 = new Jam_Price(10, 'EUR');
 
-		$item1 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
+		$item1 = $this->getMockBuilder('Model_Purchase_Item')
+			->setMethods(array('total_price'))
+			->setConstructorArgs(array('purchase_item'))
+			->getMock();
 		$item1->model = 'purchase_item_product';
 		$item1->expects($this->exactly(3))
 			->method('total_price')
 			->will($this->returnValue($price1));
 
-		$item2 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
+		$item2 = $this->getMockBuilder('Model_Purchase_Item')
+			->setMethods(array('total_price'))
+			->setConstructorArgs(array('purchase_item'))
+			->getMock();
 		$item2->model = 'purchase_item_shipping';
 		$item2->expects($this->exactly(3))
 			->method('total_price')
@@ -310,12 +319,18 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	{
 		$purchase = Jam::build('purchase');
 
-		$item1 = $this->getMock('Model_Brand_Purchase', array('update_items'), array('brand_purchase'));
+		$item1 = $this->getMockBuilder('Model_Brand_Purchase')
+			->setMethods(array('update_items'))
+			->setConstructorArgs(array('brand_purchase'))
+			->getMock();
 
 		$item1->expects($this->once())
 			->method('update_items');
 
-		$item2 = $this->getMock('Model_Brand_Purchase', array('update_items'), array('brand_purchase'));
+		$item2 = $this->getMockBuilder('Model_Brand_Purchase')
+			->setMethods(array('update_items'))
+			->setConstructorArgs(array('brand_purchase'))
+			->getMock();
 
 		$item2->expects($this->once())
 			->method('update_items');
@@ -336,18 +351,16 @@ class Model_PurchaseTest extends Testcase_Purchases {
 	{
 		$purchase = Jam::build('purchase');
 
-		$brand_purchase1 = $this->getMock('Model_Brand_Purchase', array(
-			'replace_items'
-		), array(
-			'brand_purchase'
-		));
+		$brand_purchase1 = $this->getMockBuilder('Model_Brand_Purchase')
+			->setMethods(array('replace_items'))
+			->setConstructorArgs(array('brand_purchase'))
+			->getMock();
 
 		$brand_purchase1->id = 10;
-		$brand_purchase2 = $this->getMock('Model_Brand_Purchase', array(
-			'replace_items'
-		), array(
-			'brand_purchase'
-		));
+		$brand_purchase2 = $this->getMockBuilder('Model_Brand_Purchase')
+			->setMethods(array('replace_items'))
+			->setConstructorArgs(array('brand_purchase'))
+			->getMock();
 
 		$brand_purchase2->id = 20;
 		$brand_purchase3 = Jam::build('brand_purchase', array('id' => 30));

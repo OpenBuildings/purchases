@@ -61,7 +61,10 @@ class Model_Brand_Refund_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_currency()
 	{
-		$brand_refund = $this->getMock('Model_Brand_Refund', array('currency'), array('brand_refund'));
+		$brand_refund = $this->getMockBuilder('Model_Brand_Refund')
+			->setMethods(array('currency'))
+			->setConstructorArgs(array('brand_refund'))
+			->getMock();
 		$brand_refund
 			->expects($this->exactly(2))
 				->method('currency')
@@ -90,7 +93,10 @@ class Model_Brand_Refund_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_display_currency()
 	{
-		$brand_refund = $this->getMock('Model_Brand_Refund', array('display_currency'), array('brand_refund'));
+		$brand_refund = $this->getMockBuilder('Model_Brand_Refund')
+			->setMethods(array('display_currency'))
+			->setConstructorArgs(array('brand_refund'))
+			->getMock();
 		$brand_refund
 			->expects($this->exactly(2))
 				->method('display_currency')
@@ -109,7 +115,10 @@ class Model_Brand_Refund_ItemTest extends Testcase_Purchases {
 	{
 		$monetary = new OpenBuildings\Monetary\Monetary;
 
-		$item = $this->getMock('Model_Brand_Refund_Item', array('currency', 'display_currency', 'monetary', 'purchase_item_price'), array('brand_refund_item'));
+		$item = $this->getMockBuilder('Model_Brand_Refund_Item')
+			->setMethods(array('currency', 'display_currency', 'monetary', 'purchase_item_price'))
+			->setConstructorArgs(array('brand_refund_item'))
+			->getMock();
 
 		$item
 			->expects($this->exactly(2))
@@ -149,7 +158,10 @@ class Model_Brand_Refund_ItemTest extends Testcase_Purchases {
 	{
 		$monetary = new OpenBuildings\Monetary\Monetary;
 
-		$brand_refund = $this->getMock('Model_Brand_Refund', array('monetary'), array('brand_refund'));
+		$brand_refund = $this->getMockBuilder('Model_Brand_Refund')
+			->setMethods(array('monetary'))
+			->setConstructorArgs(array('brand_refund'))
+			->getMock();
 		$brand_refund
 			->expects($this->once())
 				->method('monetary')

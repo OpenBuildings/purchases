@@ -68,19 +68,19 @@ class Model_Brand_PurchaseTest extends Testcase_Purchases {
 		$purchase = Jam::find('purchase', 1)->unfreeze();
 		$brand_purchase = $purchase->brand_purchases[0];
 
-		$existing_item_product = Jam::build('purchase_item', array(
+		$existing_item_product = Jam::build('purchase_item_product', array(
 			'reference' => Jam::find('product', 1),
 			'quantity' => 3,
 			'model' => 'purchase_item_product',
 		));
 
-		$existing_item_variation = Jam::build('purchase_item', array(
+		$existing_item_variation = Jam::build('purchase_item_product', array(
 			'reference' => Jam::find('variation', 1),
 			'quantity' => 2,
 			'model' => 'purchase_item_product',
 		));
 
-		$new_item_product = Jam::build('purchase_item', array(
+		$new_item_product = Jam::build('purchase_item_product', array(
 			'reference' => Jam::find('product', 3),
 			'quantity' => 5,
 			'model' => 'purchase_item_product',
@@ -182,7 +182,10 @@ class Model_Brand_PurchaseTest extends Testcase_Purchases {
 	{
 		$monetary = new Monetary('GBP', new Source_Static);
 
-		$brand_purchase = $this->getMock('Model_Brand_Purchase', array('currency', 'monetary', 'display_currency'), array('brand_purchase'));
+		$brand_purchase = $this->getMockBuilder('Model_Brand_Purchase')
+			->setMethods(array('currency', 'monetary', 'display_currency'))
+			->setConstructorArgs(array('brand_purchase'))
+			->getMock();
 
 		$brand_purchase
 			->expects($this->exactly(4))
@@ -202,14 +205,21 @@ class Model_Brand_PurchaseTest extends Testcase_Purchases {
 		$price1 = new Jam_Price(5, 'EUR');
 		$price2 = new Jam_Price(10, 'EUR');
 
-		$item1 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
+		$item1 = $this->getMockBuilder('Model_Purchase_Item')
+			->setMethods(array('total_price'))
+			->setConstructorArgs(array('purchase_item'))
+			->getMock();
 		$item1->model = 'purchase_item_product';
 		$item1
 			->expects($this->exactly(3))
 			->method('total_price')
 			->will($this->returnValue($price1));
 
-		$item2 = $this->getMock('Model_Purchase_Item', array('total_price'), array('purchase_item'));
+		$item2 = $this->getMockBuilder('Model_Purchase_Item')
+			->setMethods(array('total_price'))
+			->setConstructorArgs(array('purchase_item'))
+			->getMock();
+
 		$item2->model = 'purchase_item_shipping';
 		$item2
 			->expects($this->exactly(3))
@@ -351,7 +361,10 @@ class Model_Brand_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_is_paid()
 	{
-		$purchase = $this->getMock('Model_Purchase', array('is_paid'), array('purchase'));
+		$purchase = $this->getMockBuilder('Model_Purchase')
+			->setMethods(array('is_paid'))
+			->setConstructorArgs(array('purchase'))
+			->getMock();
 		$purchase
 			->expects($this->exactly(2))
 				->method('is_paid')
@@ -368,7 +381,10 @@ class Model_Brand_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_paid_at()
 	{
-		$purchase = $this->getMock('Model_Purchase', array('paid_at'), array('purchase'));
+		$purchase = $this->getMockBuilder('Model_Purchase')
+			->setMethods(array('paid_at'))
+			->setConstructorArgs(array('purchase'))
+			->getMock();
 		$purchase
 			->expects($this->exactly(2))
 				->method('paid_at')
@@ -385,7 +401,10 @@ class Model_Brand_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_currency()
 	{
-		$purchase = $this->getMock('Model_Purchase', array('currency'), array('purchase'));
+		$purchase = $this->getMockBuilder('Model_Purchase')
+			->setMethods(array('currency'))
+			->setConstructorArgs(array('purchase'))
+			->getMock();
 		$purchase
 			->expects($this->exactly(2))
 				->method('currency')
@@ -402,7 +421,10 @@ class Model_Brand_PurchaseTest extends Testcase_Purchases {
 	 */
 	public function test_display_currency()
 	{
-		$purchase = $this->getMock('Model_Purchase', array('display_currency'), array('purchase'));
+		$purchase = $this->getMockBuilder('Model_Purchase')
+			->setMethods(array('display_currency'))
+			->setConstructorArgs(array('purchase'))
+			->getMock();
 		$purchase
 			->expects($this->exactly(2))
 				->method('display_currency')
@@ -421,7 +443,10 @@ class Model_Brand_PurchaseTest extends Testcase_Purchases {
 	{
 		$monetary = new OpenBuildings\Monetary\Monetary;
 
-		$purchase = $this->getMock('Model_Purchase', array('monetary'), array('purchase'));
+		$purchase = $this->getMockBuilder('Model_Purchase')
+			->setMethods(array('monetary'))
+			->setConstructorArgs(array('purchase'))
+			->getMock();
 		$purchase
 			->expects($this->once())
 				->method('monetary')
@@ -449,7 +474,10 @@ class Model_Brand_PurchaseTest extends Testcase_Purchases {
 	{
 		$filters = array('some_filters' => TRUE);
 
-		$purchase = $this->getMock('Model_Purchase', array('total_price'), array('purchase'));
+		$purchase = $this->getMockBuilder('Model_Purchase')
+			->setMethods(array('total_price'))
+			->setConstructorArgs(array('purchase'))
+			->getMock();
 
 		$purchase
 			->expects($this->once())
@@ -457,7 +485,10 @@ class Model_Brand_PurchaseTest extends Testcase_Purchases {
 			->with($this->identicalTo($filters))
 			->will($this->returnValue($purchase_price));
 
-		$brand_purchase = $this->getMock('Model_Brand_Purchase', array('total_price'), array('brand_purchase'));
+		$brand_purchase = $this->getMockBuilder('Model_Brand_Purchase')
+			->setMethods(array('total_price'))
+			->setConstructorArgs(array('brand_purchase'))
+			->getMock();
 
 		$brand_purchase
 			->expects($this->once())
