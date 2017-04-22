@@ -1,7 +1,7 @@
 <?php
 
 use Openbuildings\EnvironmentBackup as EB;
-use Openbuildings\PHPUnitSpiderling\Testcase_Spiderling;
+use Openbuildings\PHPUnitSpiderling\TestCase as SpiderlingTestCase;
 
 /**
  * Testcase_Functest definition
@@ -10,7 +10,7 @@ use Openbuildings\PHPUnitSpiderling\Testcase_Spiderling;
  * @author Ivan Kerin
  * @copyright  (c) 2011-2013 Despark Ltd.
  */
-abstract class Testcase_Purchases_Spiderling extends Testcase_Spiderling {
+abstract class Testcase_Purchases_Spiderling extends SpiderlingTestCase {
 
 	public $environment;
 

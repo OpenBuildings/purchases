@@ -351,7 +351,8 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 
 		$item->reference = $product;
 
-		$this->setExpectedException('Kohana_Exception', 'Compute price expects the reference abc to return a Jam_Price');
+		$this->expectException(\Kohana_Exception::class);
+		$this->expectExceptionMessage('Compute price expects the reference abc to return a Jam_Price');
 		$item->compute_price();
 	}
 
@@ -360,7 +361,8 @@ class Model_Purchase_ItemTest extends Testcase_Purchases {
 	 */
 	public function test_get_price_throws_exception()
 	{
-		$this->setExpectedException('BadMethodCallException', 'You must implement get_price()');
+		$this->expectException(\BadMethodCallException::class);
+		$this->expectExceptionMessage('You must implement get_price()');
 		Jam::build('purchase_item')->get_price();
 	}
 
