@@ -79,8 +79,10 @@ class Array_UtilTest extends Testcase_Purchases {
 	{
 		if ($expected_exception_message)
 		{
-			$this->setExpectedException('Kohana_Exception', $expected_exception_message);
+			$this->expectException(\Kohana_Exception::class);
+			$this->expectExceptionMessage($expected_exception_message);
 		}
-		Array_Util::validate_instance_of($array, $class);
+
+		$this->assertNull(Array_Util::validate_instance_of($array, $class));
 	}
 }

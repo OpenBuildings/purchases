@@ -9,7 +9,7 @@ use Openbuildings\EnvironmentBackup as EB;
  * @author Ivan Kerin
  * @copyright  (c) 2011-2013 Despark Ltd.
  */
-abstract class Testcase_Purchases extends PHPUnit_Framework_TestCase {
+abstract class Testcase_Purchases extends \PHPUnit\Framework\TestCase {
 
 	public $environment;
 
