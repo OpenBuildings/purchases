@@ -52,7 +52,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 				'id'              => Jam::field('primary'),
 				'currency'        => Jam::field('string'),
 				'monetary'        => Jam::field('serialized'),
-				'is_frozen'          => Jam::field('boolean'),
+				'is_frozen'       => Jam::field('boolean'),
 				'created_at'      => Jam::field('timestamp', array('auto_now_create' => TRUE, 'format' => 'Y-m-d H:i:s')),
 				'updated_at'      => Jam::field('timestamp', array('auto_now_update' => TRUE, 'format' => 'Y-m-d H:i:s')),
 			))
