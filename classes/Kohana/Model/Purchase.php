@@ -59,7 +59,17 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 			->validator('currency', array('currency' => TRUE));
 	}
 
-	/**
+    /**
+     * Return associated model brand purchase.
+     *
+     * @return Kohana_Model_Brand_Purchase
+     */
+    public function brand_purchases()
+    {
+        return $this->brand_purchases;
+    }
+
+    /**
 	 * Iterate through the existing brand_purchases and return the one that is linked to this brand.
 	 * If none exist build one and return it
 	 *
@@ -75,7 +85,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 			return $brand_purchase;
 		}
 
-		return $this->brand_purchases->build(array('brand' => $brand));
+		return $this->brand_purchases()->build(array('brand' => $brand));
 	}
 
 	/**
@@ -87,7 +97,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	 */
 	public function find_brand_purchase(Model_Brand $brand)
 	{
-		$brand_purchases = $this->brand_purchases->as_array('brand_id');
+		$brand_purchases = $this->brand_purchases()->as_array('brand_id');
 
 		if (isset($brand_purchases[$brand->id()]))
 		{
@@ -125,7 +135,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 
 			if (0 === $brand_purchase->items_count('product'))
 			{
-				$this->brand_purchases->remove($brand_purchase);
+				$this->brand_purchases()->remove($brand_purchase);
 			}
 
 			$this->meta()->events()->trigger('model.remove_item', $this, array($item));
@@ -175,7 +185,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	{
 		$items = array();
 
-		foreach ($this->brand_purchases->as_array() as $brand_purchase)
+		foreach ($this->brand_purchases()->as_array() as $brand_purchase)
 		{
 			$items = array_merge($items, $brand_purchase->items($types));
 		}
@@ -215,7 +225,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	 */
 	public function update_items()
 	{
-		foreach ($this->brand_purchases->as_array() as $brand_purchase)
+		foreach ($this->brand_purchases()->as_array() as $brand_purchase)
 		{
 			$brand_purchase->update_items();
 		}
@@ -233,7 +243,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	public function replace_items($items, $types = NULL)
 	{
 		$grouped = Model_Purchase_Item::group_by_brand_purchase($items);
-		$current = $this->brand_purchases->as_array('id');
+		$current = $this->brand_purchases()->as_array('id');
 
 		$replaced = array_intersect_key($grouped, $current);
 		$removed = array_diff_key($current, $grouped);
@@ -243,7 +253,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 			$current[$index]->replace_items($items, $types);
 		}
 
-		$this->brand_purchases->remove(array_values($removed));
+		$this->brand_purchases()->remove(array_values($removed));
 
 		return $this;
 	}
@@ -285,7 +295,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	{
 		$this->brand_purchases = array_map(function($item){
 			return $item->set('items', $item->items);
-		}, $this->brand_purchases->as_array());
+		}, $this->brand_purchases()->as_array());
 
 		return $this->check();
 	}
@@ -313,7 +323,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 		return $this->is_frozen;
 	}
 
-	protected function setFrozen($frozen)
+    protected function setFrozen($frozen)
 	{
 		$this->is_frozen = (bool) $frozen;
 
@@ -332,7 +342,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 
 	public function freezeCollection()
 	{
-		foreach ($this->brand_purchases->as_array() as $brand_purchase)
+		foreach ($this->brand_purchases()->as_array() as $brand_purchase)
 		{
 			$brand_purchase->freeze();
 		}
@@ -340,7 +350,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 
 	public function unfreezeCollection()
 	{
-		foreach ($this->brand_purchases->as_array() as $brand_purchase)
+		foreach ($this->brand_purchases()->as_array() as $brand_purchase)
 		{
 			$brand_purchase->unfreeze();
 		}
