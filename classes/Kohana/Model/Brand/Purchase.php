@@ -257,7 +257,12 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 		return $price->amount() / $total_price->amount();
 	}
 
-	public function brand()
+    /**
+     * Return associated brand model.
+     *
+     * @return Model_Brand|null
+     */
+    public function brand()
 	{
 		return Jam_Behavior_Paranoid::with_filter(Jam_Behavior_Paranoid::ALL, function() {
 			return $this->brand;
