@@ -53,6 +53,17 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 			->validator('purchase', 'brand', array('present' => TRUE));
 	}
 
+
+    /**
+     * Return associated Kohana_Model_Purchase.
+     *
+     * @throws Jam_Exception_Notfound
+     */
+    public function purchase(): Kohana_Model_Purchase
+    {
+        return $this->get_insist('purchase');
+    }
+
 	/**
 	 * Search for the same item in items, (using "is_same()" method, and return its index, or NULL if not found)
 	 * @param  Model_Purchase_Item $new_item
@@ -197,7 +208,7 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 	 */
 	public function currency()
 	{
-		return $this->get_insist('purchase')->currency();
+		return $this->purchase()->currency();
 	}
 
 	/**
@@ -207,7 +218,7 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 	 */
 	public function display_currency()
 	{
-		return $this->get_insist('purchase')->display_currency();
+		return $this->purchase()->display_currency();
 	}
 
 	/**
@@ -217,7 +228,7 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 	 */
 	public function is_paid()
 	{
-		return $this->get_insist('purchase')->is_paid();
+		return $this->purchase()->is_paid();
 	}
 
 	/**
@@ -227,7 +238,7 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 	 */
 	public function paid_at()
 	{
-		return $this->get_insist('purchase')->paid_at();
+		return $this->purchase()->paid_at();
 	}
 
 	/**
@@ -238,7 +249,7 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 	 */
 	public function monetary()
 	{
-		return $this->get_insist('purchase')->monetary();
+		return $this->purchase()->monetary();
 	}
 
 	/**
@@ -249,7 +260,7 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 	public function total_price_ratio($types)
 	{
 		$price = $this->total_price($types);
-		$total_price = $this->get_insist('purchase')->total_price($types);
+		$total_price = $this->purchase()->total_price($types);
 
 		if ( ! $price OR ! $total_price OR ! $price->amount() OR ! $total_price->amount())
 			return NULL;
