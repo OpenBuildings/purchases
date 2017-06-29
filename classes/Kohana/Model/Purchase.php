@@ -106,9 +106,9 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	 */
 	public function add_item($brand, Model_Purchase_Item $new_item)
 	{
-		$brand_purchase = $this->find_or_build_brand_purchase($brand);
-		$brand_purchase->add_or_update_item($new_item);
-		$new_item->brand_purchase = $brand_purchase;
+		$this
+			->find_or_build_brand_purchase($brand)
+				->add_or_update_item($new_item);
 
 		$this->meta()->events()->trigger('model.add_item', $this, array($new_item));
 
