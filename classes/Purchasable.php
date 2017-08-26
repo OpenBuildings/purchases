@@ -11,7 +11,7 @@ interface Purchasable {
 	 * Get purchase_items.
 	 * Accept filters.
 	 *
-	 * @param  array $types filters
+	 * @param  array|string $types filters
 	 * @return array of Model_Purchase_Item instances
 	 */
 	public function items($types = NULL);
@@ -19,7 +19,7 @@ interface Purchasable {
 	/**
 	 * Return the total number of purchase items.
 	 *
-	 * @param  array $types filters
+	 * @param  array|string $types filters
 	 * @return integer
 	 */
 	public function items_count($types = NULL);
@@ -27,7 +27,7 @@ interface Purchasable {
 	/**
 	 * Return the sum of the quantities for the purchase items
 	 *
-	 * @param  array $types filters
+	 * @param  array|string $types filters
 	 * @return integer
 	 */
 	public function items_quantity($types = NULL);
@@ -43,7 +43,7 @@ interface Purchasable {
 	 * Replace the purchase items from a given type, removing old items
 	 *
 	 * @param  array $items array of new items
-	 * @param  array $types filters
+	 * @param  array|string $types filters
 	 * @return Purchasable $this
 	 */
 	public function replace_items($items, $types = NULL);
@@ -65,7 +65,7 @@ interface Purchasable {
 	/**
 	 * Return the sum of all the prices from the purchase items
 	 *
-	 * @param  array $types filters
+	 * @param  array|string $types filters
 	 * @return Jam_Price
 	 */
 	public function total_price($types = NULL);

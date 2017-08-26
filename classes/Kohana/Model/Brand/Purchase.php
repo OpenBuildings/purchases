@@ -119,7 +119,7 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 
 	/**
 	 * Return the count of items, filtered
-	 * @param  array $types
+	 * @param  array|string $types
 	 * @return integer
 	 */
 	public function items_count($types = NULL)
@@ -129,7 +129,7 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 
 	/**
 	 * Return the sum of the quantities of all the items, filtered.
-	 * @param  array $types
+	 * @param  array|string $types
 	 * @return integer
 	 */
 	public function items_quantity($types = NULL) // @codeCoverageIgnore
@@ -156,7 +156,7 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 	/**
 	 * Replace purchase items, filtered. Removes old items
 	 * @param  array $items array of Model_Purchase_Item
-	 * @param  array $types
+	 * @param  array|string $types
 	 * @return Model_Brand_Purchase        self
 	 */
 	public function replace_items($items, $types = NULL)
@@ -180,7 +180,7 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 	/**
 	 * Sum the total price of the filtered items.
 	 *
-	 * @param  array $types
+	 * @param  array|string $types
 	 * @return Jam_Price
 	 */
 	public function total_price($types = NULL)

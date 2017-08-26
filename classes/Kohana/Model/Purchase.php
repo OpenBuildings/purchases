@@ -186,7 +186,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	/**
 	 * Return the sum purchase items count from all brand_purchases
 	 *
-	 * @param  array $types filters
+	 * @param  array|string $types filters
 	 * @return integer
 	 */
 	public function items_count($types = NULL)
@@ -196,7 +196,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 
 	/**
 	 * Return the sum of the quantities of all the purchase_items
-	 * @param  array $types filters
+	 * @param  array|string $types filters
 	 * @return integer
 	 */
 	public function items_quantity($types = NULL)
@@ -227,7 +227,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	 * Replace the purchase items from a given type, removing old items
 	 *
 	 * @param  array $items array of new items
-	 * @param  array $types filters
+	 * @param  array|string $types filters
 	 * @return Model_Purchase $this
 	 */
 	public function replace_items($items, $types = NULL)
@@ -251,7 +251,7 @@ class Kohana_Model_Purchase extends Jam_Model implements Purchasable, FreezableI
 	/**
 	 * Return the sum of all the prices from the purchase items
 	 *
-	 * @param  array $types filters
+	 * @param  array|string $types filters
 	 * @return Jam_Price
 	 */
 	public function total_price($types = NULL)

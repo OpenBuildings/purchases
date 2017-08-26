@@ -106,7 +106,7 @@ class Kohana_Model_Purchase_Item extends Jam_Model implements FreezableInterface
 
 	/**
 	 * Return the monetary for this purchase item, get it from parent brand_purchase
-	 * @return OpenBuildings\Monetary\Montary
+	 * @return OpenBuildings\Monetary\Monetary
 	 */
 	public function monetary()
 	{
