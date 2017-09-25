@@ -84,6 +84,9 @@ class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, Free
 		{
 			$this->items->add($new_item);
 		}
+
+		$this->items = $this->items;
+
 		return $this;
 	}
 
