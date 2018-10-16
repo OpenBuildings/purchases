@@ -216,7 +216,7 @@ class Model_Brand_RefundTest extends Testcase_Purchases {
 
 		$brand_refund = $this->getMockBuilder('Model_Brand_Refund')
 			->setMethods(array(
-				'check_insist',
+				'check',
 				'payment_insist',
 			))
 			->setConstructorArgs(array('brand_refund'))
@@ -237,7 +237,8 @@ class Model_Brand_RefundTest extends Testcase_Purchases {
 
 		$brand_refund
 			->expects($this->once())
-			->method('check_insist');
+			->method('check')
+			->willReturn(true);
 
 		$brand_refund
 			->expects($this->once())
