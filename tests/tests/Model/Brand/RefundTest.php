@@ -237,7 +237,7 @@ class Model_Brand_RefundTest extends Testcase_Purchases {
 
 		$brand_refund
 			->expects($this->once())
-			->method('check_insist');
+			->method('check');
 
 		$brand_refund
 			->expects($this->once())
