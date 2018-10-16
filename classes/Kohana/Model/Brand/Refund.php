@@ -127,6 +127,7 @@ class Kohana_Model_Brand_Refund extends Jam_Model {
 	{
 		$this->check_insist();
 
+
 		$payment = $this->payment_insist();
 
 		if ($payment->status !== Model_Payment::PAID)
