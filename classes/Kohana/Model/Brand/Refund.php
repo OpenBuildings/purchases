@@ -125,7 +125,6 @@ class Kohana_Model_Brand_Refund extends Jam_Model {
 	 */
 	public function execute(GatewayInterface $gateway, array $params = array())
 	{
-		$this->check_insist();
 		$this->check();
 
 
