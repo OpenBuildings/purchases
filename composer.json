@@ -20,7 +20,7 @@
 	"require": {
 		"php": "^7",
 		"composer/installers": "*",
-		"openbuildings/jam": "^0.5",
+		"openbuildings/jam": "^0.5.24",
 		"openbuildings/jam-auth": "^0.4",
 		"openbuildings/jam-monetary": "^0.1.19",
 		"openbuildings/jam-locations": "^0.1",

@@ -121,11 +121,14 @@ class Kohana_Model_Brand_Refund extends Jam_Model {
 	 * @param	\Omnipay\Common\GatewayInterface			$gateway Omnipay payment gateway
 	 * @param	array										$params pass this to the gateway
 	 * @throws	Kohana_Exception If payment is not "paid"
+	 * @throws	Jam_Exception_Validation
 	 * @return	Model_Brand_refund self
 	 */
 	public function execute(GatewayInterface $gateway, array $params = array())
 	{
-		$this->check_insist();
+		if (!$this->check()) {
+			throw new Jam_Exception_Validation('There was an error validating the :model: :errors', $this);
+		}
 
 		$payment = $this->payment_insist();
 
