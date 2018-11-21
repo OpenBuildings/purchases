@@ -9,10 +9,10 @@ use Clippings\Freezable\FreezableInterface;
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
  *
- * @property Jam_Field_Primary     $id
- * @property Jam_Field_Boolean     $is_frozen
- * @property Jam_Field_Timestamp   $created_id
- * @property Jam_Field_Timestamp   $updated_at
+ * @property int|null              $id
+ * @property bool                  $is_frozen
+ * @property int|string|null       $created_at
+ * @property int|string|null       $updated_at
  * @property Model_Purchase        $purchase
  * @property Model_Purchase_Item[] $items
  * @property Model_Brand_Refund[]  $refunds
