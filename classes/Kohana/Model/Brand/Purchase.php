@@ -8,6 +8,15 @@ use Clippings\Freezable\FreezableInterface;
  * @author     Ivan Kerin <ikerin@gmail.com>
  * @copyright  (c) 2013 OpenBuildings Ltd.
  * @license    http://spdx.org/licenses/BSD-3-Clause
+ *
+ * @property Jam_Field_Primary     $id
+ * @property Jam_Field_Boolean     $is_frozen
+ * @property Jam_Field_Timestamp   $created_id
+ * @property Jam_Field_Timestamp   $updated_at
+ * @property Model_Purchase        $purchase
+ * @property Model_Purchase_Item[] $items
+ * @property Model_Brand_Refund[]  $refunds
+ * @property Model_Brand           $brand
  */
 class Kohana_Model_Brand_Purchase extends Jam_Model implements Purchasable, FreezableInterface {
 
