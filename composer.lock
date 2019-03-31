@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a82471098485c375bda1687820867122",
+    "content-hash": "ef9e538fcba8f6ab586694d0679333a4",
     "packages": [
         {
             "name": "clippings/freezable",
@@ -680,6 +680,17 @@
         {
             "name": "league/omnipay",
             "version": "v3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/omnipay.git",
+                "reference": "9e10d91cbf84744207e13d4483e79de39b133368"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/omnipay/zipball/9e10d91cbf84744207e13d4483e79de39b133368",
+                "reference": "9e10d91cbf84744207e13d4483e79de39b133368",
+                "shasum": ""
+            },
             "require": {
                 "omnipay/common": "^3",
                 "php": "^5.6|^7",
@@ -3630,7 +3641,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7"
+        "php": "^7.1"
     },
     "platform-dev": []
 }

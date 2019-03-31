@@ -18,7 +18,7 @@
 		}
 	],
 	"require": {
-		"php": "^7",
+		"php": "^7.1",
 		"composer/installers": "*",
 		"openbuildings/jam": "^0.5.24",
 		"openbuildings/jam-auth": "^0.4",
