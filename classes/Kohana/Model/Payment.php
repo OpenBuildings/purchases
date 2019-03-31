@@ -90,13 +90,13 @@ class Kohana_Model_Payment extends Jam_Model {
 		$this->payment_id = $response->getTransactionReference();
 		$this->raw_response = $response->getData();
 
-		if ($response->isSuccessful())
-		{
-			$this->status = Model_Payment::PAID;
-		}
-		else if ($response->isRedirect())
+		if ($response->isRedirect())
 		{
 			$this->status = Model_Payment::PENDING;
+		}
+		else if ($response->isSuccessful())
+		{
+			$this->status = Model_Payment::PAID;
 		}
 
 		return $response;
