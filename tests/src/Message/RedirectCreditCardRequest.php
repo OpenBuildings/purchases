@@ -2,9 +2,9 @@
 
 namespace Test\Omnipay\Dummy\Message;
 
-use Omnipay\Dummy\Message\AuthorizeRequest;
+use Omnipay\Dummy\Message\CreditCardRequest;
 
-class RedirectAuthorizeRequest extends AuthorizeRequest
+class RedirectCreditCardRequest extends CreditCardRequest
 {
 	public function sendData($data)
 	{

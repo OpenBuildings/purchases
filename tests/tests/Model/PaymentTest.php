@@ -96,7 +96,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 	 */
 	public function test_complete_purchase()
 	{
-		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$gateway = Omnipay::create('Dummy');
 		$purchase = $this->getMockBuilder('Model_Purchase')
 			->setMethods(array('save'))
 			->setConstructorArgs(array('purchase'))
@@ -120,10 +120,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 	 */
 	public function test_complete_purchase_not_successfull()
 	{
-		// Omnipay Dummy Gateway logic for returning a non successful response
-		$this->payment_params['card']['number'] = 4111111111111111;
-
-		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$gateway = Omnipay::create('Dummy');
 		$purchase = $this->getMockBuilder('Model_Purchase')
 			->setMethods(array('save'))
 			->setConstructorArgs(array('purchase'))
@@ -132,6 +129,9 @@ class Model_PaymentTest extends Testcase_Purchases {
 		$purchase
 			->expects($this->once())
 			->method('save');
+
+		// Transaction reference needs to contain the word "fail" and it set to the purchase number
+		$purchase->number = 'fail';
 
 		$payment = $purchase->build('payment', array('method' => 'Dummy', 'status' => Model_Payment::PENDING));
 
@@ -149,7 +149,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 	 */
 	public function test_complete_purchase_not_pending()
 	{
-		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$gateway = Omnipay::create('Dummy');
 		$purchase = Jam::build('purchase');
 
 		$payment = $purchase->build('payment', array('method' => 'Dummy'));
@@ -173,7 +173,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->build('payment', array('method' => 'Dummy'))
 				->execute_purchase($gateway, $this->payment_params);
 
-		$this->assertGreaterThan(0, $purchase->payment->payment_id);
+		$this->assertNotNull($purchase->payment->payment_id);
 		$this->assertNotNull($purchase->payment->raw_response);
 		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
 	}
@@ -197,7 +197,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->build('payment', array('method' => 'Dummy'))
 				->execute_purchase($gateway, $this->payment_params);
 
-		$this->assertGreaterThan(0, $purchase->payment->payment_id);
+		$this->assertNotNull($purchase->payment->payment_id);
 		$this->assertNotNull($purchase->payment->raw_response);
 		$this->assertEmpty($purchase->payment->status);
 	}
@@ -218,7 +218,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->build('payment', array('method' => 'Dummy'))
 				->execute_purchase($gateway, $this->payment_params);
 
-		$this->assertGreaterThan(0, $purchase->payment->payment_id);
+		$this->assertNotNull($purchase->payment->payment_id);
 		$this->assertNotNull($purchase->payment->raw_response);
 		$this->assertEquals(Model_Payment::PENDING, $purchase->payment->status);
 	}
@@ -228,7 +228,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 	 */
 	public function test_execute_complete_purchase()
 	{
-		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$gateway = Omnipay::create('Dummy');
 		$purchase = Jam::find('purchase', 2);
 
 		$purchase
@@ -239,7 +239,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->build('payment', array('method' => 'Dummy', 'status' => Model_Payment::PENDING))
 				->execute_complete_purchase($gateway, $this->payment_params);
 
-		$this->assertGreaterThan(0, $purchase->payment->payment_id);
+		$this->assertNotNull($purchase->payment->payment_id);
 		$this->assertNotNull($purchase->payment->raw_response);
 		$this->assertEquals(Model_Payment::PAID, $purchase->payment->status);
 	}
@@ -249,11 +249,11 @@ class Model_PaymentTest extends Testcase_Purchases {
 	 */
 	public function test_execute_complete_purchase_not_successful()
 	{
-		// Omnipay Dummy Gateway logic for returning a non successful response
-		$this->payment_params['card']['number'] = 4111111111111111;
-
-		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$gateway = Omnipay::create('Dummy');
 		$purchase = Jam::find('purchase', 2);
+
+		// Transaction reference needs to contain the word "fail" and it set to the purchase number
+		$purchase->number = 'fail';
 
 		$purchase
 			->freeze()
@@ -263,7 +263,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 			->build('payment', array('method' => 'Dummy', 'status' => Model_Payment::PENDING))
 				->execute_complete_purchase($gateway, $this->payment_params);
 
-		$this->assertGreaterThan(0, $purchase->payment->payment_id);
+		$this->assertNotNull($purchase->payment->payment_id);
 		$this->assertNotNull($purchase->payment->raw_response);
 		$this->assertNotEquals(Model_Payment::PAID, $purchase->payment->status);
 	}
@@ -420,7 +420,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 	 */
 	public function test_execute_refund()
 	{
-		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$gateway = Omnipay::create('Dummy');
 		$purchase = Jam::find('purchase', 1);
 		$brand_purchase = $purchase->brand_purchases[0];
 		$payment = $purchase->payment;
@@ -440,10 +440,13 @@ class Model_PaymentTest extends Testcase_Purchases {
 
 	public function test_execute_refund_not_successful()
 	{
-		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$gateway = Omnipay::create('Dummy');
 		$purchase = Jam::find('purchase', 1);
 		$brand_purchase = $purchase->brand_purchases[0];
 		$payment = $purchase->payment;
+
+		// Transaction reference needs to contain the word "fail" and it set to the payment id
+		$payment->payment_id = 'fail';
 
 		$refund = $brand_purchase->refunds->create(array(
 			'reason' => 'Faulty Product Fail',
@@ -652,7 +655,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 	 */
 	public function test_execute_multiple_refunds()
 	{
-		$gateway = Omnipay::create('\Test\Omnipay\Dummy\ExtendedGateway');
+		$gateway = Omnipay::create('Dummy');
 		$purchase = Jam::find('purchase', 4);
 		$brand_purchase = $purchase->brand_purchases[0];
 		$brand_purchase2 = $purchase->brand_purchases[1];
