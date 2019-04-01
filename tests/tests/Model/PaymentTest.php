@@ -482,7 +482,6 @@ class Model_PaymentTest extends Testcase_Purchases {
 
 		$expected = array(
 			'transactionReference' => '11111',
-			'reason' => 'Faulty Product',
 			'items' => array(
 				array(
 					'name' => $brand_purchase->items[0]->id(),
@@ -508,7 +507,6 @@ class Model_PaymentTest extends Testcase_Purchases {
 
 		$expected = array(
 			'transactionReference' => '11111',
-			'reason' => 'Full Refund',
 			'amount' => '600.00',
 			'currency' => 'EUR',
 		);
@@ -528,7 +526,6 @@ class Model_PaymentTest extends Testcase_Purchases {
 
 		$expected = array(
 			'transactionReference' => '11111',
-			'reason' => 'Full Brand And Purchase Refund',
 			'amount' => '600.00',
 			'currency' => 'EUR',
 		);
@@ -550,7 +547,6 @@ class Model_PaymentTest extends Testcase_Purchases {
 
 		$expected = array(
 			'transactionReference' => '22222',
-			'reason' => 'Full Brand But Not Purchase Refund',
 			'items' => array(
 				array(
 					'name' => $brand_purchase->items[0]->id(),
@@ -697,7 +693,6 @@ class Model_PaymentTest extends Testcase_Purchases {
 
 		$expected = array(
 			'transactionReference' => '22222',
-			'reason' => 'Faulty Product',
 			'amount' => '440.40',
 			'currency' => 'GBP',
 		);
