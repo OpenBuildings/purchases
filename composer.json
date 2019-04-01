@@ -18,23 +18,23 @@
 		}
 	],
 	"require": {
-		"php": "^7",
+		"php": "^7.1",
 		"composer/installers": "*",
 		"openbuildings/jam": "^0.5.24",
 		"openbuildings/jam-auth": "^0.4",
 		"openbuildings/jam-monetary": "^0.1.19",
 		"openbuildings/jam-locations": "^0.1",
 		"clippings/freezable": "^0.2",
-		"omnipay/common": "^2",
 		"kohana/core": "^3.3",
-		"kohana/database": "^3.3.4"
+		"kohana/database": "^3.3.4",
+		"league/omnipay": "^3"
 	},
 	"require-dev": {
 		"openbuildings/environment-backup": "^0.1",
-		"omnipay/dummy": "^2",
 		"openbuildings/kohana-test-bootstrap": "^0.2",
 		"openbuildings/phpunit-spiderling": "^0.2",
-		"phpunit/phpunit": "^6"
+		"phpunit/phpunit": "^6",
+		"omnipay/dummy": "^3.0"
 	},
     "autoload-dev": {
         "psr-4": {
