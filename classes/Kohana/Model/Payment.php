@@ -264,7 +264,6 @@ class Kohana_Model_Payment extends Jam_Model {
 
 		$params = array(
 			'transactionReference'	=> $payment->payment_id,
-			'reason'				=> $refund->reason,
 			'currency'				=> $currency,
 		);
 
