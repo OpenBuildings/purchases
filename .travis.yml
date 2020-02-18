@@ -24,6 +24,10 @@ cache:
   - $HOME/.composer/cache
 
 env:
+  - DEPS=normal
+  - DEPS=highest
+  - DEPS=lowest
+
   global:
     - secure: WM6/jFIv5y0fucZqd2kUhHindfgyz2UkRfDor/e+BEeqN9JfJD5kVDyLHIbHSvGXWYah5Nk56I6Wwo3HjPgsdKU1tfatYBNMqRzKHa13sChd4idIrpUJBRKGqWDJeh3h6Cnf5DrudUKPh7AdDN8Nz5kC+CAo5M3LpM919Qu8mz0=
     - secure: U/F0aSA/ryVple78OsCjTdnfD+633FSupEfVogdwtdvcVus1588zkDmOYnI7ZOAvbcwlfq+RmPBNObxu7kRk0YWzyfQ/eWwWEDMrTP40+HwYrb++Dxbmi8eGqSBX7XfikAZkuS6tBES+7RKGtZhlXAh77zEdDhYkZVuDzOJwO6c=
@@ -42,7 +46,9 @@ notifications:
     secure: JhetEEPz5c84CuTDHks86k6IpUAlv7LFGswafXCMO5/ztXHMU2Mv6w6jnvp/YOuqiX0nWPRJCbRfoVXdEb/VO/AcLDkscwa10foSziPfbjqofNZ/b2+MtQ93UbfHGpFNIUUrMVnY9/7YW9a6TrPqHT196/+B59L/457RWJz0tC0=
 
 install:
-  - travis_retry composer install --no-interaction --no-progress --prefer-dist
+  - if [ "$DEPS" = "normal" ]; then travis_retry composer install --no-interaction; fi;
+  - if [ "$DEPS" = "highest" ]; then travis_retry composer update --no-interaction; fi;
+  - if [ "$DEPS" = "lowest" ]; then travis_retry composer update --no-interaction --prefer-lowest --prefer-stable; fi;
 
 before_script:
   - mkdir -p build/logs
