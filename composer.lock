@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef9e538fcba8f6ab586694d0679333a4",
+    "content-hash": "8d1da5357523f3c3013f7c2dc87e488f",
     "packages": [
         {
             "name": "clippings/freezable",
@@ -929,6 +929,7 @@
                 }
             ],
             "description": "Flexible storage provider for files (rackspace, aws, ftp, local)",
+            "abandoned": true,
             "time": "2014-07-08T12:07:06+00:00"
         },
         {
@@ -3643,5 +3644,8 @@
     "platform": {
         "php": "^7.1"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "platform-overrides": {
+        "php": "7.1.8"
+    }
 }

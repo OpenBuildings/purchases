@@ -52,5 +52,10 @@
 		"branch-alias": {
 			"dev-master": "0.8.x-dev"
 		}
+	},
+	"config": {
+		"platform": {
+			"php": "7.1.8"
+		}
 	}
 }
