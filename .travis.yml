@@ -24,10 +24,6 @@ cache:
   - $HOME/.composer/cache
 
 env:
-  - DEPS=normal
-  - DEPS=highest
-  - DEPS=lowest
-
   global:
     - secure: WM6/jFIv5y0fucZqd2kUhHindfgyz2UkRfDor/e+BEeqN9JfJD5kVDyLHIbHSvGXWYah5Nk56I6Wwo3HjPgsdKU1tfatYBNMqRzKHa13sChd4idIrpUJBRKGqWDJeh3h6Cnf5DrudUKPh7AdDN8Nz5kC+CAo5M3LpM919Qu8mz0=
     - secure: U/F0aSA/ryVple78OsCjTdnfD+633FSupEfVogdwtdvcVus1588zkDmOYnI7ZOAvbcwlfq+RmPBNObxu7kRk0YWzyfQ/eWwWEDMrTP40+HwYrb++Dxbmi8eGqSBX7XfikAZkuS6tBES+7RKGtZhlXAh77zEdDhYkZVuDzOJwO6c=
@@ -39,6 +35,11 @@ env:
     - secure: L/zdXZ/QvLoKzi9waLoktc/zY6IluQX2YxYTfxfVXnH3uMNvBL2ULd4FiwCHhFF8Scg1XxfS5XrdQ1jhkwBXmdNubu36bxMbCcYYtgJ8clgKt/YuN8gD46uwB2CIY+RHIFVYlnnPx4KvAAo3ZD4LpqA3p2PKIJAejXVfugEzNxg=
     - secure: YYKm9uiW+zz3tA4k3r8PAGSTZXXAUw1rByN48FfvxRIMjxwawxyes7XI+bMy0HCdycp1eJclYNxB14MyLJH4VfsR4FmcFQvHnsNV8m3l93tezie82fBT5iwZpWttkJoUnwkWIltKXh3WlsErY07jMCtsto8SfaRcHzUL0Zr+svo=
     - secure: Vl5+/D22WmpwMhzIMVLZU559Mkblw6W5PMJq/bIOORaCpX5E7deBjKzFtRn+McJNvR3lewMF5yFxnEdJBYB7SzVQ10gExGTfVCE9YwlKUzfVo/0rufPjal10vKI42nCr7aThSKpxRo7leAivzOBxTMcWakg+p4+5AfdmAGiO17c=
+
+  jobs:
+    - DEPS=normal
+    - DEPS=highest
+    - DEPS=lowest
 
 notifications:
   email: false
