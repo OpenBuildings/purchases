@@ -32,9 +32,9 @@
 	"require-dev": {
 		"openbuildings/environment-backup": "^0.1",
 		"openbuildings/kohana-test-bootstrap": "^0.2",
-		"openbuildings/phpunit-spiderling": "^0.2",
-		"phpunit/phpunit": "^6",
-		"omnipay/dummy": "^3.0"
+		"omnipay/dummy": "^3.0",
+		"openbuildings/phpunit-spiderling": "^0.4",
+		"phpunit/phpunit": "^7"
 	},
     "autoload-dev": {
         "psr-4": {
