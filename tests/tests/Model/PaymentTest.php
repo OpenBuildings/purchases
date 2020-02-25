@@ -12,7 +12,7 @@ class Model_PaymentTest extends Testcase_Purchases {
 			'name'			=> 'TEST HOLDER',
 			'number'		=> '4242424242424242',
 			'expiryMonth'	=> '10',
-			'expiryYear'	=> '19',
+			'expiryYear'	=> '50',
 			'cvv'			=> '123',
 		),
 	);

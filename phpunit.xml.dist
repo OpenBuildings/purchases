@@ -1,9 +1,8 @@
 <phpunit
 	colors="true"
-	bootstrap="tests/bootstrap.php"
-	forceCoversAnnotations="true">
+	bootstrap="tests/bootstrap.php">
 	<testsuites>
-		<testsuite>
+		<testsuite name="RootTestSuite">
 			<directory>tests/tests</directory>
 		</testsuite>
 	</testsuites>
