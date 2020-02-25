@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c8cbf0e80e3c87d93d944d684601ccd2",
+    "content-hash": "2700ea3db375f35593b9e139f954ef6d",
     "packages": [
         {
             "name": "clippings/freezable",

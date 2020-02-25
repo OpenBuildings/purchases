@@ -21,13 +21,14 @@
 		"php": "^7.1",
 		"composer/installers": "*",
 		"openbuildings/jam": "^0.5.24",
-		"openbuildings/jam-auth": "^0.4",
+		"openbuildings/jam-auth": "^0.4.3",
 		"openbuildings/jam-monetary": "^0.1.19",
 		"openbuildings/jam-locations": "^0.1",
 		"clippings/freezable": "^0.2",
 		"kohana/core": "^3.3",
 		"kohana/database": "^3.3.4",
-		"league/omnipay": "^3"
+		"league/omnipay": "^3.0.2",
+		"php-http/httplug": "^2.0"
 	},
 	"require-dev": {
 		"openbuildings/environment-backup": "^0.1",
